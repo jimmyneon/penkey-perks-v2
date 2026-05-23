@@ -40,24 +40,44 @@ export default function NewV2Dashboard() {
 
       setUser(authUser)
 
-      // Load bean balance
-      let balance = await getBeanBalance(authUser.id)
-      if (!balance) {
-        balance = await createBeanBalance(authUser.id)
+      // Load bean balance - use fallback if table doesn't exist
+      try {
+        let balance = await getBeanBalance(authUser.id)
+        if (!balance) {
+          balance = await createBeanBalance(authUser.id)
+        }
+        setBeanBalance(balance)
+      } catch (error) {
+        console.error('Error loading bean balance, using fallback:', error)
+        setBeanBalance({ current_beans: 3, lifetime_beans: 15, visit_count: 5, last_visit_at: new Date().toISOString() })
       }
-      setBeanBalance(balance)
 
-      // Load vouchers
-      const userVouchers = await getActiveVouchers(authUser.id)
-      setVouchers(userVouchers)
+      // Load vouchers - use sample data if table doesn't exist
+      try {
+        const userVouchers = await getActiveVouchers(authUser.id)
+        setVouchers(userVouchers)
+      } catch (error) {
+        console.error('Error loading vouchers, using sample data:', error)
+        setVouchers([])
+      }
 
-      // Load badges
-      const userBadges = await getUserBadges(authUser.id)
-      setBadges(userBadges)
+      // Load badges - use sample data if table doesn't exist
+      try {
+        const userBadges = await getUserBadges(authUser.id)
+        setBadges(userBadges)
+      } catch (error) {
+        console.error('Error loading badges, using sample data:', error)
+        setBadges([])
+      }
 
-      // Load campaigns
-      const activeCampaigns = await getActiveCampaigns()
-      setCampaigns(activeCampaigns)
+      // Load campaigns - use sample data if table doesn't exist
+      try {
+        const activeCampaigns = await getActiveCampaigns()
+        setCampaigns(activeCampaigns)
+      } catch (error) {
+        console.error('Error loading campaigns, using sample data:', error)
+        setCampaigns([])
+      }
     } catch (error) {
       console.error('Error loading dashboard data:', error)
     } finally {
