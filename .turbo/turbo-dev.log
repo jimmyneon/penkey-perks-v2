@@ -1,0 +1,30 @@
+[43m[30m WARN [39m[49m Unsupported engine: wanted: {"node":">=20.0.0"} (current: {"node":"v18.19.0","pnpm":"9.12.0"})
+
+> @penkey/perks@1.0.0 dev /Users/johnhopwood/loynotverse/apps/perks
+> next dev --port 3003
+
+node:internal/modules/cjs/loader:1137
+  throw err;
+  ^
+
+Error: Cannot find module '../server/require-hook'
+Require stack:
+- /Users/johnhopwood/loynotverse/apps/perks/node_modules/.bin/next
+[90m    at Module._resolveFilename (node:internal/modules/cjs/loader:1134:15)[39m
+[90m    at Module._load (node:internal/modules/cjs/loader:975:27)[39m
+[90m    at Module.require (node:internal/modules/cjs/loader:1225:19)[39m
+[90m    at require (node:internal/modules/helpers:177:18)[39m
+    at Object.<anonymous> [90m(/Users/johnhopwood/loynotverse/apps/perks/[39mnode_modules/[4m.bin[24m/next:6:1[90m)[39m
+[90m    at Module._compile (node:internal/modules/cjs/loader:1356:14)[39m
+[90m    at Module._extensions..js (node:internal/modules/cjs/loader:1414:10)[39m
+[90m    at Module.load (node:internal/modules/cjs/loader:1197:32)[39m
+[90m    at Module._load (node:internal/modules/cjs/loader:1013:12)[39m
+[90m    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:128:12)[39m {
+  code: [32m'MODULE_NOT_FOUND'[39m,
+  requireStack: [
+    [32m'/Users/johnhopwood/loynotverse/apps/perks/node_modules/.bin/next'[39m
+  ]
+}
+
+Node.js v18.19.0
+[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 1.[39m
