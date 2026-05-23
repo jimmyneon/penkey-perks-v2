@@ -199,7 +199,7 @@ export default function NewV2Dashboard() {
             <div className="flex items-center justify-between relative z-10">
               <div className="flex-1">
                 <p className="text-sm font-semibold text-[#4B3028] mb-1">Your Beans</p>
-                <p className="text-[clamp(2.5rem,8vw,3.5rem)] font-extrabold text-[#E48A3A] mb-2">{currentBeans}</p>
+                <p className="text-[clamp(2.5rem,8vw,3.5rem)] font-extrabold text-[#C49A6C] mb-2">{currentBeans}</p>
                 <p className="text-sm font-medium text-[#4B3028]">
                   {beansNeeded > 0 ? `${beansNeeded} beans unlocks Free Any Coffee` : 'Reward unlocked!'}
                 </p>
@@ -208,7 +208,7 @@ export default function NewV2Dashboard() {
                 <svg width="130" height="130" className="transform -rotate-90">
                   <defs>
                     <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#E48A3A" />
+                      <stop offset="0%" stopColor="#C49A6C" />
                       <stop offset="100%" stopColor="#7B1234" />
                     </linearGradient>
                   </defs>
@@ -231,11 +231,11 @@ export default function NewV2Dashboard() {
                     strokeDasharray={circumference}
                     strokeDashoffset={strokeDashoffset}
                     className="transition-all duration-500"
-                    style={{ filter: 'drop-shadow(0 2px 4px rgba(228,138,58,0.3))' }}
+                    style={{ filter: 'drop-shadow(0 2px 4px rgba(196,154,108,0.3))' }}
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <Coffee className="w-8 h-8 text-[#E48A3A]" />
+                  <Coffee className="w-8 h-8 text-[#C49A6C]" />
                 </div>
               </div>
             </div>
@@ -271,7 +271,7 @@ export default function NewV2Dashboard() {
                 <h3 className="font-bold text-white text-[clamp(1.1rem,4vw,1.3rem)] mb-1">{displayCampaign.name}</h3>
                 <p className="text-xs text-white/90 mb-2">{displayCampaign.description}</p>
                 {displayCampaign.bean_multiplier > 1 && (
-                  <div className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#E48A3A] shadow-[0_4px_12px_rgba(228,138,58,0.4)]">
+                  <div className="inline-flex items-center px-2.5 py-1 rounded-full bg-gradient-to-r from-[#C49A6C] to-[#7B1234] shadow-[0_4px_12px_rgba(196,154,108,0.4)]">
                     <span className="text-[10px] font-bold text-white">{displayCampaign.bean_multiplier}x beans</span>
                   </div>
                 )}
@@ -326,7 +326,7 @@ export default function NewV2Dashboard() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
                   <div className="relative z-10 h-full flex flex-col justify-end p-4">
-                    <div className="inline-flex items-center px-2 py-1 rounded-full bg-[#E48A3A] w-fit mb-2 shadow-[0_4px_12px_rgba(228,138,58,0.4)]">
+                    <div className="inline-flex items-center px-2 py-1 rounded-full bg-gradient-to-r from-[#C49A6C] to-[#7B1234] w-fit mb-2 shadow-[0_4px_12px_rgba(196,154,108,0.4)]">
                       <span className="text-[10px] font-bold text-white">{item.description}</span>
                     </div>
                     <h3 className="font-bold text-white text-sm">{item.title}</h3>
@@ -384,7 +384,7 @@ export default function NewV2Dashboard() {
           </DialogHeader>
           <div className="py-6">
             <p className="text-sm text-[#4B3028] mb-4">{selectedFeatured?.description}</p>
-            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#E48A3A]">
+            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-gradient-to-r from-[#C49A6C] to-[#7B1234]">
               <span className="text-xs font-bold text-white">+2 bonus beans today</span>
             </div>
           </div>
@@ -400,8 +400,8 @@ export default function NewV2Dashboard() {
           <div className="py-4 space-y-3">
             <div className="bg-[#FFFDFC] rounded-xl p-4 border border-[#F3DCD4]">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#E48A3A]/10 flex items-center justify-center flex-shrink-0">
-                  <Gift className="w-4 h-4 text-[#E48A3A]" />
+                <div className="w-8 h-8 rounded-full bg-[#C49A6C]/10 flex items-center justify-center flex-shrink-0">
+                  <Gift className="w-4 h-4 text-[#C49A6C]" />
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-medium text-[#4B3028]">Reward Available!</p>
@@ -424,8 +424,8 @@ export default function NewV2Dashboard() {
             </div>
             <div className="bg-[#FFFDFC] rounded-xl p-4 border border-[#F3DCD4]">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#E48A3A]/10 flex items-center justify-center flex-shrink-0">
-                  <Sparkles className="w-4 h-4 text-[#E48A3A]" />
+                <div className="w-8 h-8 rounded-full bg-[#C49A6C]/10 flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-4 h-4 text-[#C49A6C]" />
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-medium text-[#4B3028]">Double Beans Today!</p>
@@ -446,7 +446,7 @@ export default function NewV2Dashboard() {
           </DialogHeader>
           <div className="py-4 space-y-4">
             {/* Beans Balance */}
-            <div className="bg-gradient-to-br from-[#E48A3A] to-[#D47A2A] rounded-2xl p-6 text-white text-center">
+            <div className="bg-gradient-to-br from-[#C49A6C] to-[#7B1234] rounded-2xl p-6 text-white text-center">
               <p className="text-sm font-medium mb-1">Current Balance</p>
               <p className="text-4xl font-extrabold mb-2">{currentBeans}</p>
               <p className="text-sm opacity-90">beans</p>
@@ -458,7 +458,7 @@ export default function NewV2Dashboard() {
               <div className="bg-[#FFFDFC] rounded-xl p-4 border border-[#F3DCD4]">
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-sm text-gray-600">Stamps collected</span>
-                  <span className="text-lg font-bold text-[#E48A3A]">3 / 8</span>
+                  <span className="text-lg font-bold text-[#C49A6C]">3 / 8</span>
                 </div>
                 <div className="flex gap-2 justify-center">
                   {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
@@ -466,7 +466,7 @@ export default function NewV2Dashboard() {
                       key={num}
                       className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
                         num <= 3
-                          ? 'bg-[#E48A3A] text-white'
+                          ? 'bg-gradient-to-br from-[#C49A6C] to-[#7B1234] text-white'
                           : 'bg-gray-200 text-gray-400'
                       }`}
                     >
@@ -489,14 +489,14 @@ export default function NewV2Dashboard() {
                     <div className="w-2 h-2 rounded-full bg-green-500" />
                     <span className="text-sm text-gray-700">Check-in bonus</span>
                   </div>
-                  <span className="text-sm font-semibold text-[#E48A3A]">+2 beans</span>
+                  <span className="text-sm font-semibold text-[#C49A6C]">+2 beans</span>
                 </div>
                 <div className="flex items-center justify-between py-2 border-b border-gray-100">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-green-500" />
                     <span className="text-sm text-gray-700">Coffee purchase</span>
                   </div>
-                  <span className="text-sm font-semibold text-[#E48A3A]">+1 bean</span>
+                  <span className="text-sm font-semibold text-[#C49A6C]">+1 bean</span>
                 </div>
                 <div className="flex items-center justify-between py-2">
                   <div className="flex items-center gap-2">
@@ -514,7 +514,7 @@ export default function NewV2Dashboard() {
                 setShowBeansPanel(false)
                 router.push('/rewards')
               }}
-              className="w-full py-3 bg-gradient-to-br from-[#E48A3A] to-[#D47A2A] text-white font-semibold rounded-xl shadow-lg hover:from-[#D47A2A] hover:to-[#C46A1A] transition-all"
+              className="w-full py-3 bg-gradient-to-br from-[#C49A6C] to-[#7B1234] text-white font-semibold rounded-xl shadow-lg hover:from-[#A87D55] hover:to-[#660E2B] transition-all"
             >
               View All Rewards
             </button>

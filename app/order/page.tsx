@@ -75,12 +75,12 @@ Thanks!`
       {orderSent ? (
         <div className="px-4 sm:px-6">
           <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 text-center shadow-lg">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-[#E48A3A] to-[#D47A2A] flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-[#C49A6C] to-[#7B1234] flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Check className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
             </div>
             <h2 className="text-lg sm:text-xl font-bold text-[#4B3028] mb-2">Order Sent!</h2>
             <p className="text-sm sm:text-base text-[#4B3028]/70 mb-6">Your order has been sent to WhatsApp. We'll prepare it for you!</p>
-            <Button onClick={() => { setOrderSent(false); setPickupTime(''); setOrderItems([{ id: '1', item: '', quantity: 1 }]) }} className="bg-gradient-to-br from-[#E48A3A] to-[#D47A2A] hover:from-[#D47A2A] hover:to-[#C46A1A] w-full h-12 sm:h-14">
+            <Button onClick={() => { setOrderSent(false); setPickupTime(''); setOrderItems([{ id: '1', item: '', quantity: 1 }]) }} className="bg-gradient-to-br from-[#C49A6C] to-[#7B1234] hover:from-[#A87D55] hover:to-[#660E2B] w-full h-12 sm:h-14">
               New Order
             </Button>
           </div>
@@ -94,7 +94,7 @@ Thanks!`
               onClick={() => setShowTimePicker(true)}
             >
               <div className="flex items-center gap-3 sm:gap-4">
-                <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-[#E48A3A]" />
+                <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-[#C49A6C]" />
                 <div>
                   <p className="text-sm sm:text-base font-medium text-[#4B3028]">Pickup Time</p>
                   <p className="text-xs sm:text-sm text-gray-500">{pickupTime || 'ASAP'}</p>
@@ -154,7 +154,7 @@ Thanks!`
               {/* Add Item Button */}
               <button
                 onClick={addItem}
-                className="w-full px-4 py-3 sm:px-5 sm:py-4 flex items-center justify-center gap-2 text-[#E48A3A] font-medium border-t border-gray-100 active:bg-gray-50 text-sm sm:text-base"
+                className="w-full px-4 py-3 sm:px-5 sm:py-4 flex items-center justify-center gap-2 text-[#C49A6C] font-medium border-t border-gray-100 active:bg-gray-50 text-sm sm:text-base"
               >
                 <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
                 Add Item
@@ -193,7 +193,7 @@ Thanks!`
                   }}
                   className={`py-3 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-medium transition-all ${
                     pickupTime === time
-                      ? 'bg-gradient-to-br from-[#E48A3A] to-[#D47A2A] text-white shadow-md'
+                      ? 'bg-gradient-to-br from-[#C49A6C] to-[#7B1234] text-white shadow-md'
                       : 'bg-gray-100 text-[#4B3028] hover:bg-gray-200'
                   }`}
                 >

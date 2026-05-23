@@ -67,8 +67,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
     }
   }, [showQRDialog, initialUser.id])
 
-  const handleSaveProfile = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSaveProfile = async () => {
     setIsLoading(true)
 
     try {
@@ -260,7 +259,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
                 onChange={(e) => setName(e.target.value)}
                 disabled={isLoading}
                 placeholder="Your name"
-                className="border-0 px-0 focus-visible:ring-0"
+                className="border-0 px-0 focus-visible:ring-0 pl-8"
               />
             </div>
 
@@ -296,7 +295,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
                 onChange={(e) => setPhone(e.target.value)}
                 disabled={isLoading}
                 placeholder="+44 7700 900000"
-                className="border-0 px-0 focus-visible:ring-0"
+                className="border-0 px-0 focus-visible:ring-0 pl-8"
               />
             </div>
 
@@ -322,7 +321,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
                 value={dateOfBirth}
                 onChange={(e) => setDateOfBirth(e.target.value)}
                 disabled={isLoading}
-                className="border-0 px-0 focus-visible:ring-0"
+                className="border-0 px-0 focus-visible:ring-0 pl-8"
               />
             </div>
           </div>
@@ -330,7 +329,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
           <Button 
             onClick={handleSaveProfile} 
             disabled={isLoading}
-            className="w-full mt-4 bg-[#8D123F] hover:bg-[#A8224E] text-white"
+            className="w-full mt-4 bg-gradient-to-br from-[#C49A6C] to-[#7B1234] hover:from-[#A87D55] hover:to-[#660E2B] text-white"
           >
             {isLoading ? 'Saving...' : 'Save'}
           </Button>
@@ -353,7 +352,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
                 onClick={() => setGpsConsent(!gpsConsent)}
                 disabled={isLoading}
                 className={`w-12 h-7 rounded-full p-1 transition-colors ${
-                  gpsConsent ? 'bg-[#E48A3A]' : 'bg-gray-300'
+                  gpsConsent ? 'bg-gradient-to-br from-[#C49A6C] to-[#7B1234]' : 'bg-gray-300'
                 }`}
               >
                 <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
@@ -375,7 +374,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
                 onClick={() => setMarketingConsent(!marketingConsent)}
                 disabled={isLoading}
                 className={`w-12 h-7 rounded-full p-1 transition-colors ${
-                  marketingConsent ? 'bg-[#E48A3A]' : 'bg-gray-300'
+                  marketingConsent ? 'bg-gradient-to-br from-[#C49A6C] to-[#7B1234]' : 'bg-gray-300'
                 }`}
               >
                 <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
