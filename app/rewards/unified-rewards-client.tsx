@@ -197,29 +197,29 @@ export function UnifiedRewardsClient({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-penkey-cream to-white">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white border-b border-penkey-border sticky top-0 z-10 shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between max-w-2xl mx-auto">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div className="px-4 py-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link href="/dashboard">
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className="text-[#4B3028]">
                   <ArrowLeft className="w-5 h-5" />
                 </Button>
               </Link>
               <div className="flex items-center gap-3">
-                <Gift className="w-6 h-6 text-penkey-orange" />
-                <h1 className="text-xl font-bold text-penkey-dark">Rewards</h1>
+                <Gift className="w-6 h-6 text-[#8D123F]" />
+                <h1 className="text-xl font-bold text-[#4B3028]">Rewards</h1>
               </div>
             </div>
             
             {/* Beans Display */}
-            <div className="bg-white border-2 border-penkey-brown/20 px-3 sm:px-4 py-2 rounded-xl shadow-sm">
+            <div className="bg-white border-2 border-gray-200 px-3 sm:px-4 py-2 rounded-xl">
               <div className="flex items-center gap-1.5 sm:gap-2">
-                <BeanIcon size="md" className="text-penkey-brown" />
-                <span className="text-xl sm:text-2xl font-bold text-penkey-dark">{currentPoints.toLocaleString()}</span>
-                <span className="text-xs sm:text-sm text-penkey-gray font-medium">beans</span>
+                <BeanIcon size="md" className="text-[#4B3028]" />
+                <span className="text-xl sm:text-2xl font-bold text-[#4B3028]">{currentPoints.toLocaleString()}</span>
+                <span className="text-xs sm:text-sm text-gray-500 font-medium">beans</span>
               </div>
             </div>
           </div>
@@ -227,33 +227,33 @@ export function UnifiedRewardsClient({
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 max-w-2xl">
+      <main className="px-3 sm:px-4 py-4 sm:py-6">
         <Tabs defaultValue="milestones" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 gap-2 h-auto p-1.5 bg-penkey-cream/50 border border-penkey-border rounded-lg shadow-sm">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 gap-2 h-auto p-1.5 bg-gray-100 border border-gray-200 rounded-lg">
             <TabsTrigger 
               value="how-it-works" 
-              className="flex-col sm:flex-row gap-1 sm:gap-2 py-2.5 sm:py-2 data-[state=active]:bg-white data-[state=active]:shadow data-[state=active]:border-penkey-orange/20 data-[state=active]:border"
+              className="flex-col sm:flex-row gap-1 sm:gap-2 py-2.5 sm:py-2 data-[state=active]:bg-white data-[state=active]:shadow data-[state=active]:border-[#8D123F]/20 data-[state=active]:border"
             >
               <HelpCircle className="w-4 h-4 sm:w-4 sm:h-4" />
               <span className="text-xs sm:text-sm font-medium">How to earn</span>
             </TabsTrigger>
             <TabsTrigger 
               value="milestones" 
-              className="flex-col sm:flex-row gap-1 sm:gap-2 py-2.5 sm:py-2 data-[state=active]:bg-white data-[state=active]:shadow data-[state=active]:border-penkey-orange/20 data-[state=active]:border"
+              className="flex-col sm:flex-row gap-1 sm:gap-2 py-2.5 sm:py-2 data-[state=active]:bg-white data-[state=active]:shadow data-[state=active]:border-[#8D123F]/20 data-[state=active]:border"
             >
               <Award className="w-4 h-4 sm:w-4 sm:h-4" />
               <span className="text-xs sm:text-sm font-medium">Progress</span>
             </TabsTrigger>
             <TabsTrigger 
               value="available" 
-              className="flex-col sm:flex-row gap-1 sm:gap-2 py-2.5 sm:py-2 data-[state=active]:bg-white data-[state=active]:shadow data-[state=active]:border-penkey-orange/20 data-[state=active]:border"
+              className="flex-col sm:flex-row gap-1 sm:gap-2 py-2.5 sm:py-2 data-[state=active]:bg-white data-[state=active]:shadow data-[state=active]:border-[#8D123F]/20 data-[state=active]:border"
             >
               <Sparkles className="w-4 h-4 sm:w-4 sm:h-4" />
               <span className="text-xs sm:text-sm font-medium">
                 <span className="hidden sm:inline">Available</span>
                 <span className="sm:hidden">Shop</span>
                 {availableRewards.length > 0 && (
-                  <span className="ml-1 text-[10px] sm:text-xs bg-penkey-orange text-white px-1.5 py-0.5 rounded-full">
+                  <span className="ml-1 text-[10px] sm:text-xs bg-[#8D123F] text-white px-1.5 py-0.5 rounded-full">
                     {availableRewards.length}
                   </span>
                 )}
@@ -261,14 +261,14 @@ export function UnifiedRewardsClient({
             </TabsTrigger>
             <TabsTrigger 
               value="earned" 
-              className="flex-col sm:flex-row gap-1 sm:gap-2 py-2.5 sm:py-2 data-[state=active]:bg-white data-[state=active]:shadow data-[state=active]:border-penkey-orange/20 data-[state=active]:border"
+              className="flex-col sm:flex-row gap-1 sm:gap-2 py-2.5 sm:py-2 data-[state=active]:bg-white data-[state=active]:shadow data-[state=active]:border-[#8D123F]/20 data-[state=active]:border"
             >
               <Gift className="w-4 h-4 sm:w-4 sm:h-4" />
               <span className="text-xs sm:text-sm font-medium">
                 <span className="hidden sm:inline">My Rewards</span>
                 <span className="sm:hidden">Mine</span>
                 {activeRewards.length > 0 && (
-                  <span className="ml-1 text-[10px] sm:text-xs bg-penkey-orange text-white px-1.5 py-0.5 rounded-full">
+                  <span className="ml-1 text-[10px] sm:text-xs bg-[#8D123F] text-white px-1.5 py-0.5 rounded-full">
                     {activeRewards.length}
                   </span>
                 )}
@@ -276,7 +276,7 @@ export function UnifiedRewardsClient({
             </TabsTrigger>
             <TabsTrigger 
               value="history" 
-              className="flex-col sm:flex-row gap-1 sm:gap-2 py-2.5 sm:py-2 data-[state=active]:bg-white data-[state=active]:shadow data-[state=active]:border-penkey-orange/20 data-[state=active]:border"
+              className="flex-col sm:flex-row gap-1 sm:gap-2 py-2.5 sm:py-2 data-[state=active]:bg-white data-[state=active]:shadow data-[state=active]:border-[#8D123F]/20 data-[state=active]:border"
             >
               <History className="w-4 h-4 sm:w-4 sm:h-4" />
               <span className="text-xs sm:text-sm font-medium">History</span>
@@ -294,26 +294,24 @@ export function UnifiedRewardsClient({
 
           {/* Milestones Tab */}
           <TabsContent value="milestones" className="space-y-4 mt-4 sm:mt-6">
-            <Card className="border-2 border-penkey-orange/20 bg-gradient-to-r from-penkey-orange/5 to-penkey-cream/50 shadow-sm">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <Award className="w-8 h-8 text-penkey-orange flex-shrink-0 mt-1" />
-                  <div>
-                    <h2 className="text-lg font-bold text-penkey-dark mb-2">
-                      Your beans
-                    </h2>
-                    <p className="text-penkey-gray">
-                      You have <strong className="inline-flex items-center gap-1"><BeanIcon size="sm" className="text-[#8B4513]" />{formatBeans(currentPoints)}</strong>. Keep earning to get free coffee!
-                    </p>
-                  </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+              <div className="flex items-start gap-4">
+                <Award className="w-8 h-8 text-[#8D123F] flex-shrink-0 mt-1" />
+                <div>
+                  <h2 className="text-lg font-bold text-[#4B3028] mb-2">
+                    Your beans
+                  </h2>
+                  <p className="text-gray-600">
+                    You have <strong className="inline-flex items-center gap-1"><BeanIcon size="sm" className="text-[#4B3028]" />{formatBeans(currentPoints)}</strong>. Keep earning to get free coffee!
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Progress Bar */}
             {availableRewards.length > 0 && (
-              <Card className="border-penkey-border shadow-sm">
-                <CardContent className="p-6">
+              <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <div className="p-4">
                   <div className="space-y-6">
                     {availableRewards.map((reward, index) => {
                       const isUnlocked = currentPoints >= reward.points_required
@@ -402,49 +400,43 @@ export function UnifiedRewardsClient({
                       )
                     })}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             )}
 
             {/* Motivational Card */}
-            <Card className="border-2 border-penkey-orange/20 bg-gradient-to-r from-penkey-orange/5 to-penkey-cream/50 shadow-sm">
-              <CardContent className="p-6 text-center">
-                <Sparkles className="w-12 h-12 text-penkey-orange mx-auto mb-3" />
-                <h3 className="font-bold text-penkey-dark mb-2">
-                  Earn more beans
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Check in, get stamps, play games, and refer friends to earn beans
-                </p>
-              </CardContent>
-            </Card>
+            <div className="bg-white rounded-xl border border-gray-200 p-6 text-center shadow-sm">
+              <Sparkles className="w-12 h-12 text-[#8D123F] mx-auto mb-3" />
+              <h3 className="font-bold text-[#4B3028] mb-2">
+                Earn more beans
+              </h3>
+              <p className="text-sm text-gray-600">
+                Check in, get stamps, play games, and refer friends to earn beans
+              </p>
+            </div>
           </TabsContent>
 
           {/* Available Rewards Tab */}
           <TabsContent value="available" className="space-y-4 mt-4 sm:mt-6">
-            <Card className="border-2 border-penkey-orange/20 bg-gradient-to-r from-penkey-orange/5 to-penkey-cream/50 shadow-sm">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <Sparkles className="w-8 h-8 text-penkey-orange flex-shrink-0 mt-1" />
-                  <div>
-                    <h2 className="text-lg font-bold text-penkey-dark mb-2">
-                      Spend your beans
-                    </h2>
-                    <p className="text-penkey-gray">
-                      You have <strong className="inline-flex items-center gap-1"><BeanIcon size="sm" className="text-[#8B4513]" />{formatBeans(currentPoints)}</strong>. Use them for free drinks
-                    </p>
-                  </div>
+            <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+              <div className="flex items-start gap-4">
+                <Sparkles className="w-8 h-8 text-[#8D123F] flex-shrink-0 mt-1" />
+                <div>
+                  <h2 className="text-lg font-bold text-[#4B3028] mb-2">
+                    Spend your beans
+                  </h2>
+                  <p className="text-gray-600">
+                    You have <strong className="inline-flex items-center gap-1"><BeanIcon size="sm" className="text-[#4B3028]" />{formatBeans(currentPoints)}</strong>. Use them for free drinks
+                  </p>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {availableRewards.length === 0 ? (
-              <Card className="border-penkey-border shadow-sm">
-                <CardContent className="py-12 text-center">
-                  <Gift className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500">No rewards available right now</p>
-                </CardContent>
-              </Card>
+              <div className="bg-white rounded-xl border border-gray-200 py-12 text-center shadow-sm">
+                <Gift className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500">No rewards available</p>
+              </div>
             ) : (
               <div className="space-y-4">
                 {availableRewards.map((reward) => {
@@ -452,58 +444,56 @@ export function UnifiedRewardsClient({
                   const outOfStock = reward.stock !== null && reward.stock <= 0
 
                   return (
-                    <Card
+                    <div
                       key={reward.id}
-                      className={`border-penkey-border shadow-sm transition-all rounded-xl overflow-hidden ${
+                      className={`bg-white border border-gray-200 shadow-sm transition-all rounded-xl overflow-hidden ${
                         affordable && !outOfStock
-                          ? 'hover:shadow-md hover:border-penkey-orange hover:scale-[1.01] cursor-pointer'
+                          ? 'hover:shadow-md hover:border-[#8D123F] hover:scale-[1.01] cursor-pointer'
                           : 'opacity-60'
                       }`}
                       onClick={() => affordable && !outOfStock && setSelectedReward(reward)}
                     >
-                      <CardHeader className="pb-3">
+                      <div className="p-4 pb-3">
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1">
-                            <CardTitle className="flex items-center gap-3 text-base sm:text-lg">
-                              <div className="flex-shrink-0 p-2 bg-penkey-cream/50 rounded-lg">{getRewardIcon(reward.reward_type)}</div>
+                            <div className="flex items-center gap-3 text-base sm:text-lg font-medium text-[#4B3028]">
+                              <div className="flex-shrink-0 p-2 bg-gray-100 rounded-lg">{getRewardIcon(reward.reward_type)}</div>
                               <div className="flex-1">
                                 <div className="flex items-center gap-2">
                                   <span>{reward.name}</span>
                                   {!affordable && <Lock className="w-4 h-4 text-gray-400" />}
                                 </div>
-                                <CardDescription className="mt-1 text-xs sm:text-sm">{reward.description}</CardDescription>
+                                <p className="mt-1 text-xs sm:text-sm text-gray-600">{reward.description}</p>
                               </div>
-                            </CardTitle>
+                            </div>
                           </div>
                         </div>
-                      </CardHeader>
-                      <CardContent className="pt-0">
-                        <div className="flex items-center justify-between bg-penkey-cream/30 -mx-6 -mb-6 px-6 py-4 border-t border-penkey-border/50">
-                          <div className="flex items-center gap-1.5 sm:gap-2">
-                            <BeanIcon size="lg" className={affordable ? 'text-[#8B4513]' : 'text-gray-400'} />
-                            <span className={`text-xl sm:text-2xl font-bold ${affordable ? 'text-[#8B4513]' : 'text-gray-400'}`}>
-                              {reward.points_required.toLocaleString()}
-                            </span>
-                            <span className="text-xs sm:text-sm text-gray-600">beans</span>
-                          </div>
-                          
-                          {affordable && !outOfStock ? (
-                            <Button size="sm" className="bg-penkey-orange hover:bg-penkey-orange-dark">
-                              <Sparkles className="w-4 h-4 mr-2" />
-                              Redeem Now!
-                            </Button>
-                          ) : outOfStock ? (
-                            <Button size="sm" variant="outline" disabled>
-                              Out of Stock
-                            </Button>
-                          ) : (
-                            <Button size="sm" variant="outline" disabled>
-                              Need {(reward.points_required - currentPoints).toLocaleString()} more beans
-                            </Button>
-                          )}
+                      </div>
+                      <div className="flex items-center justify-between bg-gray-50 -mx-0 -mb-0 px-4 py-4 border-t border-gray-200">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                          <BeanIcon size="lg" className={affordable ? 'text-[#4B3028]' : 'text-gray-400'} />
+                          <span className={`text-xl sm:text-2xl font-bold ${affordable ? 'text-[#4B3028]' : 'text-gray-400'}`}>
+                            {reward.points_required.toLocaleString()}
+                          </span>
+                          <span className="text-xs sm:text-sm text-gray-600">beans</span>
                         </div>
-                      </CardContent>
-                    </Card>
+                        
+                        {affordable && !outOfStock ? (
+                          <Button size="sm" className="bg-[#8D123F] hover:bg-[#A8224E]">
+                            <Sparkles className="w-4 h-4 mr-2" />
+                            Redeem
+                          </Button>
+                        ) : outOfStock ? (
+                          <Button size="sm" variant="outline" disabled>
+                            Out of Stock
+                          </Button>
+                        ) : (
+                          <Button size="sm" variant="outline" disabled>
+                            Need {(reward.points_required - currentPoints).toLocaleString()} more beans
+                          </Button>
+                        )}
+                      </div>
+                    </div>
                   )
                 })}
               </div>
@@ -513,13 +503,11 @@ export function UnifiedRewardsClient({
           {/* My Earned Rewards Tab */}
           <TabsContent value="earned" className="space-y-4 mt-4 sm:mt-6">
             {activeRewards.length === 0 ? (
-              <Card className="border-penkey-border shadow-sm">
-                <CardContent className="py-12 text-center">
-                  <Gift className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500 mb-4">No rewards yet</p>
-                  <p className="text-sm text-gray-400 flex items-center justify-center gap-1">Spend beans to get rewards <BeanIcon size="sm" className="text-gray-400" /></p>
-                </CardContent>
-              </Card>
+              <div className="bg-white rounded-xl border border-gray-200 py-12 text-center shadow-sm">
+                <Gift className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500 mb-4">No rewards yet</p>
+                <p className="text-sm text-gray-400 flex items-center justify-center gap-1">Spend beans to get rewards <BeanIcon size="sm" className="text-gray-400" /></p>
+              </div>
             ) : (
               <div className="space-y-4">
                 {activeRewards.map((userReward) => {
@@ -536,42 +524,40 @@ export function UnifiedRewardsClient({
 
                   return (
                     <Link href={`/rewards/${userReward.id}`} key={userReward.id}>
-                      <Card
-                        className={`border-penkey-border shadow-sm cursor-pointer hover:shadow-md transition-all hover:border-penkey-orange rounded-xl overflow-hidden ${
+                      <div
+                        className={`bg-white border border-gray-200 shadow-sm cursor-pointer hover:shadow-md transition-all hover:border-[#8D123F] rounded-xl overflow-hidden ${
                           isExpiringSoon ? 'border-red-400 border-2 ring-2 ring-red-100' : ''
                         }`}
                       >
-                        <CardHeader className={`pb-3 ${isExpiringSoon ? 'bg-red-50/50' : ''}`}>
+                        <div className={`p-4 pb-3 ${isExpiringSoon ? 'bg-red-50/50' : ''}`}>
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex items-center gap-3 flex-1">
-                              <div className="flex-shrink-0 p-2 bg-penkey-cream/50 rounded-lg">{getRewardIcon(reward.reward_type)}</div>
+                              <div className="flex-shrink-0 p-2 bg-gray-100 rounded-lg">{getRewardIcon(reward.reward_type)}</div>
                               <div className="flex-1 min-w-0">
-                                <CardTitle className="text-base sm:text-lg">{reward.name}</CardTitle>
-                                <CardDescription className="text-xs sm:text-sm">{reward.description}</CardDescription>
+                                <p className="text-base sm:text-lg font-medium text-[#4B3028]">{reward.name}</p>
+                                <p className="text-xs sm:text-sm text-gray-600">{reward.description}</p>
                               </div>
                             </div>
                             {reward.value && (
-                              <div className="flex-shrink-0 px-3 py-1.5 bg-penkey-orange/10 rounded-lg border border-penkey-orange/20">
-                                <span className="text-lg sm:text-xl font-bold text-penkey-orange">{reward.value}</span>
+                              <div className="flex-shrink-0 px-3 py-1.5 bg-[#8D123F]/10 rounded-lg border border-[#8D123F]/20">
+                                <span className="text-lg sm:text-xl font-bold text-[#8D123F]">{reward.value}</span>
                               </div>
                             )}
                           </div>
-                        </CardHeader>
-                        <CardContent className="pt-0">
-                          <div className="flex items-center justify-between bg-penkey-cream/30 -mx-6 -mb-6 px-6 py-3 border-t border-penkey-border/50">
-                            <div className="flex items-center gap-2 text-sm">
-                              <Clock className="w-4 h-4 text-gray-500" />
-                              <span className={isExpiringSoon ? 'text-red-600 font-semibold' : 'text-gray-600'}>
-                                {expiryText}
-                              </span>
-                            </div>
-                            <Button size="sm" variant="outline" className="border-penkey-orange/30 hover:bg-penkey-orange/10">
-                              <QrCode className="w-4 h-4 mr-2" />
-                              Show QR
-                            </Button>
+                        </div>
+                        <div className="flex items-center justify-between bg-gray-50 -mx-0 -mb-0 px-4 py-3 border-t border-gray-200">
+                          <div className="flex items-center gap-2 text-sm">
+                            <Clock className="w-4 h-4 text-gray-500" />
+                            <span className={isExpiringSoon ? 'text-red-600 font-semibold' : 'text-gray-600'}>
+                              {expiryText}
+                            </span>
                           </div>
-                        </CardContent>
-                      </Card>
+                          <Button size="sm" variant="outline" className="border-[#8D123F]/30 hover:bg-[#8D123F]/10">
+                            <QrCode className="w-4 h-4 mr-2" />
+                            Show QR
+                          </Button>
+                        </div>
+                      </div>
                     </Link>
                   )
                 })}
@@ -582,31 +568,27 @@ export function UnifiedRewardsClient({
           {/* History Tab */}
           <TabsContent value="history" className="space-y-4 mt-4 sm:mt-6">
             {historyRewards.length === 0 ? (
-              <Card className="border-penkey-border shadow-sm">
-                <CardContent className="py-12 text-center">
-                  <History className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-penkey-dark mb-2">No History Yet!</h3>
-                  <p className="text-gray-500 mb-2">Your redeemed and expired rewards will appear here</p>
-                  <p className="text-sm text-gray-400">Keep earning beans to unlock amazing rewards! ✨</p>
-                </CardContent>
-              </Card>
+              <div className="bg-white rounded-xl border border-gray-200 py-12 text-center shadow-sm">
+                <History className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-[#4B3028] mb-2">No History Yet</h3>
+                <p className="text-gray-500 mb-2">Your redeemed and expired rewards will appear here</p>
+                <p className="text-sm text-gray-400">Keep earning beans to unlock rewards</p>
+              </div>
             ) : (
               <>
-                <Card className="border-2 border-penkey-orange/20 bg-gradient-to-r from-penkey-orange/5 to-penkey-cream/50 shadow-sm">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <History className="w-8 h-8 text-penkey-orange flex-shrink-0 mt-1" />
-                      <div>
-                        <h2 className="text-lg font-bold text-penkey-dark mb-2">
-                          Your Rewards Journey
-                        </h2>
-                        <p className="text-penkey-gray">
-                          You've used <strong>{redeemedRewards.length}</strong> {redeemedRewards.length === 1 ? 'reward' : 'rewards'}! {expiredRewards.length > 0 && `${expiredRewards.length} expired.`} Keep earning beans for more amazing perks! 💕
-                        </p>
-                      </div>
+                <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+                  <div className="flex items-start gap-4">
+                    <History className="w-8 h-8 text-[#8D123F] flex-shrink-0 mt-1" />
+                    <div>
+                      <h2 className="text-lg font-bold text-[#4B3028] mb-2">
+                        Your Rewards Journey
+                      </h2>
+                      <p className="text-gray-600">
+                        You've used <strong>{redeemedRewards.length}</strong> {redeemedRewards.length === 1 ? 'reward' : 'rewards'}! {expiredRewards.length > 0 && `${expiredRewards.length} expired.`} Keep earning beans for more rewards
+                      </p>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
 
                 <div className="space-y-3">
                   {historyRewards.map((userReward) => {
@@ -623,12 +605,11 @@ export function UnifiedRewardsClient({
 
                     return (
                       <Link href={`/rewards/${userReward.id}`} key={userReward.id}>
-                        <Card 
-                          className={`border-penkey-border shadow-sm transition-all cursor-pointer hover:shadow-md hover:border-penkey-orange ${
+                        <div 
+                          className={`bg-white border border-gray-200 shadow-sm transition-all cursor-pointer hover:shadow-md hover:border-[#8D123F] rounded-xl p-4 ${
                             isExpired ? 'opacity-50' : 'opacity-75'
                           }`}
                         >
-                          <CardContent className="p-4">
                             <div className="flex items-center justify-between gap-3">
                               <div className="flex items-center gap-3 flex-1 min-w-0">
                                 <div className={`flex-shrink-0 p-2 rounded-lg ${
@@ -642,7 +623,7 @@ export function UnifiedRewardsClient({
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 mb-1">
-                                    <span className="text-sm font-semibold text-penkey-dark truncate">{reward.name}</span>
+                                    <span className="text-sm font-semibold text-[#4B3028] truncate">{reward.name}</span>
                                     {isRedeemed && (
                                       <span className="flex-shrink-0 text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
                                         Used
@@ -665,25 +646,22 @@ export function UnifiedRewardsClient({
                                 </div>
                               )}
                             </div>
-                          </CardContent>
-                        </Card>
+                        </div>
                       </Link>
                     )
                   })}
                 </div>
 
                 {/* Motivational Footer */}
-                <Card className="border-2 border-penkey-orange/20 bg-gradient-to-r from-penkey-orange/5 to-penkey-cream/50 shadow-sm mt-6">
-                  <CardContent className="p-6 text-center">
-                    <Sparkles className="w-10 h-10 text-penkey-orange mx-auto mb-3" />
-                    <h3 className="font-bold text-penkey-dark mb-2">
-                      Keep Going! 🎉
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      Every bean gets you closer to your next reward. Check in daily, play games, and refer friends!
-                    </p>
-                  </CardContent>
-                </Card>
+                <div className="bg-white rounded-xl border border-gray-200 p-6 text-center shadow-sm mt-6">
+                  <Sparkles className="w-10 h-10 text-[#8D123F] mx-auto mb-3" />
+                  <h3 className="font-bold text-[#4B3028] mb-2">
+                    Keep Going
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Every bean gets you closer to your next reward. Check in daily, play games, and refer friends
+                  </p>
+                </div>
               </>
             )}
           </TabsContent>
@@ -692,40 +670,40 @@ export function UnifiedRewardsClient({
 
       {/* Redeem Confirmation Dialog */}
       <Dialog open={!!selectedReward} onOpenChange={() => setSelectedReward(null)}>
-        <DialogContent className="max-w-md sm:max-w-lg">
+        <DialogContent className="max-w-md sm:max-w-lg rounded-2xl">
           <DialogHeader className="space-y-3">
             <div className="flex justify-center">
-              <div className="p-4 bg-penkey-cream/50 rounded-2xl border border-penkey-border">
+              <div className="p-4 bg-gray-100 rounded-2xl border border-gray-200">
                 {selectedReward && getRewardIcon(selectedReward.reward_type)}
               </div>
             </div>
-            <DialogTitle className="text-center text-xl sm:text-2xl">
+            <DialogTitle className="text-center text-xl sm:text-2xl text-[#4B3028]">
               Redeem {selectedReward?.name}?
             </DialogTitle>
             <DialogDescription className="text-center space-y-3">
-              <div className="bg-penkey-cream/50 rounded-lg p-4 border border-penkey-border">
+              <div className="bg-gray-100 rounded-lg p-4 border border-gray-200">
                 <p className="text-sm text-gray-600 mb-2">This will cost</p>
                 <div className="flex items-center gap-2 justify-center">
-                  <BeanIcon size="lg" className="text-[#8B4513]" />
-                  <span className="text-2xl font-bold text-[#8B4513]">{selectedReward?.points_required.toLocaleString()}</span>
+                  <BeanIcon size="lg" className="text-[#4B3028]" />
+                  <span className="text-2xl font-bold text-[#4B3028]">{selectedReward?.points_required.toLocaleString()}</span>
                   <span className="text-sm text-gray-600">beans</span>
                 </div>
               </div>
               <div className="text-sm text-gray-600">
-                You'll have <span className="font-semibold text-penkey-dark">{(currentPoints - (selectedReward?.points_required || 0)).toLocaleString()} beans</span> remaining
+                You'll have <span className="font-semibold text-[#4B3028]">{(currentPoints - (selectedReward?.points_required || 0)).toLocaleString()} beans</span> remaining
               </div>
             </DialogDescription>
           </DialogHeader>
 
-          <div className="bg-gradient-to-br from-penkey-orange/5 to-penkey-cream/50 p-4 rounded-xl border border-penkey-orange/20">
+          <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
             <div className="flex items-start gap-3">
               <div className="p-2 bg-white rounded-lg">
-                <QrCode className="w-5 h-5 text-penkey-orange" />
+                <QrCode className="w-5 h-5 text-[#8D123F]" />
               </div>
               <div>
-                <p className="text-sm font-medium text-penkey-dark mb-1">Next Steps</p>
+                <p className="text-sm font-medium text-[#4B3028] mb-1">Next Steps</p>
                 <p className="text-xs text-gray-600">
-                  Your reward will appear in "My Rewards" with a QR code to show staff!
+                  Your reward will appear in "My Rewards" with a QR code to show staff
                 </p>
               </div>
             </div>
@@ -742,11 +720,11 @@ export function UnifiedRewardsClient({
             </Button>
             <Button
               onClick={handleRedeem}
-              className="flex-1 sm:flex-none sm:min-w-[120px] bg-penkey-orange hover:bg-penkey-orange-dark"
+              className="flex-1 sm:flex-none sm:min-w-[120px] bg-[#8D123F] hover:bg-[#A8224E]"
               disabled={isRedeeming}
             >
               <Sparkles className="w-4 h-4 mr-2" />
-              {isRedeeming ? 'Redeeming...' : 'Redeem!'}
+              {isRedeeming ? 'Redeeming...' : 'Redeem'}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -754,12 +732,12 @@ export function UnifiedRewardsClient({
 
       {/* QR Code Dialog for Earned Rewards */}
       <Dialog open={!!selectedEarnedReward} onOpenChange={() => setSelectedEarnedReward(null)}>
-        <DialogContent className="max-w-sm">
+        <DialogContent className="max-w-sm rounded-2xl">
           <DialogHeader>
-            <DialogTitle className="text-center">
+            <DialogTitle className="text-center text-[#4B3028]">
               {selectedEarnedReward?.rewards?.name}
             </DialogTitle>
-            <DialogDescription className="text-center">
+            <DialogDescription className="text-center text-gray-500">
               Show this QR code to staff to redeem
             </DialogDescription>
           </DialogHeader>
@@ -791,38 +769,36 @@ export function UnifiedRewardsClient({
 
       {/* Success Modal */}
       <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
-        <DialogContent className="max-w-md border-4 border-penkey-orange bg-gradient-to-b from-white to-penkey-cream/30">
+        <DialogContent className="max-w-md border-4 border-[#8D123F] bg-gradient-to-b from-white to-gray-50 rounded-2xl">
           <div className="text-center space-y-6 py-4">
             {/* Celebration Icon */}
             <div className="relative">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-penkey-orange to-amber-500 flex items-center justify-center mx-auto shadow-lg animate-bounce">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#8D123F] to-[#A8224E] flex items-center justify-center mx-auto shadow-lg animate-bounce">
                 <Sparkles className="w-12 h-12 text-white" />
               </div>
-              <div className="absolute -top-2 -right-2 text-4xl animate-pulse">🎉</div>
-              <div className="absolute -bottom-2 -left-2 text-4xl animate-pulse delay-75">✨</div>
             </div>
 
             {/* Success Message */}
             <div className="space-y-3">
-              <h2 className="text-3xl font-bold text-penkey-dark">
-                Woohoo! 🎊
+              <h2 className="text-3xl font-bold text-[#4B3028]">
+                Reward Redeemed
               </h2>
-              <p className="text-xl font-semibold text-penkey-orange">
-                You've Redeemed Your Reward!
+              <p className="text-xl font-semibold text-[#8D123F]">
+                Your reward is ready!
               </p>
             </div>
 
             {/* Reward Info */}
             {redeemedRewardData && (
-              <div className="bg-white rounded-2xl p-6 border-2 border-penkey-orange/30 shadow-lg">
+              <div className="bg-white rounded-2xl p-6 border-2 border-[#8D123F]/30 shadow-lg">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-16 h-16 rounded-full bg-penkey-orange/10 flex items-center justify-center flex-shrink-0">
-                    <Gift className="w-8 h-8 text-penkey-orange" />
+                  <div className="w-16 h-16 rounded-full bg-[#8D123F]/10 flex items-center justify-center flex-shrink-0">
+                    <Gift className="w-8 h-8 text-[#8D123F]" />
                   </div>
                   <div className="text-left">
-                    <p className="font-bold text-lg text-penkey-dark">{redeemedRewardData.name}</p>
+                    <p className="font-bold text-lg text-[#4B3028]">{redeemedRewardData.name}</p>
                     {redeemedRewardData.description && (
-                      <p className="text-sm text-penkey-gray">{redeemedRewardData.description}</p>
+                      <p className="text-sm text-gray-600">{redeemedRewardData.description}</p>
                     )}
                   </div>
                 </div>
@@ -839,15 +815,15 @@ export function UnifiedRewardsClient({
             )}
 
             {/* Penkey Messaging */}
-            <div className="bg-gradient-to-r from-penkey-orange/10 to-amber-50 rounded-2xl p-5 border-2 border-penkey-orange/20">
-              <p className="text-penkey-dark font-medium mb-3">
-                💕 While you're here...
+            <div className="bg-gradient-to-r from-[#8D123F]/10 to-gray-50 rounded-2xl p-5 border-2 border-[#8D123F]/20">
+              <p className="text-[#4B3028] font-medium mb-3">
+                While you're here...
               </p>
-              <p className="text-sm text-penkey-gray leading-relaxed">
-                Don't forget to try our <span className="font-bold text-amber-800">chocolate brownies</span> or our <span className="font-bold text-amber-800">famous crumble slices</span>! 
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Don't forget to try our <span className="font-bold text-[#E48A3A]">chocolate brownies</span> or our <span className="font-bold text-[#E48A3A]">famous crumble slices</span>! 
               </p>
-              <p className="text-sm text-penkey-gray mt-2">
-                They pair perfectly with your favourite coffee! ☕✨
+              <p className="text-sm text-gray-600 mt-2">
+                They pair perfectly with your favourite coffee
               </p>
             </div>
 
@@ -857,7 +833,7 @@ export function UnifiedRewardsClient({
                 setShowSuccessModal(false)
                 setRedeemedRewardData(null)
               }}
-              className="w-full bg-penkey-orange hover:bg-penkey-dark text-white font-bold py-6 text-lg rounded-xl shadow-lg"
+              className="w-full bg-[#8D123F] hover:bg-[#A8224E] text-white font-bold py-6 text-lg rounded-xl shadow-lg"
             >
               Awesome! 🎉
             </Button>

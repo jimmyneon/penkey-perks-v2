@@ -1,36 +1,67 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Camera, Check, X } from 'lucide-react'
+import { Camera, Check, X, Loader2 } from 'lucide-react'
+import { Html5QrcodeScanner } from 'html5-qrcode'
 
 export default function ScanPage() {
-  const fileInputRef = useRef<HTMLInputElement>(null)
   const [scanned, setScanned] = useState(false)
   const [result, setResult] = useState('')
+  const [scanning, setScanning] = useState(false)
+  const [error, setError] = useState('')
+  const scannerRef = useRef<Html5QrcodeScanner | null>(null)
+  const readerRef = useRef<any>(null)
 
-  const handleCameraClick = () => {
-    fileInputRef.current?.click()
-  }
+  useEffect(() => {
+    return () => {
+      // Cleanup on unmount
+      if (readerRef.current) {
+        readerRef.current.stop().catch(console.error)
+      }
+    }
+  }, [])
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      // In a real implementation, this would process the QR code
-      // For now, just simulate a successful scan
-      setScanned(true)
-      setResult('QR-123456')
+  const startScanning = async () => {
+    setScanning(true)
+    setError('')
+
+    try {
+      const Html5Qrcode = (await import('html5-qrcode')).Html5Qrcode
+      readerRef.current = new Html5Qrcode('reader')
+      
+      await readerRef.current.start(
+        { facingMode: 'environment' },
+        {
+          fps: 10,
+          qrbox: { width: 250, height: 250 },
+        },
+        (decodedText: string) => {
+          setScanned(true)
+          setResult(decodedText)
+          setScanning(false)
+          readerRef.current?.stop().catch(console.error)
+        },
+        (errorMessage: string) => {
+          // Ignore scan errors (happens while scanning)
+        }
+      )
+    } catch (err) {
+      setError('Unable to access camera. Please ensure camera permissions are granted.')
+      setScanning(false)
+      console.error(err)
     }
   }
 
   const handleReset = () => {
     setScanned(false)
     setResult('')
+    setError('')
   }
 
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
-      {!scanned ? (
+      {!scanning && !scanned ? (
         <div className="text-center space-y-6">
           <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#8D123F] to-[#A8224E] flex items-center justify-center mx-auto shadow-lg">
             <Camera className="w-12 h-12 text-white" />
@@ -41,22 +72,38 @@ export default function ScanPage() {
             <p className="text-sm text-[#4B3028]/70">Tap to open camera and scan</p>
           </div>
 
+          {error && (
+            <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>
+          )}
+
           <Button
-            onClick={handleCameraClick}
+            onClick={startScanning}
             className="bg-gradient-to-br from-[#8D123F] to-[#A8224E] hover:from-[#A8224E] hover:to-[#8D123F] text-white font-semibold h-14 px-8 rounded-2xl shadow-lg"
           >
             <Camera className="w-5 h-5 mr-2" />
             Open Camera
           </Button>
-
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            capture="environment"
-            onChange={handleFileChange}
-            className="hidden"
-          />
+        </div>
+      ) : scanning ? (
+        <div className="w-full max-w-sm space-y-4">
+          <div className="text-center">
+            <h1 className="text-xl font-bold text-[#4B3028] mb-2">Scanning...</h1>
+            <p className="text-sm text-[#4B3028]/70">Point camera at QR code</p>
+          </div>
+          
+          <div id="reader" className="w-full rounded-xl overflow-hidden" />
+          
+          <Button
+            onClick={() => {
+              setScanning(false)
+              readerRef.current?.stop().catch(console.error)
+            }}
+            variant="outline"
+            className="w-full"
+          >
+            <X className="w-4 h-4 mr-2" />
+            Cancel
+          </Button>
         </div>
       ) : (
         <div className="text-center space-y-6 max-w-sm">

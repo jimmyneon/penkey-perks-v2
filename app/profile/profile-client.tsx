@@ -5,15 +5,12 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { ArrowLeft, User, Mail, Phone, Calendar, Lock, Trash2, PauseCircle, MapPin, Gift, AlertTriangle, QrCode } from 'lucide-react'
+import { ArrowLeft, User, Mail, Phone, Calendar, Lock, Trash2, PauseCircle, MapPin, Gift, AlertTriangle, QrCode, ChevronRight, Bell, Shield, X } from 'lucide-react'
 import Link from 'next/link'
 import { useToast } from '@/hooks/use-toast'
 import { createClient } from '@/lib/supabase/client'
 import QRCodeLib from 'qrcode'
-import { PushNotificationToggle } from '@/components/push-notification-toggle'
 
 interface ProfileClientProps {
   user: {
@@ -220,236 +217,285 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
   }
 
   return (
-    <div className="min-h-screen bg-penkey-cream">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white border-b border-penkey-border sticky top-0 z-10 shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4 max-w-2xl">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div className="px-4 py-4 flex items-center gap-4">
           <Link href="/dashboard">
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="text-[#4B3028]">
               <ArrowLeft className="w-5 h-5" />
             </Button>
           </Link>
-          <div className="flex items-center gap-3">
-            <User className="w-6 h-6 text-penkey-orange" />
-            <h1 className="text-xl font-bold text-penkey-dark">Profile & Settings</h1>
-          </div>
+          <h1 className="text-xl font-bold text-[#4B3028]">Profile</h1>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-6 space-y-6 max-w-2xl">
-        {/* Profile Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Personal Information</CardTitle>
-            <CardDescription>
-              Update your profile details here 💕
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSaveProfile} className="space-y-4">
-              {/* Name */}
-              <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  disabled={isLoading}
-                  required
-                />
+      <main className="px-4 py-4 space-y-6">
+        {/* Profile Section */}
+        <div>
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">Personal Info</h2>
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            {/* Name */}
+            <button
+              onClick={() => document.getElementById('name')?.focus()}
+              className="w-full px-4 py-3.5 flex items-center justify-between border-b border-gray-100 active:bg-gray-50"
+            >
+              <div className="flex items-center gap-3">
+                <User className="w-5 h-5 text-gray-400" />
+                <div className="text-left">
+                  <p className="text-xs text-gray-500">Name</p>
+                  <p className="text-sm font-medium text-[#4B3028]">{name || 'Not set'}</p>
+                </div>
               </div>
-
-              {/* Email (read-only) */}
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  value={initialUser.email}
-                  disabled
-                  className="bg-gray-50"
-                />
-                <p className="text-xs text-gray-500">
-                  Email cannot be changed
-                </p>
-              </div>
-
-              {/* Phone */}
-              <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  disabled={isLoading}
-                  placeholder="+44 7700 900000"
-                />
-              </div>
-
-              {/* Date of Birth */}
-              <div className="space-y-2">
-                <Label htmlFor="dob">Date of Birth</Label>
-                <Input
-                  id="dob"
-                  type="date"
-                  value={dateOfBirth}
-                  onChange={(e) => setDateOfBirth(e.target.value)}
-                  disabled={isLoading}
-                />
-                <p className="text-xs text-penkey-gray flex items-center gap-1">
-                  <Gift className="w-3 h-3" />
-                  We'll send you a birthday surprise! 🎉
-                </p>
-              </div>
-
-              <Button type="submit" disabled={isLoading} className="w-full">
-                {isLoading ? 'Saving...' : 'Save Changes'}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-
-        {/* Privacy & Permissions */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Privacy & Permissions</CardTitle>
-            <CardDescription>
-              Manage your data and communication preferences
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-start gap-3">
-              <Checkbox
-                id="gps"
-                checked={gpsConsent}
-                onCheckedChange={(checked: boolean) => setGpsConsent(checked)}
+              <ChevronRight className="w-5 h-5 text-gray-300" />
+            </button>
+            
+            {/* Name Input (hidden by default, shown when clicked) */}
+            <div className="px-4 py-3 border-b border-gray-100">
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 disabled={isLoading}
+                placeholder="Your name"
+                className="border-0 px-0 focus-visible:ring-0"
               />
-              <div className="flex-1">
-                <Label htmlFor="gps" className="flex items-center gap-2 cursor-pointer font-medium">
-                  <MapPin className="w-4 h-4 text-penkey-orange" />
-                  Location Services
-                </Label>
-                <p className="text-xs text-gray-600 mt-1">
-                  Allow GPS to verify you're at Penkey for stamps and check-ins
-                </p>
+            </div>
+
+            {/* Email */}
+            <div className="px-4 py-3.5 flex items-center justify-between border-b border-gray-100">
+              <div className="flex items-center gap-3">
+                <Mail className="w-5 h-5 text-gray-400" />
+                <div className="text-left">
+                  <p className="text-xs text-gray-500">Email</p>
+                  <p className="text-sm font-medium text-[#4B3028]">{initialUser.email}</p>
+                </div>
               </div>
             </div>
 
-            <div className="flex items-start gap-3">
-              <Checkbox
-                id="marketing"
-                checked={marketingConsent}
-                onCheckedChange={(checked: boolean) => setMarketingConsent(checked)}
-                disabled={isLoading}
-              />
-              <div className="flex-1">
-                <Label htmlFor="marketing" className="flex items-center gap-2 cursor-pointer font-medium">
-                  <Gift className="w-4 h-4 text-penkey-orange" />
-                  Marketing Communications
-                </Label>
-                <p className="text-xs text-gray-600 mt-1">
-                  Receive special offers, birthday treats, and exclusive deals
-                </p>
+            {/* Phone */}
+            <div className="px-4 py-3.5 flex items-center justify-between border-b border-gray-100">
+              <div className="flex items-center gap-3">
+                <Phone className="w-5 h-5 text-gray-400" />
+                <div className="text-left">
+                  <p className="text-xs text-gray-500">Phone</p>
+                  <p className="text-sm font-medium text-[#4B3028]">{phone || 'Not set'}</p>
+                </div>
               </div>
+              <ChevronRight className="w-5 h-5 text-gray-300" />
             </div>
 
-            <PushNotificationToggle disabled={isLoading} />
+            {/* Phone Input */}
+            <div className="px-4 py-3 border-b border-gray-100">
+              <Input
+                id="phone"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                disabled={isLoading}
+                placeholder="+44 7700 900000"
+                className="border-0 px-0 focus-visible:ring-0"
+              />
+            </div>
 
-            <Button onClick={handleSaveProfile} disabled={isLoading} variant="outline" className="w-full">
-              Update Preferences
-            </Button>
-          </CardContent>
-        </Card>
+            {/* Birthday */}
+            <div className="px-4 py-3.5 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Calendar className="w-5 h-5 text-gray-400" />
+                <div className="text-left">
+                  <p className="text-xs text-gray-500">Birthday</p>
+                  <p className="text-sm font-medium text-[#4B3028]">{dateOfBirth || 'Not set'}</p>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-gray-300" />
+            </div>
 
-        {/* Staff QR Code */}
-        <Card className="border-penkey-border bg-gradient-to-br from-orange-50 to-amber-50">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-penkey-dark">
-              <QrCode className="w-5 h-5 text-penkey-orange" />
-              Staff QR Code
-            </CardTitle>
-            <CardDescription>
-              Show this to staff for check-ins, stamps, and rewards
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button 
+            {/* Birthday Input */}
+            <div className="px-4 py-3">
+              <Input
+                id="dob"
+                type="date"
+                value={dateOfBirth}
+                onChange={(e) => setDateOfBirth(e.target.value)}
+                disabled={isLoading}
+                className="border-0 px-0 focus-visible:ring-0"
+              />
+            </div>
+          </div>
+
+          <Button 
+            onClick={handleSaveProfile} 
+            disabled={isLoading}
+            className="w-full mt-4 bg-[#8D123F] hover:bg-[#A8224E] text-white"
+          >
+            {isLoading ? 'Saving...' : 'Save'}
+          </Button>
+        </div>
+
+        {/* Preferences Section */}
+        <div>
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">Preferences</h2>
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            {/* Location */}
+            <div className="px-4 py-3.5 flex items-center justify-between border-b border-gray-100">
+              <div className="flex items-center gap-3">
+                <MapPin className="w-5 h-5 text-gray-400" />
+                <div className="text-left">
+                  <p className="text-sm font-medium text-[#4B3028]">Location Services</p>
+                  <p className="text-xs text-gray-500">For check-ins and stamps</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setGpsConsent(!gpsConsent)}
+                disabled={isLoading}
+                className={`w-12 h-7 rounded-full p-1 transition-colors ${
+                  gpsConsent ? 'bg-[#8D123F]' : 'bg-gray-300'
+                }`}
+              >
+                <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
+                  gpsConsent ? 'translate-x-5' : 'translate-x-0'
+                }`} />
+              </button>
+            </div>
+
+            {/* Marketing */}
+            <div className="px-4 py-3.5 flex items-center justify-between border-b border-gray-100">
+              <div className="flex items-center gap-3">
+                <Gift className="w-5 h-5 text-gray-400" />
+                <div className="text-left">
+                  <p className="text-sm font-medium text-[#4B3028]">Marketing</p>
+                  <p className="text-xs text-gray-500">Offers and updates</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setMarketingConsent(!marketingConsent)}
+                disabled={isLoading}
+                className={`w-12 h-7 rounded-full p-1 transition-colors ${
+                  marketingConsent ? 'bg-[#8D123F]' : 'bg-gray-300'
+                }`}
+              >
+                <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
+                  marketingConsent ? 'translate-x-5' : 'translate-x-0'
+                }`} />
+              </button>
+            </div>
+
+            {/* Notifications */}
+            <div className="px-4 py-3.5 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Bell className="w-5 h-5 text-gray-400" />
+                <div className="text-left">
+                  <p className="text-sm font-medium text-[#4B3028]">Notifications</p>
+                  <p className="text-xs text-gray-500">Push notifications</p>
+                </div>
+              </div>
+              <button
+                disabled={isLoading}
+                className={`w-12 h-7 rounded-full p-1 transition-colors bg-gray-300`}
+              >
+                <div className="w-5 h-5 rounded-full bg-white" />
+              </button>
+            </div>
+          </div>
+
+          <Button 
+            onClick={handleSaveProfile} 
+            disabled={isLoading}
+            variant="outline"
+            className="w-full mt-4"
+          >
+            Update Preferences
+          </Button>
+        </div>
+
+        {/* QR Code Section */}
+        <div>
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">Your QR Code</h2>
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <button
               onClick={() => setShowQRDialog(true)}
-              className="w-full bg-penkey-orange hover:bg-penkey-dark"
+              className="w-full px-4 py-3.5 flex items-center justify-between active:bg-gray-50"
             >
-              <QrCode className="w-4 h-4 mr-2" />
-              Show My QR Code
-            </Button>
-            <p className="text-xs text-penkey-gray mt-2 text-center">
-              Staff can scan this for quick check-ins and stamps
-            </p>
-          </CardContent>
-        </Card>
+              <div className="flex items-center gap-3">
+                <QrCode className="w-5 h-5 text-[#8D123F]" />
+                <div className="text-left">
+                  <p className="text-sm font-medium text-[#4B3028]">Show QR Code</p>
+                  <p className="text-xs text-gray-500">For staff to scan</p>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-gray-300" />
+            </button>
+          </div>
+        </div>
 
-        {/* Security */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Security</CardTitle>
-            <CardDescription>
-              Manage your password and account security
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button 
+        {/* Security Section */}
+        <div>
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">Security</h2>
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <button
               onClick={() => setShowPasswordDialog(true)}
-              variant="outline"
-              className="w-full"
+              className="w-full px-4 py-3.5 flex items-center justify-between active:bg-gray-50"
             >
-              <Lock className="w-4 h-4 mr-2" />
-              Change Password
-            </Button>
-          </CardContent>
-        </Card>
+              <div className="flex items-center gap-3">
+                <Lock className="w-5 h-5 text-gray-400" />
+                <div className="text-left">
+                  <p className="text-sm font-medium text-[#4B3028]">Change Password</p>
+                  <p className="text-xs text-gray-500">Update your password</p>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-gray-300" />
+            </button>
+          </div>
+        </div>
 
         {/* Account Actions */}
-        <Card className="border-orange-200">
-          <CardHeader>
-            <CardTitle className="text-orange-600">Account Actions</CardTitle>
-            <CardDescription>
-              Take a break or permanently delete your account
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <Button
+        <div>
+          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">Account</h2>
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <button
               onClick={() => setShowPauseDialog(true)}
-              variant="outline"
-              className="w-full border-orange-300 text-orange-600 hover:bg-orange-50"
+              className="w-full px-4 py-3.5 flex items-center justify-between border-b border-gray-100 active:bg-gray-50"
             >
-              <PauseCircle className="w-4 h-4 mr-2" />
-              Pause Account (Keep Data)
-            </Button>
+              <div className="flex items-center gap-3">
+                <PauseCircle className="w-5 h-5 text-orange-500" />
+                <div className="text-left">
+                  <p className="text-sm font-medium text-[#4B3028]">Pause Account</p>
+                  <p className="text-xs text-gray-500">Keep your data safe</p>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-gray-300" />
+            </button>
 
-            <Button
+            <button
               onClick={() => setShowDeleteDialog(true)}
-              variant="outline"
-              className="w-full border-red-300 text-red-600 hover:bg-red-50"
+              className="w-full px-4 py-3.5 flex items-center justify-between active:bg-red-50"
             >
-              <Trash2 className="w-4 h-4 mr-2" />
-              Delete Account Permanently
-            </Button>
-          </CardContent>
-        </Card>
+              <div className="flex items-center gap-3">
+                <Trash2 className="w-5 h-5 text-red-500" />
+                <div className="text-left">
+                  <p className="text-sm font-medium text-red-600">Delete Account</p>
+                  <p className="text-xs text-gray-500">Permanently delete all data</p>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-gray-300" />
+            </button>
+          </div>
+        </div>
       </main>
 
       {/* Change Password Dialog */}
       <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
-        <DialogContent>
+        <DialogContent className="rounded-2xl">
           <DialogHeader>
-            <DialogTitle>Change Password</DialogTitle>
-            <DialogDescription>
-              Enter your new password below
+            <DialogTitle className="text-[#4B3028]">Change Password</DialogTitle>
+            <DialogDescription className="text-gray-500">
+              Enter your new password
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="new-password">New Password</Label>
+              <Label htmlFor="new-password" className="text-[#4B3028]">New Password</Label>
               <Input
                 id="new-password"
                 type="password"
@@ -459,7 +505,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm Password</Label>
+              <Label htmlFor="confirm-password" className="text-[#4B3028]">Confirm Password</Label>
               <Input
                 id="confirm-password"
                 type="password"
@@ -473,8 +519,8 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
             <Button variant="outline" onClick={() => setShowPasswordDialog(false)}>
               Cancel
             </Button>
-            <Button onClick={handleChangePassword} disabled={isLoading}>
-              {isLoading ? 'Changing...' : 'Change Password'}
+            <Button onClick={handleChangePassword} disabled={isLoading} className="bg-[#8D123F] hover:bg-[#A8224E]">
+              {isLoading ? 'Changing...' : 'Change'}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -482,23 +528,28 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
 
       {/* Pause Account Dialog */}
       <Dialog open={showPauseDialog} onOpenChange={setShowPauseDialog}>
-        <DialogContent>
+        <DialogContent className="rounded-2xl">
           <DialogHeader>
-            <DialogTitle>⏸️ Pause Your Account?</DialogTitle>
-            <DialogDescription>
-              Taking a break? No worries! 💕
+            <DialogTitle className="text-[#4B3028]">Pause Account?</DialogTitle>
+            <DialogDescription className="text-gray-500">
+              Your data will be kept safe
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
-              <p className="text-sm text-gray-700">
-                <strong>What happens:</strong>
-              </p>
-              <ul className="text-sm text-gray-600 mt-2 space-y-1 list-disc list-inside">
-                <li>Your account will be paused</li>
-                <li>All your data stays safe (points, stamps, rewards)</li>
-                <li>You can reactivate anytime by logging back in</li>
-                <li>We'll keep everything ready for your return! 🎉</li>
+            <div className="p-4 bg-orange-50 border border-orange-200 rounded-xl">
+              <ul className="text-sm text-gray-600 space-y-2">
+                <li className="flex items-start gap-2">
+                  <span className="text-orange-500">•</span>
+                  Your account will be paused
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-orange-500">•</span>
+                  All your data stays safe
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-orange-500">•</span>
+                  You can reactivate anytime
+                </li>
               </ul>
             </div>
           </div>
@@ -511,7 +562,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
               disabled={isLoading}
               className="bg-orange-500 hover:bg-orange-600"
             >
-              {isLoading ? 'Pausing...' : 'Pause Account'}
+              {isLoading ? 'Pausing...' : 'Pause'}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -519,30 +570,35 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
 
       {/* Delete Account Dialog */}
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <DialogContent>
+        <DialogContent className="rounded-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-red-600">
               <AlertTriangle className="w-5 h-5" />
-              Delete Account Permanently?
+              Delete Account?
             </DialogTitle>
-            <DialogDescription>
-              This action cannot be undone!
+            <DialogDescription className="text-gray-500">
+              This cannot be undone
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-700">
-                <strong>⚠️ Warning:</strong>
-              </p>
-              <ul className="text-sm text-red-600 mt-2 space-y-1 list-disc list-inside">
-                <li>All your data will be permanently deleted</li>
-                <li>Points, stamps, and rewards will be lost</li>
-                <li>This cannot be undone</li>
-                <li>You'll need to create a new account to return</li>
+            <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
+              <ul className="text-sm text-red-600 space-y-2">
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500">•</span>
+                  All your data will be deleted
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500">•</span>
+                  Points and rewards will be lost
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-red-500">•</span>
+                  This cannot be undone
+                </li>
               </ul>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirm-delete">
+              <Label htmlFor="confirm-delete" className="text-[#4B3028]">
                 Type <strong>DELETE</strong> to confirm
               </Label>
               <Input
@@ -565,7 +621,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
               disabled={isLoading || confirmText !== 'DELETE'}
               variant="destructive"
             >
-              {isLoading ? 'Deleting...' : 'Delete Forever'}
+              {isLoading ? 'Deleting...' : 'Delete'}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -573,20 +629,20 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
 
       {/* Staff QR Code Dialog */}
       <Dialog open={showQRDialog} onOpenChange={setShowQRDialog}>
-        <DialogContent className="max-w-sm">
+        <DialogContent className="rounded-2xl max-w-sm">
           <DialogHeader>
-            <DialogTitle className="text-center text-penkey-dark flex items-center justify-center gap-2">
-              <QrCode className="w-5 h-5 text-penkey-orange" />
-              Your Staff QR Code
+            <DialogTitle className="text-center text-[#4B3028] flex items-center justify-center gap-2">
+              <QrCode className="w-5 h-5 text-[#8D123F]" />
+              Your QR Code
             </DialogTitle>
-            <DialogDescription className="text-center text-penkey-gray">
-              Show this to staff for check-ins, stamps, and rewards
+            <DialogDescription className="text-center text-gray-500">
+              Show this to staff
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4">
             {/* QR Code */}
-            <div className="bg-white p-6 rounded-xl border-2 border-penkey-border flex items-center justify-center">
+            <div className="bg-white p-6 rounded-xl border-2 border-gray-200 flex items-center justify-center">
               {qrCodeUrl && (
                 <img 
                   src={qrCodeUrl} 
@@ -598,26 +654,26 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
 
             {/* Code Text */}
             <div className="text-center space-y-2">
-              <p className="text-xs text-penkey-gray uppercase tracking-wide font-medium">QR Code</p>
-              <p className="text-sm font-mono bg-orange-50 border border-penkey-border px-4 py-3 rounded-lg text-penkey-dark font-semibold">
+              <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">QR Code</p>
+              <p className="text-sm font-mono bg-gray-50 border border-gray-200 px-4 py-3 rounded-lg text-[#4B3028] font-semibold">
                 PROFILE-{initialUser.id}
               </p>
             </div>
 
             {/* Instructions */}
-            <div className="bg-orange-50 border border-amber-200 rounded-lg p-4">
-              <p className="text-sm text-penkey-dark font-medium mb-2">Staff can use this to:</p>
-              <ul className="text-xs text-penkey-gray space-y-1">
-                <li>✓ Process your daily check-in</li>
-                <li>✓ Add coffee stamps</li>
-                <li>✓ Award bonus points</li>
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
+              <p className="text-sm text-[#4B3028] font-medium mb-2">Staff can use this to:</p>
+              <ul className="text-xs text-gray-600 space-y-1">
+                <li>• Process check-ins</li>
+                <li>• Add stamps</li>
+                <li>• Award points</li>
               </ul>
             </div>
 
             {/* Close Button */}
             <Button 
               onClick={() => setShowQRDialog(false)}
-              className="w-full bg-penkey-orange hover:bg-penkey-dark"
+              className="w-full bg-[#8D123F] hover:bg-[#A8224E]"
             >
               Close
             </Button>
