@@ -20,9 +20,9 @@ export default function ScanPage() {
     startScanning()
     
     return () => {
-      // Cleanup on unmount
+      // Cleanup on unmount - don't await, just fire and forget
       if (readerRef.current) {
-        readerRef.current.stop().catch(console.error)
+        readerRef.current.stop().catch(() => {})
       }
     }
   }, [])
@@ -77,9 +77,15 @@ export default function ScanPage() {
           <div id="reader" className="w-full rounded-xl overflow-hidden" />
           
           <Button
-            onClick={() => {
+            onClick={async () => {
               setScanning(false)
-              readerRef.current?.stop().catch(console.error)
+              try {
+                if (readerRef.current) {
+                  await readerRef.current.stop()
+                }
+              } catch (err) {
+                console.error('Error stopping scanner:', err)
+              }
               router.push('/dashboard')
             }}
             variant="outline"
