@@ -45,7 +45,7 @@ export function BottomNav() {
               className="relative -top-6"
             >
               <div className="w-16 h-16 rounded-full bg-[#F4D8CC] flex items-center justify-center shadow-[0_8px_24px_rgba(244,216,204,0.4),0_4px_12px_rgba(244,216,204,0.3)] border-4 border-white">
-                <Scan className="w-7 h-7 text-[#C49A6C]" />
+                <Scan className="w-7 h-7 text-[#7B1234]" />
               </div>
             </Link>
 

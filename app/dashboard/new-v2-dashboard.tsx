@@ -185,7 +185,7 @@ export default function NewV2Dashboard() {
                 onClick={() => setShowNotifications(true)}
                 className="w-10 h-10 rounded-full bg-[#F4D8CC] flex items-center justify-center shadow-[0_4px_12px_rgba(244,216,204,0.4)]"
               >
-                <Bell className="w-5 h-5 text-[#C49A6C]" />
+                <Bell className="w-5 h-5 text-[#7B1234]" />
               </button>
             </div>
           </div>
