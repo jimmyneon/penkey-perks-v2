@@ -466,7 +466,7 @@ export default function NewV2Dashboard() {
           </DialogHeader>
           <div className="py-4 space-y-4">
             {/* Beans Balance */}
-            <div className="bg-gradient-to-br from-[#C49A6C] to-[#7B1234] rounded-2xl p-6 text-white text-center">
+            <div className="bg-gradient-to-br from-[#C49A6C] to-[#7B1234] rounded-[28px] p-6 text-white text-center shadow-[0_8px_32px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.04)]">
               <p className="text-sm font-medium mb-1">Current Balance</p>
               <p className="text-4xl font-extrabold mb-2">{currentBeans}</p>
               <p className="text-sm opacity-90">beans</p>
@@ -475,7 +475,7 @@ export default function NewV2Dashboard() {
             {/* Stamps Section */}
             <div>
               <h3 className="text-sm font-semibold text-[#4B3028] mb-3">Coffee Stamps</h3>
-              <div className="bg-[#FFFDFC] rounded-xl p-4 border border-[#F3DCD4]">
+              <div className="bg-[#FFFDFC] rounded-[28px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.04)] border border-[#F3DCD4]">
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-sm text-gray-600">Stamps collected</span>
                   <span className="text-lg font-bold text-[#C49A6C]">3 / 8</span>
@@ -503,15 +503,15 @@ export default function NewV2Dashboard() {
             {/* Recent Activity */}
             <div>
               <h3 className="text-sm font-semibold text-[#4B3028] mb-3">Recent Activity</h3>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between py-2 border-b border-gray-100">
+              <div className="bg-[#FFFDFC] rounded-[28px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.04)] border border-[#F3DCD4] space-y-2">
+                <div className="flex items-center justify-between py-2 border-b border-[#F3DCD4]">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-green-500" />
                     <span className="text-sm text-gray-700">Check-in bonus</span>
                   </div>
                   <span className="text-sm font-semibold text-[#C49A6C]">+2 beans</span>
                 </div>
-                <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                <div className="flex items-center justify-between py-2 border-b border-[#F3DCD4]">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-green-500" />
                     <span className="text-sm text-gray-700">Coffee purchase</span>
@@ -534,7 +534,7 @@ export default function NewV2Dashboard() {
                 setShowBeansPanel(false)
                 router.push('/rewards')
               }}
-              className="w-full py-3 bg-gradient-to-br from-[#C49A6C] to-[#7B1234] text-white font-semibold rounded-xl shadow-lg hover:from-[#A87D55] hover:to-[#660E2B] transition-all"
+              className="w-full py-3 bg-gradient-to-br from-[#C49A6C] to-[#7B1234] text-white font-semibold rounded-[28px] shadow-lg hover:from-[#A87D55] hover:to-[#660E2B] transition-all"
             >
               View All Rewards
             </button>
