@@ -35,7 +35,7 @@
     "framer-motion": "^11.18.2",
     "html5-qrcode": "^2.3.8",
     "lucide-react": "^0.460.0",
-    "next": "15.0.0",
+    "next": "15.5.18",
     "postcss": "^8.4.33",
     "qrcode": "^1.5.4",
     "react": "^18.3.1",
