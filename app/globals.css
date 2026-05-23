@@ -1,0 +1,293 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Penkey Premium Design System */
+    --background: 30 30% 96%; /* #FAF7F4 - Cream Background */
+    --foreground: 20 30% 28%; /* #4B3028 - Warm Brown Text */
+    --card: 0 0% 100%; /* #FFFDFC - Off-white Cards */
+    --card-foreground: 20 30% 28%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 30% 28%;
+    --primary: 348 78% 32%; /* #8D123F - Burgundy */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 20 50% 86%; /* #F4D8CC - Blush */
+    --secondary-foreground: 20 30% 28%;
+    --muted: 20 30% 92%; /* #F0EBE5 - Soft Cream */
+    --muted-foreground: 20 20% 45%;
+    --accent: 25 80% 56%; /* #FF8C42 - Orange */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 20 20% 88%;
+    --input: 20 20% 88%;
+    --ring: 348 78% 32%;
+    --radius: 1.25rem;
+    
+    /* Additional Penkey colors */
+    --blush: 20 50% 86%; /* #F4D8CC */
+    --gold: 40 70% 49%; /* #C9952E */
+    --gold-light: 40 60% 67%; /* #E8C76E */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-cream-bg text-brown;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Typography system - Manrope for premium feel */
+  body {
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  
+  h1 {
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
+  
+  h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+  
+  h3 {
+    font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+  }
+  
+  p {
+    line-height: 1.6;
+  }
+}
+
+@layer utilities {
+  .tap-highlight-none {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+  
+  /* Hide scrollbar utility */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Accessibility - Screen reader only */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+  
+  /* Focus visible styles */
+  .focus-visible:focus {
+    outline: 2px solid #8D123F;
+    outline-offset: 2px;
+    border-radius: 0.375rem;
+  }
+  
+  /* Premium shadow utilities */
+  .shadow-premium-sm {
+    box-shadow: 0 2px 8px rgba(75, 48, 40, 0.08), 0 1px 3px rgba(75, 48, 40, 0.06);
+  }
+  
+  .shadow-premium {
+    box-shadow: 0 4px 16px rgba(75, 48, 40, 0.12), 0 2px 6px rgba(75, 48, 40, 0.08);
+  }
+  
+  .shadow-premium-lg {
+    box-shadow: 0 8px 24px rgba(75, 48, 40, 0.15), 0 4px 12px rgba(75, 48, 40, 0.1);
+  }
+  
+  .shadow-premium-xl {
+    box-shadow: 0 16px 48px rgba(75, 48, 40, 0.18), 0 8px 24px rgba(75, 48, 40, 0.12);
+  }
+  
+  /* Glass morphism */
+  .glass {
+    background: rgba(255, 253, 252, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  
+  .glass-dark {
+    background: rgba(75, 48, 40, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  
+  /* Safe area utilities for mobile */
+  .safe-top {
+    padding-top: max(env(safe-area-inset-top), 1rem);
+  }
+  
+  .safe-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+  }
+  
+  .safe-left {
+    padding-left: max(env(safe-area-inset-left), 1rem);
+  }
+  
+  .safe-right {
+    padding-right: max(env(safe-area-inset-right), 1rem);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F0EBE5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #F4D8CC;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #E8C4B8;
+}
+
+/* Animations */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.ripple {
+  animation: ripple 0.6s ease-out;
+}
+
+/* Duck pond water effect */
+@keyframes wave {
+  0%, 100% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(5px) translateY(-5px);
+  }
+  50% {
+    transform: translateX(0) translateY(-10px);
+  }
+  75% {
+    transform: translateX(-5px) translateY(-5px);
+  }
+}
+
+.water-wave {
+  animation: wave 3s ease-in-out infinite;
+}
+
+/* Confetti animation */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.confetti {
+  animation: confetti-fall 3s linear forwards;
+}
+
+/* Bubble pop animation - subtle grow */
+@keyframes bubble-pop {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.animate-bubble-pop {
+  animation: bubble-pop 2s ease-in-out infinite;
+  animation-iteration-count: infinite;
+}
+
+/* Premium Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
