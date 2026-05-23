@@ -77,14 +77,11 @@ export default function ScanPage() {
           <div id="reader" className="w-full rounded-xl overflow-hidden" />
           
           <Button
-            onClick={async () => {
+            onClick={() => {
               setScanning(false)
-              try {
-                if (readerRef.current) {
-                  await readerRef.current.stop()
-                }
-              } catch (err) {
-                console.error('Error stopping scanner:', err)
+              // Stop scanner without awaiting to avoid blocking navigation
+              if (readerRef.current) {
+                readerRef.current.stop().catch(() => {})
               }
               router.push('/dashboard')
             }}

@@ -23,6 +23,7 @@ export default function NewV2Dashboard() {
   const [selectedFeatured, setSelectedFeatured] = useState<any>(null)
   const [showNotifications, setShowNotifications] = useState(false)
   const [showBeansPanel, setShowBeansPanel] = useState(false)
+  const [voucherQrCode, setVoucherQrCode] = useState('')
 
   useEffect(() => {
     loadData()
@@ -106,6 +107,29 @@ export default function NewV2Dashboard() {
       setShowQR(true)
     } catch (error) {
       console.error('Error generating QR code:', error)
+    }
+  }
+
+  const generateVoucherQRCode = async (voucher: any) => {
+    try {
+      const qrData = JSON.stringify({
+        type: 'voucher',
+        id: voucher.id,
+        user_id: user?.id,
+        template_id: voucher.voucher_template_id,
+        timestamp: Date.now(),
+      })
+      const url = await QRCodeLib.toDataURL(qrData, {
+        width: 300,
+        margin: 2,
+        color: {
+          dark: '#7B1234',
+          light: '#FFFDFC',
+        },
+      })
+      setVoucherQrCode(url)
+    } catch (error) {
+      console.error('Error generating voucher QR code:', error)
     }
   }
 
@@ -307,7 +331,10 @@ export default function NewV2Dashboard() {
                 <div
                   key={voucher.id}
                   className={`relative rounded-[18px] shadow-[0_6px_20px_rgba(0,0,0,0.15),0_3px_10px_rgba(0,0,0,0.1)] min-w-[calc(50%-6px)] w-[calc(50%-6px)] h-[120px] flex-shrink-0 snap-start overflow-hidden cursor-pointer active:scale-[0.98] transition-transform`}
-                  onClick={() => setSelectedVoucher(voucher)}
+                  onClick={() => {
+                    setSelectedVoucher(voucher)
+                    generateVoucherQRCode(voucher)
+                  }}
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${voucher.gradient || 'from-[#8D123F] to-[#A8224E]'} opacity-85`} />
                   {voucher.image && (
@@ -387,22 +414,33 @@ export default function NewV2Dashboard() {
           <DialogHeader>
             <DialogTitle className="text-[#4B3028]">{selectedVoucher?.template?.name}</DialogTitle>
           </DialogHeader>
-          <div className="py-6">
-            <p className="text-sm text-[#4B3028] mb-4">{selectedVoucher?.template?.description}</p>
+          <div className="py-6 space-y-4">
+            <p className="text-sm text-[#4B3028]">{selectedVoucher?.template?.description}</p>
             <p className="text-xs text-[#8D123F] font-semibold">
               Expires: {selectedVoucher?.expires_at ? new Date(selectedVoucher.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A'}
             </p>
+            {voucherQrCode && (
+              <div className="flex flex-col items-center space-y-3">
+                <img src={voucherQrCode} alt="Voucher QR Code" className="w-48 h-48" />
+                <p className="text-xs text-gray-500">Show this QR code to staff to redeem</p>
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>
 
       {/* Featured Item Detail Dialog */}
       <Dialog open={!!selectedFeatured} onOpenChange={() => setSelectedFeatured(null)}>
-        <DialogContent className="sm:max-w-md rounded-[28px] shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
-          <DialogHeader>
-            <DialogTitle className="text-[#4B3028]">{selectedFeatured?.title}</DialogTitle>
-          </DialogHeader>
-          <div className="py-6">
+        <DialogContent className="sm:max-w-lg rounded-[28px] shadow-[0_20px_60px_rgba(0,0,0,0.15)] p-0 overflow-hidden">
+          {selectedFeatured?.image && (
+            <img 
+              src={selectedFeatured.image} 
+              alt={selectedFeatured.title}
+              className="w-full h-64 object-cover"
+            />
+          )}
+          <div className="p-6">
+            <DialogTitle className="text-[#4B3028] text-xl mb-2">{selectedFeatured?.title}</DialogTitle>
             <p className="text-sm text-[#4B3028] mb-4">{selectedFeatured?.description}</p>
             <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-gradient-to-r from-[#C49A6C] to-[#7B1234]">
               <span className="text-xs font-bold text-white">+2 bonus beans today</span>
@@ -460,7 +498,7 @@ export default function NewV2Dashboard() {
 
       {/* Beans Panel Dialog */}
       <Dialog open={showBeansPanel} onOpenChange={setShowBeansPanel}>
-        <DialogContent className="sm:max-w-md rounded-[28px] shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
+        <DialogContent className="sm:max-w-md rounded-[28px] shadow-[0_20px_60px_rgba(0,0,0,0.15)] bg-[#faf9f6]">
           <DialogHeader>
             <DialogTitle className="text-[#4B3028]">Your Beans & Stamps</DialogTitle>
           </DialogHeader>
@@ -475,7 +513,7 @@ export default function NewV2Dashboard() {
             {/* Stamps Section */}
             <div>
               <h3 className="text-sm font-semibold text-[#4B3028] mb-3">Coffee Stamps</h3>
-              <div className="bg-[#FFFDFC] rounded-[28px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.04)] border border-[#F3DCD4]">
+              <div className="bg-white rounded-[28px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.04)] border border-[#F3DCD4]">
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-sm text-gray-600">Stamps collected</span>
                   <span className="text-lg font-bold text-[#C49A6C]">3 / 8</span>
@@ -490,7 +528,7 @@ export default function NewV2Dashboard() {
                           : 'bg-gray-200 text-gray-400'
                       }`}
                     >
-                      {num <= 3 ? '☕' : num}
+                      {num <= 3 ? '✓' : num}
                     </div>
                   ))}
                 </div>
@@ -503,7 +541,7 @@ export default function NewV2Dashboard() {
             {/* Recent Activity */}
             <div>
               <h3 className="text-sm font-semibold text-[#4B3028] mb-3">Recent Activity</h3>
-              <div className="bg-[#FFFDFC] rounded-[28px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.04)] border border-[#F3DCD4] space-y-2">
+              <div className="bg-white rounded-[28px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.04)] border border-[#F3DCD4] space-y-2">
                 <div className="flex items-center justify-between py-2 border-b border-[#F3DCD4]">
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-green-500" />

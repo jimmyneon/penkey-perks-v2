@@ -72,21 +72,23 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
 
     try {
       const { error } = await supabase
-        .from('users')
+        .from('profiles')
         .update({
           name,
           phone: phone || null,
           date_of_birth: dateOfBirth || null,
-          gps_consent: gpsConsent,
-          marketing_consent: marketingConsent,
+          preferences: {
+            gps_consent: gpsConsent,
+            marketing_consent: marketingConsent,
+          },
         })
         .eq('id', initialUser.id)
 
       if (error) throw error
 
       toast({
-        title: '✅ Profile Updated!',
-        description: 'Your changes have been saved! 💕',
+        title: 'Profile Updated',
+        description: 'Your changes have been saved',
       })
     } catch (error: any) {
       toast({
@@ -149,15 +151,15 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
     setIsLoading(true)
     try {
       const { error } = await supabase
-        .from('users')
-        .update({ status: 'paused' })
+        .from('profiles')
+        .update({ preferences: { status: 'paused' } })
         .eq('id', initialUser.id)
 
       if (error) throw error
 
       toast({
-        title: '⏸️ Account Paused',
-        description: 'Your account is paused. We\'ll keep your data safe! Come back anytime! 💕',
+        title: 'Account Paused',
+        description: 'Your account is paused. We\'ll keep your data safe! Come back anytime!',
       })
 
       // Sign out
