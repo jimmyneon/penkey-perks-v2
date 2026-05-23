@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { useToast } from '@/hooks/use-toast'
 import { createClient } from '@/lib/supabase/client'
 import QRCodeLib from 'qrcode'
+import { BottomNav } from '@/components/bottom-nav'
 
 interface ProfileClientProps {
   user: {
@@ -350,7 +351,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
                 onClick={() => setGpsConsent(!gpsConsent)}
                 disabled={isLoading}
                 className={`w-12 h-7 rounded-full p-1 transition-colors ${
-                  gpsConsent ? 'bg-[#8D123F]' : 'bg-gray-300'
+                  gpsConsent ? 'bg-[#E48A3A]' : 'bg-gray-300'
                 }`}
               >
                 <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
@@ -372,7 +373,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
                 onClick={() => setMarketingConsent(!marketingConsent)}
                 disabled={isLoading}
                 className={`w-12 h-7 rounded-full p-1 transition-colors ${
-                  marketingConsent ? 'bg-[#8D123F]' : 'bg-gray-300'
+                  marketingConsent ? 'bg-[#E48A3A]' : 'bg-gray-300'
                 }`}
               >
                 <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
@@ -402,8 +403,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
           <Button 
             onClick={handleSaveProfile} 
             disabled={isLoading}
-            variant="outline"
-            className="w-full mt-4"
+            className="w-full mt-4 bg-gradient-to-br from-[#E48A3A] to-[#D47A2A] hover:from-[#D47A2A] hover:to-[#C46A1A] text-white font-semibold h-12"
           >
             Update Preferences
           </Button>
@@ -680,6 +680,8 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
           </div>
         </DialogContent>
       </Dialog>
+      
+      <BottomNav />
     </div>
   )
 }
