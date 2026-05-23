@@ -223,11 +223,6 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="px-4 py-4 flex items-center gap-4">
-          <Link href="/dashboard">
-            <Button variant="ghost" size="icon" className="text-[#4B3028]">
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-          </Link>
           <h1 className="text-xl font-bold text-[#4B3028]">Profile</h1>
         </div>
       </header>
@@ -331,7 +326,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
           <Button 
             onClick={handleSaveProfile} 
             disabled={isLoading}
-            className="w-full mt-4 bg-gradient-to-br from-[#C49A6C] to-[#7B1234] hover:from-[#A87D55] hover:to-[#660E2B] text-white"
+            className="w-full mt-4 bg-[#7B1234] hover:bg-[#660E2B] text-white"
           >
             {isLoading ? 'Saving...' : 'Save'}
           </Button>
@@ -354,7 +349,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
                 onClick={() => setGpsConsent(!gpsConsent)}
                 disabled={isLoading}
                 className={`w-12 h-7 rounded-full p-1 transition-colors ${
-                  gpsConsent ? 'bg-gradient-to-br from-[#C49A6C] to-[#7B1234]' : 'bg-gray-300'
+                  gpsConsent ? 'bg-[#7B1234]' : 'bg-gray-300'
                 }`}
               >
                 <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
@@ -376,7 +371,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
                 onClick={() => setMarketingConsent(!marketingConsent)}
                 disabled={isLoading}
                 className={`w-12 h-7 rounded-full p-1 transition-colors ${
-                  marketingConsent ? 'bg-gradient-to-br from-[#C49A6C] to-[#7B1234]' : 'bg-gray-300'
+                  marketingConsent ? 'bg-[#7B1234]' : 'bg-gray-300'
                 }`}
               >
                 <div className={`w-5 h-5 rounded-full bg-white transition-transform ${

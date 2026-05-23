@@ -75,12 +75,12 @@ Thanks!`
       {orderSent ? (
         <div className="px-4 sm:px-6">
           <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 text-center shadow-lg">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-[#C49A6C] to-[#7B1234] flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#7B1234] flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Check className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
             </div>
             <h2 className="text-lg sm:text-xl font-bold text-[#4B3028] mb-2">Order Sent!</h2>
             <p className="text-sm sm:text-base text-[#4B3028]/70 mb-6">Your order has been sent to WhatsApp. We'll prepare it for you!</p>
-            <Button onClick={() => { setOrderSent(false); setPickupTime(''); setOrderItems([{ id: '1', item: '', quantity: 1 }]) }} className="bg-gradient-to-br from-[#C49A6C] to-[#7B1234] hover:from-[#A87D55] hover:to-[#660E2B] w-full h-12 sm:h-14">
+            <Button onClick={() => { setOrderSent(false); setPickupTime(''); setOrderItems([{ id: '1', item: '', quantity: 1 }]) }} className="bg-[#7B1234] hover:bg-[#660E2B] w-full h-12 sm:h-14">
               New Order
             </Button>
           </div>
@@ -193,7 +193,7 @@ Thanks!`
                   }}
                   className={`py-3 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-medium transition-all ${
                     pickupTime === time
-                      ? 'bg-gradient-to-br from-[#C49A6C] to-[#7B1234] text-white shadow-md'
+                      ? 'bg-[#7B1234] text-white shadow-md'
                       : 'bg-gray-100 text-[#4B3028] hover:bg-gray-200'
                   }`}
                 >

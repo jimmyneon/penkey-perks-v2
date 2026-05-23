@@ -315,7 +315,7 @@ export default function NewV2Dashboard() {
                 <h3 className="font-bold text-white text-[clamp(1.1rem,4vw,1.3rem)] mb-1">{displayCampaign.name}</h3>
                 <p className="text-xs text-white/90 mb-2">{displayCampaign.description}</p>
                 {displayCampaign.bean_multiplier > 1 && (
-                  <div className="inline-flex items-center px-2.5 py-1 rounded-full bg-gradient-to-r from-[#C49A6C] to-[#7B1234] shadow-[0_4px_12px_rgba(196,154,108,0.4)]">
+                  <div className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#7B1234] shadow-[0_4px_12px_rgba(123,18,52,0.4)]">
                     <span className="text-[10px] font-bold text-white">{displayCampaign.bean_multiplier}x beans</span>
                   </div>
                 )}
@@ -336,7 +336,7 @@ export default function NewV2Dashboard() {
                     generateVoucherQRCode(voucher)
                   }}
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${voucher.gradient || 'from-[#8D123F] to-[#A8224E]'} opacity-85`} />
+                  <div className={`absolute inset-0 bg-[#7B1234] opacity-85`} />
                   {voucher.image && (
                     <img 
                       src={voucher.image} 
@@ -373,7 +373,7 @@ export default function NewV2Dashboard() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
                   <div className="relative z-10 h-full flex flex-col justify-end p-4">
-                    <div className="inline-flex items-center px-2 py-1 rounded-full bg-gradient-to-r from-[#C49A6C] to-[#7B1234] w-fit mb-2 shadow-[0_4px_12px_rgba(196,154,108,0.4)]">
+                    <div className="inline-flex items-center px-2 py-1 rounded-full bg-[#7B1234] w-fit mb-2 shadow-[0_4px_12px_rgba(123,18,52,0.4)]">
                       <span className="text-[10px] font-bold text-white">{item.description}</span>
                     </div>
                     <h3 className="font-bold text-white text-sm">{item.title}</h3>
@@ -504,7 +504,7 @@ export default function NewV2Dashboard() {
           </DialogHeader>
           <div className="py-4 space-y-4">
             {/* Beans Balance */}
-            <div className="bg-gradient-to-br from-[#C49A6C] to-[#7B1234] rounded-[28px] p-6 text-white text-center shadow-[0_8px_32px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.04)]">
+            <div className="bg-[#7B1234] rounded-[28px] p-6 text-white text-center shadow-[0_8px_32px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.04)]">
               <p className="text-sm font-medium mb-1">Current Balance</p>
               <p className="text-4xl font-extrabold mb-2">{currentBeans}</p>
               <p className="text-sm opacity-90">beans</p>
@@ -524,7 +524,7 @@ export default function NewV2Dashboard() {
                       key={num}
                       className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
                         num <= 3
-                          ? 'bg-gradient-to-br from-[#C49A6C] to-[#7B1234] text-white'
+                          ? 'bg-[#7B1234] text-white'
                           : 'bg-gray-200 text-gray-400'
                       }`}
                     >
@@ -572,7 +572,7 @@ export default function NewV2Dashboard() {
                 setShowBeansPanel(false)
                 router.push('/rewards')
               }}
-              className="w-full py-3 bg-gradient-to-br from-[#C49A6C] to-[#7B1234] text-white font-semibold rounded-[28px] shadow-lg hover:from-[#A87D55] hover:to-[#660E2B] transition-all"
+              className="w-full py-3 bg-[#7B1234] text-white font-semibold rounded-[28px] shadow-lg hover:bg-[#660E2B] transition-all"
             >
               View All Rewards
             </button>

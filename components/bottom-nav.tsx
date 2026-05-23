@@ -30,7 +30,7 @@ export function BottomNav() {
                   className="flex flex-col items-center justify-center flex-1 h-full relative group min-h-[44px]"
                 >
                   <div className={`flex flex-col items-center justify-center transition-all rounded-xl px-3 py-2 ${
-                    isActive ? 'bg-[#F4D8CC] text-[#C49A6C] shadow-[0_4px_12px_rgba(244,216,204,0.4)]' : 'text-[#4B3028]/60 group-hover:text-[#C49A6C] group-hover:bg-[#F4D8CC]/50'
+                    isActive ? 'text-[#7B1234] border-2 border-[#7B1234]' : 'text-[#4B3028]/60 group-hover:text-[#7B1234] border-2 border-transparent'
                   }`}>
                     <Icon className="w-5 h-5 mb-0.5" />
                     <span className="text-[10px] font-medium">{item.label}</span>
@@ -60,7 +60,7 @@ export function BottomNav() {
                   className="flex flex-col items-center justify-center flex-1 h-full relative group min-h-[44px]"
                 >
                   <div className={`flex flex-col items-center justify-center transition-all rounded-xl px-3 py-2 ${
-                    isActive ? 'bg-[#F4D8CC] text-[#C49A6C] shadow-[0_4px_12px_rgba(244,216,204,0.4)]' : 'text-[#4B3028]/60 group-hover:text-[#C49A6C] group-hover:bg-[#F4D8CC]/50'
+                    isActive ? 'text-[#7B1234] border-2 border-[#7B1234]' : 'text-[#4B3028]/60 group-hover:text-[#7B1234] border-2 border-transparent'
                   }`}>
                     <Icon className="w-5 h-5 mb-0.5" />
                     <span className="text-[10px] font-medium">{item.label}</span>
