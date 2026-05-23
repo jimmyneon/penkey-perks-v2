@@ -893,10 +893,11 @@ CREATE POLICY "System can manage notifications"
 CREATE POLICY "Admins can manage staff roles"
   ON public.staff_roles FOR ALL
   USING (
+    -- Use profiles table to check admin status to avoid recursion
     EXISTS (
-      SELECT 1 FROM public.staff_roles
-      WHERE user_id = auth.uid()
-      AND role = 'admin'
+      SELECT 1 FROM public.profiles
+      WHERE id = auth.uid()
+      AND (preferences->>'role')::text = 'admin'
     )
   );
 

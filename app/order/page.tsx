@@ -65,7 +65,7 @@ Thanks!`
   const canSend = orderItems.some(item => item.item.trim())
 
   return (
-    <div className="min-h-screen bg-white pb-24">
+    <div className="min-h-screen bg-[#faf9f6] pb-24">
       {/* Header */}
       <div className="px-4 pt-6 pb-4 sm:px-6 sm:pt-8 sm:pb-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-[#4B3028]">Order</h1>
@@ -74,13 +74,13 @@ Thanks!`
 
       {orderSent ? (
         <div className="px-4 sm:px-6">
-          <div className="bg-white rounded-2xl border border-gray-200 p-6 sm:p-8 text-center shadow-lg">
+          <div className="bg-white rounded-[28px] border border-[#F3DCD4] p-6 sm:p-8 text-center shadow-lg">
             <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#7B1234] flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Check className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
             </div>
             <h2 className="text-lg sm:text-xl font-bold text-[#4B3028] mb-2">Order Sent!</h2>
             <p className="text-sm sm:text-base text-[#4B3028]/70 mb-6">Your order has been sent to WhatsApp. We'll prepare it for you!</p>
-            <Button onClick={() => { setOrderSent(false); setPickupTime(''); setOrderItems([{ id: '1', item: '', quantity: 1 }]) }} className="bg-[#7B1234] hover:bg-[#660E2B] w-full h-12 sm:h-14">
+            <Button onClick={() => { setOrderSent(false); setPickupTime(''); setOrderItems([{ id: '1', item: '', quantity: 1 }]) }} className="bg-[#7B1234] hover:bg-[#660E2B] w-full h-12 sm:h-14 rounded-[28px]">
               New Order
             </Button>
           </div>
@@ -90,14 +90,14 @@ Thanks!`
           {/* Pickup Time */}
           <div>
             <div 
-              className="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 flex items-center justify-between cursor-pointer active:bg-gray-50 shadow-sm"
+              className="bg-white rounded-[28px] border border-[#F3DCD4] p-4 sm:p-5 flex items-center justify-between cursor-pointer active:bg-[#F4D8CC] shadow-sm"
               onClick={() => setShowTimePicker(true)}
             >
               <div className="flex items-center gap-3 sm:gap-4">
-                <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-[#C49A6C]" />
+                <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-[#7B1234]" />
                 <div>
                   <p className="text-sm sm:text-base font-medium text-[#4B3028]">Pickup Time</p>
-                  <p className="text-xs sm:text-sm text-gray-500">{pickupTime || 'ASAP'}</p>
+                  <p className="text-xs sm:text-sm text-[#4B3028]/70">{pickupTime || 'ASAP'}</p>
                 </div>
               </div>
             </div>
@@ -105,26 +105,26 @@ Thanks!`
 
           {/* Order Items */}
           <div>
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-              <div className="px-4 py-3 sm:px-5 sm:py-4 border-b border-gray-100">
+            <div className="bg-white rounded-[28px] border border-[#F3DCD4] shadow-sm overflow-hidden">
+              <div className="px-4 py-3 sm:px-5 sm:py-4 border-b border-[#F3DCD4]">
                 <p className="text-sm sm:text-base font-semibold text-[#4B3028]">Your Order</p>
               </div>
               
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-[#F3DCD4]">
                 {orderItems.map((orderItem, index) => (
                   <div key={orderItem.id} className="px-4 py-3 sm:px-5 sm:py-4 flex items-center gap-3 sm:gap-4">
                     {/* Quantity */}
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => updateItem(orderItem.id, 'quantity', Math.max(1, orderItem.quantity - 1))}
-                        className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gray-100 flex items-center justify-center text-[#4B3028] font-medium active:bg-gray-200 text-sm sm:text-base"
+                        className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[#F4D8CC] flex items-center justify-center text-[#4B3028] font-medium active:bg-[#C49A6C] text-sm sm:text-base"
                       >
                         -
                       </button>
                       <span className="w-8 sm:w-10 text-center font-medium text-[#4B3028] text-sm sm:text-base">{orderItem.quantity}</span>
                       <button
                         onClick={() => updateItem(orderItem.id, 'quantity', orderItem.quantity + 1)}
-                        className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gray-100 flex items-center justify-center text-[#4B3028] font-medium active:bg-gray-200 text-sm sm:text-base"
+                        className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[#F4D8CC] flex items-center justify-center text-[#4B3028] font-medium active:bg-[#C49A6C] text-sm sm:text-base"
                       >
                         +
                       </button>
@@ -142,7 +142,7 @@ Thanks!`
                     {orderItems.length > 1 && (
                       <button
                         onClick={() => removeItem(orderItem.id)}
-                        className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-gray-400 hover:text-red-500 active:bg-red-50"
+                        className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-[#4B3028]/40 hover:text-red-500 active:bg-red-50"
                       >
                         <X className="w-4 h-4 sm:w-5 sm:h-5" />
                       </button>
@@ -154,7 +154,7 @@ Thanks!`
               {/* Add Item Button */}
               <button
                 onClick={addItem}
-                className="w-full px-4 py-3 sm:px-5 sm:py-4 flex items-center justify-center gap-2 text-[#C49A6C] font-medium border-t border-gray-100 active:bg-gray-50 text-sm sm:text-base"
+                className="w-full px-4 py-3 sm:px-5 sm:py-4 flex items-center justify-center gap-2 text-[#7B1234] font-medium border-t border-[#F3DCD4] active:bg-[#F4D8CC] text-sm sm:text-base"
               >
                 <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
                 Add Item
@@ -167,7 +167,7 @@ Thanks!`
             <Button 
               onClick={sendToWhatsApp}
               disabled={!canSend}
-              className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white font-semibold h-12 sm:h-14 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+              className="w-full bg-[#7B1234] hover:bg-[#660E2B] text-white font-semibold h-12 sm:h-14 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base rounded-[28px]"
             >
               <Send className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               Send via WhatsApp
@@ -178,7 +178,7 @@ Thanks!`
 
       {/* Time Picker Modal */}
       <Dialog open={showTimePicker} onOpenChange={setShowTimePicker}>
-        <DialogContent className="rounded-2xl max-w-md mx-4">
+        <DialogContent className="rounded-[28px] max-w-md mx-4">
           <DialogHeader>
             <DialogTitle className="text-[#4B3028] text-lg sm:text-xl">Select Pickup Time</DialogTitle>
           </DialogHeader>
@@ -194,7 +194,7 @@ Thanks!`
                   className={`py-3 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-medium transition-all ${
                     pickupTime === time
                       ? 'bg-[#7B1234] text-white shadow-md'
-                      : 'bg-gray-100 text-[#4B3028] hover:bg-gray-200'
+                      : 'bg-[#F4D8CC] text-[#4B3028] hover:bg-[#C49A6C]'
                   }`}
                 >
                   {time}

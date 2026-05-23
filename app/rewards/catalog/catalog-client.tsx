@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { ArrowLeft, Gift, Sparkles, Lock, CheckCircle2 } from 'lucide-react'
+import { ArrowLeft, Gift, Sparkles, Lock, CheckCircle2, Coffee, Cake, DollarSign } from 'lucide-react'
 import Link from 'next/link'
 import { useToast } from '@/hooks/use-toast'
 
@@ -77,13 +77,13 @@ export function RewardsCatalogClient({ rewards, currentPoints, userId }: Rewards
     switch (type) {
       case 'free_item':
       case 'food':
-        return '🍰'
+        return <Cake className="w-6 h-6 text-[#7B1234]" />
       case 'drink':
-        return '☕'
+        return <Coffee className="w-6 h-6 text-[#7B1234]" />
       case 'discount':
-        return '💰'
+        return <DollarSign className="w-6 h-6 text-[#7B1234]" />
       default:
-        return '🎁'
+        return <Gift className="w-6 h-6 text-[#7B1234]" />
     }
   }
 
@@ -168,7 +168,7 @@ export function RewardsCatalogClient({ rewards, currentPoints, userId }: Rewards
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">
                         <CardTitle className="flex items-center gap-2 text-lg">
-                          <span className="text-3xl">{getRewardIcon(reward.type)}</span>
+                          <span>{getRewardIcon(reward.type)}</span>
                           <span>{reward.name}</span>
                           {!affordable && <Lock className="w-4 h-4 text-gray-400" />}
                           {outOfStock && <span className="text-sm text-red-500">(Out of Stock)</span>}
@@ -234,7 +234,7 @@ export function RewardsCatalogClient({ rewards, currentPoints, userId }: Rewards
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="text-center text-xl">
-              <span className="text-4xl block mb-2">{selectedReward && getRewardIcon(selectedReward.type)}</span>
+              <span className="mb-2 flex justify-center">{selectedReward && getRewardIcon(selectedReward.type)}</span>
               Redeem {selectedReward?.name}?
             </DialogTitle>
             <DialogDescription className="text-center text-base">

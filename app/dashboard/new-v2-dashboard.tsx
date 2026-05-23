@@ -300,7 +300,7 @@ export default function NewV2Dashboard() {
           <div>
             <h2 className="text-[clamp(1.1rem,4vw,1.25rem)] font-bold text-[#4B3028] mb-3">What's Brewing</h2>
             <div 
-              className="bg-gradient-to-br from-[#214B39] via-[#2A5A40] to-[#1A3A2A] rounded-[20px] p-5 shadow-[0_8px_24px_rgba(33,75,57,0.25),0_4px_12px_rgba(33,75,57,0.15)] relative overflow-hidden h-[140px] cursor-pointer active:scale-[0.98] transition-transform"
+              className="bg-[#214B39] rounded-[20px] p-5 shadow-[0_8px_24px_rgba(33,75,57,0.25),0_4px_12px_rgba(33,75,57,0.15)] relative overflow-hidden h-[140px] cursor-pointer active:scale-[0.98] transition-transform"
               onClick={() => router.push('/campaigns')}
             >
               {displayCampaign.image && (
@@ -442,7 +442,7 @@ export default function NewV2Dashboard() {
           <div className="p-6">
             <DialogTitle className="text-[#4B3028] text-xl mb-2">{selectedFeatured?.title}</DialogTitle>
             <p className="text-sm text-[#4B3028] mb-4">{selectedFeatured?.description}</p>
-            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-gradient-to-r from-[#C49A6C] to-[#7B1234]">
+            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#7B1234]">
               <span className="text-xs font-bold text-white">+2 bonus beans today</span>
             </div>
           </div>
@@ -516,7 +516,7 @@ export default function NewV2Dashboard() {
               <div className="bg-white rounded-[28px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.04)] border border-[#F3DCD4]">
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-sm text-gray-600">Stamps collected</span>
-                  <span className="text-lg font-bold text-[#C49A6C]">3 / 8</span>
+                  <span className="text-lg font-bold text-[#7B1234]">3 / 8</span>
                 </div>
                 <div className="flex gap-2 justify-center">
                   {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (

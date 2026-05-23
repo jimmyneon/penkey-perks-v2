@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { ArrowLeft, Gift, Clock, CheckCircle2, DollarSign, Bird } from 'lucide-react'
-import Link from 'next/link'
+import { Gift, Clock, CheckCircle2, DollarSign, Bird } from 'lucide-react'
 import QRCode from 'qrcode'
 import { useEffect } from 'react'
 import { getDaysUntil } from '@/lib/utils'
@@ -75,9 +74,6 @@ export function RewardsClient({ userRewards }: RewardsClientProps) {
                 <p className="text-[#4B3028]/70 mb-4">
                   No active rewards yet. Keep visiting to earn rewards!
                 </p>
-                <Link href="/dashboard">
-                  <Button className="rounded-[28px] bg-[#7B1234] hover:bg-[#660E2B] text-white">Back to Dashboard</Button>
-                </Link>
               </CardContent>
             </Card>
           ) : (

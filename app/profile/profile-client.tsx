@@ -517,7 +517,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
             <Button variant="outline" onClick={() => setShowPasswordDialog(false)}>
               Cancel
             </Button>
-            <Button onClick={handleChangePassword} disabled={isLoading} className="bg-[#8D123F] hover:bg-[#A8224E]">
+            <Button onClick={handleChangePassword} disabled={isLoading} className="bg-[#7B1234] hover:bg-[#660E2B]">
               {isLoading ? 'Changing...' : 'Change'}
             </Button>
           </DialogFooter>
@@ -671,7 +671,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
             {/* Close Button */}
             <Button 
               onClick={() => setShowQRDialog(false)}
-              className="w-full bg-[#8D123F] hover:bg-[#A8224E]"
+              className="w-full bg-[#7B1234] hover:bg-[#660E2B]"
             >
               Close
             </Button>
