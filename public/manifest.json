@@ -4,8 +4,8 @@
   "description": "Earn ducks, play games, and get rewards at Penkey Deli!",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FFFEF7",
-  "theme_color": "#FFD93B",
+  "background_color": "#FFFDFC",
+  "theme_color": "#F4D8CC",
   "orientation": "portrait",
   "icons": [
     {
