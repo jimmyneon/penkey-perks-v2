@@ -1,11 +1,13 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Camera, Check, X, Loader2 } from 'lucide-react'
 import { Html5QrcodeScanner } from 'html5-qrcode'
 
 export default function ScanPage() {
+  const router = useRouter()
   const [scanned, setScanned] = useState(false)
   const [result, setResult] = useState('')
   const [scanning, setScanning] = useState(false)
@@ -78,6 +80,7 @@ export default function ScanPage() {
             onClick={() => {
               setScanning(false)
               readerRef.current?.stop().catch(console.error)
+              router.push('/dashboard')
             }}
             variant="outline"
             className="w-full"
