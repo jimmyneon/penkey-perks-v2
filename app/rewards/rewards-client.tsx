@@ -9,7 +9,7 @@ import { Gift, Clock, CheckCircle2, DollarSign, Bird } from 'lucide-react'
 import QRCode from 'qrcode'
 import { useEffect } from 'react'
 import { getDaysUntil } from '@/lib/utils'
-import { BottomNavigation } from '@/components/bottom-navigation'
+import { BottomNav } from '@/components/bottom-nav'
 
 interface RewardsClientProps {
   userRewards: any[]
