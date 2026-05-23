@@ -71,6 +71,15 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
     setIsLoading(true)
 
     try {
+      // Get current profile to preserve existing preferences
+      const { data: currentProfile } = await supabase
+        .from('profiles')
+        .select('preferences')
+        .eq('id', initialUser.id)
+        .single()
+
+      const existingPreferences = currentProfile?.preferences || {}
+
       const { error } = await supabase
         .from('profiles')
         .update({
@@ -78,6 +87,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
           phone: phone || null,
           date_of_birth: dateOfBirth || null,
           preferences: {
+            ...existingPreferences,
             gps_consent: gpsConsent,
             marketing_consent: marketingConsent,
           },
