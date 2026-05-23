@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { getBeanBalance, getActiveVouchers, getUserBadges, getActiveCampaigns, getNextRewardThreshold } from '@/lib/supabase/queries'
-import { Bell, Coffee, Gift, TrendingUp, QrCode, BarChart3, ChevronRight } from 'lucide-react'
+import { Bell, Coffee, Gift, TrendingUp, QrCode, BarChart3, ChevronRight, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import QRCodeLib from 'qrcode'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -21,6 +21,8 @@ export default function NewV2Dashboard() {
   const [user, setUser] = useState<any>(null)
   const [selectedVoucher, setSelectedVoucher] = useState<any>(null)
   const [selectedFeatured, setSelectedFeatured] = useState<any>(null)
+  const [showNotifications, setShowNotifications] = useState(false)
+  const [showBeansPanel, setShowBeansPanel] = useState(false)
 
   useEffect(() => {
     loadData()
@@ -179,8 +181,11 @@ export default function NewV2Dashboard() {
               <p className="text-sm text-[#4B3028]">Good coffee. Great people.</p>
             </div>
             <div className="flex items-center gap-3">
-              <button className="w-10 h-10 rounded-full bg-[#F4D8CC] flex items-center justify-center shadow-[0_4px_12px_rgba(244,216,204,0.4)]">
-                <Bell className="w-5 h-5 text-[#8D123F]" />
+              <button 
+                onClick={() => setShowNotifications(true)}
+                className="w-10 h-10 rounded-full bg-[#F4D8CC] flex items-center justify-center shadow-[0_4px_12px_rgba(244,216,204,0.4)]"
+              >
+                <Bell className="w-5 h-5 text-[#E48A3A]" />
               </button>
             </div>
           </div>
@@ -188,7 +193,7 @@ export default function NewV2Dashboard() {
           {/* Bean Progress Card */}
           <div 
             className="bg-[#FFFDFC] rounded-[28px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.04)] border border-[#F3DCD4] relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform"
-            onClick={() => router.push('/rewards')}
+            onClick={() => setShowBeansPanel(true)}
           >
             <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-white/60 to-transparent" />
             <div className="flex items-center justify-between relative z-10">
@@ -382,6 +387,137 @@ export default function NewV2Dashboard() {
             <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#E48A3A]">
               <span className="text-xs font-bold text-white">+2 bonus beans today</span>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Notifications Dialog */}
+      <Dialog open={showNotifications} onOpenChange={setShowNotifications}>
+        <DialogContent className="sm:max-w-md rounded-[28px] shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
+          <DialogHeader>
+            <DialogTitle className="text-[#4B3028]">Notifications</DialogTitle>
+          </DialogHeader>
+          <div className="py-4 space-y-3">
+            <div className="bg-[#FFFDFC] rounded-xl p-4 border border-[#F3DCD4]">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-[#E48A3A]/10 flex items-center justify-center flex-shrink-0">
+                  <Gift className="w-4 h-4 text-[#E48A3A]" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-[#4B3028]">Reward Available!</p>
+                  <p className="text-xs text-gray-600 mt-1">You have enough beans for a free coffee</p>
+                  <p className="text-[10px] text-gray-400 mt-2">2 hours ago</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[#FFFDFC] rounded-xl p-4 border border-[#F3DCD4]">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0">
+                  <Coffee className="w-4 h-4 text-green-600" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-[#4B3028]">Check-in Bonus</p>
+                  <p className="text-xs text-gray-600 mt-1">You earned 2 beans for checking in today</p>
+                  <p className="text-[10px] text-gray-400 mt-2">Yesterday</p>
+                </div>
+              </div>
+            </div>
+            <div className="bg-[#FFFDFC] rounded-xl p-4 border border-[#F3DCD4]">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-[#E48A3A]/10 flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-4 h-4 text-[#E48A3A]" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-[#4B3028]">Double Beans Today!</p>
+                  <p className="text-xs text-gray-600 mt-1">Rainy Day Double Beans is active until 2pm</p>
+                  <p className="text-[10px] text-gray-400 mt-2">2 days ago</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Beans Panel Dialog */}
+      <Dialog open={showBeansPanel} onOpenChange={setShowBeansPanel}>
+        <DialogContent className="sm:max-w-md rounded-[28px] shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
+          <DialogHeader>
+            <DialogTitle className="text-[#4B3028]">Your Beans & Stamps</DialogTitle>
+          </DialogHeader>
+          <div className="py-4 space-y-4">
+            {/* Beans Balance */}
+            <div className="bg-gradient-to-br from-[#E48A3A] to-[#D47A2A] rounded-2xl p-6 text-white text-center">
+              <p className="text-sm font-medium mb-1">Current Balance</p>
+              <p className="text-4xl font-extrabold mb-2">{currentBeans}</p>
+              <p className="text-sm opacity-90">beans</p>
+            </div>
+
+            {/* Stamps Section */}
+            <div>
+              <h3 className="text-sm font-semibold text-[#4B3028] mb-3">Coffee Stamps</h3>
+              <div className="bg-[#FFFDFC] rounded-xl p-4 border border-[#F3DCD4]">
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-sm text-gray-600">Stamps collected</span>
+                  <span className="text-lg font-bold text-[#E48A3A]">3 / 8</span>
+                </div>
+                <div className="flex gap-2 justify-center">
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
+                    <div
+                      key={num}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
+                        num <= 3
+                          ? 'bg-[#E48A3A] text-white'
+                          : 'bg-gray-200 text-gray-400'
+                      }`}
+                    >
+                      {num <= 3 ? '☕' : num}
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 mt-3 text-center">
+                  5 more stamps for a free coffee
+                </p>
+              </div>
+            </div>
+
+            {/* Recent Activity */}
+            <div>
+              <h3 className="text-sm font-semibold text-[#4B3028] mb-3">Recent Activity</h3>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-green-500" />
+                    <span className="text-sm text-gray-700">Check-in bonus</span>
+                  </div>
+                  <span className="text-sm font-semibold text-[#E48A3A]">+2 beans</span>
+                </div>
+                <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-green-500" />
+                    <span className="text-sm text-gray-700">Coffee purchase</span>
+                  </div>
+                  <span className="text-sm font-semibold text-[#E48A3A]">+1 bean</span>
+                </div>
+                <div className="flex items-center justify-between py-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-red-500" />
+                    <span className="text-sm text-gray-700">Reward redeemed</span>
+                  </div>
+                  <span className="text-sm font-semibold text-gray-500">-8 beans</span>
+                </div>
+              </div>
+            </div>
+
+            {/* View Rewards Button */}
+            <button
+              onClick={() => {
+                setShowBeansPanel(false)
+                router.push('/rewards')
+              }}
+              className="w-full py-3 bg-gradient-to-br from-[#E48A3A] to-[#D47A2A] text-white font-semibold rounded-xl shadow-lg hover:from-[#D47A2A] hover:to-[#C46A1A] transition-all"
+            >
+              View All Rewards
+            </button>
           </div>
         </DialogContent>
       </Dialog>

@@ -306,7 +306,9 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
                 <Calendar className="w-5 h-5 text-gray-400" />
                 <div className="text-left">
                   <p className="text-xs text-gray-500">Birthday</p>
-                  <p className="text-sm font-medium text-[#4B3028]">{dateOfBirth || 'Not set'}</p>
+                  <p className="text-sm font-medium text-[#4B3028]">
+                    {dateOfBirth ? new Date(dateOfBirth).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }) : 'Not set'}
+                  </p>
                 </div>
               </div>
               <ChevronRight className="w-5 h-5 text-gray-300" />
