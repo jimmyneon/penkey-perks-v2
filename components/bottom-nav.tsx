@@ -30,7 +30,7 @@ export function BottomNav() {
                   className="flex flex-col items-center justify-center flex-1 h-full relative group min-h-[44px]"
                 >
                   <div className={`flex flex-col items-center justify-center transition-all rounded-xl px-3 py-2 ${
-                    isActive ? 'bg-[#F4D8CC] text-[#E48A3A] shadow-[0_4px_12px_rgba(244,216,204,0.4)]' : 'text-[#4B3028]/60 group-hover:text-[#E48A3A] group-hover:bg-[#F4D8CC]/50'
+                    isActive ? 'bg-[#F4D8CC] text-[#C49A6C] shadow-[0_4px_12px_rgba(244,216,204,0.4)]' : 'text-[#4B3028]/60 group-hover:text-[#C49A6C] group-hover:bg-[#F4D8CC]/50'
                   }`}>
                     <Icon className="w-5 h-5 mb-0.5" />
                     <span className="text-[10px] font-medium">{item.label}</span>
@@ -45,7 +45,7 @@ export function BottomNav() {
               className="relative -top-6"
             >
               <div className="w-16 h-16 rounded-full bg-[#F4D8CC] flex items-center justify-center shadow-[0_8px_24px_rgba(244,216,204,0.4),0_4px_12px_rgba(244,216,204,0.3)] border-4 border-white">
-                <Scan className="w-7 h-7 text-[#E48A3A]" />
+                <Scan className="w-7 h-7 text-[#C49A6C]" />
               </div>
             </Link>
 
@@ -60,7 +60,7 @@ export function BottomNav() {
                   className="flex flex-col items-center justify-center flex-1 h-full relative group min-h-[44px]"
                 >
                   <div className={`flex flex-col items-center justify-center transition-all rounded-xl px-3 py-2 ${
-                    isActive ? 'bg-[#F4D8CC] text-[#E48A3A] shadow-[0_4px_12px_rgba(244,216,204,0.4)]' : 'text-[#4B3028]/60 group-hover:text-[#E48A3A] group-hover:bg-[#F4D8CC]/50'
+                    isActive ? 'bg-[#F4D8CC] text-[#C49A6C] shadow-[0_4px_12px_rgba(244,216,204,0.4)]' : 'text-[#4B3028]/60 group-hover:text-[#C49A6C] group-hover:bg-[#F4D8CC]/50'
                   }`}>
                     <Icon className="w-5 h-5 mb-0.5" />
                     <span className="text-[10px] font-medium">{item.label}</span>
