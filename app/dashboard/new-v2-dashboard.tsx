@@ -212,13 +212,13 @@ export default function NewV2Dashboard() {
   const displayCampaign = campaigns.length > 0 ? campaigns[0] : sampleCampaign
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5]">
+    <div className="min-h-screen bg-[#FAFAF8]">
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
-        {/* Top gradient - soft cream to blush, fades by mid-screen */}
+        {/* Subtle warm top wash */}
         <div 
-          className="absolute top-0 left-0 right-0 h-80 pointer-events-none" 
+          className="absolute top-0 left-0 right-0 h-72 pointer-events-none" 
           style={{ 
-            background: 'linear-gradient(180deg, #FDF5F0 0%, #FAF0EC 30%, #F9EDE8 55%, rgba(250,248,245,0) 100%)',
+            background: 'linear-gradient(180deg, #F5EFE8 0%, rgba(250,250,248,0) 100%)',
             zIndex: 0
           }} 
         />
@@ -227,22 +227,22 @@ export default function NewV2Dashboard() {
           {/* Header */}
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-xs font-semibold text-[#B07A5E] uppercase tracking-widest mb-0.5">Good morning</p>
-              <h1 className="text-[2rem] font-extrabold text-[#2C1810] leading-none tracking-tight">
+              <p className="text-xs font-semibold text-[#B0A090] uppercase tracking-widest mb-0.5">Good morning</p>
+              <h1 className="text-[2rem] font-extrabold text-[#1A1208] leading-none tracking-tight">
                 {user?.user_metadata?.first_name || 'Welcome'}
               </h1>
             </div>
             <button 
               onClick={() => setShowNotifications(true)}
-              className="w-11 h-11 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-[0_2px_12px_rgba(75,48,40,0.12)] border border-[#F0E6E0] mt-1"
+              className="w-11 h-11 rounded-full bg-white flex items-center justify-center shadow-[0_2px_12px_rgba(26,18,8,0.10)] border border-[#E8E0D8] mt-1"
             >
-              <Bell className="w-5 h-5 text-[#7B1234]" />
+              <Bell className="w-5 h-5 text-[#1A1208]" />
             </button>
           </div>
 
           {/* Bean Progress Card - Hero */}
           <div 
-            className="bg-white rounded-[24px] p-5 shadow-[0_4px_24px_rgba(75,48,40,0.10),0_1px_4px_rgba(75,48,40,0.06)] border border-[#EEE0D8] relative overflow-hidden cursor-pointer active:scale-[0.985] transition-all duration-200"
+            className="bg-white rounded-[24px] p-5 shadow-[0_2px_16px_rgba(26,18,8,0.08),0_1px_3px_rgba(26,18,8,0.04)] border border-[#E8E0D8] relative overflow-hidden cursor-pointer active:scale-[0.985] transition-all duration-200"
             onClick={() => setShowBeansPanel(true)}
           >
             {/* Subtle inner highlight */}
@@ -250,11 +250,11 @@ export default function NewV2Dashboard() {
             
             <div className="flex items-center justify-between">
               <div className="flex-1 pr-4">
-                <p className="text-[11px] font-bold text-[#B07A5E] uppercase tracking-widest mb-2">Your Beans</p>
-                <p className="text-[3.5rem] font-extrabold text-[#2C1810] leading-none mb-2">{currentBeans}</p>
-                <p className="text-[13px] font-medium text-[#6B4C3B] leading-snug">
+                <p className="text-[11px] font-bold text-[#B0A090] uppercase tracking-widest mb-2">Your Beans</p>
+                <p className="text-[3.5rem] font-extrabold text-[#1A1208] leading-none mb-2">{currentBeans}</p>
+                <p className="text-[13px] font-medium text-[#7A6A5A] leading-snug">
                   {beansNeeded > 0 
-                    ? <><span className="font-bold text-[#C49A6C]">{beansNeeded} more</span> for a free coffee</>
+                    ? <><span className="font-bold text-[#C8602A]">{beansNeeded} more</span> for a free coffee</>
                     : <span className="text-[#2A7A4A] font-bold">Reward unlocked!</span>
                   }
                 </p>
@@ -263,11 +263,11 @@ export default function NewV2Dashboard() {
                 <svg width="116" height="116" className="transform -rotate-90">
                   <defs>
                     <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#E8A87C" />
-                      <stop offset="100%" stopColor="#C49A6C" />
+                      <stop offset="0%" stopColor="#D4956A" />
+                      <stop offset="100%" stopColor="#C8602A" />
                     </linearGradient>
                   </defs>
-                  <circle cx="58" cy="58" r="50" stroke="#F3E4DB" strokeWidth="7" fill="none" />
+                  <circle cx="58" cy="58" r="50" stroke="#EDE8E2" strokeWidth="7" fill="none" />
                   <circle
                     cx="58" cy="58" r="50"
                     stroke="url(#progressGradient)"
@@ -277,24 +277,24 @@ export default function NewV2Dashboard() {
                     strokeDasharray={2 * Math.PI * 50}
                     strokeDashoffset={2 * Math.PI * 50 - (progress / 100) * 2 * Math.PI * 50}
                     className="transition-all duration-700"
-                    style={{ filter: 'drop-shadow(0 2px 6px rgba(196,154,108,0.35))' }}
+                    style={{ filter: 'drop-shadow(0 2px 6px rgba(200,96,42,0.30))' }}
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <Coffee className="w-6 h-6 text-[#C49A6C] mb-0.5" />
-                  <span className="text-[10px] font-bold text-[#B07A5E]">{currentBeans}/{targetBeans}</span>
+                  <Coffee className="w-6 h-6 text-[#C8602A] mb-0.5" />
+                  <span className="text-[10px] font-bold text-[#7A6A5A]">{currentBeans}/{targetBeans}</span>
                 </div>
               </div>
             </div>
 
             <div className="mt-4 pt-3.5 border-t border-[#F0E6DE] flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <span className="text-[11px] text-[#9A7A6A]">Lifetime</span>
-                <span className="text-[11px] font-bold text-[#6B4C3B]">{beanBalance?.lifetime_beans || 0} beans</span>
+                <span className="text-[11px] text-[#B0A090]">Lifetime</span>
+                <span className="text-[11px] font-bold text-[#4A3728]">{beanBalance?.lifetime_beans || 0} beans</span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-[10px] font-bold text-[#E48A3A] bg-[#FFF0E4] px-2 py-0.5 rounded-full">Gold Member</span>
-                <ChevronRight className="w-3.5 h-3.5 text-[#C49A6C]" />
+                <span className="text-[10px] font-bold text-[#C8602A] bg-[#F5EAE0] px-2 py-0.5 rounded-full">Gold Member</span>
+                <ChevronRight className="w-3.5 h-3.5 text-[#C8602A]" />
               </div>
             </div>
           </div>
@@ -302,7 +302,7 @@ export default function NewV2Dashboard() {
           {/* What's Brewing */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[17px] font-bold text-[#2C1810] tracking-tight">What's Brewing</h2>
+              <h2 className="text-[17px] font-bold text-[#1A1208] tracking-tight">What's Brewing</h2>
             </div>
             <div 
               className="rounded-[20px] relative overflow-hidden h-[148px] cursor-pointer active:scale-[0.985] transition-all duration-200 shadow-[0_4px_20px_rgba(33,75,57,0.22)]"
@@ -318,7 +318,7 @@ export default function NewV2Dashboard() {
               <div className="absolute inset-0 bg-gradient-to-t from-[#0E2A1E]/90 via-[#0E2A1E]/40 to-transparent" />
               <div className="relative z-10 h-full flex flex-col justify-end p-4">
                 {displayCampaign.bean_multiplier > 1 && (
-                  <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#E48A3A] w-fit mb-2">
+                  <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#C8602A] w-fit mb-2">
                     <Sparkles className="w-3 h-3 text-white" />
                     <span className="text-[10px] font-bold text-white">{displayCampaign.bean_multiplier}× beans today</span>
                   </div>
@@ -332,10 +332,10 @@ export default function NewV2Dashboard() {
           {/* Your Vouchers */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[17px] font-bold text-[#2C1810] tracking-tight">Your Vouchers</h2>
-              <span className="text-[11px] font-semibold text-[#C49A6C]">{displayVouchers.length} active</span>
+              <h2 className="text-[17px] font-bold text-[#1A1208] tracking-tight">Your Vouchers</h2>
+              <span className="text-[11px] font-semibold text-[#C8602A]">{displayVouchers.length} active</span>
             </div>
-            <div className="flex gap-3 overflow-x-auto overflow-y-hidden snap-x snap-mandatory scrollbar-hide -mx-5 px-5">
+            <div className="flex gap-3 overflow-x-auto overflow-y-hidden snap-x snap-mandatory scrollbar-hide">
               {displayVouchers.map((voucher) => (
                 <div
                   key={voucher.id}
@@ -369,7 +369,7 @@ export default function NewV2Dashboard() {
           {/* Try Something New */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[17px] font-bold text-[#2C1810] tracking-tight">Try Something New</h2>
+              <h2 className="text-[17px] font-bold text-[#1A1208] tracking-tight">Try Something New</h2>
             </div>
             <div className="space-y-3">
               {sampleFeatured.map((item) => (
@@ -381,7 +381,7 @@ export default function NewV2Dashboard() {
                   <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
                   <div className="relative z-10 h-full flex flex-col justify-center p-4">
-                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#E48A3A] w-fit mb-2">
+                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#C8602A] w-fit mb-2">
                       <span className="text-[10px] font-bold text-white">{item.description}</span>
                     </div>
                     <h3 className="font-bold text-white text-[15px]">{item.title}</h3>

@@ -56,7 +56,7 @@ ${orderText}
 Thanks!`
     
     const encodedMessage = encodeURIComponent(message)
-    const whatsappUrl = `https://wa.me/447700900000?text=${encodedMessage}`
+    const whatsappUrl = `https://wa.me/441590619472?text=${encodedMessage}`
     
     window.open(whatsappUrl, '_blank')
     setOrderSent(true)
@@ -65,12 +65,12 @@ Thanks!`
   const canSend = orderItems.some(item => item.item.trim())
 
   return (
-    <div className="min-h-screen bg-[#F5EFE9]">
+    <div className="min-h-screen bg-[#FAFAF8]">
       <div className="w-full max-w-[430px] mx-auto pb-28">
         {/* Header */}
         <header className="pt-12 pb-3 px-5">
-          <p className="text-[11px] font-bold text-[#B07A5E] uppercase tracking-widest mb-0.5">Collection</p>
-          <h1 className="text-[26px] font-extrabold text-[#2C1810] tracking-tight">Order Ahead</h1>
+          <p className="text-[11px] font-bold text-[#B0A090] uppercase tracking-widest mb-0.5">Collection</p>
+          <h1 className="text-[26px] font-extrabold text-[#1A1208] tracking-tight">Order Ahead</h1>
         </header>
 
         {orderSent ? (
@@ -83,7 +83,7 @@ Thanks!`
               <p className="text-[13px] text-[#9A7A6A] mb-6 leading-relaxed">Your order is ready to send. Just hit send in WhatsApp and we'll have it ready for you.</p>
               <button
                 onClick={() => { setOrderSent(false); setPickupTime(''); setOrderItems([{ id: '1', item: '', quantity: 1 }]) }}
-                className="w-full py-3.5 bg-[#2C1810] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all"
+                className="w-full py-3.5 bg-[#1A1208] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all"
               >
                 New Order
               </button>
@@ -99,7 +99,7 @@ Thanks!`
                 onClick={() => setShowTimePicker(true)}
               >
                 <div className="w-8 h-8 rounded-[10px] bg-[#FFF5EB] flex items-center justify-center flex-shrink-0">
-                  <Clock className="w-4 h-4 text-[#E48A3A]" />
+                  <Clock className="w-4 h-4 text-[#C8602A]" />
                 </div>
                 <span className="flex-1 text-left text-[14px] font-semibold text-[#2C1810]">
                   {pickupTime || 'ASAP'}
@@ -156,8 +156,8 @@ Thanks!`
             </div>
 
             {/* Note */}
-            <div className="bg-[#FFF5EB] rounded-[14px] px-4 py-3 flex items-start gap-2.5">
-              <Coffee className="w-4 h-4 text-[#E48A3A] flex-shrink-0 mt-0.5" />
+            <div className="bg-[#F5EAE0] rounded-[14px] px-4 py-3 flex items-start gap-2.5">
+              <Coffee className="w-4 h-4 text-[#C8602A] flex-shrink-0 mt-0.5" />
               <p className="text-[12px] text-[#6B4C3B] leading-relaxed">Your order opens in WhatsApp — just hit send! We'll have it ready for collection.</p>
             </div>
 
@@ -188,8 +188,8 @@ Thanks!`
                 onClick={() => { setPickupTime(time === 'ASAP' ? '' : time); setShowTimePicker(false) }}
                 className={`py-3 rounded-[12px] text-[13px] font-bold transition-all active:scale-[0.97] ${
                   (pickupTime === time) || (time === 'ASAP' && !pickupTime)
-                    ? 'bg-[#2C1810] text-white shadow-[0_2px_8px_rgba(44,24,16,0.25)]'
-                    : 'bg-white text-[#2C1810] shadow-[0_1px_3px_rgba(44,24,16,0.08)]'
+                    ? 'bg-[#1A1208] text-white shadow-[0_2px_8px_rgba(26,18,8,0.25)]'
+                    : 'bg-white text-[#1A1208] shadow-[0_1px_3px_rgba(26,18,8,0.08)]'
                 }`}
               >
                 {time}

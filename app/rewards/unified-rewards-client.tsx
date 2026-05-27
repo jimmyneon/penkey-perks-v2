@@ -198,65 +198,65 @@ export function UnifiedRewardsClient({
   }
 
   return (
-    <div className="min-h-screen bg-[#F5EFE9]">
+    <div className="min-h-screen bg-[#FAFAF8]">
       {/* Header */}
       <header className="pt-12 pb-3 px-5 flex items-end justify-between">
         <div>
-          <p className="text-[11px] font-bold text-[#B07A5E] uppercase tracking-widest mb-0.5">Penkey Perks</p>
-          <h1 className="text-[26px] font-extrabold text-[#2C1810] tracking-tight">Rewards</h1>
+          <p className="text-[11px] font-bold text-[#B0A090] uppercase tracking-widest mb-0.5">Penkey Perks</p>
+          <h1 className="text-[26px] font-extrabold text-[#1A1208] tracking-tight">Rewards</h1>
         </div>
-        <div className="flex items-center gap-1.5 bg-white rounded-[14px] px-3 py-2 shadow-[0_1px_4px_rgba(44,24,16,0.08)] mb-1">
-          <BeanIcon size="md" className="text-[#C49A6C]" />
-          <span className="text-[18px] font-extrabold text-[#2C1810]">{currentPoints.toLocaleString()}</span>
-          <span className="text-[11px] text-[#9A7A6A] font-medium">beans</span>
+        <div className="flex items-center gap-1.5 bg-white rounded-[14px] px-3 py-2 shadow-[0_1px_4px_rgba(26,18,8,0.08)] mb-1">
+          <BeanIcon size="md" className="text-[#C8602A]" />
+          <span className="text-[18px] font-extrabold text-[#1A1208]">{currentPoints.toLocaleString()}</span>
+          <span className="text-[11px] text-[#7A6A5A] font-medium">beans</span>
         </div>
       </header>
 
       {/* Main Content */}
       <main className="px-4 pb-28">
         <Tabs defaultValue="milestones" className="w-full">
-          <TabsList className="flex w-full gap-1 h-auto p-1 bg-white rounded-[14px] shadow-[0_1px_4px_rgba(44,24,16,0.07)] mb-4">
+          <TabsList className="flex w-full gap-1 h-auto p-1 bg-white rounded-[14px] shadow-[0_1px_4px_rgba(26,18,8,0.07)] mb-4">
             <TabsTrigger
               value="how-it-works"
-              className="flex-1 flex-col gap-0.5 py-2 text-[10px] font-bold data-[state=active]:bg-[#2C1810] data-[state=active]:text-white data-[state=active]:shadow-[0_2px_8px_rgba(44,24,16,0.25)] data-[state=active]:rounded-[10px] text-[#9A7A6A] rounded-[10px] transition-all"
+              className="flex-1 flex-col gap-0.5 py-2 text-[10px] font-bold data-[state=active]:bg-[#1A1208] data-[state=active]:text-white data-[state=active]:shadow-[0_2px_8px_rgba(26,18,8,0.25)] data-[state=active]:rounded-[10px] text-[#B0A090] rounded-[10px] transition-all"
             >
               <HelpCircle className="w-3.5 h-3.5" />
               How to earn
             </TabsTrigger>
             <TabsTrigger
               value="milestones"
-              className="flex-1 flex-col gap-0.5 py-2 text-[10px] font-bold data-[state=active]:bg-[#2C1810] data-[state=active]:text-white data-[state=active]:shadow-[0_2px_8px_rgba(44,24,16,0.25)] data-[state=active]:rounded-[10px] text-[#9A7A6A] rounded-[10px] transition-all"
+              className="flex-1 flex-col gap-0.5 py-2 text-[10px] font-bold data-[state=active]:bg-[#1A1208] data-[state=active]:text-white data-[state=active]:shadow-[0_2px_8px_rgba(26,18,8,0.25)] data-[state=active]:rounded-[10px] text-[#B0A090] rounded-[10px] transition-all"
             >
               <Award className="w-3.5 h-3.5" />
               Progress
             </TabsTrigger>
             <TabsTrigger
               value="available"
-              className="flex-1 flex-col gap-0.5 py-2 text-[10px] font-bold data-[state=active]:bg-[#2C1810] data-[state=active]:text-white data-[state=active]:shadow-[0_2px_8px_rgba(44,24,16,0.25)] data-[state=active]:rounded-[10px] text-[#9A7A6A] rounded-[10px] transition-all relative"
+              className="flex-1 flex-col gap-0.5 py-2 text-[10px] font-bold data-[state=active]:bg-[#1A1208] data-[state=active]:text-white data-[state=active]:shadow-[0_2px_8px_rgba(26,18,8,0.25)] data-[state=active]:rounded-[10px] text-[#B0A090] rounded-[10px] transition-all relative"
             >
               <Sparkles className="w-3.5 h-3.5" />
               Shop
               {availableRewards.length > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#E48A3A] text-white text-[9px] font-bold flex items-center justify-center">
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#C8602A] text-white text-[9px] font-bold flex items-center justify-center">
                   {availableRewards.length}
                 </span>
               )}
             </TabsTrigger>
             <TabsTrigger
               value="earned"
-              className="flex-1 flex-col gap-0.5 py-2 text-[10px] font-bold data-[state=active]:bg-[#2C1810] data-[state=active]:text-white data-[state=active]:shadow-[0_2px_8px_rgba(44,24,16,0.25)] data-[state=active]:rounded-[10px] text-[#9A7A6A] rounded-[10px] transition-all relative"
+              className="flex-1 flex-col gap-0.5 py-2 text-[10px] font-bold data-[state=active]:bg-[#1A1208] data-[state=active]:text-white data-[state=active]:shadow-[0_2px_8px_rgba(26,18,8,0.25)] data-[state=active]:rounded-[10px] text-[#B0A090] rounded-[10px] transition-all relative"
             >
               <Gift className="w-3.5 h-3.5" />
               Mine
               {activeRewards.length > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#E48A3A] text-white text-[9px] font-bold flex items-center justify-center">
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-[#C8602A] text-white text-[9px] font-bold flex items-center justify-center">
                   {activeRewards.length}
                 </span>
               )}
             </TabsTrigger>
             <TabsTrigger
               value="history"
-              className="flex-1 flex-col gap-0.5 py-2 text-[10px] font-bold data-[state=active]:bg-[#2C1810] data-[state=active]:text-white data-[state=active]:shadow-[0_2px_8px_rgba(44,24,16,0.25)] data-[state=active]:rounded-[10px] text-[#9A7A6A] rounded-[10px] transition-all"
+              className="flex-1 flex-col gap-0.5 py-2 text-[10px] font-bold data-[state=active]:bg-[#1A1208] data-[state=active]:text-white data-[state=active]:shadow-[0_2px_8px_rgba(26,18,8,0.25)] data-[state=active]:rounded-[10px] text-[#B0A090] rounded-[10px] transition-all"
             >
               <History className="w-3.5 h-3.5" />
               History
@@ -442,7 +442,7 @@ export function UnifiedRewardsClient({
                           <span className="text-[11px] text-[#9A7A6A] ml-0.5">beans</span>
                         </div>
                         {affordable && !outOfStock ? (
-                          <span className="text-[11px] font-bold text-white bg-[#E48A3A] px-3 py-1.5 rounded-full">Redeem</span>
+                          <span className="text-[11px] font-bold text-white bg-[#C8602A] px-3 py-1.5 rounded-full">Redeem</span>
                         ) : outOfStock ? (
                           <span className="text-[11px] font-bold text-[#9A7A6A] bg-[#F0E8E2] px-3 py-1.5 rounded-full">Out of stock</span>
                         ) : (
@@ -593,8 +593,8 @@ export function UnifiedRewardsClient({
               <p className="text-[12px] text-[#6B4C3B]">A QR code will appear in <strong>My Rewards</strong> for staff to scan</p>
             </div>
             <div className="flex gap-2">
-              <button onClick={() => setSelectedReward(null)} disabled={isRedeeming} className="flex-1 py-3 bg-[#F0E8E2] text-[#6B4C3B] text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60">Cancel</button>
-              <button onClick={handleRedeem} disabled={isRedeeming} className="flex-1 py-3 bg-[#E48A3A] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60">{isRedeeming ? 'Redeeming…' : 'Redeem'}</button>
+              <button onClick={() => setSelectedReward(null)} disabled={isRedeeming} className="flex-1 py-3 bg-[#F2EDE8] text-[#4A3728] text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60">Cancel</button>
+              <button onClick={handleRedeem} disabled={isRedeeming} className="flex-1 py-3 bg-[#C8602A] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60">{isRedeeming ? 'Redeeming…' : 'Redeem'}</button>
             </div>
           </div>
         </DialogContent>
@@ -655,7 +655,7 @@ export function UnifiedRewardsClient({
             </div>
             <button
               onClick={() => { setShowSuccessModal(false); setRedeemedRewardData(null) }}
-              className="w-full py-3.5 bg-[#2C1810] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all"
+              className="w-full py-3.5 bg-[#1A1208] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all"
             >
               Done
             </button>
