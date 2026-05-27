@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Clock, Send, Check, Plus, X, Coffee } from 'lucide-react'
 import { BottomNav } from '@/components/bottom-nav'
+import { createClient } from '@/lib/supabase/client'
 
 interface OrderItem {
   id: string
@@ -20,6 +21,24 @@ export default function OrderPage() {
     { id: '1', item: '', quantity: 1 }
   ])
   const [showTimePicker, setShowTimePicker] = useState(false)
+  const [userName, setUserName] = useState('')
+  const [userPhone, setUserPhone] = useState('')
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return
+      supabase
+        .from('profiles')
+        .select('name, phone')
+        .eq('id', user.id)
+        .single()
+        .then(({ data }) => {
+          if (data?.name) setUserName(data.name)
+          if (data?.phone) setUserPhone(data.phone)
+        })
+    })
+  }, [])
 
   const addItem = () => {
     setOrderItems([...orderItems, { id: Date.now().toString(), item: '', quantity: 1 }])
@@ -46,7 +65,8 @@ export default function OrderPage() {
       .map(item => `${item.quantity}x ${item.item}`)
       .join('\n')
 
-    const message = `Hi Penkey, I'd like to place an order for collection.
+    const message = `Hi Penkey!${userName ? ` It's ${userName}` : ''} — I'd like to place a collection order.${userPhone ? `
+My number: ${userPhone}` : ''}
 
 Pickup time: ${pickupTime || 'ASAP'}
 

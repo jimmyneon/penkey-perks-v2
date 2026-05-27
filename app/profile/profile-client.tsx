@@ -100,6 +100,8 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
         title: 'Profile Updated',
         description: 'Your changes have been saved',
       })
+
+      router.refresh()
     } catch (error: any) {
       toast({
         title: 'Error',

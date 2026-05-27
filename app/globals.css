@@ -5,39 +5,39 @@
 @layer base {
   :root {
     /* Penkey Modern Café Design System */
-    --background: 40 20% 97%; /* #FAFAF8 - Warm white */
-    --foreground: 25 60% 8%;  /* #1A1208 - Espresso dark */
+    --background: 36 40% 96%; /* #FAF6F1 - Rich warm cream */
+    --foreground: 20 55% 12%; /* #261408 - Deep coffee */
     --card: 0 0% 100%;
-    --card-foreground: 25 60% 8%;
+    --card-foreground: 20 55% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 25 60% 8%;
-    --primary: 22 66% 47%;    /* #C8602A - Burnt espresso orange */
+    --popover-foreground: 20 55% 12%;
+    --primary: 24 78% 46%;    /* #D05A18 - Vibrant espresso orange */
     --primary-foreground: 0 0% 100%;
-    --secondary: 30 30% 93%;  /* #EEE8E2 - Parchment */
-    --secondary-foreground: 25 60% 8%;
-    --muted: 30 20% 93%;      /* #EEE9E4 - Soft warm grey */
-    --muted-foreground: 25 15% 45%;
-    --accent: 28 48% 63%;     /* #D4956A - Latte caramel */
+    --secondary: 32 35% 92%;  /* #EDE5DC - Warm parchment */
+    --secondary-foreground: 20 55% 12%;
+    --muted: 32 25% 92%;
+    --muted-foreground: 22 18% 44%;
+    --accent: 30 55% 60%;     /* #D4906A - Latte caramel */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 30 15% 88%;
-    --input: 30 15% 88%;
-    --ring: 22 66% 47%;
+    --border: 32 20% 86%;
+    --input: 32 20% 86%;
+    --ring: 24 78% 46%;
     --radius: 1rem;
 
     /* Penkey brand tokens */
-    --pk-bg: #FAFAF8;
-    --pk-surface: #F2EDE8;
+    --pk-bg: #FAF6F1;
+    --pk-surface: #F0E8DF;
     --pk-card: #FFFFFF;
-    --pk-dark: #1A1208;
-    --pk-mid: #4A3728;
-    --pk-muted: #7A6A5A;
-    --pk-subtle: #B0A090;
-    --pk-border: #E8E0D8;
-    --pk-orange: #C8602A;
-    --pk-orange-light: #F5EAE0;
-    --pk-caramel: #D4956A;
+    --pk-dark: #261408;
+    --pk-mid: #4E3420;
+    --pk-muted: #7A6454;
+    --pk-subtle: #AE9888;
+    --pk-border: #E4D8CC;
+    --pk-orange: #D05A18;
+    --pk-orange-light: #FDF0E6;
+    --pk-caramel: #D4906A;
   }
 }
 

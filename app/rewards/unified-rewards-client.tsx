@@ -185,17 +185,17 @@ export function UnifiedRewardsClient({
     : 100
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8]">
+    <div className="min-h-screen bg-[#FAF6F1]">
 
       {/* ── HERO HEADER ── */}
       <div className="pt-14 pb-6 px-5">
-        <p className="text-[11px] font-bold text-[#B0A090] uppercase tracking-widest mb-1">Your Beans</p>
+        <p className="text-[11px] font-bold text-[#AE9888] uppercase tracking-widest mb-1">Your Beans</p>
         <div className="flex items-end justify-between">
           <div>
-            <p className="text-[64px] font-extrabold text-[#1A1208] leading-none tracking-tight">{currentPoints}</p>
-            <p className="text-[14px] text-[#7A6A5A] mt-1 font-medium">
+            <p className="text-[64px] font-extrabold text-[#261408] leading-none tracking-tight">{currentPoints}</p>
+            <p className="text-[14px] text-[#7A6454] mt-1 font-medium">
               {nextReward
-                ? <><span className="font-bold text-[#C8602A]">{nextReward.points_required - currentPoints} more</span> until {nextReward.name}</>
+                ? <><span className="font-bold text-[#D05A18]">{nextReward.points_required - currentPoints} more</span> until {nextReward.name}</>
                 : <span className="text-[#2A7A4A] font-bold">All rewards unlocked 🎉</span>
               }
             </p>
@@ -203,20 +203,20 @@ export function UnifiedRewardsClient({
           {/* Progress ring */}
           <div className="relative flex-shrink-0 mb-1">
             <svg width="72" height="72" className="-rotate-90">
-              <circle cx="36" cy="36" r="30" stroke="#EDE8E2" strokeWidth="5" fill="none" />
+              <circle cx="36" cy="36" r="30" stroke="#EAD8C8" strokeWidth="5" fill="none" />
               <circle
                 cx="36" cy="36" r="30"
-                stroke="#C8602A"
+                stroke="#D05A18"
                 strokeWidth="5"
                 fill="none"
                 strokeLinecap="round"
                 strokeDasharray={2 * Math.PI * 30}
                 strokeDashoffset={2 * Math.PI * 30 * (1 - nextProgress / 100)}
-                style={{ filter: 'drop-shadow(0 0 4px rgba(200,96,42,0.4))', transition: 'stroke-dashoffset 0.6s ease' }}
+                style={{ filter: 'drop-shadow(0 0 4px rgba(208,90,24,0.45))', transition: 'stroke-dashoffset 0.6s ease' }}
               />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-[11px] font-extrabold text-[#1A1208]">{Math.round(nextProgress)}%</span>
+              <span className="text-[11px] font-extrabold text-[#261408]">{Math.round(nextProgress)}%</span>
             </div>
           </div>
         </div>
@@ -233,7 +233,7 @@ export function UnifiedRewardsClient({
                 <button
                   key={reward.id}
                   onClick={() => setSelectedReward(reward)}
-                  className="w-full bg-[#1A1208] rounded-[18px] px-4 py-4 flex items-center gap-3.5 active:scale-[0.98] transition-all shadow-[0_4px_20px_rgba(26,18,8,0.20)]"
+                  className="w-full bg-[#261408] rounded-[18px] px-4 py-4 flex items-center gap-3.5 active:scale-[0.98] transition-all shadow-[0_4px_24px_rgba(38,20,8,0.22)]"
                 >
                   <div className="w-10 h-10 rounded-[12px] bg-white/10 flex items-center justify-center flex-shrink-0">
                     <Gift className="w-5 h-5 text-white" />
@@ -242,7 +242,7 @@ export function UnifiedRewardsClient({
                     <p className="text-[15px] font-extrabold text-white leading-tight">{reward.name}</p>
                     <p className="text-[12px] text-white/60 mt-0.5">{reward.points_required} beans</p>
                   </div>
-                  <div className="flex items-center gap-1 bg-[#C8602A] rounded-full px-3 py-1.5">
+                  <div className="flex items-center gap-1 bg-[#D05A18] rounded-full px-3 py-1.5">
                     <Sparkles className="w-3 h-3 text-white" />
                     <span className="text-[11px] font-bold text-white">Redeem</span>
                   </div>
@@ -256,26 +256,26 @@ export function UnifiedRewardsClient({
         {nextReward && (
           <section>
             <p className="text-[11px] font-bold text-[#B0A090] uppercase tracking-widest mb-2.5 px-1">Next Up ☕</p>
-            <div className="bg-white rounded-[20px] p-5 shadow-[0_2px_16px_rgba(26,18,8,0.08)] border border-[#E8E0D8]">
+            <div className="bg-white rounded-[20px] p-5 shadow-[0_4px_20px_rgba(38,20,8,0.08)] border border-[#E4D8CC]">
               <div className="flex items-start justify-between gap-4 mb-4">
                 <div>
-                  <p className="text-[20px] font-extrabold text-[#1A1208] leading-tight">{nextReward.name}</p>
-                  <p className="text-[13px] text-[#7A6A5A] mt-0.5">{nextReward.points_required - currentPoints} beans to go</p>
+                  <p className="text-[20px] font-extrabold text-[#261408] leading-tight">{nextReward.name}</p>
+                  <p className="text-[13px] text-[#7A6454] mt-0.5">{nextReward.points_required - currentPoints} beans to go</p>
                 </div>
-                <div className="w-12 h-12 rounded-[14px] bg-[#F5EAE0] flex items-center justify-center flex-shrink-0">
-                  <Gift className="w-6 h-6 text-[#C8602A]" />
+                <div className="w-12 h-12 rounded-[14px] bg-[#FDF0E6] flex items-center justify-center flex-shrink-0">
+                  <Gift className="w-6 h-6 text-[#D05A18]" />
                 </div>
               </div>
               {/* Progress bar */}
               <div className="h-2 bg-[#EDE8E2] rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-[#C8602A] rounded-full transition-all duration-700"
+                  className="h-full bg-[#D05A18] rounded-full transition-all duration-700"
                   style={{ width: `${nextProgress}%` }}
                 />
               </div>
               <div className="flex justify-between mt-1.5">
-                <span className="text-[10px] text-[#B0A090] font-semibold">{currentPoints} beans</span>
-                <span className="text-[10px] text-[#B0A090] font-semibold">{nextReward.points_required} beans</span>
+                <span className="text-[10px] text-[#AE9888] font-semibold">{currentPoints} beans</span>
+                <span className="text-[10px] text-[#AE9888] font-semibold">{nextReward.points_required} beans</span>
               </div>
             </div>
           </section>
@@ -294,13 +294,13 @@ export function UnifiedRewardsClient({
                   <Link href={`/rewards/${userReward.id}`} key={userReward.id}>
                     <div className={`bg-white rounded-[16px] px-4 py-3.5 flex items-center gap-3 shadow-[0_1px_6px_rgba(26,18,8,0.07)] active:scale-[0.98] transition-all border ${expiringSoon ? 'border-red-200' : 'border-transparent'}`}>
                       <div className={`w-10 h-10 rounded-[12px] flex items-center justify-center flex-shrink-0 ${expiringSoon ? 'bg-red-50' : 'bg-[#F5EAE0]'}`}>
-                        <Gift className={`w-5 h-5 ${expiringSoon ? 'text-red-400' : 'text-[#C8602A]'}`} />
+                        <Gift className={`w-5 h-5 ${expiringSoon ? 'text-red-400' : 'text-[#D05A18]'}`} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[14px] font-bold text-[#1A1208] leading-tight truncate">{reward.name}</p>
-                        <p className={`text-[11px] mt-0.5 font-medium ${expiringSoon ? 'text-red-500' : 'text-[#B0A090]'}`}>{getExpiryText(userReward.expires_at)}</p>
+                        <p className="text-[14px] font-bold text-[#261408] leading-tight truncate">{reward.name}</p>
+                        <p className={`text-[11px] mt-0.5 font-medium ${expiringSoon ? 'text-red-500' : 'text-[#AE9888]'}`}>{getExpiryText(userReward.expires_at)}</p>
                       </div>
-                      <div className="flex items-center gap-1 text-[11px] font-bold text-[#C8602A]">
+                      <div className="flex items-center gap-1 text-[11px] font-bold text-[#D05A18]">
                         <QrCode className="w-3.5 h-3.5" />
                         Show QR
                       </div>
@@ -349,16 +349,16 @@ export function UnifiedRewardsClient({
                       key={reward.id}
                       className={`flex items-center gap-3 px-4 py-3.5 ${i < arr.length - 1 ? 'border-b border-[#F2EDE8]' : ''}`}
                     >
-                      <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${unlocked ? 'bg-[#C8602A]' : 'bg-[#EDE8E2]'}`}>
+                      <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${unlocked ? 'bg-[#D05A18]' : 'bg-[#EAD8C8]'}`}>
                         {unlocked
                           ? <CheckCircle2 className="w-4 h-4 text-white" />
-                          : <span className="text-[10px] font-extrabold text-[#B0A090]">{reward.points_required}</span>
+                          : <span className="text-[10px] font-extrabold text-[#AE9888]">{reward.points_required}</span>
                         }
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className={`text-[13px] font-bold leading-tight ${unlocked ? 'text-[#1A1208]' : 'text-[#7A6A5A]'}`}>{reward.name}</p>
+                        <p className={`text-[13px] font-bold leading-tight ${unlocked ? 'text-[#261408]' : 'text-[#7A6454]'}`}>{reward.name}</p>
                       </div>
-                      <span className={`text-[11px] font-bold ${unlocked ? 'text-[#C8602A]' : 'text-[#B0A090]'}`}>
+                      <span className={`text-[11px] font-bold ${unlocked ? 'text-[#D05A18]' : 'text-[#AE9888]'}`}>
                         {unlocked ? 'Unlocked' : `${reward.points_required} beans`}
                       </span>
                     </div>
@@ -370,19 +370,19 @@ export function UnifiedRewardsClient({
 
         {/* ── LIFETIME PROGRESS ── subtle strip ── */}
         <section>
-          <div className="bg-white rounded-[16px] px-4 py-3.5 flex items-center justify-between shadow-[0_1px_4px_rgba(26,18,8,0.05)] border border-[#E8E0D8]">
+          <div className="bg-white rounded-[16px] px-4 py-3.5 flex items-center justify-between shadow-[0_1px_4px_rgba(38,20,8,0.05)] border border-[#E4D8CC]">
             <div className="flex items-center gap-2">
-              <Star className="w-4 h-4 text-[#C8602A]" />
-              <span className="text-[12px] font-bold text-[#4A3728]">Lifetime beans</span>
+              <Star className="w-4 h-4 text-[#D05A18]" />
+              <span className="text-[12px] font-bold text-[#4E3420]">Lifetime beans</span>
             </div>
-            <span className="text-[13px] font-extrabold text-[#1A1208]">{currentPoints.toLocaleString()}</span>
+            <span className="text-[13px] font-extrabold text-[#261408]">{currentPoints.toLocaleString()}</span>
           </div>
         </section>
 
         {/* ── HISTORY (compact) ── */}
         {historyRewards.length > 0 && (
           <section>
-            <p className="text-[11px] font-bold text-[#B0A090] uppercase tracking-widest mb-2.5 px-1">Past Rewards</p>
+            <p className="text-[11px] font-bold text-[#AE9888] uppercase tracking-widest mb-2.5 px-1">Past Rewards</p>
             <div className="space-y-1.5">
               {historyRewards.slice(0, 5).map(userReward => {
                 const reward = userReward.rewards
@@ -397,7 +397,7 @@ export function UnifiedRewardsClient({
                       <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${isRedeemed ? 'bg-[#F0FAF4]' : 'bg-[#F2EDE8]'}`}>
                         {isRedeemed ? <CheckCircle2 className="w-3.5 h-3.5 text-[#2A7A4A]" /> : <Clock className="w-3.5 h-3.5 text-[#B0A090]" />}
                       </div>
-                      <span className="flex-1 text-[12px] font-semibold text-[#4A3728] truncate">{reward.name}</span>
+                      <span className="flex-1 text-[12px] font-semibold text-[#4E3420] truncate">{reward.name}</span>
                       <span className="text-[11px] text-[#B0A090]">{displayDate}</span>
                     </div>
                   </Link>
