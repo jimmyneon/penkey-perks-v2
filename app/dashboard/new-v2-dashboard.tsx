@@ -219,135 +219,118 @@ export default function NewV2Dashboard() {
   const displayCampaign = campaigns.length > 0 ? campaigns[0] : sampleCampaign
 
   return (
-    <div className="min-h-screen bg-[#FAF6F1]">
+    <div className="min-h-screen" style={{ backgroundColor: '#F2E8DF' }}>
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
-        {/* Subtle warm top wash */}
-        <div 
-          className="absolute top-0 left-0 right-0 h-72 pointer-events-none" 
-          style={{ 
-            background: 'linear-gradient(180deg, #F0E4D6 0%, rgba(250,246,241,0) 100%)',
-            zIndex: 0
-          }} 
-        />
-        
-        <div className="relative z-10 px-5 pt-12 pb-28 space-y-6">
-          {/* Header */}
-          <div className="flex items-start justify-between">
+
+        <div className="px-5 pt-14 pb-28 space-y-4">
+
+          {/* ── HEADER ── */}
+          <div className="flex items-start justify-between mb-1">
             <div>
-              <p className="text-xs font-semibold text-[#AE9888] uppercase tracking-[0.08em] mb-0.5">{getGreeting()}</p>
-              <h1 className="text-[2rem] font-extrabold text-[#261408] leading-none tracking-tight">
-                {user?.user_metadata?.first_name || 'Welcome'}
+              <h1 className="text-[28px] font-extrabold leading-tight tracking-tight" style={{ color: '#3D1A0E' }}>
+                Hi {user?.user_metadata?.first_name || 'there'} 👋
               </h1>
+              <p className="text-[14px] font-medium mt-0.5" style={{ color: '#9A7060' }}>Good coffee. Great people.</p>
             </div>
-            <button 
-              onClick={() => setShowNotifications(true)}
-              className="w-11 h-11 rounded-full bg-white flex items-center justify-center shadow-[0_2px_12px_rgba(38,20,8,0.12)] border border-[#E4D8CC] mt-1"
-            >
-              <Bell className="w-5 h-5 text-[#261408]" />
-            </button>
+            <div className="flex items-center gap-2.5 mt-1">
+              <button
+                onClick={() => setShowNotifications(true)}
+                className="relative w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-[0_2px_8px_rgba(61,26,14,0.12)]"
+              >
+                <Bell className="w-[18px] h-[18px]" style={{ color: '#3D1A0E' }} strokeWidth={1.8} />
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#C8472A] rounded-full text-[9px] font-bold text-white flex items-center justify-center">2</span>
+              </button>
+              <div className="w-10 h-10 rounded-full overflow-hidden shadow-[0_2px_8px_rgba(61,26,14,0.18)] border-2 border-white">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face" alt="" className="w-full h-full object-cover" />
+              </div>
+            </div>
           </div>
 
-          {/* Bean Progress Card - Hero */}
-          <div 
-            className="bg-white rounded-[24px] p-5 shadow-[0_4px_24px_rgba(38,20,8,0.10),0_1px_4px_rgba(38,20,8,0.05)] border border-[#E4D8CC] relative overflow-hidden cursor-pointer active:scale-[0.985] transition-all duration-200"
+          {/* ── BEAN CARD ── white, clean, ring on right ── */}
+          <div
+            className="bg-white rounded-[20px] p-5 shadow-[0_4px_20px_rgba(61,26,14,0.10)] cursor-pointer active:scale-[0.985] transition-all duration-200"
             onClick={() => setShowBeansPanel(true)}
           >
-            {/* Subtle inner highlight */}
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white to-transparent" />
-            
+            <p className="text-[11px] font-bold uppercase tracking-[0.1em] mb-2" style={{ color: '#B08070' }}>YOUR BEANS</p>
             <div className="flex items-center justify-between">
-              <div className="flex-1 pr-4">
-                <p className="text-[11px] font-bold text-[#AE9888] uppercase tracking-widest mb-2">Your Beans</p>
-                <p className="text-[3.5rem] font-extrabold text-[#261408] leading-none mb-2">{currentBeans}</p>
-                <p className="text-[13px] font-medium text-[#7A6454] leading-snug">
-                  {beansNeeded > 0 
-                    ? <><span className="font-bold text-[#D05A18]">{beansNeeded} more</span> for a free coffee</>
-                    : <span className="text-[#2A7A4A] font-bold">Reward unlocked!</span>
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-[52px] font-extrabold leading-none tracking-tight" style={{ color: '#3D1A0E' }}>{currentBeans}</span>
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F5EAE2' }}>
+                    <Coffee className="w-4 h-4" style={{ color: '#C8472A' }} strokeWidth={1.8} />
+                  </div>
+                </div>
+                <p className="text-[13px] leading-snug" style={{ color: '#9A7060' }}>
+                  {beansNeeded > 0
+                    ? <>You're {beansNeeded} beans away from<br /><span className="font-semibold" style={{ color: '#C8472A' }}>a Free Any Coffee</span></>
+                    : <span className="font-semibold" style={{ color: '#2A7A4A' }}>Reward unlocked!</span>
                   }
                 </p>
               </div>
-              <div className="relative flex-shrink-0">
-                <svg width="116" height="116" className="transform -rotate-90">
-                  <defs>
-                    <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#E07840" />
-                      <stop offset="100%" stopColor="#D05A18" />
-                    </linearGradient>
-                  </defs>
-                  <circle cx="58" cy="58" r="50" stroke="#EAD8C8" strokeWidth="7" fill="none" />
+              {/* Donut ring — matches reference */}
+              <div className="relative flex-shrink-0 ml-2">
+                <svg width="88" height="88" className="-rotate-90">
+                  <circle cx="44" cy="44" r="36" stroke="#F0E4DA" strokeWidth="7" fill="none" />
                   <circle
-                    cx="58" cy="58" r="50"
-                    stroke="url(#progressGradient)"
+                    cx="44" cy="44" r="36"
+                    stroke="#C8472A"
                     strokeWidth="7"
                     fill="none"
                     strokeLinecap="round"
-                    strokeDasharray={2 * Math.PI * 50}
-                    strokeDashoffset={2 * Math.PI * 50 - (progress / 100) * 2 * Math.PI * 50}
+                    strokeDasharray={2 * Math.PI * 36}
+                    strokeDashoffset={2 * Math.PI * 36 * (1 - progress / 100)}
                     className="transition-all duration-700"
-                    style={{ filter: 'drop-shadow(0 2px 8px rgba(208,90,24,0.35))' }}
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <Coffee className="w-6 h-6 text-[#D05A18] mb-0.5" />
-                  <span className="text-[10px] font-bold text-[#7A6454]">{currentBeans}/{targetBeans}</span>
+                  <span className="text-[20px] font-extrabold leading-none" style={{ color: '#3D1A0E' }}>{beansNeeded > 0 ? beansNeeded : '✓'}</span>
+                  <span className="text-[10px] font-medium mt-0.5" style={{ color: '#B08070' }}>to go</span>
                 </div>
               </div>
             </div>
+            <p className="text-[11px] mt-3 pt-3 border-t" style={{ color: '#B08070', borderColor: '#F0E4DA' }}>
+              Free coffee at {targetBeans} beans
+            </p>
+          </div>
 
-            <div className="mt-4 pt-3.5 border-t border-[#EDD8C8] flex items-center justify-between">
+          {/* ── LIFETIME BEANS + LOCAL LEGEND ── */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-white rounded-[16px] p-4 shadow-[0_2px_10px_rgba(61,26,14,0.07)]">
+              <p className="text-[10px] font-bold uppercase tracking-[0.08em] mb-1.5" style={{ color: '#B08070' }}>LIFETIME BEANS</p>
               <div className="flex items-center gap-1.5">
-                <span className="text-[11px] text-[#AE9888]">Lifetime</span>
-                <span className="text-[11px] font-bold text-[#4E3420]">{beanBalance?.lifetime_beans || 0} beans</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <span className="text-[10px] font-bold text-[#D05A18] bg-[#FDF0E6] px-2 py-0.5 rounded-full">Gold Member</span>
-                <ChevronRight className="w-3.5 h-3.5 text-[#D05A18]" />
+                <div className="w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: '#3D1A0E' }}>
+                  <Coffee className="w-2.5 h-2.5 text-white" strokeWidth={2} />
+                </div>
+                <span className="text-[22px] font-extrabold leading-none" style={{ color: '#3D1A0E' }}>{beanBalance?.lifetime_beans || 0}</span>
               </div>
             </div>
-          </div>
-
-          {/* What's Brewing */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[17px] font-bold text-[#261408] tracking-tight">What's Brewing</h2>
-            </div>
-            <div 
-              className="rounded-[20px] relative overflow-hidden h-[148px] cursor-pointer active:scale-[0.985] transition-all duration-200 shadow-[0_4px_20px_rgba(33,75,57,0.22)]"
-              onClick={() => router.push('/campaigns')}
+            <div
+              className="bg-white rounded-[16px] p-4 shadow-[0_2px_10px_rgba(61,26,14,0.07)] flex items-center justify-between cursor-pointer active:scale-[0.97] transition-all"
+              onClick={() => router.push('/rewards')}
             >
-              {displayCampaign.image && (
-                <img 
-                  src={displayCampaign.image} 
-                  alt={displayCampaign.name}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0E2A1E]/90 via-[#0E2A1E]/40 to-transparent" />
-              <div className="relative z-10 h-full flex flex-col justify-end p-4">
-                {displayCampaign.bean_multiplier > 1 && (
-                  <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#D05A18] w-fit mb-2">
-                    <TrendingUp className="w-3 h-3 text-white" strokeWidth={2} />
-                    <span className="text-[10px] font-semibold text-white">{displayCampaign.bean_multiplier}× beans today</span>
-                  </div>
-                )}
-                <h3 className="font-bold text-white text-[15px] leading-snug">{displayCampaign.name}</h3>
-                <p className="text-[11px] text-white/75 mt-0.5">{displayCampaign.description}</p>
+              <div>
+                <div className="flex items-center gap-1 mb-1">
+                  <span className="text-[11px]">⭐</span>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.08em]" style={{ color: '#C8472A' }}>LOCAL LEGEND</p>
+                </div>
+                <p className="text-[11px] font-medium" style={{ color: '#9A7060' }}>Keep enjoying the perks</p>
               </div>
+              <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: '#C8C0B8' }} strokeWidth={2} />
             </div>
           </div>
 
-          {/* Your Vouchers */}
+          {/* ── YOUR VOUCHERS ── */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[17px] font-bold text-[#261408] tracking-tight">Your Vouchers</h2>
-              <span className="text-[11px] font-semibold text-[#D05A18]">{displayVouchers.length} active</span>
+              <h2 className="text-[15px] font-extrabold uppercase tracking-[0.06em]" style={{ color: '#3D1A0E' }}>YOUR VOUCHERS</h2>
+              <button onClick={() => router.push('/rewards')} className="text-[13px] font-semibold" style={{ color: '#3D1A0E' }}>View all</button>
             </div>
-            <div className="flex gap-3 overflow-x-auto overflow-y-hidden snap-x snap-mandatory scrollbar-hide">
+            <div className="flex gap-3 overflow-x-auto overflow-y-hidden snap-x snap-mandatory scrollbar-hide -mx-1 px-1">
               {displayVouchers.map((voucher) => (
                 <div
                   key={voucher.id}
-                  style={{ minWidth: 'calc(50vw - 28px)', maxWidth: '180px' }}
-                  className="relative rounded-[18px] h-[130px] flex-shrink-0 snap-start overflow-hidden cursor-pointer active:scale-[0.97] transition-all duration-200 shadow-[0_4px_16px_rgba(0,0,0,0.14)]"
+                  style={{ minWidth: '140px', maxWidth: '150px' }}
+                  className="relative rounded-[16px] h-[160px] flex-shrink-0 snap-start overflow-hidden cursor-pointer active:scale-[0.97] transition-all duration-200 shadow-[0_4px_16px_rgba(61,26,14,0.16)]"
                   onClick={() => {
                     setSelectedVoucher(voucher)
                     generateVoucherQRCode(voucher)
@@ -356,47 +339,57 @@ export default function NewV2Dashboard() {
                   {voucher.image ? (
                     <img src={voucher.image} alt="" className="absolute inset-0 w-full h-full object-cover" />
                   ) : (
-                    <div className="absolute inset-0 bg-[#3D1520]" />
+                    <div className="absolute inset-0" style={{ backgroundColor: '#3D1520' }} />
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1A0A0E]/85 via-[#1A0A0E]/30 to-transparent" />
-                  <div className="relative z-10 h-full flex flex-col justify-between p-3.5">
-                    <Gift className="w-4 h-4 text-white/60" />
-                    <div>
-                      <h3 className="font-bold text-white text-[12px] leading-tight mb-1">{voucher.template?.name}</h3>
-                      <p className="text-[10px] text-white/60 font-medium">
-                        Expires {new Date(voucher.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
-                      </p>
-                    </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  {/* x1 badge */}
+                  <div className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-white/90 flex items-center justify-center shadow-sm">
+                    <span className="text-[10px] font-extrabold" style={{ color: '#3D1A0E' }}>x1</span>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <h3 className="font-bold text-white text-[13px] leading-tight mb-1">{voucher.template?.name}</h3>
+                    <p className="text-[10px] font-medium" style={{ color: 'rgba(255,255,255,0.65)' }}>
+                      Expires {new Date(voucher.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Try Something New */}
+          {/* ── ACTIVE CAMPAIGN ── dark green card ── */}
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[17px] font-bold text-[#261408] tracking-tight">Try Something New</h2>
-            </div>
-            <div className="space-y-3">
-              {sampleFeatured.map((item) => (
-                <div
-                  key={item.id}
-                  className="relative rounded-[18px] h-[128px] overflow-hidden cursor-pointer active:scale-[0.985] transition-all duration-200 shadow-[0_3px_16px_rgba(0,0,0,0.12)]"
-                  onClick={() => setSelectedFeatured(item)}
-                >
-                  <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
-                  <div className="relative z-10 h-full flex flex-col justify-center p-4">
-                    <div className="inline-flex items-center px-2 py-0.5 rounded-full bg-white/20 w-fit mb-2">
-                      <span className="text-[10px] font-semibold text-white">{item.description}</span>
+            <h2 className="text-[15px] font-extrabold uppercase tracking-[0.06em] mb-3" style={{ color: '#3D1A0E' }}>ACTIVE CAMPAIGN</h2>
+            <div
+              className="relative rounded-[20px] overflow-hidden cursor-pointer active:scale-[0.985] transition-all duration-200 shadow-[0_6px_24px_rgba(14,42,30,0.28)]"
+              style={{ backgroundColor: '#1A3828', minHeight: '148px' }}
+              onClick={() => router.push('/campaigns')}
+            >
+              {displayCampaign.image && (
+                <img
+                  src={displayCampaign.image}
+                  alt=""
+                  className="absolute right-0 top-0 bottom-0 w-[55%] h-full object-cover"
+                  style={{ maskImage: 'linear-gradient(to left, rgba(0,0,0,0.9) 0%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,0.9) 0%, transparent 100%)' }}
+                />
+              )}
+              <div className="relative z-10 p-5 flex flex-col justify-between h-full" style={{ minHeight: '148px' }}>
+                <div>
+                  {displayCampaign.bean_multiplier > 1 && (
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style={{ backgroundColor: '#D05A18' }}>
+                      <span className="text-[10px] font-bold text-white uppercase tracking-wide">Today Only</span>
                     </div>
-                    <h3 className="font-bold text-white text-[15px]">{item.title}</h3>
-                  </div>
+                  )}
+                  <h3 className="font-extrabold text-white text-[20px] leading-tight mb-1">{displayCampaign.name}</h3>
+                  <p className="text-[12px] font-medium" style={{ color: 'rgba(255,255,255,0.65)' }}>{displayCampaign.description}</p>
                 </div>
-              ))}
+                <button className="mt-4 self-start px-4 py-2 rounded-full bg-white/15 border border-white/20">
+                  <span className="text-[12px] font-semibold text-white">View details</span>
+                </button>
+              </div>
             </div>
           </div>
+
         </div>
 
         <BottomNav />

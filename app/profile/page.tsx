@@ -2,6 +2,9 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { ProfileClient } from './profile-client'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function ProfilePage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -12,10 +15,10 @@ export default async function ProfilePage() {
 
   // Get user profile
   const { data: profile } = await supabase
-    .from('users')
+    .from('profiles')
     .select('*')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
   return (
     <ProfileClient 
@@ -26,8 +29,8 @@ export default async function ProfilePage() {
         phone: profile?.phone || '',
         date_of_birth: profile?.date_of_birth || '',
         avatar_url: profile?.avatar_url || '',
-        gps_consent: profile?.gps_consent || false,
-        marketing_consent: profile?.marketing_consent || false,
+        gps_consent: profile?.preferences?.gps_consent || false,
+        marketing_consent: profile?.preferences?.marketing_consent || false,
       }}
     />
   )

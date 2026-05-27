@@ -31,8 +31,18 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
   const [name, setName] = useState(initialUser.name)
   const [phone, setPhone] = useState(initialUser.phone)
   const [dateOfBirth, setDateOfBirth] = useState(initialUser.date_of_birth || '')
+
   const [gpsConsent, setGpsConsent] = useState(initialUser.gps_consent)
   const [marketingConsent, setMarketingConsent] = useState(initialUser.marketing_consent)
+
+  // Sync state if server re-renders with fresh data (after router.refresh)
+  useEffect(() => {
+    setName(initialUser.name)
+    setPhone(initialUser.phone)
+    setDateOfBirth(initialUser.date_of_birth || '')
+    setGpsConsent(initialUser.gps_consent)
+    setMarketingConsent(initialUser.marketing_consent)
+  }, [initialUser.name, initialUser.phone, initialUser.date_of_birth, initialUser.gps_consent, initialUser.marketing_consent])
   
   // Password change
   const [showPasswordDialog, setShowPasswordDialog] = useState(false)
@@ -97,9 +107,14 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
       if (error) throw error
 
       toast({
-        title: 'Profile Updated',
-        description: 'Your changes have been saved',
+        title: 'Saved',
+        description: 'Your profile has been updated',
       })
+
+      // Immediately reflect the saved values in state (don't wait for server)
+      setName(name)
+      setPhone(phone || '')
+      setDateOfBirth(dateOfBirth || '')
 
       router.refresh()
     } catch (error: any) {
@@ -235,7 +250,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
       onClick={onToggle}
       disabled={isLoading}
       className={`w-[46px] h-[26px] rounded-full p-[3px] transition-colors duration-200 flex-shrink-0 ${
-        on ? 'bg-[#2C1810]' : 'bg-[#D8CEC8]'
+        on ? 'bg-[#261408]' : 'bg-[#D4C4BA]'
       }`}
     >
       <div className={`w-[20px] h-[20px] rounded-full bg-white shadow-sm transition-transform duration-200 ${
@@ -247,75 +262,76 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
   const Row = ({ icon: Icon, iconColor = '#9A7A6A', label, value, onPress, last = false, danger = false }: any) => (
     <button
       onClick={onPress}
-      className={`w-full px-4 flex items-center gap-3 min-h-[50px] active:bg-[#F5EFE9] transition-colors ${
-        !last ? 'border-b border-[#F0E8E2]' : ''
+      className={`w-full px-4 flex items-center gap-3 min-h-[52px] active:bg-[#FAF0E8] transition-colors ${
+        !last ? 'border-b border-[#F2EAE2]' : ''
       }`}
     >
-      <Icon className="w-[18px] h-[18px] flex-shrink-0" style={{ color: iconColor }} />
+      <Icon className="w-[17px] h-[17px] flex-shrink-0" strokeWidth={1.8} style={{ color: iconColor }} />
       <span className={`flex-1 text-[14px] font-medium text-left ${
-        danger ? 'text-red-500' : 'text-[#2C1810]'
+        danger ? 'text-red-500' : 'text-[#261408]'
       }`}>{label}</span>
-      {value && <span className="text-[13px] text-[#9A7A6A] max-w-[140px] truncate text-right">{value}</span>}
-      <ChevronRight className="w-4 h-4 text-[#D8CEC8] flex-shrink-0" />
+      {value && <span className="text-[13px] text-[#AE9888] max-w-[140px] truncate text-right">{value}</span>}
+      <ChevronRight className="w-[15px] h-[15px] text-[#CCBDB4] flex-shrink-0" strokeWidth={1.8} />
     </button>
   )
 
   const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-    <p className="text-[11px] font-bold text-[#9A7A6A] uppercase tracking-widest px-1 mb-1.5">{children}</p>
+    <p className="text-[11px] font-semibold text-[#AE9888] uppercase tracking-[0.08em] px-1 mb-2">{children}</p>
   )
 
   return (
-    <div className="min-h-screen bg-[#F5EFE9]">
+    <div className="min-h-screen bg-[#FAF6F1]">
       {/* Header */}
-      <header className="bg-[#F5EFE9] pt-12 pb-2 px-5">
-        <h1 className="text-[26px] font-extrabold text-[#2C1810] tracking-tight">Profile</h1>
+      <header className="bg-[#FAF6F1] pt-12 pb-4 px-5">
+        <p className="text-[11px] font-semibold text-[#AE9888] uppercase tracking-[0.1em] mb-0.5">Penkey Perks</p>
+        <h1 className="text-[26px] font-extrabold text-[#261408] tracking-tight leading-none">Profile</h1>
       </header>
 
       <main className="px-4 pb-28 space-y-5">
         {/* Personal Info */}
         <div>
           <SectionLabel>Personal Info</SectionLabel>
-          <div className="bg-white rounded-[16px] overflow-hidden shadow-[0_1px_4px_rgba(44,24,16,0.07)]">
-            <div className="px-4 flex items-center gap-3 min-h-[50px] border-b border-[#F0E8E2]">
-              <User className="w-[18px] h-[18px] text-[#9A7A6A] flex-shrink-0" />
+          <div className="bg-white rounded-[18px] overflow-hidden shadow-[0_2px_12px_rgba(38,20,8,0.07)] border border-[#E8DDD4]">
+            <div className="px-4 flex items-center gap-3 min-h-[52px] border-b border-[#F2EAE2]">
+              <User className="w-[17px] h-[17px] text-[#AE9888] flex-shrink-0" strokeWidth={1.8} />
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 disabled={isLoading}
                 placeholder="Your name"
-                className="flex-1 text-[14px] font-medium text-[#2C1810] bg-transparent outline-none placeholder:text-[#C4AFA8] py-3"
+                className="flex-1 text-[14px] font-medium text-[#261408] bg-transparent outline-none placeholder:text-[#C8B8AC] py-3"
               />
             </div>
-            <div className="px-4 flex items-center gap-3 min-h-[50px] border-b border-[#F0E8E2]">
-              <Mail className="w-[18px] h-[18px] text-[#9A7A6A] flex-shrink-0" />
-              <span className="flex-1 text-[14px] text-[#9A7A6A] py-3 select-all">{initialUser.email}</span>
+            <div className="px-4 flex items-center gap-3 min-h-[52px] border-b border-[#F2EAE2]">
+              <Mail className="w-[17px] h-[17px] text-[#AE9888] flex-shrink-0" strokeWidth={1.8} />
+              <span className="flex-1 text-[14px] text-[#AE9888] py-3">{initialUser.email}</span>
             </div>
-            <div className="px-4 flex items-center gap-3 min-h-[50px] border-b border-[#F0E8E2]">
-              <Phone className="w-[18px] h-[18px] text-[#9A7A6A] flex-shrink-0" />
+            <div className="px-4 flex items-center gap-3 min-h-[52px] border-b border-[#F2EAE2]">
+              <Phone className="w-[17px] h-[17px] text-[#AE9888] flex-shrink-0" strokeWidth={1.8} />
               <input
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 disabled={isLoading}
                 placeholder="Phone number"
-                className="flex-1 text-[14px] font-medium text-[#2C1810] bg-transparent outline-none placeholder:text-[#C4AFA8] py-3"
+                className="flex-1 text-[14px] font-medium text-[#261408] bg-transparent outline-none placeholder:text-[#C8B8AC] py-3"
               />
             </div>
-            <div className="px-4 flex items-center gap-3 min-h-[50px]">
-              <Calendar className="w-[18px] h-[18px] text-[#9A7A6A] flex-shrink-0" />
+            <div className="px-4 flex items-center gap-3 min-h-[52px]">
+              <Calendar className="w-[17px] h-[17px] text-[#AE9888] flex-shrink-0" strokeWidth={1.8} />
               <input
                 type="date"
                 value={dateOfBirth}
                 onChange={(e) => setDateOfBirth(e.target.value)}
                 disabled={isLoading}
-                className="flex-1 text-[14px] font-medium text-[#2C1810] bg-transparent outline-none py-3"
+                className="flex-1 text-[14px] font-medium text-[#261408] bg-transparent outline-none py-3"
               />
             </div>
           </div>
           <button
             onClick={handleSaveProfile}
             disabled={isLoading}
-            className="w-full mt-2.5 py-3.5 bg-[#2C1810] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60"
+            className="w-full mt-2.5 py-3.5 bg-[#261408] text-white text-[14px] font-semibold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60 shadow-[0_4px_16px_rgba(38,20,8,0.25)]"
           >
             {isLoading ? 'Saving…' : 'Save Changes'}
           </button>
@@ -324,28 +340,28 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
         {/* Preferences */}
         <div>
           <SectionLabel>Preferences</SectionLabel>
-          <div className="bg-white rounded-[16px] overflow-hidden shadow-[0_1px_4px_rgba(44,24,16,0.07)]">
-            <div className="px-4 flex items-center gap-3 min-h-[52px] border-b border-[#F0E8E2]">
-              <MapPin className="w-[18px] h-[18px] text-[#9A7A6A] flex-shrink-0" />
+          <div className="bg-white rounded-[18px] overflow-hidden shadow-[0_2px_12px_rgba(38,20,8,0.07)] border border-[#E8DDD4]">
+            <div className="px-4 flex items-center gap-3 min-h-[54px] border-b border-[#F2EAE2]">
+              <MapPin className="w-[17px] h-[17px] text-[#AE9888] flex-shrink-0" strokeWidth={1.8} />
               <div className="flex-1">
-                <p className="text-[14px] font-medium text-[#2C1810]">Location Services</p>
-                <p className="text-[11px] text-[#9A7A6A]">For check-ins and stamps</p>
+                <p className="text-[14px] font-medium text-[#261408]">Location Services</p>
+                <p className="text-[11px] text-[#AE9888]">For check-ins and stamps</p>
               </div>
               <Toggle on={gpsConsent} onToggle={() => setGpsConsent(!gpsConsent)} />
             </div>
-            <div className="px-4 flex items-center gap-3 min-h-[52px] border-b border-[#F0E8E2]">
-              <Gift className="w-[18px] h-[18px] text-[#9A7A6A] flex-shrink-0" />
+            <div className="px-4 flex items-center gap-3 min-h-[54px] border-b border-[#F2EAE2]">
+              <Gift className="w-[17px] h-[17px] text-[#AE9888] flex-shrink-0" strokeWidth={1.8} />
               <div className="flex-1">
-                <p className="text-[14px] font-medium text-[#2C1810]">Marketing</p>
-                <p className="text-[11px] text-[#9A7A6A]">Offers and updates</p>
+                <p className="text-[14px] font-medium text-[#261408]">Marketing</p>
+                <p className="text-[11px] text-[#AE9888]">Offers and updates</p>
               </div>
               <Toggle on={marketingConsent} onToggle={() => setMarketingConsent(!marketingConsent)} />
             </div>
-            <div className="px-4 flex items-center gap-3 min-h-[52px]">
-              <Bell className="w-[18px] h-[18px] text-[#9A7A6A] flex-shrink-0" />
+            <div className="px-4 flex items-center gap-3 min-h-[54px]">
+              <Bell className="w-[17px] h-[17px] text-[#AE9888] flex-shrink-0" strokeWidth={1.8} />
               <div className="flex-1">
-                <p className="text-[14px] font-medium text-[#2C1810]">Push Notifications</p>
-                <p className="text-[11px] text-[#9A7A6A]">Alerts and reminders</p>
+                <p className="text-[14px] font-medium text-[#261408]">Push Notifications</p>
+                <p className="text-[11px] text-[#AE9888]">Alerts and reminders</p>
               </div>
               <Toggle on={false} onToggle={() => {}} />
             </div>
@@ -355,17 +371,17 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
         {/* QR + Security */}
         <div>
           <SectionLabel>Quick Actions</SectionLabel>
-          <div className="bg-white rounded-[16px] overflow-hidden shadow-[0_1px_4px_rgba(44,24,16,0.07)]">
-            <Row icon={QrCode} iconColor="#7B1234" label="Show My QR Code" value="For staff" onPress={() => setShowQRDialog(true)} />
-            <Row icon={Lock} label="Change Password" last onPress={() => setShowPasswordDialog(true)} />
+          <div className="bg-white rounded-[18px] overflow-hidden shadow-[0_2px_12px_rgba(38,20,8,0.07)] border border-[#E8DDD4]">
+            <Row icon={QrCode} iconColor="#D05A18" label="Show My QR Code" value="For staff" onPress={() => setShowQRDialog(true)} />
+            <Row icon={Lock} iconColor="#AE9888" label="Change Password" last onPress={() => setShowPasswordDialog(true)} />
           </div>
         </div>
 
         {/* Account */}
         <div>
           <SectionLabel>Account</SectionLabel>
-          <div className="bg-white rounded-[16px] overflow-hidden shadow-[0_1px_4px_rgba(44,24,16,0.07)]">
-            <Row icon={PauseCircle} iconColor="#E48A3A" label="Pause Account" value="Keep data safe" onPress={() => setShowPauseDialog(true)} />
+          <div className="bg-white rounded-[18px] overflow-hidden shadow-[0_2px_12px_rgba(38,20,8,0.07)] border border-[#E8DDD4]">
+            <Row icon={PauseCircle} iconColor="#D05A18" label="Pause Account" value="Keep data safe" onPress={() => setShowPauseDialog(true)} />
             <Row icon={Trash2} iconColor="#EF4444" label="Delete Account" danger last onPress={() => setShowDeleteDialog(true)} />
           </div>
         </div>

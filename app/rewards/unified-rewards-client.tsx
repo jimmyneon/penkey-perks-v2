@@ -189,6 +189,8 @@ export function UnifiedRewardsClient({
 
       {/* ── HERO HEADER ── */}
       <div className="pt-14 pb-6 px-5">
+        <p className="text-[11px] font-semibold text-[#AE9888] uppercase tracking-[0.1em] mb-0.5">Penkey Perks</p>
+        <p className="text-[26px] font-extrabold text-[#261408] leading-none tracking-tight mb-4">Rewards</p>
         <p className="text-[11px] font-semibold text-[#AE9888] uppercase tracking-[0.08em] mb-1">Your Beans</p>
         <div className="flex items-end justify-between">
           <div>
