@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { useToast } from '@/hooks/use-toast'
 import { createClient } from '@/lib/supabase/client'
 import QRCodeLib from 'qrcode'
+import { BottomNav } from '@/components/bottom-nav'
 
 interface ProfileClientProps {
   user: {
@@ -66,27 +67,38 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
     }
   }, [showQRDialog, initialUser.id])
 
-  const handleSaveProfile = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSaveProfile = async () => {
     setIsLoading(true)
 
     try {
+      // Get current profile to preserve existing preferences
+      const { data: currentProfile } = await supabase
+        .from('profiles')
+        .select('preferences')
+        .eq('id', initialUser.id)
+        .single()
+
+      const existingPreferences = currentProfile?.preferences || {}
+
       const { error } = await supabase
-        .from('users')
+        .from('profiles')
         .update({
           name,
           phone: phone || null,
           date_of_birth: dateOfBirth || null,
-          gps_consent: gpsConsent,
-          marketing_consent: marketingConsent,
+          preferences: {
+            ...existingPreferences,
+            gps_consent: gpsConsent,
+            marketing_consent: marketingConsent,
+          },
         })
         .eq('id', initialUser.id)
 
       if (error) throw error
 
       toast({
-        title: '✅ Profile Updated!',
-        description: 'Your changes have been saved! 💕',
+        title: 'Profile Updated',
+        description: 'Your changes have been saved',
       })
     } catch (error: any) {
       toast({
@@ -149,15 +161,15 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
     setIsLoading(true)
     try {
       const { error } = await supabase
-        .from('users')
-        .update({ status: 'paused' })
+        .from('profiles')
+        .update({ preferences: { status: 'paused' } })
         .eq('id', initialUser.id)
 
       if (error) throw error
 
       toast({
-        title: '⏸️ Account Paused',
-        description: 'Your account is paused. We\'ll keep your data safe! Come back anytime! 💕',
+        title: 'Account Paused',
+        description: 'Your account is paused. We\'ll keep your data safe! Come back anytime!',
       })
 
       // Sign out
@@ -216,470 +228,256 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
     }
   }
 
+  const Toggle = ({ on, onToggle }: { on: boolean; onToggle: () => void }) => (
+    <button
+      onClick={onToggle}
+      disabled={isLoading}
+      className={`w-[46px] h-[26px] rounded-full p-[3px] transition-colors duration-200 flex-shrink-0 ${
+        on ? 'bg-[#2C1810]' : 'bg-[#D8CEC8]'
+      }`}
+    >
+      <div className={`w-[20px] h-[20px] rounded-full bg-white shadow-sm transition-transform duration-200 ${
+        on ? 'translate-x-[20px]' : 'translate-x-0'
+      }`} />
+    </button>
+  )
+
+  const Row = ({ icon: Icon, iconColor = '#9A7A6A', label, value, onPress, last = false, danger = false }: any) => (
+    <button
+      onClick={onPress}
+      className={`w-full px-4 flex items-center gap-3 min-h-[50px] active:bg-[#F5EFE9] transition-colors ${
+        !last ? 'border-b border-[#F0E8E2]' : ''
+      }`}
+    >
+      <Icon className="w-[18px] h-[18px] flex-shrink-0" style={{ color: iconColor }} />
+      <span className={`flex-1 text-[14px] font-medium text-left ${
+        danger ? 'text-red-500' : 'text-[#2C1810]'
+      }`}>{label}</span>
+      {value && <span className="text-[13px] text-[#9A7A6A] max-w-[140px] truncate text-right">{value}</span>}
+      <ChevronRight className="w-4 h-4 text-[#D8CEC8] flex-shrink-0" />
+    </button>
+  )
+
+  const SectionLabel = ({ children }: { children: React.ReactNode }) => (
+    <p className="text-[11px] font-bold text-[#9A7A6A] uppercase tracking-widest px-1 mb-1.5">{children}</p>
+  )
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#F5EFE9]">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="px-4 py-4 flex items-center gap-4">
-          <Link href="/dashboard">
-            <Button variant="ghost" size="icon" className="text-[#4B3028]">
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-          </Link>
-          <h1 className="text-xl font-bold text-[#4B3028]">Profile</h1>
-        </div>
+      <header className="bg-[#F5EFE9] pt-12 pb-2 px-5">
+        <h1 className="text-[26px] font-extrabold text-[#2C1810] tracking-tight">Profile</h1>
       </header>
 
-      {/* Main Content */}
-      <main className="px-4 py-4 space-y-6">
-        {/* Profile Section */}
+      <main className="px-4 pb-28 space-y-5">
+        {/* Personal Info */}
         <div>
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">Personal Info</h2>
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            {/* Name */}
-            <button
-              onClick={() => document.getElementById('name')?.focus()}
-              className="w-full px-4 py-3.5 flex items-center justify-between border-b border-gray-100 active:bg-gray-50"
-            >
-              <div className="flex items-center gap-3">
-                <User className="w-5 h-5 text-gray-400" />
-                <div className="text-left">
-                  <p className="text-xs text-gray-500">Name</p>
-                  <p className="text-sm font-medium text-[#4B3028]">{name || 'Not set'}</p>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 text-gray-300" />
-            </button>
-            
-            {/* Name Input (hidden by default, shown when clicked) */}
-            <div className="px-4 py-3 border-b border-gray-100">
-              <Input
-                id="name"
+          <SectionLabel>Personal Info</SectionLabel>
+          <div className="bg-white rounded-[16px] overflow-hidden shadow-[0_1px_4px_rgba(44,24,16,0.07)]">
+            <div className="px-4 flex items-center gap-3 min-h-[50px] border-b border-[#F0E8E2]">
+              <User className="w-[18px] h-[18px] text-[#9A7A6A] flex-shrink-0" />
+              <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 disabled={isLoading}
                 placeholder="Your name"
-                className="border-0 px-0 focus-visible:ring-0"
+                className="flex-1 text-[14px] font-medium text-[#2C1810] bg-transparent outline-none placeholder:text-[#C4AFA8] py-3"
               />
             </div>
-
-            {/* Email */}
-            <div className="px-4 py-3.5 flex items-center justify-between border-b border-gray-100">
-              <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-gray-400" />
-                <div className="text-left">
-                  <p className="text-xs text-gray-500">Email</p>
-                  <p className="text-sm font-medium text-[#4B3028]">{initialUser.email}</p>
-                </div>
-              </div>
+            <div className="px-4 flex items-center gap-3 min-h-[50px] border-b border-[#F0E8E2]">
+              <Mail className="w-[18px] h-[18px] text-[#9A7A6A] flex-shrink-0" />
+              <span className="flex-1 text-[14px] text-[#9A7A6A] py-3 select-all">{initialUser.email}</span>
             </div>
-
-            {/* Phone */}
-            <div className="px-4 py-3.5 flex items-center justify-between border-b border-gray-100">
-              <div className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-gray-400" />
-                <div className="text-left">
-                  <p className="text-xs text-gray-500">Phone</p>
-                  <p className="text-sm font-medium text-[#4B3028]">{phone || 'Not set'}</p>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 text-gray-300" />
-            </div>
-
-            {/* Phone Input */}
-            <div className="px-4 py-3 border-b border-gray-100">
-              <Input
-                id="phone"
+            <div className="px-4 flex items-center gap-3 min-h-[50px] border-b border-[#F0E8E2]">
+              <Phone className="w-[18px] h-[18px] text-[#9A7A6A] flex-shrink-0" />
+              <input
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 disabled={isLoading}
-                placeholder="+44 7700 900000"
-                className="border-0 px-0 focus-visible:ring-0"
+                placeholder="Phone number"
+                className="flex-1 text-[14px] font-medium text-[#2C1810] bg-transparent outline-none placeholder:text-[#C4AFA8] py-3"
               />
             </div>
-
-            {/* Birthday */}
-            <div className="px-4 py-3.5 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Calendar className="w-5 h-5 text-gray-400" />
-                <div className="text-left">
-                  <p className="text-xs text-gray-500">Birthday</p>
-                  <p className="text-sm font-medium text-[#4B3028]">{dateOfBirth || 'Not set'}</p>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 text-gray-300" />
-            </div>
-
-            {/* Birthday Input */}
-            <div className="px-4 py-3">
-              <Input
-                id="dob"
+            <div className="px-4 flex items-center gap-3 min-h-[50px]">
+              <Calendar className="w-[18px] h-[18px] text-[#9A7A6A] flex-shrink-0" />
+              <input
                 type="date"
                 value={dateOfBirth}
                 onChange={(e) => setDateOfBirth(e.target.value)}
                 disabled={isLoading}
-                className="border-0 px-0 focus-visible:ring-0"
+                className="flex-1 text-[14px] font-medium text-[#2C1810] bg-transparent outline-none py-3"
               />
             </div>
           </div>
-
-          <Button 
-            onClick={handleSaveProfile} 
+          <button
+            onClick={handleSaveProfile}
             disabled={isLoading}
-            className="w-full mt-4 bg-[#8D123F] hover:bg-[#A8224E] text-white"
+            className="w-full mt-2.5 py-3.5 bg-[#2C1810] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60"
           >
-            {isLoading ? 'Saving...' : 'Save'}
-          </Button>
+            {isLoading ? 'Saving…' : 'Save Changes'}
+          </button>
         </div>
 
-        {/* Preferences Section */}
+        {/* Preferences */}
         <div>
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">Preferences</h2>
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            {/* Location */}
-            <div className="px-4 py-3.5 flex items-center justify-between border-b border-gray-100">
-              <div className="flex items-center gap-3">
-                <MapPin className="w-5 h-5 text-gray-400" />
-                <div className="text-left">
-                  <p className="text-sm font-medium text-[#4B3028]">Location Services</p>
-                  <p className="text-xs text-gray-500">For check-ins and stamps</p>
-                </div>
+          <SectionLabel>Preferences</SectionLabel>
+          <div className="bg-white rounded-[16px] overflow-hidden shadow-[0_1px_4px_rgba(44,24,16,0.07)]">
+            <div className="px-4 flex items-center gap-3 min-h-[52px] border-b border-[#F0E8E2]">
+              <MapPin className="w-[18px] h-[18px] text-[#9A7A6A] flex-shrink-0" />
+              <div className="flex-1">
+                <p className="text-[14px] font-medium text-[#2C1810]">Location Services</p>
+                <p className="text-[11px] text-[#9A7A6A]">For check-ins and stamps</p>
               </div>
-              <button
-                onClick={() => setGpsConsent(!gpsConsent)}
-                disabled={isLoading}
-                className={`w-12 h-7 rounded-full p-1 transition-colors ${
-                  gpsConsent ? 'bg-[#8D123F]' : 'bg-gray-300'
-                }`}
-              >
-                <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
-                  gpsConsent ? 'translate-x-5' : 'translate-x-0'
-                }`} />
-              </button>
+              <Toggle on={gpsConsent} onToggle={() => setGpsConsent(!gpsConsent)} />
             </div>
-
-            {/* Marketing */}
-            <div className="px-4 py-3.5 flex items-center justify-between border-b border-gray-100">
-              <div className="flex items-center gap-3">
-                <Gift className="w-5 h-5 text-gray-400" />
-                <div className="text-left">
-                  <p className="text-sm font-medium text-[#4B3028]">Marketing</p>
-                  <p className="text-xs text-gray-500">Offers and updates</p>
-                </div>
+            <div className="px-4 flex items-center gap-3 min-h-[52px] border-b border-[#F0E8E2]">
+              <Gift className="w-[18px] h-[18px] text-[#9A7A6A] flex-shrink-0" />
+              <div className="flex-1">
+                <p className="text-[14px] font-medium text-[#2C1810]">Marketing</p>
+                <p className="text-[11px] text-[#9A7A6A]">Offers and updates</p>
               </div>
-              <button
-                onClick={() => setMarketingConsent(!marketingConsent)}
-                disabled={isLoading}
-                className={`w-12 h-7 rounded-full p-1 transition-colors ${
-                  marketingConsent ? 'bg-[#8D123F]' : 'bg-gray-300'
-                }`}
-              >
-                <div className={`w-5 h-5 rounded-full bg-white transition-transform ${
-                  marketingConsent ? 'translate-x-5' : 'translate-x-0'
-                }`} />
-              </button>
+              <Toggle on={marketingConsent} onToggle={() => setMarketingConsent(!marketingConsent)} />
             </div>
-
-            {/* Notifications */}
-            <div className="px-4 py-3.5 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Bell className="w-5 h-5 text-gray-400" />
-                <div className="text-left">
-                  <p className="text-sm font-medium text-[#4B3028]">Notifications</p>
-                  <p className="text-xs text-gray-500">Push notifications</p>
-                </div>
+            <div className="px-4 flex items-center gap-3 min-h-[52px]">
+              <Bell className="w-[18px] h-[18px] text-[#9A7A6A] flex-shrink-0" />
+              <div className="flex-1">
+                <p className="text-[14px] font-medium text-[#2C1810]">Push Notifications</p>
+                <p className="text-[11px] text-[#9A7A6A]">Alerts and reminders</p>
               </div>
-              <button
-                disabled={isLoading}
-                className={`w-12 h-7 rounded-full p-1 transition-colors bg-gray-300`}
-              >
-                <div className="w-5 h-5 rounded-full bg-white" />
-              </button>
+              <Toggle on={false} onToggle={() => {}} />
             </div>
           </div>
-
-          <Button 
-            onClick={handleSaveProfile} 
-            disabled={isLoading}
-            variant="outline"
-            className="w-full mt-4"
-          >
-            Update Preferences
-          </Button>
         </div>
 
-        {/* QR Code Section */}
+        {/* QR + Security */}
         <div>
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">Your QR Code</h2>
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <button
-              onClick={() => setShowQRDialog(true)}
-              className="w-full px-4 py-3.5 flex items-center justify-between active:bg-gray-50"
-            >
-              <div className="flex items-center gap-3">
-                <QrCode className="w-5 h-5 text-[#8D123F]" />
-                <div className="text-left">
-                  <p className="text-sm font-medium text-[#4B3028]">Show QR Code</p>
-                  <p className="text-xs text-gray-500">For staff to scan</p>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 text-gray-300" />
-            </button>
+          <SectionLabel>Quick Actions</SectionLabel>
+          <div className="bg-white rounded-[16px] overflow-hidden shadow-[0_1px_4px_rgba(44,24,16,0.07)]">
+            <Row icon={QrCode} iconColor="#7B1234" label="Show My QR Code" value="For staff" onPress={() => setShowQRDialog(true)} />
+            <Row icon={Lock} label="Change Password" last onPress={() => setShowPasswordDialog(true)} />
           </div>
         </div>
 
-        {/* Security Section */}
+        {/* Account */}
         <div>
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">Security</h2>
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <button
-              onClick={() => setShowPasswordDialog(true)}
-              className="w-full px-4 py-3.5 flex items-center justify-between active:bg-gray-50"
-            >
-              <div className="flex items-center gap-3">
-                <Lock className="w-5 h-5 text-gray-400" />
-                <div className="text-left">
-                  <p className="text-sm font-medium text-[#4B3028]">Change Password</p>
-                  <p className="text-xs text-gray-500">Update your password</p>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 text-gray-300" />
-            </button>
-          </div>
-        </div>
-
-        {/* Account Actions */}
-        <div>
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">Account</h2>
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <button
-              onClick={() => setShowPauseDialog(true)}
-              className="w-full px-4 py-3.5 flex items-center justify-between border-b border-gray-100 active:bg-gray-50"
-            >
-              <div className="flex items-center gap-3">
-                <PauseCircle className="w-5 h-5 text-orange-500" />
-                <div className="text-left">
-                  <p className="text-sm font-medium text-[#4B3028]">Pause Account</p>
-                  <p className="text-xs text-gray-500">Keep your data safe</p>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 text-gray-300" />
-            </button>
-
-            <button
-              onClick={() => setShowDeleteDialog(true)}
-              className="w-full px-4 py-3.5 flex items-center justify-between active:bg-red-50"
-            >
-              <div className="flex items-center gap-3">
-                <Trash2 className="w-5 h-5 text-red-500" />
-                <div className="text-left">
-                  <p className="text-sm font-medium text-red-600">Delete Account</p>
-                  <p className="text-xs text-gray-500">Permanently delete all data</p>
-                </div>
-              </div>
-              <ChevronRight className="w-5 h-5 text-gray-300" />
-            </button>
+          <SectionLabel>Account</SectionLabel>
+          <div className="bg-white rounded-[16px] overflow-hidden shadow-[0_1px_4px_rgba(44,24,16,0.07)]">
+            <Row icon={PauseCircle} iconColor="#E48A3A" label="Pause Account" value="Keep data safe" onPress={() => setShowPauseDialog(true)} />
+            <Row icon={Trash2} iconColor="#EF4444" label="Delete Account" danger last onPress={() => setShowDeleteDialog(true)} />
           </div>
         </div>
       </main>
 
       {/* Change Password Dialog */}
       <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
-        <DialogContent className="rounded-2xl">
+        <DialogContent className="sm:max-w-sm rounded-[24px] bg-[#FAF8F5] border-0 shadow-[0_24px_64px_rgba(0,0,0,0.15)]">
           <DialogHeader>
-            <DialogTitle className="text-[#4B3028]">Change Password</DialogTitle>
-            <DialogDescription className="text-gray-500">
-              Enter your new password
-            </DialogDescription>
+            <DialogTitle className="text-[#2C1810] text-lg font-extrabold">Change Password</DialogTitle>
+            <DialogDescription className="text-[#9A7A6A] text-[13px]">Enter a new password below</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="new-password" className="text-[#4B3028]">New Password</Label>
-              <Input
-                id="new-password"
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="At least 6 characters"
-              />
+          <div className="space-y-3 pb-1">
+            <div className="bg-white rounded-[14px] overflow-hidden shadow-[0_1px_4px_rgba(44,24,16,0.07)]">
+              <div className="px-4 flex items-center gap-3 min-h-[50px] border-b border-[#F0E8E2]">
+                <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="New password" className="flex-1 text-[14px] font-medium text-[#2C1810] bg-transparent outline-none placeholder:text-[#C4AFA8] py-3" />
+              </div>
+              <div className="px-4 flex items-center gap-3 min-h-[50px]">
+                <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Confirm password" className="flex-1 text-[14px] font-medium text-[#2C1810] bg-transparent outline-none placeholder:text-[#C4AFA8] py-3" />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="confirm-password" className="text-[#4B3028]">Confirm Password</Label>
-              <Input
-                id="confirm-password"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Re-enter new password"
-              />
+            <div className="flex gap-2">
+              <button onClick={() => setShowPasswordDialog(false)} className="flex-1 py-3 bg-[#F0E8E2] text-[#6B4C3B] text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all">Cancel</button>
+              <button onClick={handleChangePassword} disabled={isLoading} className="flex-1 py-3 bg-[#2C1810] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60">{isLoading ? 'Saving…' : 'Change'}</button>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPasswordDialog(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleChangePassword} disabled={isLoading} className="bg-[#8D123F] hover:bg-[#A8224E]">
-              {isLoading ? 'Changing...' : 'Change'}
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Pause Account Dialog */}
       <Dialog open={showPauseDialog} onOpenChange={setShowPauseDialog}>
-        <DialogContent className="rounded-2xl">
+        <DialogContent className="sm:max-w-sm rounded-[24px] bg-[#FAF8F5] border-0 shadow-[0_24px_64px_rgba(0,0,0,0.15)]">
           <DialogHeader>
-            <DialogTitle className="text-[#4B3028]">Pause Account?</DialogTitle>
-            <DialogDescription className="text-gray-500">
-              Your data will be kept safe
-            </DialogDescription>
+            <DialogTitle className="text-[#2C1810] text-lg font-extrabold">Pause Account?</DialogTitle>
+            <DialogDescription className="text-[#9A7A6A] text-[13px]">Your data stays safe while paused</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div className="p-4 bg-orange-50 border border-orange-200 rounded-xl">
-              <ul className="text-sm text-gray-600 space-y-2">
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-500">•</span>
-                  Your account will be paused
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-500">•</span>
-                  All your data stays safe
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-orange-500">•</span>
-                  You can reactivate anytime
-                </li>
-              </ul>
+          <div className="space-y-3 pb-1">
+            <div className="bg-[#FFF5EB] rounded-[14px] p-4 space-y-2">
+              {['Your account will be paused', 'All your data stays safe', 'You can reactivate anytime'].map((t, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#E48A3A] flex-shrink-0" />
+                  <span className="text-[13px] text-[#6B4C3B]">{t}</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => setShowPauseDialog(false)} className="flex-1 py-3 bg-[#F0E8E2] text-[#6B4C3B] text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all">Cancel</button>
+              <button onClick={handlePauseAccount} disabled={isLoading} className="flex-1 py-3 bg-[#E48A3A] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60">{isLoading ? 'Pausing…' : 'Pause'}</button>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPauseDialog(false)}>
-              Cancel
-            </Button>
-            <Button 
-              onClick={handlePauseAccount} 
-              disabled={isLoading}
-              className="bg-orange-500 hover:bg-orange-600"
-            >
-              {isLoading ? 'Pausing...' : 'Pause'}
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Delete Account Dialog */}
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <DialogContent className="rounded-2xl">
+        <DialogContent className="sm:max-w-sm rounded-[24px] bg-[#FAF8F5] border-0 shadow-[0_24px_64px_rgba(0,0,0,0.15)]">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-red-600">
-              <AlertTriangle className="w-5 h-5" />
+            <DialogTitle className="text-[#2C1810] text-lg font-extrabold flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-red-500" />
               Delete Account?
             </DialogTitle>
-            <DialogDescription className="text-gray-500">
-              This cannot be undone
-            </DialogDescription>
+            <DialogDescription className="text-[#9A7A6A] text-[13px]">This action is permanent and cannot be undone</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
-              <ul className="text-sm text-red-600 space-y-2">
-                <li className="flex items-start gap-2">
-                  <span className="text-red-500">•</span>
-                  All your data will be deleted
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-red-500">•</span>
-                  Points and rewards will be lost
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-red-500">•</span>
-                  This cannot be undone
-                </li>
-              </ul>
+          <div className="space-y-3 pb-1">
+            <div className="bg-red-50 rounded-[14px] p-4 space-y-2">
+              {['All your data will be permanently deleted', 'Points and rewards will be lost', 'This cannot be undone'].map((t, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" />
+                  <span className="text-[13px] text-red-600">{t}</span>
+                </div>
+              ))}
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="confirm-delete" className="text-[#4B3028]">
-                Type <strong>DELETE</strong> to confirm
-              </Label>
-              <Input
-                id="confirm-delete"
-                value={confirmText}
-                onChange={(e) => setConfirmText(e.target.value)}
-                placeholder="DELETE"
-              />
+            <div className="bg-white rounded-[14px] px-4 min-h-[50px] flex items-center shadow-[0_1px_4px_rgba(44,24,16,0.07)]">
+              <input value={confirmText} onChange={(e) => setConfirmText(e.target.value)} placeholder='Type DELETE to confirm' className="flex-1 text-[14px] font-medium text-[#2C1810] bg-transparent outline-none placeholder:text-[#C4AFA8] py-3" />
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => { setShowDeleteDialog(false); setConfirmText('') }} className="flex-1 py-3 bg-[#F0E8E2] text-[#6B4C3B] text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all">Cancel</button>
+              <button onClick={handleDeleteAccount} disabled={isLoading || confirmText !== 'DELETE'} className="flex-1 py-3 bg-red-500 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-40">{isLoading ? 'Deleting…' : 'Delete'}</button>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => {
-              setShowDeleteDialog(false)
-              setConfirmText('')
-            }}>
-              Cancel
-            </Button>
-            <Button 
-              onClick={handleDeleteAccount} 
-              disabled={isLoading || confirmText !== 'DELETE'}
-              variant="destructive"
-            >
-              {isLoading ? 'Deleting...' : 'Delete'}
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Staff QR Code Dialog */}
       <Dialog open={showQRDialog} onOpenChange={setShowQRDialog}>
-        <DialogContent className="rounded-2xl max-w-sm">
+        <DialogContent className="sm:max-w-sm rounded-[24px] bg-[#FAF8F5] border-0 shadow-[0_24px_64px_rgba(0,0,0,0.15)]">
           <DialogHeader>
-            <DialogTitle className="text-center text-[#4B3028] flex items-center justify-center gap-2">
-              <QrCode className="w-5 h-5 text-[#8D123F]" />
-              Your QR Code
-            </DialogTitle>
-            <DialogDescription className="text-center text-gray-500">
-              Show this to staff
-            </DialogDescription>
+            <DialogTitle className="text-[#2C1810] text-lg font-extrabold text-center">Your QR Code</DialogTitle>
+            <DialogDescription className="text-[#9A7A6A] text-[13px] text-center">Show to staff to earn beans & stamps</DialogDescription>
           </DialogHeader>
-
-          <div className="space-y-4">
-            {/* QR Code */}
-            <div className="bg-white p-6 rounded-xl border-2 border-gray-200 flex items-center justify-center">
-              {qrCodeUrl && (
-                <img 
-                  src={qrCodeUrl} 
-                  alt="Staff QR Code" 
-                  className="w-full max-w-[250px]" 
-                />
+          <div className="space-y-3 pb-1">
+            <div className="bg-white rounded-[16px] p-5 flex items-center justify-center shadow-[0_1px_4px_rgba(44,24,16,0.07)]">
+              {qrCodeUrl ? (
+                <img src={qrCodeUrl} alt="QR Code" className="w-52 h-52 animate-qr-pop" />
+              ) : (
+                <div className="w-52 h-52 bg-[#F5EFE9] rounded-[12px] flex items-center justify-center">
+                  <QrCode className="w-12 h-12 text-[#C4AFA8]" />
+                </div>
               )}
             </div>
-
-            {/* Code Text */}
-            <div className="text-center space-y-2">
-              <p className="text-xs text-gray-500 uppercase tracking-wide font-medium">QR Code</p>
-              <p className="text-sm font-mono bg-gray-50 border border-gray-200 px-4 py-3 rounded-lg text-[#4B3028] font-semibold">
-                PROFILE-{initialUser.id}
-              </p>
+            <div className="bg-white rounded-[14px] px-4 py-3 shadow-[0_1px_4px_rgba(44,24,16,0.07)]">
+              <p className="text-[10px] font-bold text-[#9A7A6A] uppercase tracking-widest mb-1">Staff can use this to</p>
+              <div className="flex gap-3">
+                {['Check-ins', 'Add stamps', 'Award beans'].map((t) => (
+                  <span key={t} className="text-[11px] font-semibold text-[#6B4C3B] bg-[#F5EFE9] px-2 py-1 rounded-full">{t}</span>
+                ))}
+              </div>
             </div>
-
-            {/* Instructions */}
-            <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
-              <p className="text-sm text-[#4B3028] font-medium mb-2">Staff can use this to:</p>
-              <ul className="text-xs text-gray-600 space-y-1">
-                <li>• Process check-ins</li>
-                <li>• Add stamps</li>
-                <li>• Award points</li>
-              </ul>
-            </div>
-
-            {/* Close Button */}
-            <Button 
-              onClick={() => setShowQRDialog(false)}
-              className="w-full bg-[#8D123F] hover:bg-[#A8224E]"
-            >
-              Close
-            </Button>
+            <button onClick={() => setShowQRDialog(false)} className="w-full py-3.5 bg-[#2C1810] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all">Done</button>
           </div>
         </DialogContent>
       </Dialog>
+      
+      <BottomNav />
     </div>
   )
 }
