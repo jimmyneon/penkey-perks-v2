@@ -9,6 +9,13 @@ import QRCodeLib from 'qrcode'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { BottomNav } from '@/components/bottom-nav'
 
+function getGreeting() {
+  const h = new Date().getHours()
+  if (h < 12) return 'Good morning'
+  if (h < 17) return 'Good afternoon'
+  return 'Good evening'
+}
+
 export default function NewV2Dashboard() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
@@ -227,7 +234,7 @@ export default function NewV2Dashboard() {
           {/* Header */}
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-xs font-semibold text-[#AE9888] uppercase tracking-widest mb-0.5">Good morning</p>
+              <p className="text-xs font-semibold text-[#AE9888] uppercase tracking-[0.08em] mb-0.5">{getGreeting()}</p>
               <h1 className="text-[2rem] font-extrabold text-[#261408] leading-none tracking-tight">
                 {user?.user_metadata?.first_name || 'Welcome'}
               </h1>
@@ -318,9 +325,9 @@ export default function NewV2Dashboard() {
               <div className="absolute inset-0 bg-gradient-to-t from-[#0E2A1E]/90 via-[#0E2A1E]/40 to-transparent" />
               <div className="relative z-10 h-full flex flex-col justify-end p-4">
                 {displayCampaign.bean_multiplier > 1 && (
-                  <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#C8602A] w-fit mb-2">
-                    <Sparkles className="w-3 h-3 text-white" />
-                    <span className="text-[10px] font-bold text-white">{displayCampaign.bean_multiplier}× beans today</span>
+                  <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#D05A18] w-fit mb-2">
+                    <TrendingUp className="w-3 h-3 text-white" strokeWidth={2} />
+                    <span className="text-[10px] font-semibold text-white">{displayCampaign.bean_multiplier}× beans today</span>
                   </div>
                 )}
                 <h3 className="font-bold text-white text-[15px] leading-snug">{displayCampaign.name}</h3>
@@ -381,8 +388,8 @@ export default function NewV2Dashboard() {
                   <img src={item.image} alt={item.title} className="absolute inset-0 w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
                   <div className="relative z-10 h-full flex flex-col justify-center p-4">
-                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#C8602A] w-fit mb-2">
-                      <span className="text-[10px] font-bold text-white">{item.description}</span>
+                    <div className="inline-flex items-center px-2 py-0.5 rounded-full bg-white/20 w-fit mb-2">
+                      <span className="text-[10px] font-semibold text-white">{item.description}</span>
                     </div>
                     <h3 className="font-bold text-white text-[15px]">{item.title}</h3>
                   </div>

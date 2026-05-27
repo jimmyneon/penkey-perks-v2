@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Gift, Sparkles, CheckCircle2, Clock, Star, QrCode } from 'lucide-react'
+import { Gift, CheckCircle2, Clock, Star, QrCode, ShoppingBag, ScanLine, Circle, Unlock, ChevronRight as ChevronRight2 } from 'lucide-react'
 import Link from 'next/link'
 import QRCode from 'qrcode'
 import { useToast } from '@/hooks/use-toast'
@@ -189,14 +189,14 @@ export function UnifiedRewardsClient({
 
       {/* ── HERO HEADER ── */}
       <div className="pt-14 pb-6 px-5">
-        <p className="text-[11px] font-bold text-[#AE9888] uppercase tracking-widest mb-1">Your Beans</p>
+        <p className="text-[11px] font-semibold text-[#AE9888] uppercase tracking-[0.08em] mb-1">Your Beans</p>
         <div className="flex items-end justify-between">
           <div>
             <p className="text-[64px] font-extrabold text-[#261408] leading-none tracking-tight">{currentPoints}</p>
             <p className="text-[14px] text-[#7A6454] mt-1 font-medium">
               {nextReward
                 ? <><span className="font-bold text-[#D05A18]">{nextReward.points_required - currentPoints} more</span> until {nextReward.name}</>
-                : <span className="text-[#2A7A4A] font-bold">All rewards unlocked 🎉</span>
+                : <span className="text-[#2A7A4A] font-semibold">All rewards unlocked</span>
               }
             </p>
           </div>
@@ -227,7 +227,7 @@ export function UnifiedRewardsClient({
         {/* ── UNLOCKED — ready to redeem ── */}
         {unlockedRewards.length > 0 && (
           <section>
-            <p className="text-[11px] font-bold text-[#B0A090] uppercase tracking-widest mb-2.5 px-1">Ready to Redeem</p>
+            <p className="text-[11px] font-semibold text-[#AE9888] uppercase tracking-[0.08em] mb-3 px-1">Ready to Redeem</p>
             <div className="space-y-2">
               {unlockedRewards.map(reward => (
                 <button
@@ -242,10 +242,7 @@ export function UnifiedRewardsClient({
                     <p className="text-[15px] font-extrabold text-white leading-tight">{reward.name}</p>
                     <p className="text-[12px] text-white/60 mt-0.5">{reward.points_required} beans</p>
                   </div>
-                  <div className="flex items-center gap-1 bg-[#D05A18] rounded-full px-3 py-1.5">
-                    <Sparkles className="w-3 h-3 text-white" />
-                    <span className="text-[11px] font-bold text-white">Redeem</span>
-                  </div>
+                  <span className="text-[11px] font-semibold text-white bg-[#D05A18] rounded-full px-3 py-1.5">Redeem</span>
                 </button>
               ))}
             </div>
@@ -255,7 +252,7 @@ export function UnifiedRewardsClient({
         {/* ── NEXT REWARD UNLOCK ── */}
         {nextReward && (
           <section>
-            <p className="text-[11px] font-bold text-[#B0A090] uppercase tracking-widest mb-2.5 px-1">Next Up ☕</p>
+            <p className="text-[11px] font-semibold text-[#AE9888] uppercase tracking-[0.08em] mb-3 px-1">Next Reward</p>
             <div className="bg-white rounded-[20px] p-5 shadow-[0_4px_20px_rgba(38,20,8,0.08)] border border-[#E4D8CC]">
               <div className="flex items-start justify-between gap-4 mb-4">
                 <div>
@@ -284,7 +281,7 @@ export function UnifiedRewardsClient({
         {/* ── ACTIVE VOUCHERS ── */}
         {activeRewards.length > 0 && (
           <section>
-            <p className="text-[11px] font-bold text-[#B0A090] uppercase tracking-widest mb-2.5 px-1">Your Vouchers</p>
+            <p className="text-[11px] font-semibold text-[#AE9888] uppercase tracking-[0.08em] mb-3 px-1">Your Vouchers</p>
             <div className="space-y-2">
               {activeRewards.map(userReward => {
                 const reward = userReward.rewards
@@ -312,34 +309,34 @@ export function UnifiedRewardsClient({
           </section>
         )}
 
-        {/* ── HOW BEANS WORK ── visual flow ── */}
+        {/* ── HOW IT WORKS ── */}
         <section>
-          <p className="text-[11px] font-bold text-[#B0A090] uppercase tracking-widest mb-2.5 px-1">How It Works</p>
-          <div className="bg-white rounded-[20px] p-5 shadow-[0_1px_6px_rgba(26,18,8,0.06)] border border-[#E8E0D8]">
-            <div className="flex items-center justify-between">
-              {[
-                { icon: '☕', label: 'Buy' },
-                { icon: '📱', label: 'Scan' },
-                { icon: '🫘', label: 'Beans' },
-                { icon: '🎁', label: 'Reward' },
-              ].map((step, i, arr) => (
-                <div key={step.label} className="flex items-center gap-1.5">
-                  <div className="flex flex-col items-center gap-1">
-                    <div className="w-11 h-11 rounded-full bg-[#F5EAE0] flex items-center justify-center text-[20px]">{step.icon}</div>
-                    <span className="text-[10px] font-bold text-[#7A6A5A]">{step.label}</span>
-                  </div>
-                  {i < arr.length - 1 && <div className="w-5 h-px bg-[#D4CAC0] mb-4 flex-shrink-0" />}
+          <p className="text-[11px] font-semibold text-[#AE9888] uppercase tracking-[0.08em] mb-3 px-1">How It Works</p>
+          <div className="bg-white rounded-[20px] overflow-hidden shadow-[0_2px_12px_rgba(38,20,8,0.07)] border border-[#E4D8CC]">
+            {[
+              { Icon: ShoppingBag, title: 'Buy anything', sub: 'Coffee, food, anything at Penkey' },
+              { Icon: ScanLine,    title: 'Scan your code', sub: 'Staff scan your QR at the till' },
+              { Icon: Circle,      title: 'Earn beans', sub: '1 bean per visit, more on bonus days' },
+              { Icon: Unlock,      title: 'Unlock rewards', sub: 'Free coffee, discounts and more' },
+            ].map(({ Icon, title, sub }, i, arr) => (
+              <div key={title} className={`flex items-center gap-4 px-5 py-4 ${i < arr.length - 1 ? 'border-b border-[#F5EDE5]' : ''}`}>
+                <div className="w-9 h-9 rounded-[10px] bg-[#FDF0E6] flex items-center justify-center flex-shrink-0">
+                  <Icon className="w-4 h-4 text-[#D05A18]" strokeWidth={1.8} />
                 </div>
-              ))}
-            </div>
+                <div>
+                  <p className="text-[13px] font-semibold text-[#261408] leading-tight">{title}</p>
+                  <p className="text-[11px] text-[#AE9888] mt-0.5">{sub}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
         {/* ── REWARD LADDER ── */}
         {availableRewards.length > 0 && (
           <section>
-            <p className="text-[11px] font-bold text-[#B0A090] uppercase tracking-widest mb-2.5 px-1">Reward Ladder</p>
-            <div className="bg-white rounded-[20px] shadow-[0_1px_6px_rgba(26,18,8,0.06)] border border-[#E8E0D8] overflow-hidden">
+            <p className="text-[11px] font-semibold text-[#AE9888] uppercase tracking-[0.08em] mb-3 px-1">Reward Ladder</p>
+            <div className="bg-white rounded-[20px] shadow-[0_2px_12px_rgba(38,20,8,0.07)] border border-[#E4D8CC] overflow-hidden">
               {availableRewards
                 .sort((a, b) => a.points_required - b.points_required)
                 .map((reward, i, arr) => {
@@ -382,7 +379,7 @@ export function UnifiedRewardsClient({
         {/* ── HISTORY (compact) ── */}
         {historyRewards.length > 0 && (
           <section>
-            <p className="text-[11px] font-bold text-[#AE9888] uppercase tracking-widest mb-2.5 px-1">Past Rewards</p>
+            <p className="text-[11px] font-semibold text-[#AE9888] uppercase tracking-[0.08em] mb-3 px-1">Past Rewards</p>
             <div className="space-y-1.5">
               {historyRewards.slice(0, 5).map(userReward => {
                 const reward = userReward.rewards
