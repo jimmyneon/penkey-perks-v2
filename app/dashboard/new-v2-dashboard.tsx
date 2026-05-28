@@ -273,9 +273,15 @@ export default function NewV2Dashboard() {
                           border: filled ? '2px solid rgba(255,255,255,0.35)' : '2px dashed rgba(255,255,255,0.22)',
                         }}
                       >
-                        {filled && (
-                          <img src="/bean.png" alt="" className="w-4 h-4 object-contain" style={{ filter: 'brightness(0) invert(1)', opacity: 0.9 }} />
-                        )}
+                        <img
+                          src="/bean.png"
+                          alt=""
+                          className="w-4 h-4 object-contain"
+                          style={{
+                            filter: filled ? 'brightness(0) invert(1)' : 'brightness(0.3) grayscale(0.8)',
+                            opacity: filled ? 0.9 : 0.4
+                          }}
+                        />
                       </div>
                     )
                   })}
