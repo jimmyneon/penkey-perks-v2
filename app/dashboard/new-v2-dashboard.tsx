@@ -397,18 +397,18 @@ export default function NewV2Dashboard() {
           </div>
 
           {/* ── THANKS FOR SUPPORTING LOCAL ── */}
-          <div className="rounded-[18px] overflow-hidden" style={{ backgroundColor: '#F8F5EF', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}>
+          <div className="rounded-[18px] overflow-hidden" style={{ backgroundColor: '#E0F2FE', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #BAE6FD' }}>
             <div className="flex items-center p-4">
               <div className="flex items-center gap-3 flex-1">
                 <div className="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center flex-shrink-0">
                   <img src="/heart.png" alt="" className="w-5 h-5 object-contain" />
                 </div>
                 <div className="text-left">
-                  <p className="text-base font-bold text-blue-900">Thanks for supporting local</p>
-                  <p className="text-xs text-blue-700">Every visit to Penkey helps our community thrive</p>
+                  <p className="text-base font-bold" style={{ color: '#24364B' }}>Thanks for supporting local</p>
+                  <p className="text-xs" style={{ color: '#5A6A7A' }}>Every visit to Penkey helps our community thrive</p>
                 </div>
               </div>
-              <div className="w-16 h-16 flex-shrink-0">
+              <div className="w-24 h-24 flex-shrink-0">
                 <img src="/local.png" alt="" className="w-full h-full object-contain" />
               </div>
             </div>
