@@ -323,21 +323,21 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
   ]
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
 
       {/* Header — matches dashboard greeting style */}
       <div className="px-5 pt-14 pb-5 flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-[18px] font-bold italic leading-tight" style={{ color: '#D87A2E', fontFamily: 'Georgia, serif' }}>
+          <p className="text-[18px] font-bold italic leading-tight" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>
             {name ? `Hi, ` : 'Your profile'}
-            {name && <span style={{ fontStyle: 'normal', fontFamily: 'inherit', fontWeight: 800, color: '#D87A2E' }}>{name.split(' ')[0]}</span>}
+            {name && <span style={{ fontStyle: 'normal', fontFamily: 'inherit', fontWeight: 800, color: '#E07A3A' }}>{name.split(' ')[0]}</span>}
             {name && <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle ml-1" style={{ marginBottom: '2px' }} />}
           </p>
           <p className="text-[13px] font-medium mt-1" style={{ color: '#8A96A0' }}>
             Here&apos;s your Penkey Perks profile
           </p>
         </div>
-        <div className="flex flex-col items-end gap-3 ml-3 flex-shrink-0">
+        <div className="flex flex-col items-end gap-3 ml-6 flex-shrink-0">
           <img src="/logo.png" alt="PENKEY Perks" className="h-10 w-auto" />
         </div>
       </div>
@@ -347,9 +347,9 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
         {/* Level card — matches reference */}
         <div className="bg-white rounded-[18px] flex items-center gap-4 px-4 py-4" style={{ border: '1px solid #EDF1F4', boxShadow: '0 2px 14px rgba(28,43,58,0.07)' }}>
           {/* Badge icon */}
-          <div className="w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: '#FEF3EA', border: '2px solid #D87A2E' }}>
+          <div className="w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: '#FEF3EA', border: '2px solid #E07A3A' }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#D87A2E" stroke="#D87A2E" strokeWidth="1" strokeLinejoin="round"/>
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#E07A3A" stroke="#E07A3A" strokeWidth="1" strokeLinejoin="round"/>
             </svg>
           </div>
           <div className="flex-1 min-w-0">
@@ -357,13 +357,13 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
             <p className="text-[18px] font-extrabold leading-tight" style={{ color: '#1C2B3A' }}>Local Legend</p>
             <p className="text-[12px] mt-0.5" style={{ color: '#8A96A0' }}>72 beans until next level</p>
             <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: '#EDF1F4' }}>
-              <div className="h-full rounded-full" style={{ width: '35%', backgroundColor: '#D87A2E' }} />
+              <div className="h-full rounded-full" style={{ width: '35%', backgroundColor: '#E07A3A' }} />
             </div>
           </div>
           <div className="flex-shrink-0 text-right">
             <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-0.5" style={{ color: '#9AAAB8' }}>LIFETIME BEANS</p>
             <p className="text-[32px] font-extrabold leading-none" style={{ color: '#1C2B3A' }}>128</p>
-            <p className="text-[12px] italic mt-0.5" style={{ color: '#D87A2E', fontFamily: 'Georgia, serif' }}>beans</p>
+            <p className="text-[12px] italic mt-0.5" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>beans</p>
             <p className="text-[11px] mt-1" style={{ color: '#8A96A0' }}>Keep it up!</p>
           </div>
         </div>
@@ -381,7 +381,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
                 <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
               </svg>
             </div>
-            <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-extrabold text-white" style={{ backgroundColor: '#D87A2E' }}>1</div>
+            <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-extrabold text-white" style={{ backgroundColor: '#E07A3A' }}>1</div>
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-0.5" style={{ color: 'rgba(255,255,255,0.45)' }}>YOU HAVE A VOUCHER</p>
@@ -391,7 +391,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
           <button
             onClick={(e) => { e.stopPropagation(); router.push('/rewards') }}
             className="flex-shrink-0 px-4 py-2.5 rounded-[12px] text-white text-[13px] font-bold flex items-center gap-1.5 active:opacity-80 transition-opacity"
-            style={{ backgroundColor: '#D87A2E' }}
+            style={{ backgroundColor: '#E07A3A' }}
           >
             View voucher
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -499,14 +499,14 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
             <div className="rounded-[14px] p-4 space-y-2" style={{ backgroundColor: 'rgba(224,122,58,0.08)' }}>
               {['Your account will be paused', 'All your data stays safe', 'You can reactivate anytime'].map((t, i) => (
                 <div key={i} className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: '#D87A2E' }} />
+                  <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: '#E07A3A' }} />
                   <span className="text-[13px]" style={{ color: '#5A6A7A' }}>{t}</span>
                 </div>
               ))}
             </div>
             <div className="flex gap-2">
               <button onClick={() => setShowPauseDialog(false)} className="flex-1 py-3 text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all" style={{ backgroundColor: '#EDF1F4', color: '#5A6A7A' }}>Cancel</button>
-              <button onClick={handlePauseAccount} disabled={isLoading} className="flex-1 py-3 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60" style={{ backgroundColor: '#D87A2E' }}>{isLoading ? 'Pausing...' : 'Pause'}</button>
+              <button onClick={handlePauseAccount} disabled={isLoading} className="flex-1 py-3 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60" style={{ backgroundColor: '#E07A3A' }}>{isLoading ? 'Pausing...' : 'Pause'}</button>
             </div>
           </div>
         </DialogContent>
@@ -560,7 +560,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
               <p className="text-[10px] font-bold uppercase tracking-[0.1em] mb-1" style={{ color: '#9AAAB8' }}>Staff can use this to</p>
               <div className="flex gap-2 flex-wrap">
                 {['Check-ins', 'Add stamps', 'Award beans'].map((t) => (
-                  <span key={t} className="text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(216,122,46,0.12)', color: '#D87A2E' }}>{t}</span>
+                  <span key={t} className="text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(224,122,58,0.12)', color: '#E07A3A' }}>{t}</span>
                 ))}
               </div>
             </div>

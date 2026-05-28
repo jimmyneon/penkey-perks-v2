@@ -221,96 +221,96 @@ export default function NewV2Dashboard() {
   const firstName = firstNameRaw.charAt(0).toUpperCase() + firstNameRaw.slice(1).toLowerCase()
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#F5F2EB' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
-        <div className="px-5 pt-14 pb-28 space-y-6">
+        <div className="px-5 pt-14 pb-28 space-y-5">
 
           {/* ── HEADER ── */}
           <div className="flex items-start justify-between pt-1">
             {/* Left: greeting */}
             <div className="flex-1">
-              <p className="text-[20px] font-medium leading-tight" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>
+              <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
                 {getGreeting()},{' '}
-                <img
-                  src="/heart.png"
-                  alt=""
-                  className="inline-block w-4 h-4 object-contain align-middle"
-                  style={{ marginBottom: '2px' }}
+                <img 
+                  src="/heart.png" 
+                  alt="" 
+                  className="inline-block w-5 h-5 object-contain align-middle" 
+                  style={{ marginBottom: '2px', animation: 'heartPulse 1.2s ease-in-out 3' }} 
                 />
               </p>
-              <h1 className="text-[56px] font-semibold leading-none tracking-tight mt-1" style={{ color: '#24364B', fontFamily: 'Georgia, serif' }}>
+              <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#24364B' }}>
                 {firstName}
               </h1>
-              <p className="text-[13px] font-medium mt-2 flex items-center gap-1.5" style={{ color: '#D87A2E' }}>
+              <p className="text-[13px] font-medium mt-1.5 flex items-center gap-1.5" style={{ color: '#F28A2E' }}>
                 Welcome to Penkey Perks
-                <SparkLines className="text-[#D87A2E] w-10 h-10" />
+                <SparkLines className="text-[#F28A2E] w-12 h-12" />
               </p>
             </div>
             {/* Right: wordmark */}
             <div className="flex flex-col items-end ml-6">
-              <img src="/logo.png" alt="PENKEY Perks" className="h-20 w-auto object-contain" />
+              <img src="/logo.png" alt="PENKEY Perks" className="h-24 w-auto object-contain" />
             </div>
           </div>
 
           {/* ── YOUR PROGRESS ── */}
           <div
             className="rounded-[18px] overflow-hidden cursor-pointer active:scale-[0.985] transition-all duration-200"
-            style={{ background: 'linear-gradient(135deg, #3B4E62 0%, #2F4154 100%)', boxShadow: '0 3px 16px rgba(36,54,75,0.12)' }}
+            style={{ background: 'linear-gradient(135deg, #2B3E52 0%, #24364A 100%)', boxShadow: '0 4px 20px rgba(36,54,75,0.15)' }}
             onClick={() => setShowBeansPanel(true)}
           >
             <div className="flex">
               {/* Left: stamps */}
               <div className="flex-1 p-5 pr-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: 'rgba(255,255,255,0.5)' }}>
                   YOUR PROGRESS
                 </p>
                 {/* Stamp dots */}
-                <div className="grid grid-cols-4 gap-2.5 mb-3">
+                <div className="grid grid-cols-4 gap-3 mb-3">
                   {Array.from({ length: 8 }).map((_, i) => {
                     const filled = i < currentBeans
                     return (
                       <div
                         key={i}
-                        className="w-12 h-12 rounded-full flex items-center justify-center"
+                        className="w-16 h-16 rounded-full flex items-center justify-center"
                         style={{
                           backgroundColor: filled ? '#F0EDE5' : 'transparent',
-                          border: filled ? '2px solid #E0D8CC' : '2px dashed rgba(240,237,229,0.4)',
+                          border: filled ? '2px solid #E0D8CC' : '2px dashed #F0EDE5',
                         }}
                       >
                         <img
                           src="/bean.png"
                           alt=""
-                          className="w-9 h-9 object-contain"
+                          className="w-12 h-12 object-contain"
                           style={{
-                            filter: filled ? 'brightness(0) invert(1)' : 'brightness(0.5) grayscale(0.4)',
-                            opacity: filled ? 1 : 0.5
+                            filter: filled ? 'brightness(0) invert(1)' : 'brightness(0.4) grayscale(0.5)',
+                            opacity: filled ? 1 : 0.6
                           }}
                         />
                       </div>
                     )
                   })}
                 </div>
-                <p className="text-[16px] font-semibold text-white leading-tight">
+                <p className="text-[18px] font-bold text-white leading-tight">
                   {stampBeansNeeded} beans to your next treat
                 </p>
                 <div className="mt-1.5">
-                  <BrushUnderline className="text-[#D87A2E] w-14" />
+                  <BrushUnderline className="text-[#F28A2E] w-16" />
                 </div>
-                <p className="text-[11px] mt-2" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                <p className="text-[11px] mt-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
                   {nextMilestone} beans = a reward
                 </p>
               </div>
 
               {/* Right: next reward */}
               <div
-                className="w-[100px] flex-shrink-0 flex flex-col items-center justify-center p-4 gap-2"
-                style={{ borderLeft: '1px solid rgba(255,255,255,0.08)' }}
+                className="w-[110px] flex-shrink-0 flex flex-col items-center justify-center p-4 gap-2"
+                style={{ borderLeft: '1px solid rgba(255,255,255,0.12)' }}
               >
                 <div
-                  className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden"
+                  className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden"
                   style={{ backgroundColor: '#F8F5EF', border: '1.5px solid #E8E2D8' }}
                 >
-                  <GiftIcon className="w-14 h-14 object-contain" style={{ transform: 'scale(1.4)' }} />
+                  <GiftIcon className="w-16 h-16 object-contain" style={{ transform: 'scale(1.5)' }} />
                 </div>
                 <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-center" style={{ color: '#F8F5EF' }}>
                   NEXT REWARD
@@ -333,7 +333,7 @@ export default function NewV2Dashboard() {
               }}
             >
               <div className="p-5 pr-[120px]">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style={{ backgroundColor: '#D87A2E', boxShadow: '0 2px 8px rgba(216,122,46,0.25)' }}>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style={{ backgroundColor: '#F28A2E', boxShadow: '0 2px 8px rgba(242,138,46,0.25)' }}>
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="white">
                     <circle cx="5" cy="5" r="4"/>
                   </svg>
@@ -373,7 +373,7 @@ export default function NewV2Dashboard() {
               <span className="text-[20px] font-medium mb-1" style={{ color: '#8A96A0' }}>beans</span>
             </div>
             <div className="mb-3">
-              <BrushUnderline className="text-[#D87A2E] w-20" />
+              <BrushUnderline className="text-[#F28A2E] w-20" />
             </div>
             <div className="grid grid-cols-2 gap-4 pt-4" style={{ borderTop: '1px solid #E8E2D8' }}>
               <div className="flex items-start gap-3">
@@ -561,7 +561,7 @@ export default function NewV2Dashboard() {
                     {stampBeansNeeded} beans to your next treat
                   </p>
                   <div className="mt-2">
-                    <BrushUnderline className="text-[#D87A2E] w-24" />
+                    <BrushUnderline className="text-[#F28A2E] w-24" />
                   </div>
                   <p className="text-[13px] mt-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
                     {nextMilestone} beans = a reward
@@ -612,7 +612,7 @@ export default function NewV2Dashboard() {
 
               <button
                 onClick={() => { setShowBeansPanel(false); router.push('/rewards') }}
-                className="w-full mt-6 py-4 bg-[#D87A2E] text-white text-sm font-bold rounded-[16px] active:scale-[0.98] transition-all"
+                className="w-full mt-6 py-4 bg-[#F28A2E] text-white text-sm font-bold rounded-[16px] active:scale-[0.98] transition-all"
                 style={{ boxShadow: '0 4px 12px rgba(242,138,46,0.3)' }}
               >
                 View All Rewards
