@@ -506,66 +506,113 @@ export default function NewV2Dashboard() {
 
       {/* Beans Panel Dialog */}
       <Dialog open={showBeansPanel} onOpenChange={setShowBeansPanel}>
-        <DialogContent className="sm:max-w-sm rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.15)] bg-[#FAF8F5] border-0">
-          <DialogHeader>
-            <DialogTitle className="text-[#2C1810] text-lg font-extrabold">Your Beans</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-3 pb-2">
-            {/* Balance row */}
-            <div className="bg-white rounded-[16px] p-4 flex items-center justify-between shadow-[0_1px_4px_rgba(75,48,40,0.07)]">
-              <div>
-                <p className="text-[11px] font-bold text-[#B07A5E] uppercase tracking-widest mb-1">Current Balance</p>
-                <p className="text-[2.5rem] font-extrabold text-[#2C1810] leading-none">{currentBeans}</p>
-                <p className="text-[12px] text-[#9A7A6A] mt-1">beans</p>
+        <DialogContent className="sm:max-w-md rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 overflow-hidden border-0">
+          <div
+            className="rounded-[24px] overflow-hidden"
+            style={{ background: 'linear-gradient(135deg, #2B3E52 0%, #24364A 100%)' }}
+          >
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <p className="text-[12px] font-semibold uppercase tracking-[0.12em]" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                  YOUR PROGRESS
+                </p>
+                <button onClick={() => setShowBeansPanel(false)} className="text-white/50 hover:text-white transition-colors">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
               </div>
-              <div className="text-right">
-                <p className="text-[11px] text-[#9A7A6A]">Lifetime</p>
-                <p className="text-lg font-bold text-[#C49A6C]">{beanBalance?.lifetime_beans || 0}</p>
-              </div>
-            </div>
 
-            {/* Stamps */}
-            <div className="bg-white rounded-[16px] p-4 shadow-[0_1px_4px_rgba(75,48,40,0.07)]">
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-[13px] font-bold text-[#2C1810]">Coffee Stamps</p>
-                <span className="text-[11px] font-bold text-[#7B1234]">3 / 8</span>
-              </div>
-              <div className="flex gap-1.5">
-                {[1,2,3,4,5,6,7,8].map((n) => (
-                  <div key={n} className={`flex-1 h-7 rounded-lg flex items-center justify-center text-[10px] font-bold ${n <= 3 ? 'bg-[#E48A3A] text-white' : 'bg-[#F3E4DB] text-[#C4AFA8]'}`}>
-                    {n <= 3 ? '✓' : n}
-                  </div>
-                ))}
-              </div>
-              <p className="text-[11px] text-[#9A7A6A] mt-2.5">5 more for a free coffee</p>
-            </div>
-
-            {/* Recent Activity */}
-            <div className="bg-white rounded-[16px] p-4 shadow-[0_1px_4px_rgba(75,48,40,0.07)]">
-              <p className="text-[13px] font-bold text-[#2C1810] mb-3">Recent Activity</p>
-              <div className="space-y-2.5">
-                {[
-                  { label: 'Check-in bonus', val: '+2', pos: true },
-                  { label: 'Coffee purchase', val: '+1', pos: true },
-                  { label: 'Reward redeemed', val: '−8', pos: false },
-                ].map((a, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-1.5 h-1.5 rounded-full ${a.pos ? 'bg-[#2A7A4A]' : 'bg-[#C49A6C]'}`} />
-                      <span className="text-[12px] text-[#6B4C3B]">{a.label}</span>
+              {/* Large stamps grid */}
+              <div className="grid grid-cols-4 gap-4 mb-6">
+                {Array.from({ length: 8 }).map((_, i) => {
+                  const filled = i < currentBeans
+                  return (
+                    <div
+                      key={i}
+                      className="w-20 h-20 rounded-full flex items-center justify-center"
+                      style={{
+                        backgroundColor: filled ? '#F0EDE5' : 'transparent',
+                        border: filled ? '2px solid #E0D8CC' : '2px dashed #F0EDE5',
+                      }}
+                    >
+                      <img
+                        src="/bean.png"
+                        alt=""
+                        className="w-16 h-16 object-contain"
+                        style={{
+                          filter: filled ? 'brightness(0) invert(1)' : 'brightness(0.4) grayscale(0.5)',
+                          opacity: filled ? 1 : 0.6
+                        }}
+                      />
                     </div>
-                    <span className={`text-[12px] font-bold ${a.pos ? 'text-[#2A7A4A]' : 'text-[#9A7A6A]'}`}>{a.val} beans</span>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
-            </div>
 
-            <button
-              onClick={() => { setShowBeansPanel(false); router.push('/rewards') }}
-              className="w-full py-3.5 bg-[#2C1810] text-white text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all"
-            >
-              View All Rewards
-            </button>
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <p className="text-[32px] font-bold text-white leading-tight">
+                    {stampBeansNeeded} beans to your next treat
+                  </p>
+                  <div className="mt-2">
+                    <BrushUnderline className="text-[#F28A2E] w-24" />
+                  </div>
+                  <p className="text-[13px] mt-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                    {nextMilestone} beans = a reward
+                  </p>
+                </div>
+
+                {/* Right: next reward */}
+                <div
+                  className="w-[130px] flex-shrink-0 flex flex-col items-center justify-center p-4 gap-2"
+                  style={{ borderLeft: '1px solid rgba(255,255,255,0.12)' }}
+                >
+                  <div
+                    className="w-20 h-20 rounded-full flex items-center justify-center overflow-hidden"
+                    style={{ backgroundColor: '#F8F5EF', border: '1.5px solid #E8E2D8' }}
+                  >
+                    <GiftIcon className="w-20 h-20 object-contain" style={{ transform: 'scale(1.5)' }} />
+                  </div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-center" style={{ color: '#F8F5EF' }}>
+                    NEXT REWARD
+                  </p>
+                  <p className="text-[12px] font-medium text-center leading-snug" style={{ color: '#F8F5EF' }}>
+                    {nextMilestone} beans<br />= reward
+                  </p>
+                </div>
+              </div>
+
+              {/* Balance info */}
+              <div className="mt-6 pt-6" style={{ borderTop: '1px solid rgba(255,255,255,0.12)' }}>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] mb-1" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                      LIFETIME BEANS
+                    </p>
+                    <p className="text-[28px] font-bold text-white leading-none">
+                      {beanBalance?.lifetime_beans || 0}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] mb-1" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                      VISITS
+                    </p>
+                    <p className="text-[28px] font-bold text-white leading-none">
+                      {beanBalance?.visit_count || 0}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => { setShowBeansPanel(false); router.push('/rewards') }}
+                className="w-full mt-6 py-4 bg-[#F28A2E] text-white text-sm font-bold rounded-[16px] active:scale-[0.98] transition-all"
+                style={{ boxShadow: '0 4px 12px rgba(242,138,46,0.3)' }}
+              >
+                View All Rewards
+              </button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
