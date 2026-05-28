@@ -243,7 +243,7 @@ export default function NewV2Dashboard() {
               </h1>
               <p className="text-[13px] font-medium mt-1.5 flex items-center gap-1.5" style={{ color: '#24364B' }}>
                 Welcome to Penkey Perks
-                <SparkLines className="text-[#F28A2E] w-4 h-4" />
+                <SparkLines className="text-[#F28A2E] w-6 h-6" />
               </p>
             </div>
             {/* Right: wordmark */}
@@ -266,7 +266,7 @@ export default function NewV2Dashboard() {
                 </p>
                 {/* Stamp dots */}
                 <div className="grid grid-cols-4 gap-3 mb-3">
-                  {Array.from({ length: Math.min(stampTotal, 8) }).map((_, i) => {
+                  {Array.from({ length: 8 }).map((_, i) => {
                     const filled = i < currentBeans
                     return (
                       <div
@@ -280,7 +280,7 @@ export default function NewV2Dashboard() {
                         <img
                           src="/bean.png"
                           alt=""
-                          className="w-8 h-8 object-contain"
+                          className="w-12 h-12 object-contain"
                           style={{
                             filter: filled ? 'brightness(0) invert(1)' : 'brightness(0.4) grayscale(0.5)',
                             opacity: filled ? 1 : 0.6
@@ -310,7 +310,7 @@ export default function NewV2Dashboard() {
                   className="w-14 h-14 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: '#F8F5EF', border: '1.5px solid #E8E2D8' }}
                 >
-                  <GiftIcon className="w-8 h-8" />
+                  <GiftIcon className="w-12 h-12" />
                 </div>
                 <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-center" style={{ color: '#F8F5EF' }}>
                   NEXT REWARD
