@@ -238,19 +238,9 @@ export default function NewV2Dashboard() {
                 Welcome to Penkey Perks
               </p>
             </div>
-            {/* Right: wordmark + avatar */}
-            <div className="flex flex-col items-end gap-3 ml-6 mt-0.5">
-              <img src="/logo.png" alt="PENKEY Perks" className="h-30 w-auto" />
-              <button
-                onClick={() => router.push('/profile')}
-                className="w-10 h-10 rounded-full border-2 flex items-center justify-center"
-                style={{ borderColor: '#E8EDF0', backgroundColor: '#F4F7F9' }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5A7A8A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                  <circle cx="12" cy="7" r="4"/>
-                </svg>
-              </button>
+            {/* Right: wordmark */}
+            <div className="flex flex-col items-end ml-6 mt-0.5">
+              <img src="/logo.png" alt="PENKEY Perks" className="h-40 w-auto" />
             </div>
           </div>
 
@@ -349,7 +339,7 @@ export default function NewV2Dashboard() {
               </div>
               {/* Coffee cup illustration */}
               <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center"
-                style={{ width: 88, height: 88 }}>
+                style={{ width: 176, height: 176 }}>
                 <img src="/coffeecup.png" alt="" className="w-full h-full object-contain" />
               </div>
             </div>
@@ -392,11 +382,11 @@ export default function NewV2Dashboard() {
             </div>
           </div>
 
-          {/* ── THANKS FOR SUPPORTING LOCAL ── */}
-          <div className="rounded-[18px] overflow-hidden">
-            <img src="/local-banner.png" alt="Thanks for supporting local" className="w-full h-auto" />
-          </div>
+        </div>
 
+        {/* ── THANKS FOR SUPPORTING LOCAL ── full width */}
+        <div className="rounded-[18px] overflow-hidden">
+          <img src="/local-banner.png" alt="Thanks for supporting local" className="w-full h-auto" />
         </div>
 
         <BottomNav />
