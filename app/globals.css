@@ -4,32 +4,40 @@
 
 @layer base {
   :root {
-    /* Penkey Premium Design System */
-    --background: 30 30% 96%; /* #FAF7F4 - Cream Background */
-    --foreground: 20 30% 28%; /* #4B3028 - Warm Brown Text */
-    --card: 0 0% 100%; /* #FFFDFC - Off-white Cards */
-    --card-foreground: 20 30% 28%;
+    /* Penkey Modern Café Design System */
+    --background: 36 40% 96%; /* #FAF6F1 - Rich warm cream */
+    --foreground: 20 55% 12%; /* #261408 - Deep coffee */
+    --card: 0 0% 100%;
+    --card-foreground: 20 55% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 20 30% 28%;
-    --primary: 348 78% 32%; /* #8D123F - Burgundy */
+    --popover-foreground: 20 55% 12%;
+    --primary: 24 78% 46%;    /* #D05A18 - Vibrant espresso orange */
     --primary-foreground: 0 0% 100%;
-    --secondary: 20 50% 86%; /* #F4D8CC - Blush */
-    --secondary-foreground: 20 30% 28%;
-    --muted: 20 30% 92%; /* #F0EBE5 - Soft Cream */
-    --muted-foreground: 20 20% 45%;
-    --accent: 25 80% 56%; /* #FF8C42 - Orange */
+    --secondary: 32 35% 92%;  /* #EDE5DC - Warm parchment */
+    --secondary-foreground: 20 55% 12%;
+    --muted: 32 25% 92%;
+    --muted-foreground: 22 18% 44%;
+    --accent: 30 55% 60%;     /* #D4906A - Latte caramel */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 20 20% 88%;
-    --input: 20 20% 88%;
-    --ring: 348 78% 32%;
-    --radius: 1.25rem;
-    
-    /* Additional Penkey colors */
-    --blush: 20 50% 86%; /* #F4D8CC */
-    --gold: 40 70% 49%; /* #C9952E */
-    --gold-light: 40 60% 67%; /* #E8C76E */
+    --border: 32 20% 86%;
+    --input: 32 20% 86%;
+    --ring: 24 78% 46%;
+    --radius: 1rem;
+
+    /* Penkey brand tokens */
+    --pk-bg: #FAF6F1;
+    --pk-surface: #F0E8DF;
+    --pk-card: #FFFFFF;
+    --pk-dark: #261408;
+    --pk-mid: #4E3420;
+    --pk-muted: #7A6454;
+    --pk-subtle: #AE9888;
+    --pk-border: #E4D8CC;
+    --pk-orange: #D05A18;
+    --pk-orange-light: #FDF0E6;
+    --pk-caramel: #D4906A;
   }
 }
 
@@ -290,4 +298,77 @@
 
 .animate-scale-in {
   animation: scaleIn 0.3s ease-out;
+}
+
+/* Scanner glow - breathing pulse on corner brackets */
+@keyframes scannerGlow {
+  0%, 100% {
+    opacity: 0.6;
+    filter: drop-shadow(0 0 4px rgba(228, 138, 58, 0.4));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 12px rgba(228, 138, 58, 0.9));
+  }
+}
+
+/* Scan line sweep from top to bottom */
+@keyframes scanline {
+  0% {
+    top: 8%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    top: 92%;
+    opacity: 0;
+  }
+}
+
+/* Sheet slide up from bottom (for bottom-sheet dialogs) */
+@keyframes sheetSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Quick scale + fade pop for QR codes */
+@keyframes qrPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  70% {
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scanner-glow {
+  animation: scannerGlow 2s ease-in-out infinite;
+}
+
+.animate-scanline {
+  animation: scanline 2s ease-in-out infinite;
+}
+
+.animate-sheet-up {
+  animation: sheetSlideUp 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.animate-qr-pop {
+  animation: qrPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }

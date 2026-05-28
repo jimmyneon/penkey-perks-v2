@@ -9,6 +9,13 @@ import QRCodeLib from 'qrcode'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { BottomNav } from '@/components/bottom-nav'
 
+function getGreeting() {
+  const h = new Date().getHours()
+  if (h < 12) return 'Good morning'
+  if (h < 17) return 'Good afternoon'
+  return 'Good evening'
+}
+
 export default function NewV2Dashboard() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
@@ -151,33 +158,23 @@ export default function NewV2Dashboard() {
 
   // Sample vouchers for demo mode
   const sampleVouchers = [
-    { 
-      id: 1, 
-      template: { name: 'Free Any Coffee', description: 'Redeem for any coffee' }, 
-      expires_at: '2026-12-15', 
-      gradient: 'from-[#8D123F] to-[#A8224E]',
-      image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop'
+    {
+      id: 1,
+      template: { name: 'Free Any Coffee', description: 'Redeem for any coffee' },
+      expires_at: new Date(Date.now() + 28 * 86400000).toISOString(),
+      image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop',
     },
-    { 
-      id: 2, 
-      template: { name: 'Lucky Duck Spin', description: 'Spin to win prizes' }, 
-      expires_at: '2026-12-20', 
-      gradient: 'from-[#F4D8CC] to-[#F8E9E0]',
-      image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=400&h=300&fit=crop'
+    {
+      id: 2,
+      template: { name: 'Lucky Duck Spin', description: 'Spin to win a prize' },
+      expires_at: new Date(Date.now() + 14 * 86400000).toISOString(),
+      image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=400&h=300&fit=crop',
     },
-    { 
-      id: 3, 
-      template: { name: '£5 Lunch Reward', description: 'Off any lunch item' }, 
-      expires_at: '2026-12-25', 
-      gradient: 'from-[#214B39] to-[#2A5A40]',
-      image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=300&fit=crop'
-    },
-    { 
-      id: 4, 
-      template: { name: 'Morning Boost', description: 'Free coffee upgrade' }, 
-      expires_at: '2026-12-30', 
-      gradient: 'from-[#F3DCD4] to-[#F8E9E0]',
-      image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop'
+    {
+      id: 3,
+      template: { name: '£5 Lunch Reward', description: 'Off any lunch item' },
+      expires_at: new Date(Date.now() + 23 * 86400000).toISOString(),
+      image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=300&fit=crop',
     },
   ]
 
@@ -185,7 +182,7 @@ export default function NewV2Dashboard() {
   const sampleCampaign = {
     id: 1,
     name: 'Rainy Day Double Beans',
-    description: 'On hot drinks until 2pm',
+    description: 'Any hot drink until 2pm — double the beans.',
     bean_multiplier: 2,
     image: 'https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=600&h=400&fit=crop'
   }
@@ -211,239 +208,306 @@ export default function NewV2Dashboard() {
   const displayVouchers = vouchers.length > 0 ? vouchers : sampleVouchers
   const displayCampaign = campaigns.length > 0 ? campaigns[0] : sampleCampaign
 
+  // Stamp card config — next milestone from current beans
+  const STAMP_MILESTONES = [2, 8, 15, 25]
+  const nextMilestone = STAMP_MILESTONES.find(m => m > currentBeans) ?? 8
+  const stampBeansNeeded = nextMilestone - currentBeans
+  // Show stamps for the current milestone cycle
+  const stampTotal = nextMilestone
+  const firstName = user?.user_metadata?.first_name || user?.user_metadata?.name?.split(' ')[0] || 'there'
+
   return (
     <div className="min-h-screen bg-white">
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
-        {/* Subtle Header Gradient - lighter, cleaner */}
-        <div className="absolute top-0 left-0 right-0 h-64 -z-10" style={{ background: 'linear-gradient(180deg, #FFFDFC 0%, #F8F6F4 60%, rgba(255,255,255,0) 100%)' }} />
-        
-        <div className="px-[clamp(20px,5vw,32px)] pt-4 pb-24 space-y-4">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-2 relative z-10">
-            <div>
-              <h1 className="text-[clamp(1.5rem,5vw,2rem)] font-extrabold text-[#4B3028]">Hi {user?.user_metadata?.first_name || 'there'}</h1>
-              <p className="text-sm text-[#4B3028]">Good coffee. Great people.</p>
+
+        <div className="px-5 pt-14 pb-28 space-y-4">
+
+          {/* ── HEADER — matches reference exactly ── */}
+          <div className="flex items-start justify-between pt-1">
+            {/* Left: greeting */}
+            <div className="flex-1">
+              <p className="text-[18px] font-bold italic leading-tight" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>
+                {getGreeting()}, ♡
+              </p>
+              <h1 className="text-[42px] font-extrabold leading-none tracking-tight mt-0.5" style={{ color: '#1C2B3A' }}>
+                {firstName}
+              </h1>
+              <p className="text-[13px] font-medium mt-1.5" style={{ color: '#8A96A0' }}>
+                Welcome to Penkey Perks
+                <span className="ml-1" style={{ color: '#E07A3A' }}>✦</span>
+              </p>
             </div>
-            <div className="flex items-center gap-3">
-              <button 
-                onClick={() => setShowNotifications(true)}
-                className="w-10 h-10 rounded-full bg-[#F4D8CC] flex items-center justify-center shadow-[0_4px_12px_rgba(244,216,204,0.4)]"
+            {/* Right: wordmark + avatar */}
+            <div className="flex flex-col items-end gap-3 ml-3 mt-0.5">
+              <div className="text-right leading-none">
+                <span className="block text-[18px] font-extrabold tracking-tight" style={{ color: '#1C2B3A' }}>
+                  PEN<span style={{ color: '#E07A3A' }}>KEY</span>
+                </span>
+                <span className="block text-[14px] font-medium italic" style={{ color: '#1C2B3A', fontFamily: 'Georgia, serif' }}>
+                  Perks ✦
+                </span>
+              </div>
+              <button
+                onClick={() => router.push('/profile')}
+                className="w-10 h-10 rounded-full border-2 flex items-center justify-center"
+                style={{ borderColor: '#E8EDF0', backgroundColor: '#F4F7F9' }}
               >
-                <Bell className="w-5 h-5 text-[#7B1234]" />
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5A7A8A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
               </button>
             </div>
           </div>
 
-          {/* Bean Progress Card */}
-          <div 
-            className="bg-[#FFFDFC] rounded-[28px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.04)] border border-[#F3DCD4] relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform"
+          {/* ── YOUR PROGRESS — dark slate stamp card ── */}
+          <div
+            className="rounded-[18px] overflow-hidden cursor-pointer active:scale-[0.985] transition-all duration-200"
+            style={{ backgroundColor: '#2C3E50', boxShadow: '0 4px 20px rgba(28,43,58,0.22)' }}
             onClick={() => setShowBeansPanel(true)}
           >
-            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-white/60 to-transparent" />
-            <div className="flex items-center justify-between relative z-10">
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-[#4B3028] mb-1">Your Beans</p>
-                <p className="text-[clamp(2.5rem,8vw,3.5rem)] font-extrabold text-[#C49A6C] mb-2">{currentBeans}</p>
-                <p className="text-sm font-medium text-[#4B3028]">
-                  {beansNeeded > 0 ? `${beansNeeded} beans unlocks Free Any Coffee` : 'Reward unlocked!'}
+            <div className="flex">
+              {/* Left: stamps */}
+              <div className="flex-1 p-5 pr-3">
+                <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-3" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                  YOUR PROGRESS
+                </p>
+                {/* Stamp dots */}
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {Array.from({ length: Math.min(stampTotal, 8) }).map((_, i) => {
+                    const filled = i < currentBeans
+                    return (
+                      <div
+                        key={i}
+                        className="w-8 h-8 rounded-full flex items-center justify-center"
+                        style={{
+                          backgroundColor: filled ? 'rgba(255,255,255,0.15)' : 'transparent',
+                          border: filled ? '2px solid rgba(255,255,255,0.35)' : '2px dashed rgba(255,255,255,0.22)',
+                        }}
+                      >
+                        {filled && (
+                          <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
+                            <ellipse cx="10" cy="10" rx="7" ry="9" fill="rgba(255,255,255,0.9)" />
+                            <ellipse cx="10" cy="8" rx="3.5" ry="4.5" fill="rgba(100,60,20,0.5)" />
+                          </svg>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+                <p className="text-[18px] font-extrabold text-white leading-tight">
+                  {stampBeansNeeded} beans to your next treat
+                </p>
+                <div className="mt-1.5 w-12 h-[2.5px] rounded-full" style={{ backgroundColor: '#E07A3A' }} />
+                <p className="text-[11px] mt-2" style={{ color: 'rgba(255,255,255,0.45)' }}>
+                  {nextMilestone} beans = a reward
                 </p>
               </div>
-              <div className="relative">
-                <svg width="130" height="130" className="transform -rotate-90">
-                  <defs>
-                    <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#C49A6C" />
-                      <stop offset="100%" stopColor="#7B1234" />
-                    </linearGradient>
-                  </defs>
-                  <circle
-                    cx="65"
-                    cy="65"
-                    r="58"
-                    stroke="#F3DCD4"
-                    strokeWidth="8"
-                    fill="none"
-                  />
-                  <circle
-                    cx="65"
-                    cy="65"
-                    r="58"
-                    stroke="url(#progressGradient)"
-                    strokeWidth="8"
-                    fill="none"
-                    strokeLinecap="round"
-                    strokeDasharray={circumference}
-                    strokeDashoffset={strokeDashoffset}
-                    className="transition-all duration-500"
-                    style={{ filter: 'drop-shadow(0 2px 4px rgba(196,154,108,0.3))' }}
-                  />
-                </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Coffee className="w-8 h-8 text-[#C49A6C]" />
+
+              {/* Right: next reward */}
+              <div
+                className="w-[110px] flex-shrink-0 flex flex-col items-center justify-center p-4 gap-2"
+                style={{ borderLeft: '1px solid rgba(255,255,255,0.10)' }}
+              >
+                <div
+                  className="w-14 h-14 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'rgba(255,255,255,0.10)', border: '1.5px dashed rgba(255,255,255,0.30)' }}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                  </svg>
                 </div>
-              </div>
-            </div>
-            {/* Lifetime Beans Subtle Strip */}
-            <div className="mt-4 pt-4 border-t border-[#F3DCD4] flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-medium text-[#4B3028]">Lifetime Beans</span>
-                <span className="text-xs font-bold text-[#4B3028]">{beanBalance?.lifetime_beans || 0}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-semibold text-[#8D123F]">Gold Member</span>
-                <ChevronRight className="w-3 h-3 text-[#4B3028]" />
+                <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-center" style={{ color: 'rgba(255,255,255,0.45)' }}>
+                  NEXT REWARD
+                </p>
+                <p className="text-[11px] font-semibold text-white text-center leading-snug">
+                  Reward voucher<br />when you collect<br />{nextMilestone} beans
+                </p>
               </div>
             </div>
           </div>
 
-          {/* What's Brewing - Compact */}
-          <div>
-            <h2 className="text-[clamp(1.1rem,4vw,1.25rem)] font-bold text-[#4B3028] mb-3">What's Brewing</h2>
-            <div 
-              className="bg-[#214B39] rounded-[20px] p-5 shadow-[0_8px_24px_rgba(33,75,57,0.25),0_4px_12px_rgba(33,75,57,0.15)] relative overflow-hidden h-[140px] cursor-pointer active:scale-[0.98] transition-transform"
-              onClick={() => router.push('/campaigns')}
+          {/* ── PERK UNLOCKED — only shows when vouchers exist ── */}
+          {displayVouchers.length > 0 && (
+            <div
+              className="rounded-[18px] overflow-hidden relative cursor-pointer active:scale-[0.985] transition-all duration-200"
+              style={{ backgroundColor: '#FAF2E8', boxShadow: '0 2px 12px rgba(28,43,58,0.08)' }}
+              onClick={() => {
+                setSelectedVoucher(displayVouchers[0])
+                generateVoucherQRCode(displayVouchers[0])
+              }}
             >
-              {displayCampaign.image && (
-                <img 
-                  src={displayCampaign.image} 
-                  alt={displayCampaign.name}
-                  className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-40"
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent" />
-              <div className="relative z-10 h-full flex flex-col justify-end">
-                <h3 className="font-bold text-white text-[clamp(1.1rem,4vw,1.3rem)] mb-1">{displayCampaign.name}</h3>
-                <p className="text-xs text-white/90 mb-2">{displayCampaign.description}</p>
-                {displayCampaign.bean_multiplier > 1 && (
-                  <div className="inline-flex items-center px-2.5 py-1 rounded-full bg-[#7B1234] shadow-[0_4px_12px_rgba(123,18,52,0.4)]">
-                    <span className="text-[10px] font-bold text-white">{displayCampaign.bean_multiplier}x beans</span>
-                  </div>
-                )}
+              <div className="p-5 pr-[120px]">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style={{ backgroundColor: '#E07A3A' }}>
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="white">
+                    <circle cx="5" cy="5" r="4"/>
+                  </svg>
+                  <span className="text-[10px] font-bold text-white uppercase tracking-wide">Perk unlocked</span>
+                </div>
+                <h3 className="text-[26px] font-extrabold leading-tight" style={{ color: '#1C2B3A' }}>
+                  Nice one!
+                </h3>
+                <p className="text-[13px] font-medium mt-1 leading-snug" style={{ color: '#5A6A7A' }}>
+                  You've collected {currentBeans} beans.<br />
+                  Keep going!{' '}
+                  <span style={{ color: '#E07A3A' }}>♡</span>
+                </p>
+              </div>
+              {/* Coffee cup illustration placeholder — orange circle with cup lines */}
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center"
+                style={{ width: 88, height: 88 }}>
+                <div className="w-full h-full rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: 'rgba(224,122,58,0.10)' }}>
+                  <svg width="44" height="52" viewBox="0 0 44 52" fill="none">
+                    <rect x="6" y="12" width="28" height="32" rx="4" fill="#1C2B3A" opacity="0.12"/>
+                    <rect x="8" y="14" width="24" height="28" rx="3" fill="#1C2B3A" opacity="0.10"/>
+                    <text x="22" y="32" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#1C2B3A" opacity="0.5" fontFamily="sans-serif">PEN</text>
+                    <text x="22" y="43" textAnchor="middle" fontSize="7" fill="#E07A3A" opacity="0.7" fontFamily="sans-serif">KEY</text>
+                    <path d="M34 20 Q40 24 34 28" stroke="#1C2B3A" strokeWidth="2" strokeLinecap="round" opacity="0.25" fill="none"/>
+                    {/* steam */}
+                    <path d="M16 8 Q17 4 16 1" stroke="#1C2B3A" strokeWidth="1.5" strokeLinecap="round" opacity="0.2" fill="none"/>
+                    <path d="M22 6 Q23 2 22 0" stroke="#1C2B3A" strokeWidth="1.5" strokeLinecap="round" opacity="0.2" fill="none"/>
+                    <path d="M28 8 Q29 4 28 1" stroke="#1C2B3A" strokeWidth="1.5" strokeLinecap="round" opacity="0.2" fill="none"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── YOUR BEAN BALANCE ── white card, big number ── */}
+          <div className="bg-white rounded-[18px] p-5" style={{ boxShadow: '0 2px 14px rgba(28,43,58,0.09)', border: '1px solid #EDF1F4' }}>
+            <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-3" style={{ color: '#8A96A0' }}>
+              YOUR BEAN BALANCE
+            </p>
+            <div className="flex items-end gap-4 mb-5">
+              <span className="text-[64px] font-extrabold leading-none tracking-tight" style={{ color: '#1C2B3A' }}>
+                {currentBeans}
+              </span>
+              <span className="text-[20px] font-semibold mb-1" style={{ color: '#8A96A0' }}>beans</span>
+            </div>
+            <div className="grid grid-cols-2 gap-4 pt-4" style={{ borderTop: '1px solid #EDF1F4' }}>
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F0F4F7', border: '1.5px solid #E0E8EE' }}>
+                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                    <ellipse cx="10" cy="10" rx="7" ry="9" fill="#8A96A0"/>
+                    <ellipse cx="10" cy="8" rx="3.5" ry="4.5" fill="#1C2B3A" opacity="0.4"/>
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[13px] font-semibold leading-tight" style={{ color: '#1C2B3A' }}>Collect beans</p>
+                  <p className="text-[11px] mt-0.5 leading-snug" style={{ color: '#8A96A0' }}>Scan every time<br/>you visit</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F0F4F7', border: '1.5px solid #E0E8EE' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A96A0" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 12a9 9 0 0 1 9-9"/>
+                    <path d="M12 3a9 9 0 0 1 9 9 9 9 0 0 1-9 9"/>
+                    <path d="M12 8v4l3 3"/>
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[13px] font-semibold leading-tight" style={{ color: '#1C2B3A' }}>Get rewards</p>
+                  <p className="text-[11px] mt-0.5 leading-snug" style={{ color: '#8A96A0' }}>Exchange {nextMilestone} beans<br/>for a voucher</p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Active Vouchers - Compact Horizontal */}
-          <div>
-            <h2 className="text-[clamp(1.1rem,4vw,1.25rem)] font-bold text-[#4B3028] mb-3">Your Vouchers</h2>
-            <div className="flex gap-3 overflow-x-auto overflow-y-hidden snap-x snap-mandatory scrollbar-hide scroll-smooth">
-              {displayVouchers.map((voucher) => (
-                <div
-                  key={voucher.id}
-                  className={`relative rounded-[18px] shadow-[0_6px_20px_rgba(0,0,0,0.15),0_3px_10px_rgba(0,0,0,0.1)] min-w-[calc(50%-6px)] w-[calc(50%-6px)] h-[120px] flex-shrink-0 snap-start overflow-hidden cursor-pointer active:scale-[0.98] transition-transform`}
-                  onClick={() => {
-                    setSelectedVoucher(voucher)
-                    generateVoucherQRCode(voucher)
-                  }}
-                >
-                  <div className={`absolute inset-0 bg-[#7B1234] opacity-85`} />
-                  {voucher.image && (
-                    <img 
-                      src={voucher.image} 
-                      alt={voucher.template?.name}
-                      className="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-25"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent" />
-                  <div className="relative z-10 h-full flex flex-col justify-between p-3">
-                    <h3 className="font-bold text-white text-xs leading-tight">{voucher.template?.name}</h3>
-                    <p className="text-[10px] font-semibold text-white/90">
-                      {new Date(voucher.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
-                    </p>
-                  </div>
-                </div>
-              ))}
+          {/* ── THANKS FOR SUPPORTING LOCAL — slate card ── */}
+          <div
+            className="rounded-[18px] overflow-hidden relative"
+            style={{ backgroundColor: '#2C3E50', boxShadow: '0 4px 16px rgba(28,43,58,0.18)' }}
+          >
+            <div className="p-5 pr-[120px]">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center mb-3" style={{ backgroundColor: '#E07A3A' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+              </div>
+              <h3 className="text-[16px] font-extrabold text-white leading-tight">Thanks for supporting local</h3>
+              <p className="text-[12px] font-medium mt-1.5 leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)' }}>
+                Every visit helps keep Penkey<br />independent and our community strong.
+                <span className="ml-1" style={{ color: '#E07A3A' }}>✦</span>
+              </p>
+            </div>
+            {/* Shop illustration placeholder */}
+            <div className="absolute right-0 top-0 bottom-0 w-[110px] flex items-end justify-end pr-3 pb-3 pointer-events-none">
+              <svg width="90" height="90" viewBox="0 0 90 90" fill="none" opacity="0.35">
+                {/* simple shop facade */}
+                <rect x="10" y="40" width="70" height="42" rx="2" fill="white"/>
+                <rect x="18" y="48" width="16" height="18" rx="1" fill="rgba(28,43,58,0.6)"/>
+                <rect x="40" y="50" width="12" height="12" rx="1" fill="rgba(28,43,58,0.6)"/>
+                <rect x="56" y="50" width="12" height="10" rx="1" fill="rgba(28,43,58,0.6)"/>
+                <path d="M5 40 Q45 20 85 40" fill="rgba(28,43,58,0.4)"/>
+                <rect x="30" y="20" width="30" height="6" rx="1" fill="white" opacity="0.7"/>
+                <text x="45" y="27" textAnchor="middle" fontSize="5" fontWeight="bold" fill="#1C2B3A" fontFamily="sans-serif">PENKEY</text>
+                <rect x="0" y="78" width="90" height="12" rx="2" fill="rgba(255,255,255,0.1)"/>
+                <rect x="15" y="70" width="3" height="8" fill="rgba(255,255,255,0.3)"/>
+                <rect x="72" y="70" width="3" height="8" fill="rgba(255,255,255,0.3)"/>
+              </svg>
             </div>
           </div>
 
-          {/* Try Something New - Compact Editorial */}
-          <div>
-            <h2 className="text-[clamp(1.1rem,4vw,1.25rem)] font-bold text-[#4B3028] mb-3">Try Something New</h2>
-            <div className="space-y-3">
-              {sampleFeatured.map((item) => (
-                <div
-                  key={item.id}
-                  className="relative rounded-[18px] shadow-[0_6px_20px_rgba(0,0,0,0.15),0_3px_10px_rgba(0,0,0,0.1)] h-[140px] overflow-hidden cursor-pointer active:scale-[0.98] transition-transform"
-                  onClick={() => setSelectedFeatured(item)}
-                >
-                  <img 
-                    src={item.image} 
-                    alt={item.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent" />
-                  <div className="relative z-10 h-full flex flex-col justify-end p-4">
-                    <div className="inline-flex items-center px-2 py-1 rounded-full bg-[#7B1234] w-fit mb-2 shadow-[0_4px_12px_rgba(123,18,52,0.4)]">
-                      <span className="text-[10px] font-bold text-white">{item.description}</span>
-                    </div>
-                    <h3 className="font-bold text-white text-sm">{item.title}</h3>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
 
         <BottomNav />
       </div>
 
-      {/* QR Code Dialog */}
-      <Dialog open={showQR} onOpenChange={setShowQR}>
-        <DialogContent className="sm:max-w-md rounded-[28px] shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
-          <DialogHeader>
-            <DialogTitle className="text-[#4B3028]">Your QR Code</DialogTitle>
-          </DialogHeader>
-          <div className="flex flex-col items-center py-6">
-            {qrCodeUrl && (
-              <img
-                src={qrCodeUrl}
-                alt="QR Code"
-                className="w-64 h-64 border-4 border-[#F3DCD4] rounded-[28px] shadow-[0_8px_24px_rgba(0,0,0,0.1)]"
-              />
-            )}
-            <p className="mt-4 text-sm text-[#4B3028] text-center">
-              Show this QR code to staff to add beans or redeem rewards
-            </p>
-          </div>
-        </DialogContent>
-      </Dialog>
-
       {/* Voucher Detail Dialog */}
       <Dialog open={!!selectedVoucher} onOpenChange={() => setSelectedVoucher(null)}>
-        <DialogContent className="sm:max-w-md rounded-[28px] shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
-          <DialogHeader>
-            <DialogTitle className="text-[#4B3028]">{selectedVoucher?.template?.name}</DialogTitle>
-          </DialogHeader>
-          <div className="py-6 space-y-4">
-            <p className="text-sm text-[#4B3028]">{selectedVoucher?.template?.description}</p>
-            <p className="text-xs text-[#8D123F] font-semibold">
-              Expires: {selectedVoucher?.expires_at ? new Date(selectedVoucher.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A'}
-            </p>
+        <DialogContent className="sm:max-w-sm rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 overflow-hidden border-0">
+          {selectedVoucher?.image && (
+            <div className="relative h-44 overflow-hidden">
+              <img src={selectedVoucher.image} alt="" className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute bottom-4 left-4">
+                <h3 className="font-bold text-white text-lg leading-tight">{selectedVoucher?.template?.name}</h3>
+              </div>
+            </div>
+          )}
+          <div className="p-5 space-y-4 bg-white">
+            <p className="text-[13px] text-[#6B4C3B] leading-relaxed">{selectedVoucher?.template?.description}</p>
+            <div className="flex items-center gap-2 py-2 border-t border-[#F0E6DE]">
+              <span className="text-[11px] font-semibold text-[#9A7A6A] uppercase tracking-wide">Expires</span>
+              <span className="text-[12px] font-bold text-[#7B1234]">
+                {selectedVoucher?.expires_at ? new Date(selectedVoucher.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'N/A'}
+              </span>
+            </div>
             {voucherQrCode && (
-              <div className="flex flex-col items-center space-y-3">
-                <img src={voucherQrCode} alt="Voucher QR Code" className="w-48 h-48" />
-                <p className="text-xs text-gray-500">Show this QR code to staff to redeem</p>
+              <div className="flex flex-col items-center gap-2 pt-2">
+                <div className="bg-[#FAF8F5] rounded-[16px] p-4 border border-[#EEE0D8]">
+                  <img src={voucherQrCode} alt="Voucher QR Code" className="w-44 h-44" />
+                </div>
+                <p className="text-[11px] text-[#9A7A6A] text-center">Show to staff to redeem this voucher</p>
               </div>
             )}
+            <button
+              onClick={() => setSelectedVoucher(null)}
+              className="w-full py-3 bg-[#2C1810] text-white text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all"
+            >
+              Close
+            </button>
           </div>
         </DialogContent>
       </Dialog>
 
       {/* Featured Item Detail Dialog */}
       <Dialog open={!!selectedFeatured} onOpenChange={() => setSelectedFeatured(null)}>
-        <DialogContent className="sm:max-w-lg rounded-[28px] shadow-[0_20px_60px_rgba(0,0,0,0.15)] p-0 overflow-hidden">
+        <DialogContent className="sm:max-w-sm rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 overflow-hidden border-0">
           {selectedFeatured?.image && (
-            <img 
-              src={selectedFeatured.image} 
-              alt={selectedFeatured.title}
-              className="w-full h-64 object-cover"
-            />
+            <div className="relative h-52 overflow-hidden">
+              <img src={selectedFeatured.image} alt={selectedFeatured.title} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+            </div>
           )}
-          <div className="p-6">
-            <DialogTitle className="text-[#4B3028] text-xl mb-2">{selectedFeatured?.title}</DialogTitle>
-            <p className="text-sm text-[#4B3028] mb-4">{selectedFeatured?.description}</p>
-            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-[#7B1234]">
-              <span className="text-xs font-bold text-white">+2 bonus beans today</span>
+          <div className="p-5 bg-white">
+            <DialogTitle className="text-[#2C1810] text-lg font-extrabold mb-1">{selectedFeatured?.title}</DialogTitle>
+            <p className="text-[13px] text-[#6B4C3B] mb-4">{selectedFeatured?.description}</p>
+            <div className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-[#FFF0E4] border border-[#F0D0B8]">
+              <Sparkles className="w-3 h-3 text-[#E48A3A]" />
+              <span className="text-[11px] font-bold text-[#E48A3A]">+2 bonus beans today</span>
             </div>
           </div>
         </DialogContent>
@@ -451,128 +515,90 @@ export default function NewV2Dashboard() {
 
       {/* Notifications Dialog */}
       <Dialog open={showNotifications} onOpenChange={setShowNotifications}>
-        <DialogContent className="sm:max-w-md rounded-[28px] shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
+        <DialogContent className="sm:max-w-sm rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.15)] bg-[#FAF8F5] border-0">
           <DialogHeader>
-            <DialogTitle className="text-[#4B3028]">Notifications</DialogTitle>
+            <DialogTitle className="text-[#2C1810] text-lg font-extrabold">Notifications</DialogTitle>
           </DialogHeader>
-          <div className="py-4 space-y-3">
-            <div className="bg-[#FFFDFC] rounded-xl p-4 border border-[#F3DCD4]">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#C49A6C]/10 flex items-center justify-center flex-shrink-0">
-                  <Gift className="w-4 h-4 text-[#C49A6C]" />
+          <div className="space-y-2 pb-2">
+            {[
+              { icon: Gift, color: '#C49A6C', bg: '#FFF5EB', title: 'Reward Available', body: 'You have enough beans for a free coffee', time: '2h ago' },
+              { icon: Coffee, color: '#2A7A4A', bg: '#F0FAF4', title: 'Check-in Bonus', body: 'You earned 2 beans for checking in', time: 'Yesterday' },
+              { icon: Sparkles, color: '#E48A3A', bg: '#FFF5EB', title: 'Double Beans Today!', body: 'Rainy Day Double Beans is active until 2pm', time: '2d ago' },
+            ].map((n, i) => (
+              <div key={i} className="bg-white rounded-[14px] p-3.5 flex items-start gap-3 shadow-[0_1px_4px_rgba(75,48,40,0.07)]">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: n.bg }}>
+                  <n.icon className="w-4 h-4" style={{ color: n.color }} />
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-[#4B3028]">Reward Available!</p>
-                  <p className="text-xs text-gray-600 mt-1">You have enough beans for a free coffee</p>
-                  <p className="text-[10px] text-gray-400 mt-2">2 hours ago</p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[13px] font-semibold text-[#2C1810]">{n.title}</p>
+                  <p className="text-[11px] text-[#9A7A6A] mt-0.5 leading-snug">{n.body}</p>
                 </div>
+                <span className="text-[10px] text-[#C4AFA8] flex-shrink-0 mt-0.5">{n.time}</span>
               </div>
-            </div>
-            <div className="bg-[#FFFDFC] rounded-xl p-4 border border-[#F3DCD4]">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0">
-                  <Coffee className="w-4 h-4 text-green-600" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-[#4B3028]">Check-in Bonus</p>
-                  <p className="text-xs text-gray-600 mt-1">You earned 2 beans for checking in today</p>
-                  <p className="text-[10px] text-gray-400 mt-2">Yesterday</p>
-                </div>
-              </div>
-            </div>
-            <div className="bg-[#FFFDFC] rounded-xl p-4 border border-[#F3DCD4]">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full bg-[#C49A6C]/10 flex items-center justify-center flex-shrink-0">
-                  <Sparkles className="w-4 h-4 text-[#C49A6C]" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-[#4B3028]">Double Beans Today!</p>
-                  <p className="text-xs text-gray-600 mt-1">Rainy Day Double Beans is active until 2pm</p>
-                  <p className="text-[10px] text-gray-400 mt-2">2 days ago</p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </DialogContent>
       </Dialog>
 
       {/* Beans Panel Dialog */}
       <Dialog open={showBeansPanel} onOpenChange={setShowBeansPanel}>
-        <DialogContent className="sm:max-w-md rounded-[28px] shadow-[0_20px_60px_rgba(0,0,0,0.15)] bg-[#faf9f6]">
+        <DialogContent className="sm:max-w-sm rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.15)] bg-[#FAF8F5] border-0">
           <DialogHeader>
-            <DialogTitle className="text-[#4B3028]">Your Beans & Stamps</DialogTitle>
+            <DialogTitle className="text-[#2C1810] text-lg font-extrabold">Your Beans</DialogTitle>
           </DialogHeader>
-          <div className="py-4 space-y-4">
-            {/* Beans Balance */}
-            <div className="bg-[#7B1234] rounded-[28px] p-6 text-white text-center shadow-[0_8px_32px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.04)]">
-              <p className="text-sm font-medium mb-1">Current Balance</p>
-              <p className="text-4xl font-extrabold mb-2">{currentBeans}</p>
-              <p className="text-sm opacity-90">beans</p>
+          <div className="space-y-3 pb-2">
+            {/* Balance row */}
+            <div className="bg-white rounded-[16px] p-4 flex items-center justify-between shadow-[0_1px_4px_rgba(75,48,40,0.07)]">
+              <div>
+                <p className="text-[11px] font-bold text-[#B07A5E] uppercase tracking-widest mb-1">Current Balance</p>
+                <p className="text-[2.5rem] font-extrabold text-[#2C1810] leading-none">{currentBeans}</p>
+                <p className="text-[12px] text-[#9A7A6A] mt-1">beans</p>
+              </div>
+              <div className="text-right">
+                <p className="text-[11px] text-[#9A7A6A]">Lifetime</p>
+                <p className="text-lg font-bold text-[#C49A6C]">{beanBalance?.lifetime_beans || 0}</p>
+              </div>
             </div>
 
-            {/* Stamps Section */}
-            <div>
-              <h3 className="text-sm font-semibold text-[#4B3028] mb-3">Coffee Stamps</h3>
-              <div className="bg-white rounded-[28px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.04)] border border-[#F3DCD4]">
-                <div className="flex justify-between items-center mb-3">
-                  <span className="text-sm text-gray-600">Stamps collected</span>
-                  <span className="text-lg font-bold text-[#7B1234]">3 / 8</span>
-                </div>
-                <div className="flex gap-2 justify-center">
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                    <div
-                      key={num}
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
-                        num <= 3
-                          ? 'bg-[#7B1234] text-white'
-                          : 'bg-gray-200 text-gray-400'
-                      }`}
-                    >
-                      {num <= 3 ? '✓' : num}
-                    </div>
-                  ))}
-                </div>
-                <p className="text-xs text-gray-500 mt-3 text-center">
-                  5 more stamps for a free coffee
-                </p>
+            {/* Stamps */}
+            <div className="bg-white rounded-[16px] p-4 shadow-[0_1px_4px_rgba(75,48,40,0.07)]">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-[13px] font-bold text-[#2C1810]">Coffee Stamps</p>
+                <span className="text-[11px] font-bold text-[#7B1234]">3 / 8</span>
               </div>
+              <div className="flex gap-1.5">
+                {[1,2,3,4,5,6,7,8].map((n) => (
+                  <div key={n} className={`flex-1 h-7 rounded-lg flex items-center justify-center text-[10px] font-bold ${n <= 3 ? 'bg-[#E48A3A] text-white' : 'bg-[#F3E4DB] text-[#C4AFA8]'}`}>
+                    {n <= 3 ? '✓' : n}
+                  </div>
+                ))}
+              </div>
+              <p className="text-[11px] text-[#9A7A6A] mt-2.5">5 more for a free coffee</p>
             </div>
 
             {/* Recent Activity */}
-            <div>
-              <h3 className="text-sm font-semibold text-[#4B3028] mb-3">Recent Activity</h3>
-              <div className="bg-white rounded-[28px] p-6 shadow-[0_8px_32px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.04)] border border-[#F3DCD4] space-y-2">
-                <div className="flex items-center justify-between py-2 border-b border-[#F3DCD4]">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-green-500" />
-                    <span className="text-sm text-gray-700">Check-in bonus</span>
+            <div className="bg-white rounded-[16px] p-4 shadow-[0_1px_4px_rgba(75,48,40,0.07)]">
+              <p className="text-[13px] font-bold text-[#2C1810] mb-3">Recent Activity</p>
+              <div className="space-y-2.5">
+                {[
+                  { label: 'Check-in bonus', val: '+2', pos: true },
+                  { label: 'Coffee purchase', val: '+1', pos: true },
+                  { label: 'Reward redeemed', val: '−8', pos: false },
+                ].map((a, i) => (
+                  <div key={i} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-1.5 h-1.5 rounded-full ${a.pos ? 'bg-[#2A7A4A]' : 'bg-[#C49A6C]'}`} />
+                      <span className="text-[12px] text-[#6B4C3B]">{a.label}</span>
+                    </div>
+                    <span className={`text-[12px] font-bold ${a.pos ? 'text-[#2A7A4A]' : 'text-[#9A7A6A]'}`}>{a.val} beans</span>
                   </div>
-                  <span className="text-sm font-semibold text-[#C49A6C]">+2 beans</span>
-                </div>
-                <div className="flex items-center justify-between py-2 border-b border-[#F3DCD4]">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-green-500" />
-                    <span className="text-sm text-gray-700">Coffee purchase</span>
-                  </div>
-                  <span className="text-sm font-semibold text-[#C49A6C]">+1 bean</span>
-                </div>
-                <div className="flex items-center justify-between py-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-red-500" />
-                    <span className="text-sm text-gray-700">Reward redeemed</span>
-                  </div>
-                  <span className="text-sm font-semibold text-gray-500">-8 beans</span>
-                </div>
+                ))}
               </div>
             </div>
 
-            {/* View Rewards Button */}
             <button
-              onClick={() => {
-                setShowBeansPanel(false)
-                router.push('/rewards')
-              }}
-              className="w-full py-3 bg-[#7B1234] text-white font-semibold rounded-[28px] shadow-lg hover:bg-[#660E2B] transition-all"
+              onClick={() => { setShowBeansPanel(false); router.push('/rewards') }}
+              className="w-full py-3.5 bg-[#2C1810] text-white text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all"
             >
               View All Rewards
             </button>

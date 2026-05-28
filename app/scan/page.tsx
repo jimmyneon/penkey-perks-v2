@@ -1,141 +1,170 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { Camera, Check, X, Loader2 } from 'lucide-react'
-import { Html5QrcodeScanner } from 'html5-qrcode'
+import { createClient } from '@/lib/supabase/client'
+import QRCodeLib from 'qrcode'
+import { BottomNav } from '@/components/bottom-nav'
+
+const recentScans = [
+  { location: 'Penkey Cafe', time: 'Today · 9:34am', stamp: '+1 stamp' },
+  { location: 'Penkey Cafe', time: 'Yesterday · 2:17pm', stamp: '+1 stamp' },
+  { location: 'Penkey Cafe', time: '2 days ago · 10:08am', stamp: '+1 stamp' },
+]
 
 export default function ScanPage() {
   const router = useRouter()
-  const [scanned, setScanned] = useState(false)
-  const [result, setResult] = useState('')
-  const [scanning, setScanning] = useState(false)
-  const [error, setError] = useState('')
-  const scannerRef = useRef<Html5QrcodeScanner | null>(null)
-  const readerRef = useRef<any>(null)
+  const [qrCodeUrl, setQrCodeUrl] = useState('')
+  const [userId, setUserId] = useState('')
 
   useEffect(() => {
-    // Auto-start camera on page load
-    startScanning()
-    
-    return () => {
-      // Cleanup on unmount - don't await, just fire and forget
-      if (readerRef.current) {
-        readerRef.current.stop().catch(() => {})
-      }
-    }
-  }, [])
-
-  const startScanning = async () => {
-    setScanning(true)
-    setError('')
-
-    try {
-      const Html5Qrcode = (await import('html5-qrcode')).Html5Qrcode
-      readerRef.current = new Html5Qrcode('reader')
-      
-      await readerRef.current.start(
-        { facingMode: 'environment' },
-        {
-          fps: 10,
-          qrbox: { width: 250, height: 250 },
-        },
-        (decodedText: string) => {
-          setScanned(true)
-          setResult(decodedText)
-          setScanning(false)
-          readerRef.current?.stop().catch(console.error)
-        },
-        (errorMessage: string) => {
-          // Ignore scan errors (happens while scanning)
-        }
-      )
-    } catch (err) {
-      setError('Unable to access camera. Please ensure camera permissions are granted.')
-      setScanning(false)
-      console.error(err)
-    }
-  }
-
-  const handleReset = () => {
-    setScanned(false)
-    setResult('')
-    setError('')
-    startScanning()
-  }
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) { router.push('/login'); return }
+      setUserId(user.id)
+      const qrData = JSON.stringify({ type: 'customer', id: user.id, email: user.email })
+      QRCodeLib.toDataURL(qrData, {
+        width: 280,
+        margin: 1,
+        color: { dark: '#1C2B3A', light: '#FFFFFF' },
+      }).then(setQrCodeUrl)
+    })
+  }, [router])
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
-      {scanning ? (
-        <div className="w-full max-w-sm space-y-4">
-          <div className="text-center">
-            <h1 className="text-xl font-bold text-[#4B3028] mb-2">Scanning...</h1>
-            <p className="text-sm text-[#4B3028]/70">Point camera at QR code</p>
-          </div>
-          
-          <div id="reader" className="w-full rounded-xl overflow-hidden" />
-          
-          <Button
-            onClick={() => {
-              setScanning(false)
-              // Stop scanner without awaiting to avoid blocking navigation
-              if (readerRef.current) {
-                readerRef.current.stop().catch(() => {})
-              }
-              router.push('/dashboard')
-            }}
-            variant="outline"
-            className="w-full"
-          >
-            <X className="w-4 h-4 mr-2" />
-            Cancel
-          </Button>
-        </div>
-      ) : scanned ? (
-        <div className="text-center space-y-6 max-w-sm">
-          <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto">
-            <Check className="w-10 h-10 text-green-600" />
-          </div>
-          
+    <div className="min-h-screen bg-white pb-28">
+      <div className="w-full max-w-[430px] mx-auto">
+
+        {/* Header */}
+        <div className="px-5 pt-14 pb-4 flex items-start justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-[#4B3028] mb-2">Scanned!</h1>
-            <p className="text-sm text-[#4B3028]/70">Code: {result}</p>
+            <h1 className="text-[32px] font-extrabold leading-tight tracking-tight" style={{ color: '#1C2B3A' }}>
+              Scan to collect
+            </h1>
+            <p className="text-[14px] font-medium mt-1" style={{ color: '#8A96A0' }}>
+              Show this code to earn your stamp.
+            </p>
+          </div>
+          <div className="text-right leading-none mt-1 flex-shrink-0 ml-4">
+            <span className="block text-[18px] font-extrabold tracking-tight" style={{ color: '#1C2B3A' }}>
+              PEN<span style={{ color: '#E07A3A' }}>KEY</span>
+            </span>
+            <span className="block text-[14px] font-medium italic" style={{ color: '#1C2B3A', fontFamily: 'Georgia, serif' }}>
+              Perks &#x2756;
+            </span>
+          </div>
+        </div>
+
+        <div className="px-4 space-y-4">
+
+          {/* QR card — white card with orange corner brackets */}
+          <div
+            className="rounded-[22px] p-5 relative overflow-hidden"
+            style={{ backgroundColor: '#F4F7F9', border: '1px solid #EDF1F4', boxShadow: '0 4px 24px rgba(28,43,58,0.10)' }}
+          >
+            <div className="flex gap-4 items-start">
+              {/* Left text */}
+              <div className="flex-1">
+                <p className="text-[15px] font-extrabold leading-tight mb-1" style={{ color: '#1C2B3A' }}>Your QR Code</p>
+                <p className="text-[12px] leading-snug mb-4" style={{ color: '#8A96A0' }}>
+                  Scan at the till every time<br />you visit Penkey.
+                </p>
+                <div className="flex items-start gap-2 mt-4">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(224,122,58,0.12)' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E07A3A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                  </div>
+                  <p className="text-[11px] leading-snug" style={{ color: '#8A96A0' }}>
+                    Your code is unique<br />and refreshes regularly<br />for security.
+                  </p>
+                </div>
+              </div>
+
+              {/* QR code with orange corner brackets */}
+              <div className="relative flex-shrink-0">
+                <div className="relative w-[140px] h-[140px]">
+                  {/* Corner brackets */}
+                  <div className="absolute top-0 left-0 w-7 h-7 border-t-[3px] border-l-[3px] rounded-tl-[6px]" style={{ borderColor: '#E07A3A' }} />
+                  <div className="absolute top-0 right-0 w-7 h-7 border-t-[3px] border-r-[3px] rounded-tr-[6px]" style={{ borderColor: '#E07A3A' }} />
+                  <div className="absolute bottom-0 left-0 w-7 h-7 border-b-[3px] border-l-[3px] rounded-bl-[6px]" style={{ borderColor: '#E07A3A' }} />
+                  <div className="absolute bottom-0 right-0 w-7 h-7 border-b-[3px] border-r-[3px] rounded-br-[6px]" style={{ borderColor: '#E07A3A' }} />
+                  {/* QR */}
+                  <div className="absolute inset-2.5 bg-white rounded-[6px] flex items-center justify-center overflow-hidden shadow-sm">
+                    {qrCodeUrl ? (
+                      <img src={qrCodeUrl} alt="Your QR code" className="w-full h-full object-contain p-1" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <div className="w-6 h-6 rounded-full border-2 border-[#E07A3A] border-t-transparent animate-spin" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <Button
-            onClick={handleReset}
-            variant="outline"
-            className="h-12 px-8 rounded-xl"
+          {/* Every scan = 1 stamp */}
+          <div
+            className="rounded-[18px] px-4 py-4 flex items-center gap-4"
+            style={{ backgroundColor: 'rgba(224,122,58,0.08)', border: '1px solid rgba(224,122,58,0.15)' }}
           >
-            <X className="w-4 h-4 mr-2" />
-            Scan Again
-          </Button>
-        </div>
-      ) : (
-        <div className="text-center space-y-6">
-          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#E48A3A] to-[#D47A2A] flex items-center justify-center mx-auto shadow-lg">
-            <Camera className="w-12 h-12 text-white" />
+            <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(224,122,58,0.15)' }}>
+              {/* Bean icon */}
+              <svg width="22" height="26" viewBox="0 0 20 24" fill="none">
+                <ellipse cx="10" cy="12" rx="8" ry="11" fill="#E07A3A" opacity="0.9"/>
+                <ellipse cx="10" cy="9" rx="4" ry="5" fill="#1C2B3A" opacity="0.25"/>
+              </svg>
+            </div>
+            <div className="flex-1">
+              <p className="text-[16px] font-extrabold leading-tight" style={{ color: '#1C2B3A' }}>Every scan = 1 stamp</p>
+              <p className="text-[12px] mt-0.5" style={{ color: '#8A96A0' }}>Keep coming back and unlock amazing rewards!</p>
+              <div className="mt-1.5 w-10 h-[2.5px] rounded-full" style={{ backgroundColor: '#E07A3A' }} />
+            </div>
           </div>
-          
+
+          {/* Recent scans */}
           <div>
-            <h1 className="text-2xl font-bold text-[#4B3028] mb-2">Scan QR Code</h1>
-            <p className="text-sm text-[#4B3028]/70">Opening camera...</p>
+            <div className="flex items-center justify-between px-1 mb-2">
+              <p className="text-[14px] font-extrabold" style={{ color: '#1C2B3A' }}>Recent scans</p>
+              <button className="text-[13px] font-semibold flex items-center gap-1" style={{ color: '#E07A3A' }}>
+                View all
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E07A3A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </button>
+            </div>
+            <div className="bg-white rounded-[18px] overflow-hidden" style={{ border: '1px solid #EDF1F4', boxShadow: '0 2px 12px rgba(28,43,58,0.06)' }}>
+              {recentScans.map((scan, i) => (
+                <div
+                  key={i}
+                  className={`flex items-center gap-3 px-4 min-h-[62px] ${i < recentScans.length - 1 ? 'border-b' : ''}`}
+                  style={{ borderColor: '#EDF1F4' }}
+                >
+                  {/* Check circle */}
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(224,122,58,0.10)', border: '1.5px solid rgba(224,122,58,0.25)' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E07A3A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[14px] font-semibold leading-tight" style={{ color: '#1C2B3A' }}>{scan.location}</p>
+                    <p className="text-[12px] mt-0.5" style={{ color: '#8A96A0' }}>{scan.time}</p>
+                  </div>
+                  <div className="flex items-center gap-1.5 flex-shrink-0">
+                    <span className="text-[13px] font-bold" style={{ color: '#E07A3A' }}>{scan.stamp}</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C8D4DC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
-          {error && (
-            <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>
-          )}
-
-          <Button
-            onClick={startScanning}
-            className="bg-gradient-to-br from-[#E48A3A] to-[#D47A2A] hover:from-[#D47A2A] hover:to-[#C46A1A] text-white font-semibold h-14 px-8 rounded-2xl shadow-lg"
-          >
-            <Camera className="w-5 h-5 mr-2" />
-            Open Camera
-          </Button>
         </div>
-      )}
+      </div>
+      <BottomNav />
     </div>
   )
 }

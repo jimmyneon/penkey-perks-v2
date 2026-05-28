@@ -2,11 +2,14 @@
 
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { Home, Coffee, Gift, User, Scan } from 'lucide-react'
+import { Home, MessageCircle, ScanLine, Gift, User } from 'lucide-react'
 
-const navItems = [
-  { href: '/home', icon: Home, label: 'Home' },
-  { href: '/order', icon: Coffee, label: 'Order' },
+const leftItems = [
+  { href: '/dashboard', icon: Home, label: 'Home' },
+  { href: '/order', icon: MessageCircle, label: 'Order Now', external: false },
+]
+
+const rightItems = [
   { href: '/rewards', icon: Gift, label: 'Rewards' },
   { href: '/profile', icon: User, label: 'Profile' },
 ]
@@ -17,57 +20,81 @@ export function BottomNav() {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50">
       <div className="w-full max-w-[430px] mx-auto">
-        <div className="mx-4 mb-4 bg-white/90 backdrop-blur-xl rounded-[28px] shadow-[0_8px_32px_rgba(0,0,0,0.12),0_4px_16px_rgba(0,0,0,0.08)] border border-[#F0EBE5]">
-          <div className="flex items-center justify-around h-16 px-2">
-            {navItems.slice(0, 2).map((item) => {
-              const isActive = pathname === item.href
+        <div className="bg-white shadow-[0_-1px_0_rgba(28,43,58,0.08),0_-4px_20px_rgba(28,43,58,0.06)]">
+          <div className="flex items-center h-[64px] pb-safe">
+
+            {/* Left two items */}
+            {leftItems.map((item) => {
+              const isActive = !item.external && (pathname === item.href || pathname.startsWith(item.href + '/'))
               const Icon = item.icon
-              
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex flex-col items-center justify-center flex-1 h-full relative group min-h-[44px]"
-                >
-                  <div className={`flex flex-col items-center justify-center transition-all rounded-xl px-3 py-2 ${
-                    isActive ? 'text-[#7B1234] border-2 border-[#7B1234]' : 'text-[#4B3028]/60 group-hover:text-[#7B1234] border-2 border-transparent'
-                  }`}>
-                    <Icon className="w-5 h-5 mb-0.5" />
-                    <span className="text-[10px] font-medium">{item.label}</span>
-                  </div>
+              const content = (
+                <span className="flex flex-col items-center justify-center flex-1 h-full gap-[3px] min-h-[44px] w-full">
+                  <Icon
+                    className="w-[22px] h-[22px] transition-colors"
+                    style={{ color: isActive ? '#E07A3A' : '#9AAAB8' }}
+                    strokeWidth={isActive ? 2.2 : 1.6}
+                  />
+                  <span
+                    className="text-[10px] font-semibold"
+                    style={{ color: isActive ? '#E07A3A' : '#9AAAB8' }}
+                  >
+                    {item.label}
+                  </span>
+                </span>
+              )
+              return item.external ? (
+                <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer"
+                  className="flex flex-col items-center justify-center flex-1 h-full">
+                  {content}
+                </a>
+              ) : (
+                <Link key={item.href} href={item.href}
+                  className="flex flex-col items-center justify-center flex-1 h-full">
+                  {content}
                 </Link>
               )
             })}
-            
-            {/* Central Scan Button */}
+
+            {/* Centre Scan button — orange, lifted, matches reference */}
             <Link
               href="/scan"
-              className="relative -top-6"
+              className="flex items-center justify-center flex-shrink-0 -mt-7 mx-2"
             >
-              <div className="w-16 h-16 rounded-full bg-[#F4D8CC] flex items-center justify-center shadow-[0_8px_24px_rgba(244,216,204,0.4),0_4px_12px_rgba(244,216,204,0.3)] border-4 border-white">
-                <Scan className="w-7 h-7 text-[#7B1234]" />
+              <div
+                className="w-[60px] h-[60px] rounded-full flex flex-col items-center justify-center gap-0.5 active:scale-95 transition-transform duration-150"
+                style={{
+                  backgroundColor: '#E07A3A',
+                  boxShadow: '0 4px 18px rgba(224,122,58,0.50)',
+                  border: '3px solid white',
+                }}
+              >
+                <ScanLine className="w-[22px] h-[22px] text-white" strokeWidth={1.8} />
+                <span className="text-[8px] font-bold text-white tracking-wide">SCAN</span>
               </div>
             </Link>
 
-            {navItems.slice(2).map((item) => {
-              const isActive = pathname === item.href
+            {/* Right two items */}
+            {rightItems.map((item) => {
+              const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
               const Icon = item.icon
-              
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex flex-col items-center justify-center flex-1 h-full relative group min-h-[44px]"
-                >
-                  <div className={`flex flex-col items-center justify-center transition-all rounded-xl px-3 py-2 ${
-                    isActive ? 'text-[#7B1234] border-2 border-[#7B1234]' : 'text-[#4B3028]/60 group-hover:text-[#7B1234] border-2 border-transparent'
-                  }`}>
-                    <Icon className="w-5 h-5 mb-0.5" />
-                    <span className="text-[10px] font-medium">{item.label}</span>
-                  </div>
+                <Link key={item.href} href={item.href}
+                  className="flex flex-col items-center justify-center flex-1 h-full gap-[3px] min-h-[44px]">
+                  <Icon
+                    className="w-[22px] h-[22px] transition-colors"
+                    style={{ color: isActive ? '#E07A3A' : '#9AAAB8' }}
+                    strokeWidth={isActive ? 2.2 : 1.6}
+                  />
+                  <span
+                    className="text-[10px] font-semibold"
+                    style={{ color: isActive ? '#E07A3A' : '#9AAAB8' }}
+                  >
+                    {item.label}
+                  </span>
                 </Link>
               )
             })}
+
           </div>
         </div>
       </div>
