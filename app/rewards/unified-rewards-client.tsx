@@ -196,9 +196,14 @@ export function UnifiedRewardsClient({
     <div className="min-h-screen bg-white">
 
       {/* ── HEADER ── */}
-      <div className="px-5 pt-14 pb-2">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] mb-0.5" style={{ color: '#9AAAB8' }}>Penkey Perks</p>
-        <h1 className="text-[32px] font-extrabold leading-tight tracking-tight" style={{ color: '#1C2B3A' }}>Your Rewards</h1>
+      <div className="px-5 pt-14 pb-2 flex items-start justify-between">
+        <div className="flex-1">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] mb-0.5" style={{ color: '#9AAAB8' }}>Penkey Perks</p>
+          <h1 className="text-[32px] font-extrabold leading-tight tracking-tight" style={{ color: '#1C2B3A' }}>Your Rewards</h1>
+        </div>
+        <div className="flex flex-col items-end gap-3 ml-3 flex-shrink-0">
+          <img src="/logo.png" alt="PENKEY Perks" className="h-10 w-auto" />
+        </div>
       </div>
 
       <main className="px-4 pb-28 pt-4 space-y-5">
@@ -239,14 +244,19 @@ export function UnifiedRewardsClient({
                   return (
                     <div
                       key={i}
-                      className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] transition-all duration-300"
+                      className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300"
                       style={{
-                        backgroundColor: filled ? '#E07A3A' : 'rgba(255,255,255,0.12)',
+                        backgroundColor: filled ? '#F0EDE5' : 'rgba(255,255,255,0.12)',
+                        border: filled ? '2px solid #E0D8CC' : '2px dashed #F0EDE5',
                         boxShadow: filled ? '0 2px 6px rgba(224,122,58,0.40)' : 'none',
                         transform: filled ? 'scale(1.05)' : 'scale(1)',
                       }}
                     >
-                      {filled && <span style={{ color: 'white', fontSize: '10px', fontWeight: 800 }}>✓</span>}
+                      {filled ? (
+                        <img src="/bean.png" alt="" className="w-5 h-5 object-contain" style={{ filter: 'brightness(0) invert(1)' }} />
+                      ) : (
+                        <img src="/bean.png" alt="" className="w-5 h-5 object-contain" style={{ filter: 'brightness(0.4) grayscale(0.5)', opacity: 0.6 }} />
+                      )}
                     </div>
                   )
                 })}

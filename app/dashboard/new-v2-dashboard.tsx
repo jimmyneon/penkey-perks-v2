@@ -397,10 +397,10 @@ export default function NewV2Dashboard() {
           </div>
 
           {/* ── THANKS FOR SUPPORTING LOCAL ── */}
-          <div className="rounded-[18px] overflow-hidden" style={{ backgroundColor: '#E0F2FE', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #BAE6FD' }}>
+          <div className="rounded-[18px] overflow-hidden" style={{ backgroundColor: '#F0F9FF', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E0F2FE' }}>
             <div className="flex items-center p-4">
               <div className="flex items-center gap-3 flex-1">
-                <div className="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
                   <img src="/heart.png" alt="" className="w-5 h-5 object-contain" />
                 </div>
                 <div className="text-left">
@@ -408,7 +408,7 @@ export default function NewV2Dashboard() {
                   <p className="text-xs" style={{ color: '#5A6A7A' }}>Every visit to Penkey helps our community thrive</p>
                 </div>
               </div>
-              <div className="w-24 h-24 flex-shrink-0">
+              <div className="w-32 h-32 flex-shrink-0">
                 <img src="/local.png" alt="" className="w-full h-full object-contain" />
               </div>
             </div>
