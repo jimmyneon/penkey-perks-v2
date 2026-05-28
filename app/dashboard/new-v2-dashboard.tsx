@@ -220,7 +220,7 @@ export default function NewV2Dashboard() {
   const firstName = firstNameRaw.charAt(0).toUpperCase() + firstNameRaw.slice(1).toLowerCase()
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#F5F1EA' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#F7F5F0' }}>
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
         <div className="px-5 pt-14 pb-28 space-y-5">
 
@@ -399,12 +399,12 @@ export default function NewV2Dashboard() {
 
         </div>
 
-        <BottomNav />
-      </div>
+        {/* ── THANKS FOR SUPPORTING LOCAL ── full width */}
+        <div className="-mx-5">
+          <img src="/local-banner.png" alt="Thanks for supporting local" className="w-full h-auto" />
+        </div>
 
-      {/* ── THANKS FOR SUPPORTING LOCAL ── full width outside max-width container */}
-      <div className="w-full">
-        <img src="/local-banner.png" alt="Thanks for supporting local" className="w-full h-auto" />
+        <BottomNav />
       </div>
 
       {/* Voucher Detail Dialog */}

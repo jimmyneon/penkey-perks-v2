@@ -7,35 +7,69 @@ interface SparkLinesProps extends React.SVGAttributes<SVGElement> {
 export function SparkLines({ className = '', ...props }: SparkLinesProps) {
   return (
     <svg
-      viewBox="0 0 24 24"
+      viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       {...props}
     >
-      {/* Top ray */}
+      {/* Small decorative spark lines radiating outward */}
       <path
-        d="M12 2L14 7"
+        d="M10 2L10 5"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.5"
         strokeLinecap="round"
-        style={{ opacity: 0.8 }}
+        style={{ opacity: 0.7 }}
       />
-      {/* Middle ray (longer) */}
       <path
-        d="M12 2L12 9"
+        d="M10 15L10 18"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.5"
         strokeLinecap="round"
-        style={{ opacity: 0.9 }}
+        style={{ opacity: 0.7 }}
       />
-      {/* Bottom ray */}
       <path
-        d="M12 2L10 7"
+        d="M2 10L5 10"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth="1.5"
         strokeLinecap="round"
-        style={{ opacity: 0.8 }}
+        style={{ opacity: 0.7 }}
+      />
+      <path
+        d="M15 10L18 10"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        style={{ opacity: 0.7 }}
+      />
+      {/* Diagonal rays */}
+      <path
+        d="M4 4L6 6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        style={{ opacity: 0.5 }}
+      />
+      <path
+        d="M14 14L16 16"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        style={{ opacity: 0.5 }}
+      />
+      <path
+        d="M16 4L14 6"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        style={{ opacity: 0.5 }}
+      />
+      <path
+        d="M6 14L4 16"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        style={{ opacity: 0.5 }}
       />
     </svg>
   )

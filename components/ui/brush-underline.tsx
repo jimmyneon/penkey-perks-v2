@@ -7,19 +7,19 @@ interface BrushUnderlineProps extends React.SVGAttributes<SVGElement> {
 export function BrushUnderline({ className = '', ...props }: BrushUnderlineProps) {
   return (
     <svg
-      viewBox="0 0 120 12"
+      viewBox="0 0 100 10"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       {...props}
     >
       <path
-        d="M2 6C15 2 35 10 50 8C65 6 85 2 98 6C105 8 112 4 118 6"
+        d="M5 5C20 3 35 7 50 5C65 3 80 7 95 5"
         stroke="currentColor"
-        strokeWidth="3"
+        strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        style={{ opacity: 0.9 }}
+        style={{ opacity: 0.85 }}
       />
     </svg>
   )
