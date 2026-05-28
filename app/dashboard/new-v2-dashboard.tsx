@@ -214,7 +214,8 @@ export default function NewV2Dashboard() {
   const stampBeansNeeded = nextMilestone - currentBeans
   // Show stamps for the current milestone cycle
   const stampTotal = nextMilestone
-  const firstName = user?.user_metadata?.first_name || user?.user_metadata?.name?.split(' ')[0] || 'there'
+  const firstNameRaw = user?.user_metadata?.first_name || user?.user_metadata?.name?.split(' ')[0] || 'there'
+  const firstName = firstNameRaw.charAt(0).toUpperCase() + firstNameRaw.slice(1).toLowerCase()
 
   return (
     <div className="min-h-screen bg-white">
@@ -226,11 +227,11 @@ export default function NewV2Dashboard() {
           <div className="flex items-start justify-between pt-1">
             {/* Left: greeting */}
             <div className="flex-1">
-              <p className="text-[18px] font-bold italic leading-tight" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>
+              <p className="text-[20px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
                 {getGreeting()},{' '}
                 <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px' }} />
               </p>
-              <h1 className="text-[42px] font-extrabold leading-none tracking-tight mt-0.5" style={{ color: '#1C2B3A' }}>
+              <h1 className="text-[72px] font-extrabold leading-none tracking-tight mt-0.5" style={{ color: '#1C2B3A' }}>
                 {firstName}
               </h1>
               <p className="text-[13px] font-medium mt-1.5" style={{ color: '#8A96A0' }}>
@@ -240,7 +241,7 @@ export default function NewV2Dashboard() {
             </div>
             {/* Right: wordmark + avatar */}
             <div className="flex flex-col items-end gap-3 ml-3 mt-0.5">
-              <img src="/logo.png" alt="PENKEY Perks" className="h-10 w-auto" />
+              <img src="/logo.png" alt="PENKEY Perks" className="h-20 w-auto" />
               <button
                 onClick={() => router.push('/profile')}
                 className="w-10 h-10 rounded-full border-2 flex items-center justify-center"
@@ -330,11 +331,11 @@ export default function NewV2Dashboard() {
               }}
             >
               <div className="p-5 pr-[120px]">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style={{ backgroundColor: '#E07A3A' }}>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style={{ backgroundColor: '#E07A3A', boxShadow: '0 2px 8px rgba(224,122,58,0.3)' }}>
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="white">
                     <circle cx="5" cy="5" r="4"/>
                   </svg>
-                  <span className="text-[10px] font-bold text-white uppercase tracking-wide">Perk unlocked</span>
+                  <span className="text-[10px] font-bold text-white uppercase tracking-wide" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.15)' }}>Perk unlocked</span>
                 </div>
                 <h3 className="text-[26px] font-extrabold leading-tight" style={{ color: '#1C2B3A' }}>
                   Nice one!
@@ -404,7 +405,7 @@ export default function NewV2Dashboard() {
           </div>
 
           {/* ── THANKS FOR SUPPORTING LOCAL ── */}
-          <img src="/local-banner.png" alt="Thanks for supporting local" className="w-full rounded-[18px]" />
+          <img src="/local-banner.png" alt="Thanks for supporting local" className="w-full rounded-[18px]" style={{ width: '100%', maxWidth: 'none' }} />
 
         </div>
 
