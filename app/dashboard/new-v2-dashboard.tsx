@@ -223,7 +223,7 @@ export default function NewV2Dashboard() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
-        <div className="px-5 pt-14 pb-24 space-y-5">
+        <div className="px-5 pt-14 pb-28 space-y-5">
 
           {/* ── HEADER ── */}
           <div className="flex items-start justify-between pt-1">
@@ -274,7 +274,7 @@ export default function NewV2Dashboard() {
                         className="w-16 h-16 rounded-full flex items-center justify-center"
                         style={{
                           backgroundColor: filled ? '#F0EDE5' : 'transparent',
-                          border: filled ? '2px solid #E0D8CC' : '2px dashed rgba(255,255,255,0.25)',
+                          border: filled ? '2px solid #E0D8CC' : '2px dashed #F0EDE5',
                         }}
                       >
                         <img
@@ -307,10 +307,10 @@ export default function NewV2Dashboard() {
                 style={{ borderLeft: '1px solid rgba(255,255,255,0.12)' }}
               >
                 <div
-                  className="w-24 h-24 rounded-full flex items-center justify-center"
+                  className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden"
                   style={{ backgroundColor: '#F8F5EF', border: '1.5px solid #E8E2D8' }}
                 >
-                  <GiftIcon className="w-20 h-20 object-contain" />
+                  <GiftIcon className="w-16 h-16 object-contain" style={{ transform: 'scale(1.5)' }} />
                 </div>
                 <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-center" style={{ color: '#F8F5EF' }}>
                   NEXT REWARD
