@@ -326,31 +326,19 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
     <div className="min-h-screen bg-white">
 
       {/* Header — matches dashboard greeting style */}
-      <div className="px-5 pt-14 pb-5">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <p className="text-[18px] font-bold italic leading-tight" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>
-              {name ? `Hi, ` : 'Your profile'}
-              {name && <span style={{ fontStyle: 'normal', fontFamily: 'inherit', fontWeight: 800, color: '#E07A3A' }}>{name.split(' ')[0]}</span>}
-              {name && <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle ml-1" style={{ marginBottom: '2px' }} />}
-            </p>
-            <p className="text-[13px] font-medium mt-1" style={{ color: '#8A96A0' }}>
-              Here&apos;s your Penkey Perks profile
-            </p>
-          </div>
-          <div className="flex flex-col items-end gap-3 ml-3">
-            <img src="/logo.png" alt="PENKEY Perks" className="h-10 w-auto" />
-            <button
-              onClick={() => router.push('/profile')}
-              className="w-10 h-10 rounded-full border-2 flex items-center justify-center"
-              style={{ borderColor: '#E07A3A', backgroundColor: '#FEF3EA' }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E07A3A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
-              </svg>
-            </button>
-          </div>
+      <div className="px-5 pt-14 pb-5 flex items-start justify-between">
+        <div className="flex-1">
+          <p className="text-[18px] font-bold italic leading-tight" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>
+            {name ? `Hi, ` : 'Your profile'}
+            {name && <span style={{ fontStyle: 'normal', fontFamily: 'inherit', fontWeight: 800, color: '#E07A3A' }}>{name.split(' ')[0]}</span>}
+            {name && <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle ml-1" style={{ marginBottom: '2px' }} />}
+          </p>
+          <p className="text-[13px] font-medium mt-1" style={{ color: '#8A96A0' }}>
+            Here&apos;s your Penkey Perks profile
+          </p>
+        </div>
+        <div className="flex flex-col items-end gap-3 ml-3 flex-shrink-0">
+          <img src="/logo.png" alt="PENKEY Perks" className="h-10 w-auto" />
         </div>
       </div>
 
