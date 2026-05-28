@@ -398,6 +398,11 @@ export default function NewV2Dashboard() {
 
         </div>
 
+        {/* ── THANKS FOR SUPPORTING LOCAL ── */}
+        <div className="rounded-[18px] overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(36,54,75,0.08)' }}>
+          <img src="/local-banner.png" alt="" className="w-full h-auto" />
+        </div>
+
         <BottomNav />
       </div>
 
