@@ -2,12 +2,18 @@
 
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { Home, Gift, User, Scan, Megaphone } from 'lucide-react'
+import { Home, MessageCircle, ScanLine, Gift, User } from 'lucide-react'
 
-const navItems = [
+const WHATSAPP_NUMBER = '447700000000' // TODO: update to real number
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I%27d%20like%20to%20place%20an%20order%20please`
+
+const leftItems = [
   { href: '/dashboard', icon: Home, label: 'Home' },
+  { href: WHATSAPP_URL, icon: MessageCircle, label: 'Order Now', external: true },
+]
+
+const rightItems = [
   { href: '/rewards', icon: Gift, label: 'Rewards' },
-  { href: '/campaigns', icon: Megaphone, label: "What's on" },
   { href: '/profile', icon: User, label: 'Profile' },
 ]
 
@@ -17,69 +23,81 @@ export function BottomNav() {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50">
       <div className="w-full max-w-[430px] mx-auto">
-        <div className="bg-white border-t border-[#EDE0D8] shadow-[0_-2px_16px_rgba(61,26,14,0.08)]">
-          <div className="flex items-center h-[62px] px-1 pb-safe">
-            {navItems.slice(0, 2).map((item) => {
-              const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+        <div className="bg-white shadow-[0_-1px_0_rgba(28,43,58,0.08),0_-4px_20px_rgba(28,43,58,0.06)]">
+          <div className="flex items-center h-[64px] pb-safe">
+
+            {/* Left two items */}
+            {leftItems.map((item) => {
+              const isActive = !item.external && (pathname === item.href || pathname.startsWith(item.href + '/'))
               const Icon = item.icon
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex flex-col items-center justify-center flex-1 h-full gap-[3px] min-h-[44px]"
-                >
+              const content = (
+                <span className="flex flex-col items-center justify-center flex-1 h-full gap-[3px] min-h-[44px] w-full">
                   <Icon
-                    className="w-[22px] h-[22px] transition-all"
-                    style={{ color: isActive ? '#C8472A' : '#C0ADA4' }}
+                    className="w-[22px] h-[22px] transition-colors"
+                    style={{ color: isActive ? '#E07A3A' : '#9AAAB8' }}
                     strokeWidth={isActive ? 2.2 : 1.6}
                   />
                   <span
-                    className="text-[9px] font-bold tracking-wide"
-                    style={{ color: isActive ? '#C8472A' : '#C0ADA4' }}
+                    className="text-[10px] font-semibold"
+                    style={{ color: isActive ? '#E07A3A' : '#9AAAB8' }}
                   >
                     {item.label}
                   </span>
+                </span>
+              )
+              return item.external ? (
+                <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer"
+                  className="flex flex-col items-center justify-center flex-1 h-full">
+                  {content}
+                </a>
+              ) : (
+                <Link key={item.href} href={item.href}
+                  className="flex flex-col items-center justify-center flex-1 h-full">
+                  {content}
                 </Link>
               )
             })}
 
-            {/* Central Scan Button — burgundy, lifted */}
-            <Link href="/scan" className="flex items-center justify-center flex-shrink-0 -mt-6 mx-1">
+            {/* Centre Scan button — orange, lifted, matches reference */}
+            <Link
+              href="/scan"
+              className="flex items-center justify-center flex-shrink-0 -mt-7 mx-2"
+            >
               <div
-                className="w-[58px] h-[58px] rounded-full flex items-center justify-center active:scale-95 transition-transform duration-150"
+                className="w-[60px] h-[60px] rounded-full flex flex-col items-center justify-center gap-0.5 active:scale-95 transition-transform duration-150"
                 style={{
-                  backgroundColor: '#7B1234',
-                  boxShadow: '0 4px 20px rgba(123,18,52,0.40)',
+                  backgroundColor: '#E07A3A',
+                  boxShadow: '0 4px 18px rgba(224,122,58,0.50)',
                   border: '3px solid white',
                 }}
               >
-                <Scan className="w-[22px] h-[22px] text-white" strokeWidth={1.8} />
+                <ScanLine className="w-[22px] h-[22px] text-white" strokeWidth={1.8} />
+                <span className="text-[8px] font-bold text-white tracking-wide">SCAN</span>
               </div>
             </Link>
 
-            {navItems.slice(2).map((item) => {
+            {/* Right two items */}
+            {rightItems.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
               const Icon = item.icon
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex flex-col items-center justify-center flex-1 h-full gap-[3px] min-h-[44px]"
-                >
+                <Link key={item.href} href={item.href}
+                  className="flex flex-col items-center justify-center flex-1 h-full gap-[3px] min-h-[44px]">
                   <Icon
-                    className="w-[22px] h-[22px] transition-all"
-                    style={{ color: isActive ? '#C8472A' : '#C0ADA4' }}
+                    className="w-[22px] h-[22px] transition-colors"
+                    style={{ color: isActive ? '#E07A3A' : '#9AAAB8' }}
                     strokeWidth={isActive ? 2.2 : 1.6}
                   />
                   <span
-                    className="text-[9px] font-bold tracking-wide"
-                    style={{ color: isActive ? '#C8472A' : '#C0ADA4' }}
+                    className="text-[10px] font-semibold"
+                    style={{ color: isActive ? '#E07A3A' : '#9AAAB8' }}
                   >
                     {item.label}
                   </span>
                 </Link>
               )
             })}
+
           </div>
         </div>
       </div>
