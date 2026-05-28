@@ -399,9 +399,19 @@ export default function NewV2Dashboard() {
 
         </div>
 
-        {/* ── THANKS FOR SUPPORTING LOCAL ── full width */}
+        {/* ── THANKS FOR SUPPORTING LOCAL ── */}
         <div className="-mx-5">
-          <img src="/local-banner.png" alt="Thanks for supporting local" className="w-full h-auto" />
+          <div className="relative w-full h-32 overflow-hidden">
+            <img src="/local-banner.png" alt="" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center px-5">
+              <p className="text-[18px] font-bold text-white leading-tight" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+                Thanks for supporting local
+              </p>
+              <p className="text-[13px] font-medium text-white mt-1" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.3)' }}>
+                Every visit to Penkey helps our community thrive
+              </p>
+            </div>
+          </div>
         </div>
 
         <BottomNav />
