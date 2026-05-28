@@ -186,7 +186,7 @@ export function UnifiedRewardsClient({
 
   // Fixed reward tiers — shown even when no DB rewards configured
   const fixedTiers = [
-    { beans: 2,  icon: <Sparkles className="w-4 h-4" />, label: 'Free syrup shot',   sub: 'Add any flavour to your drink',    color: '#E07A3A' },
+    { beans: 2,  icon: <Sparkles className="w-4 h-4" />, label: 'Free syrup shot',   sub: 'Add any flavour to your drink',    color: '#D87A2E' },
     { beans: 8,  icon: <Coffee className="w-4 h-4" />, label: 'Free coffee',        sub: 'Any hot or cold coffee, on us',    color: '#2C3E50' },
     { beans: 15, icon: <ShoppingBag className="w-4 h-4" />, label: 'Free snack',         sub: 'Pastry, toastie — your choice',    color: '#3D5A73' },
     { beans: 25, icon: <ShoppingBag className="w-4 h-4" />, label: 'Free meal',          sub: 'A full lunch, completely free',    color: '#1C2B3A' },
@@ -222,7 +222,7 @@ export function UnifiedRewardsClient({
               <div className="relative">
                 <svg width="72" height="72" className="-rotate-90">
                   <circle cx="36" cy="36" r="30" stroke="rgba(255,255,255,0.15)" strokeWidth="6" fill="none" />
-                  <circle cx="36" cy="36" r="30" stroke="#E07A3A" strokeWidth="6" fill="none"
+                  <circle cx="36" cy="36" r="30" stroke="#D87A2E" strokeWidth="6" fill="none"
                     strokeLinecap="round"
                     strokeDasharray={2 * Math.PI * 30}
                     strokeDashoffset={2 * Math.PI * 30 * (1 - nextProgress / 100)}
@@ -265,7 +265,7 @@ export function UnifiedRewardsClient({
 
             <p className="text-[13px] font-medium leading-snug" style={{ color: 'rgba(255,255,255,0.6)' }}>
               {nextReward
-                ? <><span className="font-bold" style={{ color: '#E07A3A' }}>{nextReward.points_required - currentPoints} more</span> until your next reward</>
+                ? <><span className="font-bold" style={{ color: '#D87A2E' }}>{nextReward.points_required - currentPoints} more</span> until your next reward</>
                 : <span className="font-semibold text-white">All rewards unlocked — go redeem!</span>
               }
             </p>
@@ -291,7 +291,7 @@ export function UnifiedRewardsClient({
                     <p className="text-[15px] font-extrabold text-white leading-tight">{reward.name}</p>
                     <p className="text-[12px] mt-0.5" style={{ color: 'rgba(255,255,255,0.55)' }}>{reward.points_required} beans</p>
                   </div>
-                  <span className="text-[11px] font-bold text-white px-3 py-1.5 rounded-full" style={{ backgroundColor: '#E07A3A' }}>Use now</span>
+                  <span className="text-[11px] font-bold text-white px-3 py-1.5 rounded-full" style={{ backgroundColor: '#D87A2E' }}>Use now</span>
                 </button>
               ))}
             </div>
@@ -313,13 +313,13 @@ export function UnifiedRewardsClient({
                       style={{ border: expiringSoon ? '1.5px solid #FCA5A5' : '1.5px solid transparent' }}>
                       <div className="w-10 h-10 rounded-[12px] flex items-center justify-center flex-shrink-0"
                         style={{ backgroundColor: expiringSoon ? '#FEF2F2' : '#FDF0E6' }}>
-                        <Gift className="w-5 h-5" style={{ color: expiringSoon ? '#EF4444' : '#E07A3A' }} />
+                        <Gift className="w-5 h-5" style={{ color: expiringSoon ? '#EF4444' : '#D87A2E' }} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-[14px] font-bold leading-tight truncate" style={{ color: '#1C2B3A' }}>{reward.name}</p>
                         <p className="text-[11px] mt-0.5 font-medium" style={{ color: expiringSoon ? '#EF4444' : '#B08070' }}>{getExpiryText(userReward.expires_at)}</p>
                       </div>
-                      <div className="flex items-center gap-1 text-[11px] font-bold" style={{ color: '#E07A3A' }}>
+                      <div className="flex items-center gap-1 text-[11px] font-bold" style={{ color: '#D87A2E' }}>
                         <QrCode className="w-3.5 h-3.5" />
                         Show
                       </div>
@@ -373,7 +373,7 @@ export function UnifiedRewardsClient({
                     </div>
                   ) : isNext ? (
                     <div className="flex-shrink-0 text-right">
-                      <span className="text-[10px] font-bold px-2 py-1 rounded-full" style={{ backgroundColor: 'rgba(224,122,58,0.12)', color: '#E07A3A' }}>
+                      <span className="text-[10px] font-bold px-2 py-1 rounded-full" style={{ backgroundColor: 'rgba(216,122,46,0.12)', color: '#D87A2E' }}>
                         {tier.beans - currentPoints} to go
                       </span>
                     </div>
@@ -397,7 +397,7 @@ export function UnifiedRewardsClient({
               { n: '4', text: 'Spend them on free stuff', sub: 'Syrup, coffee, snacks, full meals' },
             ].map(({ n, text, sub }, i, arr) => (
               <div key={n} className={`flex items-center gap-4 px-4 py-3.5 ${i < arr.length - 1 ? 'border-b' : ''}`} style={{ borderColor: '#F5EDE5' }}>
-                <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-[12px] font-extrabold text-white" style={{ backgroundColor: '#E07A3A' }}>{n}</div>
+                <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-[12px] font-extrabold text-white" style={{ backgroundColor: '#D87A2E' }}>{n}</div>
                 <div>
                   <p className="text-[13px] font-semibold leading-tight" style={{ color: '#1C2B3A' }}>{text}</p>
                   <p className="text-[11px] mt-0.5" style={{ color: '#8A9AAA' }}>{sub}</p>

@@ -85,7 +85,7 @@ export default function OrderPage() {
         {/* Header */}
         <div className="px-5 pt-14 pb-4 flex items-start justify-between">
           <div className="flex-1">
-            <p className="text-[18px] font-bold italic leading-none mb-0.5" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>
+            <p className="text-[18px] font-bold italic leading-none mb-0.5" style={{ color: '#D87A2E', fontFamily: 'Georgia, serif' }}>
               Coffee, your way.{' '}
               <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px' }} />
             </p>
@@ -181,9 +181,9 @@ export default function OrderPage() {
           <div>
             <div className="flex items-center justify-between px-1 mb-2">
               <p className="text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: '#9AAAB8' }}>Your order</p>
-              <button onClick={addItem} className="flex items-center gap-1 text-[12px] font-bold" style={{ color: '#E07A3A' }}>
+              <button onClick={addItem} className="flex items-center gap-1 text-[12px] font-bold" style={{ color: '#D87A2E' }}>
                 Add items
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E07A3A" strokeWidth="2.5" strokeLinecap="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D87A2E" strokeWidth="2.5" strokeLinecap="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
               </button>
             </div>
             <div className="bg-white rounded-[16px] overflow-hidden" style={{ border: '1px solid #EDF1F4', boxShadow: '0 1px 4px rgba(28,43,58,0.06)' }}>
@@ -191,7 +191,7 @@ export default function OrderPage() {
                 <div key={orderItem.id} className={`px-4 pt-3 pb-3 ${index < orderItems.length - 1 ? 'border-b' : ''}`} style={{ borderColor: '#EDF1F4' }}>
                   <div className="flex items-center gap-3">
                     {/* Qty badge */}
-                    <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[11px] font-extrabold flex-shrink-0" style={{ backgroundColor: '#E07A3A' }}>
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[11px] font-extrabold flex-shrink-0" style={{ backgroundColor: '#D87A2E' }}>
                       {orderItem.quantity}
                     </div>
                     <input
@@ -272,7 +272,7 @@ export default function OrderPage() {
                 <rect x="14" y="10" width="18" height="8" rx="2" fill="#EDF1F4"/>
                 <path d="M14 54h18" stroke="#EDF1F4" strokeWidth="2" strokeLinecap="round"/>
                 <text x="23" y="42" textAnchor="middle" fill="#1C2B3A" fontSize="8" fontWeight="800" fontFamily="sans-serif">PEN</text>
-                <text x="23" y="50" textAnchor="middle" fill="#E07A3A" fontSize="7" fontWeight="800" fontFamily="sans-serif">KEY</text>
+                <text x="23" y="50" textAnchor="middle" fill="#D87A2E" fontSize="7" fontWeight="800" fontFamily="sans-serif">KEY</text>
               </svg>
             </div>
           </div>
