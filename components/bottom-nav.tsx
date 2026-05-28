@@ -34,12 +34,12 @@ export function BottomNav() {
                 <span className="flex flex-col items-center justify-center flex-1 h-full gap-[3px] min-h-[44px] w-full">
                   <Icon
                     className="w-[22px] h-[22px] transition-colors"
-                    style={{ color: isActive ? '#F28A2E' : '#A8B8C8' }}
+                    style={{ color: isActive ? '#D87A2E' : '#A8B8C8' }}
                     strokeWidth={isActive ? 2 : 1.5}
                   />
                   <span
                     className="text-[10px] font-medium"
-                    style={{ color: isActive ? '#F28A2E' : '#A8B8C8' }}
+                    style={{ color: isActive ? '#D87A2E' : '#A8B8C8' }}
                   >
                     {item.label}
                   </span>
@@ -58,21 +58,21 @@ export function BottomNav() {
               )
             })}
 
-            {/* Centre Scan button — warmer orange, softer glow */}
+            {/* Centre Scan button — smaller, softer, more subtle */}
             <Link
               href="/scan"
-              className="flex items-center justify-center flex-shrink-0 -mt-7 mx-2"
+              className="flex items-center justify-center flex-shrink-0 -mt-5 mx-2"
             >
               <div
-                className="w-[60px] h-[60px] rounded-full flex flex-col items-center justify-center gap-0.5 active:scale-95 transition-transform duration-150"
+                className="w-[52px] h-[52px] rounded-full flex flex-col items-center justify-center gap-0.5 active:scale-95 transition-transform duration-150"
                 style={{
-                  background: 'linear-gradient(135deg, #F28A2E 0%, #E67B22 100%)',
-                  boxShadow: '0 4px 16px rgba(242,138,46,0.35)',
+                  background: 'linear-gradient(135deg, #E87A2E 0%, #D66B1F 100%)',
+                  boxShadow: '0 3px 12px rgba(232,122,46,0.25)',
                   border: '3px solid white',
                 }}
               >
-                <ScanLine className="w-[22px] h-[22px] text-white" strokeWidth={1.8} />
-                <span className="text-[8px] font-semibold text-white tracking-wide">SCAN</span>
+                <ScanLine className="w-[20px] h-[20px] text-white" strokeWidth={1.8} />
+                <span className="text-[7px] font-semibold text-white tracking-wide">SCAN</span>
               </div>
             </Link>
 
@@ -85,12 +85,12 @@ export function BottomNav() {
                   className="flex flex-col items-center justify-center flex-1 h-full gap-[3px] min-h-[44px]">
                   <Icon
                     className="w-[22px] h-[22px] transition-colors"
-                    style={{ color: isActive ? '#F28A2E' : '#A8B8C8' }}
+                    style={{ color: isActive ? '#D87A2E' : '#A8B8C8' }}
                     strokeWidth={isActive ? 2 : 1.5}
                   />
                   <span
                     className="text-[10px] font-medium"
-                    style={{ color: isActive ? '#F28A2E' : '#A8B8C8' }}
+                    style={{ color: isActive ? '#D87A2E' : '#A8B8C8' }}
                   >
                     {item.label}
                   </span>
