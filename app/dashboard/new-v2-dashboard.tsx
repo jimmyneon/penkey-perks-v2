@@ -220,10 +220,9 @@ export default function NewV2Dashboard() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F4F7F9' }}>
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
-
         <div className="px-5 pt-14 pb-28 space-y-4">
 
-          {/* ── HEADER — matches reference exactly ── */}
+          {/* ── HEADER ── */}
           <div className="flex items-start justify-between pt-1">
             {/* Left: greeting */}
             <div className="flex-1">
@@ -244,8 +243,8 @@ export default function NewV2Dashboard() {
               </p>
             </div>
             {/* Right: wordmark */}
-            <div className="flex flex-col items-end ml-6 mt-0.5">
-              <img src="/logo.png" alt="PENKEY Perks" className="h-40 w-auto" />
+            <div className="flex flex-col items-end ml-4">
+              <img src="/logo.png" alt="PENKEY Perks" className="h-24 w-auto object-contain" />
             </div>
           </div>
 
@@ -389,12 +388,12 @@ export default function NewV2Dashboard() {
 
         </div>
 
-        {/* ── THANKS FOR SUPPORTING LOCAL ── full width */}
-        <div className="rounded-[18px] overflow-hidden">
-          <img src="/local-banner.png" alt="Thanks for supporting local" className="w-full h-auto" />
-        </div>
-
         <BottomNav />
+      </div>
+
+      {/* ── THANKS FOR SUPPORTING LOCAL ── full width outside container */}
+      <div className="w-full px-5 mt-4">
+        <img src="/local-banner.png" alt="Thanks for supporting local" className="w-full h-auto rounded-[18px]" />
       </div>
 
       {/* Voucher Detail Dialog */}
