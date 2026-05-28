@@ -243,7 +243,7 @@ export default function NewV2Dashboard() {
               </p>
             </div>
             {/* Right: wordmark */}
-            <div className="flex flex-col items-end ml-4">
+            <div className="flex flex-col items-end ml-6">
               <img src="/logo.png" alt="PENKEY Perks" className="h-24 w-auto object-contain" />
             </div>
           </div>
@@ -388,12 +388,12 @@ export default function NewV2Dashboard() {
 
         </div>
 
-        {/* ── THANKS FOR SUPPORTING LOCAL ── full width with negative margins */}
-        <div className="-mx-5">
-          <img src="/local-banner.png" alt="Thanks for supporting local" className="w-full h-auto" />
-        </div>
-
         <BottomNav />
+      </div>
+
+      {/* ── THANKS FOR SUPPORTING LOCAL ── full width outside max-width container */}
+      <div className="w-full">
+        <img src="/local-banner.png" alt="Thanks for supporting local" className="w-full h-auto" />
       </div>
 
       {/* Voucher Detail Dialog */}
