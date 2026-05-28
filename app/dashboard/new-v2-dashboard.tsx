@@ -399,8 +399,9 @@ export default function NewV2Dashboard() {
         </div>
 
         {/* ── THANKS FOR SUPPORTING LOCAL ── */}
-        <div className="rounded-[18px] overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(36,54,75,0.08)' }}>
-          <img src="/local-banner.png" alt="" className="w-full h-auto" />
+        <div className="rounded-[18px] overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-amber-50 p-6 text-center">
+          <p className="text-xl font-bold text-gray-800">Thanks for supporting local</p>
+          <p className="text-sm text-gray-600 mt-2">Every visit to Penkey helps our community thrive</p>
         </div>
 
         <BottomNav />
