@@ -223,7 +223,7 @@ export default function NewV2Dashboard() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
-        <div className="px-5 pt-14 pb-28 space-y-5">
+        <div className="px-5 pt-14 pb-20 space-y-5">
 
           {/* ── HEADER ── */}
           <div className="flex items-start justify-between pt-1">
