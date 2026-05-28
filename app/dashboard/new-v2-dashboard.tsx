@@ -229,7 +229,12 @@ export default function NewV2Dashboard() {
             <div className="flex-1">
               <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
                 {getGreeting()},{' '}
-                <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px' }} />
+                <img 
+                  src="/heart.png" 
+                  alt="" 
+                  className="inline-block w-5 h-5 object-contain align-middle" 
+                  style={{ marginBottom: '2px', animation: 'heartPulse 0.6s ease-in-out 3' }} 
+                />
               </p>
               <h1 className="text-[72px] font-extrabold leading-none tracking-tight mt-0.5" style={{ color: '#1C2B3A' }}>
                 {firstName}
