@@ -19,9 +19,12 @@ export function BottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50">
-      <div className="w-full max-w-[430px] mx-auto">
-        <div className="bg-white shadow-[0_-1px_0_rgba(28,43,58,0.08),0_-4px_20px_rgba(28,43,58,0.06)]">
-          <div className="flex items-center h-[64px] pb-safe">
+      <div className="w-full max-w-[430px] mx-auto px-4 pb-4">
+        <div 
+          className="bg-white/80 backdrop-blur-xl shadow-[0_-1px_0_rgba(28,43,58,0.08),0_-4px_20px_rgba(28,43,58,0.06)] rounded-[28px]"
+          style={{ WebkitBackdropFilter: 'blur(20px)' }}
+        >
+          <div className="flex items-center h-[64px]">
 
             {/* Left two items */}
             {leftItems.map((item) => {

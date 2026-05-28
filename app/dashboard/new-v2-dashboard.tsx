@@ -232,7 +232,7 @@ export default function NewV2Dashboard() {
                   src="/heart.png" 
                   alt="" 
                   className="inline-block w-5 h-5 object-contain align-middle" 
-                  style={{ marginBottom: '2px', animation: 'heartPulse 0.6s ease-in-out 3' }} 
+                  style={{ marginBottom: '2px', animation: 'heartPulse 1.2s ease-in-out 3' }} 
                 />
               </p>
               <h1 className="text-[72px] font-extrabold leading-none tracking-tight mt-0.5" style={{ color: '#2C3E50' }}>
