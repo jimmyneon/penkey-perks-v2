@@ -361,13 +361,13 @@ export default function NewV2Dashboard() {
             <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#8A96A0' }}>
               YOUR BEAN BALANCE
             </p>
-            <div className="flex items-end gap-4 mb-5">
+            <div className="flex items-end gap-4 mb-2">
               <span className="text-[64px] font-bold leading-none tracking-tight" style={{ color: '#24364B' }}>
                 {currentBeans}
               </span>
               <span className="text-[20px] font-medium mb-1" style={{ color: '#8A96A0' }}>beans</span>
             </div>
-            <div className="mb-5">
+            <div className="mb-3">
               <BrushUnderline className="text-[#F28A2E] w-20" />
             </div>
             <div className="grid grid-cols-2 gap-4 pt-4" style={{ borderTop: '1px solid #E8E2D8' }}>
