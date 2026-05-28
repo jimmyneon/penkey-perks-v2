@@ -346,23 +346,10 @@ export default function NewV2Dashboard() {
                   <span style={{ color: '#E07A3A' }}>♡</span>
                 </p>
               </div>
-              {/* Coffee cup illustration placeholder — orange circle with cup lines */}
+              {/* Coffee cup illustration */}
               <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center"
                 style={{ width: 88, height: 88 }}>
-                <div className="w-full h-full rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(224,122,58,0.10)' }}>
-                  <svg width="44" height="52" viewBox="0 0 44 52" fill="none">
-                    <rect x="6" y="12" width="28" height="32" rx="4" fill="#1C2B3A" opacity="0.12"/>
-                    <rect x="8" y="14" width="24" height="28" rx="3" fill="#1C2B3A" opacity="0.10"/>
-                    <text x="22" y="32" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#1C2B3A" opacity="0.5" fontFamily="sans-serif">PEN</text>
-                    <text x="22" y="43" textAnchor="middle" fontSize="7" fill="#E07A3A" opacity="0.7" fontFamily="sans-serif">KEY</text>
-                    <path d="M34 20 Q40 24 34 28" stroke="#1C2B3A" strokeWidth="2" strokeLinecap="round" opacity="0.25" fill="none"/>
-                    {/* steam */}
-                    <path d="M16 8 Q17 4 16 1" stroke="#1C2B3A" strokeWidth="1.5" strokeLinecap="round" opacity="0.2" fill="none"/>
-                    <path d="M22 6 Q23 2 22 0" stroke="#1C2B3A" strokeWidth="1.5" strokeLinecap="round" opacity="0.2" fill="none"/>
-                    <path d="M28 8 Q29 4 28 1" stroke="#1C2B3A" strokeWidth="1.5" strokeLinecap="round" opacity="0.2" fill="none"/>
-                  </svg>
-                </div>
+                <img src="/coffeecup.png" alt="" className="w-full h-full object-contain" />
               </div>
             </div>
           )}
