@@ -388,12 +388,12 @@ export default function NewV2Dashboard() {
 
         </div>
 
-        <BottomNav />
-      </div>
+        {/* ── THANKS FOR SUPPORTING LOCAL ── full width with negative margins */}
+        <div className="-mx-5">
+          <img src="/local-banner.png" alt="Thanks for supporting local" className="w-full h-auto" />
+        </div>
 
-      {/* ── THANKS FOR SUPPORTING LOCAL ── full width outside container */}
-      <div className="w-full px-5 mt-4">
-        <img src="/local-banner.png" alt="Thanks for supporting local" className="w-full h-auto rounded-[18px]" />
+        <BottomNav />
       </div>
 
       {/* Voucher Detail Dialog */}
