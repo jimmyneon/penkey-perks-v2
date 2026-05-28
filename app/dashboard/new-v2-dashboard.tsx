@@ -399,10 +399,15 @@ export default function NewV2Dashboard() {
         </div>
 
         {/* ── THANKS FOR SUPPORTING LOCAL ── */}
-        <div className="rounded-[18px] overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-amber-50 p-6 text-center min-h-[100px] flex items-center justify-center">
-          <div>
-            <p className="text-xl font-bold text-gray-800">Thanks for supporting local</p>
-            <p className="text-sm text-gray-600 mt-2">Every visit to Penkey helps our community thrive</p>
+        <div className="rounded-[18px] overflow-hidden shadow-sm bg-blue-50 p-6 text-center min-h-[100px] flex items-center justify-center">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-blue-200 flex items-center justify-center">
+              <img src="/heart.png" alt="" className="w-6 h-6 object-contain" />
+            </div>
+            <div className="text-left">
+              <p className="text-lg font-bold text-blue-900">Thanks for supporting local</p>
+              <p className="text-sm text-blue-700">Every visit to Penkey helps our community thrive</p>
+            </div>
           </div>
         </div>
 
