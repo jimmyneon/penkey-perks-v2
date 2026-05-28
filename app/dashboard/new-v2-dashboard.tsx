@@ -397,14 +397,19 @@ export default function NewV2Dashboard() {
           </div>
 
           {/* ── THANKS FOR SUPPORTING LOCAL ── */}
-          <div className="rounded-[18px] overflow-hidden shadow-sm bg-blue-50 p-6 text-center min-h-[100px] flex items-center justify-center">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-blue-200 flex items-center justify-center">
-                <img src="/heart.png" alt="" className="w-6 h-6 object-contain" />
+          <div className="rounded-[18px] overflow-hidden" style={{ backgroundColor: '#F8F5EF', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}>
+            <div className="flex items-center p-5">
+              <div className="flex items-center gap-4 flex-1">
+                <div className="w-12 h-12 rounded-full bg-blue-200 flex items-center justify-center flex-shrink-0">
+                  <img src="/heart.png" alt="" className="w-6 h-6 object-contain" />
+                </div>
+                <div className="text-left">
+                  <p className="text-lg font-bold text-blue-900">Thanks for supporting local</p>
+                  <p className="text-sm text-blue-700">Every visit to Penkey helps our community thrive</p>
+                </div>
               </div>
-              <div className="text-left">
-                <p className="text-lg font-bold text-blue-900">Thanks for supporting local</p>
-                <p className="text-sm text-blue-700">Every visit to Penkey helps our community thrive</p>
+              <div className="w-20 h-20 flex-shrink-0">
+                <img src="/local.png" alt="" className="w-full h-full object-contain" />
               </div>
             </div>
           </div>
