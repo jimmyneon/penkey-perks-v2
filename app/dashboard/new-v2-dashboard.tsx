@@ -307,10 +307,10 @@ export default function NewV2Dashboard() {
                 style={{ borderLeft: '1px solid rgba(255,255,255,0.12)' }}
               >
                 <div
-                  className="w-14 h-14 rounded-full flex items-center justify-center"
+                  className="w-16 h-16 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: '#F8F5EF', border: '1.5px solid #E8E2D8' }}
                 >
-                  <GiftIcon className="w-12 h-12" />
+                  <GiftIcon className="w-12 h-12 object-contain" />
                 </div>
                 <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-center" style={{ color: '#F8F5EF' }}>
                   NEXT REWARD
