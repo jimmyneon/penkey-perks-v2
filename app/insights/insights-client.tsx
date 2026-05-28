@@ -99,22 +99,19 @@ export function InsightsClient({ user, analyticsData }: InsightsClientProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 pb-20">
-      <div className="max-w-4xl mx-auto p-4 space-y-6">
+    <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
+      <div className="max-w-[430px] mx-auto px-5 space-y-5">
+
         {/* Header */}
-        <div className="flex items-center gap-4 mb-6">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => router.back()}
-            className="rounded-full"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <div className="flex-1">
-            <h1 className="text-2xl sm:text-3xl font-heading font-bold text-penkey-dark">My Rewards & Savings</h1>
-            <p className="text-sm text-green-600 font-semibold">See how much you've saved!</p>
-          </div>
+        <div className="pt-14 pb-5">
+          <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
+            Your Insights{' '}
+            <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px' }} />
+          </p>
+          <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#1C2B3A' }}>Insights</h1>
+          <p className="text-[13px] font-medium mt-1.5 leading-snug" style={{ color: '#8A96A0' }}>
+            Your activity at a glance
+          </p>
         </div>
 
         {/* Summary Stats Grid - Focus on SAVINGS & BENEFITS */}
