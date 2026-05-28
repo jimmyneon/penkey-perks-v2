@@ -345,7 +345,12 @@ export default function NewV2Dashboard() {
                 <p className="text-[13px] font-medium mt-1 leading-snug" style={{ color: '#5A6A7A' }}>
                   You've collected {currentBeans} beans.<br />
                   Keep going!{' '}
-                  <span style={{ color: '#D87A2E' }}>♡</span>
+                  <img 
+                    src="/heart.png" 
+                    alt="" 
+                    className="inline-block w-5 h-5 object-contain align-middle" 
+                    style={{ marginBottom: '2px', transform: 'rotate(-15deg)' }} 
+                  />
                 </p>
               </div>
               {/* Coffee cup illustration */}
