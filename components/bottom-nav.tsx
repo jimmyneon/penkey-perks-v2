@@ -21,8 +21,8 @@ export function BottomNav() {
     <nav className="fixed bottom-0 left-0 right-0 z-50">
       <div className="w-full max-w-[430px] mx-auto px-4 pb-4">
         <div
-          className="bg-white/90 backdrop-blur-xl shadow-[0_-1px_0_rgba(36,54,75,0.06),0_-4px_20px rgba(36,54,75,0.04)] rounded-[28px]"
-          style={{ WebkitBackdropFilter: 'blur(20px)' }}
+          className="backdrop-blur-xl shadow-[0_-1px_0_rgba(36,54,75,0.06),0_-4px_20px rgba(36,54,75,0.04)] rounded-[28px]"
+          style={{ backgroundColor: '#F9F7F2', WebkitBackdropFilter: 'blur(20px)' }}
         >
           <div className="flex items-center h-[64px]">
 

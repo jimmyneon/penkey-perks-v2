@@ -220,7 +220,7 @@ export default function NewV2Dashboard() {
   const firstName = firstNameRaw.charAt(0).toUpperCase() + firstNameRaw.slice(1).toLowerCase()
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#F7F5F0' }}>
+    <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
         <div className="px-5 pt-14 pb-28 space-y-5">
 
@@ -402,7 +402,7 @@ export default function NewV2Dashboard() {
         {/* ── THANKS FOR SUPPORTING LOCAL ── */}
         <div className="rounded-[18px] overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(36,54,75,0.08)' }}>
           <div className="relative w-full h-36">
-            <img src="/local.png" alt="" className="w-full h-full object-cover" />
+            <img src="/local-banner.png" alt="" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/40" />
             <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
               <p className="text-[20px] font-bold text-white leading-tight" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
