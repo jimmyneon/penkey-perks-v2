@@ -86,7 +86,8 @@ export default function OrderPage() {
         <div className="px-5 pt-14 pb-4 flex items-start justify-between">
           <div className="flex-1">
             <p className="text-[18px] font-bold italic leading-none mb-0.5" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>
-              Coffee, your way.
+              Coffee, your way.{' '}
+              <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px' }} />
             </p>
             <h1 className="text-[34px] font-extrabold leading-tight tracking-tight" style={{ color: '#1C2B3A' }}>Order Now</h1>
             <p className="text-[13px] font-medium mt-1 leading-snug" style={{ color: '#8A96A0' }}>
@@ -94,14 +95,7 @@ export default function OrderPage() {
             </p>
           </div>
           <div className="flex flex-col items-end gap-3 ml-3 flex-shrink-0">
-            <div className="text-right leading-none">
-              <span className="block text-[18px] font-extrabold tracking-tight" style={{ color: '#1C2B3A' }}>
-                PEN<span style={{ color: '#E07A3A' }}>KEY</span>
-              </span>
-              <span className="block text-[14px] font-medium italic" style={{ color: '#1C2B3A', fontFamily: 'Georgia, serif' }}>
-                Perks &#x2756;
-              </span>
-            </div>
+            <img src="/logo.png" alt="PENKEY Perks" className="h-10 w-auto" />
             <button onClick={() => router.push('/profile')} className="w-10 h-10 rounded-full border-2 flex items-center justify-center" style={{ borderColor: '#E07A3A', backgroundColor: '#FEF3EA' }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E07A3A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>

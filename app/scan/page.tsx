@@ -45,14 +45,7 @@ export default function ScanPage() {
               Show this code to earn your stamp.
             </p>
           </div>
-          <div className="text-right leading-none mt-1 flex-shrink-0 ml-4">
-            <span className="block text-[18px] font-extrabold tracking-tight" style={{ color: '#1C2B3A' }}>
-              PEN<span style={{ color: '#E07A3A' }}>KEY</span>
-            </span>
-            <span className="block text-[14px] font-medium italic" style={{ color: '#1C2B3A', fontFamily: 'Georgia, serif' }}>
-              Perks &#x2756;
-            </span>
-          </div>
+          <img src="/logo.png" alt="PENKEY Perks" className="h-10 w-auto mt-1 flex-shrink-0 ml-4" />
         </div>
 
         <div className="px-4 space-y-4">
@@ -110,11 +103,7 @@ export default function ScanPage() {
             style={{ backgroundColor: 'rgba(224,122,58,0.08)', border: '1px solid rgba(224,122,58,0.15)' }}
           >
             <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(224,122,58,0.15)' }}>
-              {/* Bean icon */}
-              <svg width="22" height="26" viewBox="0 0 20 24" fill="none">
-                <ellipse cx="10" cy="12" rx="8" ry="11" fill="#E07A3A" opacity="0.9"/>
-                <ellipse cx="10" cy="9" rx="4" ry="5" fill="#1C2B3A" opacity="0.25"/>
-              </svg>
+              <img src="/bean.png" alt="" className="w-7 h-7 object-contain" />
             </div>
             <div className="flex-1">
               <p className="text-[16px] font-extrabold leading-tight" style={{ color: '#1C2B3A' }}>Every scan = 1 stamp</p>

@@ -86,14 +86,7 @@ export default function CampaignsPage() {
             </p>
           </div>
           <div className="flex flex-col items-end gap-3 ml-3 flex-shrink-0">
-            <div className="text-right leading-none">
-              <span className="block text-[18px] font-extrabold tracking-tight" style={{ color: '#1C2B3A' }}>
-                PEN<span style={{ color: '#E07A3A' }}>KEY</span>
-              </span>
-              <span className="block text-[14px] font-medium italic" style={{ color: '#1C2B3A', fontFamily: 'Georgia, serif' }}>
-                Perks &#x2756;
-              </span>
-            </div>
+            <img src="/logo.png" alt="PENKEY Perks" className="h-10 w-auto" />
             <button onClick={() => router.push('/profile')} className="w-10 h-10 rounded-full border-2 flex items-center justify-center" style={{ borderColor: '#E07A3A', backgroundColor: '#FEF3EA' }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E07A3A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>

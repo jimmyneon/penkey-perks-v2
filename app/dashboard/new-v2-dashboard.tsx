@@ -227,7 +227,8 @@ export default function NewV2Dashboard() {
             {/* Left: greeting */}
             <div className="flex-1">
               <p className="text-[18px] font-bold italic leading-tight" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>
-                {getGreeting()}, ♡
+                {getGreeting()},{' '}
+                <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px' }} />
               </p>
               <h1 className="text-[42px] font-extrabold leading-none tracking-tight mt-0.5" style={{ color: '#1C2B3A' }}>
                 {firstName}
@@ -239,14 +240,7 @@ export default function NewV2Dashboard() {
             </div>
             {/* Right: wordmark + avatar */}
             <div className="flex flex-col items-end gap-3 ml-3 mt-0.5">
-              <div className="text-right leading-none">
-                <span className="block text-[18px] font-extrabold tracking-tight" style={{ color: '#1C2B3A' }}>
-                  PEN<span style={{ color: '#E07A3A' }}>KEY</span>
-                </span>
-                <span className="block text-[14px] font-medium italic" style={{ color: '#1C2B3A', fontFamily: 'Georgia, serif' }}>
-                  Perks ✦
-                </span>
-              </div>
+              <img src="/logo.png" alt="PENKEY Perks" className="h-10 w-auto" />
               <button
                 onClick={() => router.push('/profile')}
                 className="w-10 h-10 rounded-full border-2 flex items-center justify-center"
@@ -286,10 +280,7 @@ export default function NewV2Dashboard() {
                         }}
                       >
                         {filled && (
-                          <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
-                            <ellipse cx="10" cy="10" rx="7" ry="9" fill="rgba(255,255,255,0.9)" />
-                            <ellipse cx="10" cy="8" rx="3.5" ry="4.5" fill="rgba(100,60,20,0.5)" />
-                          </svg>
+                          <img src="/bean.png" alt="" className="w-4 h-4 object-contain" style={{ filter: 'brightness(0) invert(1)', opacity: 0.9 }} />
                         )}
                       </div>
                     )
@@ -389,10 +380,7 @@ export default function NewV2Dashboard() {
             <div className="grid grid-cols-2 gap-4 pt-4" style={{ borderTop: '1px solid #EDF1F4' }}>
               <div className="flex items-start gap-3">
                 <div className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F0F4F7', border: '1.5px solid #E0E8EE' }}>
-                  <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-                    <ellipse cx="10" cy="10" rx="7" ry="9" fill="#8A96A0"/>
-                    <ellipse cx="10" cy="8" rx="3.5" ry="4.5" fill="#1C2B3A" opacity="0.4"/>
-                  </svg>
+                  <img src="/bean.png" alt="" className="w-5 h-5 object-contain opacity-60" />
                 </div>
                 <div>
                   <p className="text-[13px] font-semibold leading-tight" style={{ color: '#1C2B3A' }}>Collect beans</p>
@@ -415,40 +403,8 @@ export default function NewV2Dashboard() {
             </div>
           </div>
 
-          {/* ── THANKS FOR SUPPORTING LOCAL — slate card ── */}
-          <div
-            className="rounded-[18px] overflow-hidden relative"
-            style={{ backgroundColor: '#2C3E50', boxShadow: '0 4px 16px rgba(28,43,58,0.18)' }}
-          >
-            <div className="p-5 pr-[120px]">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center mb-3" style={{ backgroundColor: '#E07A3A' }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                </svg>
-              </div>
-              <h3 className="text-[16px] font-extrabold text-white leading-tight">Thanks for supporting local</h3>
-              <p className="text-[12px] font-medium mt-1.5 leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)' }}>
-                Every visit helps keep Penkey<br />independent and our community strong.
-                <span className="ml-1" style={{ color: '#E07A3A' }}>✦</span>
-              </p>
-            </div>
-            {/* Shop illustration placeholder */}
-            <div className="absolute right-0 top-0 bottom-0 w-[110px] flex items-end justify-end pr-3 pb-3 pointer-events-none">
-              <svg width="90" height="90" viewBox="0 0 90 90" fill="none" opacity="0.35">
-                {/* simple shop facade */}
-                <rect x="10" y="40" width="70" height="42" rx="2" fill="white"/>
-                <rect x="18" y="48" width="16" height="18" rx="1" fill="rgba(28,43,58,0.6)"/>
-                <rect x="40" y="50" width="12" height="12" rx="1" fill="rgba(28,43,58,0.6)"/>
-                <rect x="56" y="50" width="12" height="10" rx="1" fill="rgba(28,43,58,0.6)"/>
-                <path d="M5 40 Q45 20 85 40" fill="rgba(28,43,58,0.4)"/>
-                <rect x="30" y="20" width="30" height="6" rx="1" fill="white" opacity="0.7"/>
-                <text x="45" y="27" textAnchor="middle" fontSize="5" fontWeight="bold" fill="#1C2B3A" fontFamily="sans-serif">PENKEY</text>
-                <rect x="0" y="78" width="90" height="12" rx="2" fill="rgba(255,255,255,0.1)"/>
-                <rect x="15" y="70" width="3" height="8" fill="rgba(255,255,255,0.3)"/>
-                <rect x="72" y="70" width="3" height="8" fill="rgba(255,255,255,0.3)"/>
-              </svg>
-            </div>
-          </div>
+          {/* ── THANKS FOR SUPPORTING LOCAL ── */}
+          <img src="/local-banner.png" alt="Thanks for supporting local" className="w-full rounded-[18px]" />
 
         </div>
 
