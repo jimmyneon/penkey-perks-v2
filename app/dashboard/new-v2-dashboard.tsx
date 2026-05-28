@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation'
 import QRCodeLib from 'qrcode'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { BottomNav } from '@/components/bottom-nav'
+import { BrushUnderline } from '@/components/ui/brush-underline'
+import { SparkLines } from '@/components/ui/spark-lines'
 
 function getGreeting() {
   const h = new Date().getHours()
@@ -238,8 +240,9 @@ export default function NewV2Dashboard() {
               <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#24364B' }}>
                 {firstName}
               </h1>
-              <p className="text-[13px] font-medium mt-1.5" style={{ color: '#24364B' }}>
+              <p className="text-[13px] font-medium mt-1.5 flex items-center gap-1.5" style={{ color: '#24364B' }}>
                 Welcome to Penkey Perks
+                <SparkLines className="text-[#F28A2E] w-4 h-4" />
               </p>
             </div>
             {/* Right: wordmark */}
@@ -289,7 +292,9 @@ export default function NewV2Dashboard() {
                 <p className="text-[18px] font-bold text-white leading-tight">
                   {stampBeansNeeded} beans to your next treat
                 </p>
-                <div className="mt-1.5 w-12 h-[2.5px] rounded-full" style={{ backgroundColor: '#E07A3A' }} />
+                <div className="mt-1.5">
+                  <BrushUnderline className="text-[#F28A2E] w-16" />
+                </div>
                 <p className="text-[11px] mt-2" style={{ color: 'rgba(255,255,255,0.35)' }}>
                   {nextMilestone} beans = a reward
                 </p>
@@ -332,11 +337,11 @@ export default function NewV2Dashboard() {
               }}
             >
               <div className="p-5 pr-[120px]">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style={{ backgroundColor: '#F28A2E', boxShadow: '0 2px 8px rgba(242,138,46,0.25)' }}>
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="white">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style={{ backgroundColor: '#F8F5EF', boxShadow: '0 2px 8px rgba(242,138,46,0.15)', border: '1px solid #F28A2E' }}>
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="#F28A2E">
                     <circle cx="5" cy="5" r="4"/>
                   </svg>
-                  <span className="text-[10px] font-semibold text-white uppercase tracking-wide" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.15)' }}>Perk unlocked</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: '#F28A2E' }}>Perk unlocked</span>
                 </div>
                 <h3 className="text-[26px] font-bold leading-tight" style={{ color: '#24364B' }}>
                   Nice one!
