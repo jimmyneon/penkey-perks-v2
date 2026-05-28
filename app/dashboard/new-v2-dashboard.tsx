@@ -254,13 +254,13 @@ export default function NewV2Dashboard() {
           {/* ── YOUR PROGRESS ── */}
           <div
             className="rounded-[18px] overflow-hidden cursor-pointer active:scale-[0.985] transition-all duration-200"
-            style={{ background: 'linear-gradient(135deg, #2B3E52 0%, #24364A 100%)', boxShadow: '0 4px 20px rgba(36,54,75,0.15)' }}
+            style={{ backgroundColor: '#F0EDE5', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E5DFD5' }}
             onClick={() => setShowBeansPanel(true)}
           >
             <div className="flex">
               {/* Left: stamps */}
               <div className="flex-1 p-5 pr-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#8A96A0' }}>
                   YOUR PROGRESS
                 </p>
                 {/* Stamp dots */}
@@ -272,8 +272,8 @@ export default function NewV2Dashboard() {
                         key={i}
                         className="w-8 h-8 rounded-full flex items-center justify-center"
                         style={{
-                          backgroundColor: filled ? 'rgba(255,255,255,0.15)' : 'transparent',
-                          border: filled ? '2px solid rgba(255,255,255,0.35)' : '2px dashed rgba(255,255,255,0.22)',
+                          backgroundColor: filled ? 'rgba(36,54,75,0.08)' : 'transparent',
+                          border: filled ? '2px solid rgba(36,54,75,0.2)' : '2px dashed rgba(36,54,75,0.15)',
                         }}
                       >
                         <img
@@ -281,21 +281,21 @@ export default function NewV2Dashboard() {
                           alt=""
                           className="w-4 h-4 object-contain"
                           style={{
-                            filter: filled ? 'brightness(0) invert(1)' : 'brightness(0.3) grayscale(0.8)',
-                            opacity: filled ? 0.9 : 0.4
+                            filter: filled ? 'none' : 'brightness(0.5) grayscale(0.6)',
+                            opacity: filled ? 1 : 0.5
                           }}
                         />
                       </div>
                     )
                   })}
                 </div>
-                <p className="text-[18px] font-bold text-white leading-tight">
+                <p className="text-[18px] font-bold leading-tight" style={{ color: '#24364B' }}>
                   {stampBeansNeeded} beans to your next treat
                 </p>
                 <div className="mt-1.5">
                   <BrushUnderline className="text-[#F28A2E] w-16" />
                 </div>
-                <p className="text-[11px] mt-2" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                <p className="text-[11px] mt-2" style={{ color: '#8A96A0' }}>
                   {nextMilestone} beans = a reward
                 </p>
               </div>
@@ -303,23 +303,23 @@ export default function NewV2Dashboard() {
               {/* Right: next reward */}
               <div
                 className="w-[110px] flex-shrink-0 flex flex-col items-center justify-center p-4 gap-2"
-                style={{ borderLeft: '1px solid rgba(255,255,255,0.10)' }}
+                style={{ borderLeft: '1px solid #E5DFD5' }}
               >
                 <div
                   className="w-14 h-14 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.10)', border: '1.5px dashed rgba(255,255,255,0.30)' }}
+                  style={{ backgroundColor: '#E8E2D8', border: '1.5px dashed #D8D0C8' }}
                 >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#24364B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="2" y="7" width="20" height="14" rx="2"/>
                     <path d="M12 7v-3a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v3"/>
                     <path d="M16 21v-2a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
                     <circle cx="12" cy="14" r="2"/>
                   </svg>
                 </div>
-                <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-center" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-center" style={{ color: '#8A96A0' }}>
                   NEXT REWARD
                 </p>
-                <p className="text-[11px] font-medium text-white text-center leading-snug">
+                <p className="text-[11px] font-medium text-center leading-snug" style={{ color: '#24364B' }}>
                   {nextMilestone} beans<br />= reward
                 </p>
               </div>
@@ -330,18 +330,18 @@ export default function NewV2Dashboard() {
           {displayVouchers.length > 0 && (
             <div
               className="rounded-[18px] overflow-hidden relative cursor-pointer active:scale-[0.985] transition-all duration-200"
-              style={{ backgroundColor: '#F8F5EF', boxShadow: '0 2px 12px rgba(36,54,75,0.08)' }}
+              style={{ backgroundColor: '#F4EFE7', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}
               onClick={() => {
                 setSelectedVoucher(displayVouchers[0])
                 generateVoucherQRCode(displayVouchers[0])
               }}
             >
               <div className="p-5 pr-[120px]">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style={{ backgroundColor: '#F8F5EF', boxShadow: '0 2px 8px rgba(242,138,46,0.15)', border: '1px solid #F28A2E' }}>
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="#F28A2E">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style={{ backgroundColor: '#F28A2E', boxShadow: '0 2px 8px rgba(242,138,46,0.25)' }}>
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="white">
                     <circle cx="5" cy="5" r="4"/>
                   </svg>
-                  <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: '#F28A2E' }}>Perk unlocked</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wide text-white">Perk unlocked</span>
                 </div>
                 <h3 className="text-[26px] font-bold leading-tight" style={{ color: '#24364B' }}>
                   Nice one!
@@ -400,7 +400,7 @@ export default function NewV2Dashboard() {
         </div>
 
         {/* ── THANKS FOR SUPPORTING LOCAL ── */}
-        <div className="-mx-5">
+        <div className="rounded-[18px] overflow-hidden" style={{ boxShadow: '0 2px 12px rgba(36,54,75,0.08)' }}>
           <div className="relative w-full h-32 overflow-hidden">
             <img src="/local-banner.png" alt="" className="w-full h-full object-cover" />
             <div className="absolute inset-0 flex flex-col items-center justify-center px-5">
