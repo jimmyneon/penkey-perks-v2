@@ -243,7 +243,7 @@ export default function NewV2Dashboard() {
               </h1>
               <p className="text-[13px] font-medium mt-1.5 flex items-center gap-1.5" style={{ color: '#24364B' }}>
                 Welcome to Penkey Perks
-                <SparkLines className="text-[#F28A2E] w-6 h-6" />
+                <SparkLines className="text-[#F28A2E] w-8 h-8" />
               </p>
             </div>
             {/* Right: wordmark */}
@@ -273,14 +273,14 @@ export default function NewV2Dashboard() {
                         key={i}
                         className="w-14 h-14 rounded-full flex items-center justify-center"
                         style={{
-                          backgroundColor: filled ? 'rgba(255,255,255,0.2)' : 'transparent',
-                          border: filled ? '2px solid rgba(255,255,255,0.4)' : '2px dashed rgba(255,255,255,0.25)',
+                          backgroundColor: filled ? '#F8F5EF' : 'transparent',
+                          border: filled ? '2px solid #E8E2D8' : '2px dashed rgba(255,255,255,0.25)',
                         }}
                       >
                         <img
                           src="/bean.png"
                           alt=""
-                          className="w-12 h-12 object-contain"
+                          className="w-10 h-10 object-contain"
                           style={{
                             filter: filled ? 'brightness(0) invert(1)' : 'brightness(0.4) grayscale(0.5)',
                             opacity: filled ? 1 : 0.6
@@ -399,9 +399,11 @@ export default function NewV2Dashboard() {
         </div>
 
         {/* ── THANKS FOR SUPPORTING LOCAL ── */}
-        <div className="rounded-[18px] overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-amber-50 p-6 text-center">
-          <p className="text-xl font-bold text-gray-800">Thanks for supporting local</p>
-          <p className="text-sm text-gray-600 mt-2">Every visit to Penkey helps our community thrive</p>
+        <div className="rounded-[18px] overflow-hidden shadow-sm bg-gradient-to-br from-orange-50 to-amber-50 p-6 text-center min-h-[100px] flex items-center justify-center">
+          <div>
+            <p className="text-xl font-bold text-gray-800">Thanks for supporting local</p>
+            <p className="text-sm text-gray-600 mt-2">Every visit to Penkey helps our community thrive</p>
+          </div>
         </div>
 
         <BottomNav />
