@@ -4,12 +4,9 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Home, MessageCircle, ScanLine, Gift, User } from 'lucide-react'
 
-const WHATSAPP_NUMBER = '447700000000' // TODO: update to real number
-const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I%27d%20like%20to%20place%20an%20order%20please`
-
 const leftItems = [
   { href: '/dashboard', icon: Home, label: 'Home' },
-  { href: WHATSAPP_URL, icon: MessageCircle, label: 'Order Now', external: true },
+  { href: '/order', icon: MessageCircle, label: 'Order Now', external: false },
 ]
 
 const rightItems = [

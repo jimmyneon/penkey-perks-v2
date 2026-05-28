@@ -85,12 +85,12 @@ Thanks!`
   const canSend = orderItems.some(item => item.item.trim())
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8]">
+    <div className="min-h-screen bg-white">
       <div className="w-full max-w-[430px] mx-auto pb-28">
         {/* Header */}
         <header className="pt-12 pb-3 px-5">
-          <p className="text-[11px] font-bold text-[#B0A090] uppercase tracking-widest mb-0.5">Collection</p>
-          <h1 className="text-[26px] font-extrabold text-[#1A1208] tracking-tight">Order Ahead</h1>
+          <p className="text-[11px] font-bold uppercase tracking-[0.12em] mb-0.5" style={{ color: '#9AAAB8' }}>Collection</p>
+          <h1 className="text-[32px] font-extrabold tracking-tight" style={{ color: '#1C2B3A' }}>Order Ahead</h1>
         </header>
 
         {orderSent ? (
@@ -103,7 +103,7 @@ Thanks!`
               <p className="text-[13px] text-[#9A7A6A] mb-6 leading-relaxed">Your order is ready to send. Just hit send in WhatsApp and we'll have it ready for you.</p>
               <button
                 onClick={() => { setOrderSent(false); setPickupTime(''); setOrderItems([{ id: '1', item: '', quantity: 1 }]) }}
-                className="w-full py-3.5 bg-[#1A1208] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all"
+                className="w-full py-3.5 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all" style={{ backgroundColor: '#2C3E50' }}
               >
                 New Order
               </button>
@@ -113,13 +113,13 @@ Thanks!`
           <div className="px-4 space-y-4">
             {/* Pickup Time */}
             <div>
-              <p className="text-[11px] font-bold text-[#9A7A6A] uppercase tracking-widest px-1 mb-1.5">Pickup Time</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.12em] px-1 mb-1.5" style={{ color: '#9AAAB8' }}>Pickup Time</p>
               <button
                 className="w-full bg-white rounded-[16px] px-4 min-h-[52px] flex items-center gap-3 shadow-[0_1px_4px_rgba(44,24,16,0.07)] active:bg-[#F5EFE9] transition-colors"
                 onClick={() => setShowTimePicker(true)}
               >
-                <div className="w-8 h-8 rounded-[10px] bg-[#FFF5EB] flex items-center justify-center flex-shrink-0">
-                  <Clock className="w-4 h-4 text-[#C8602A]" />
+                <div className="w-8 h-8 rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(224,122,58,0.12)' }}>
+                  <Clock className="w-4 h-4" style={{ color: '#E07A3A' }} />
                 </div>
                 <span className="flex-1 text-left text-[14px] font-semibold text-[#2C1810]">
                   {pickupTime || 'ASAP'}
@@ -130,7 +130,7 @@ Thanks!`
 
             {/* Order Items */}
             <div>
-              <p className="text-[11px] font-bold text-[#9A7A6A] uppercase tracking-widest px-1 mb-1.5">Your Order</p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.12em] px-1 mb-1.5" style={{ color: '#9AAAB8' }}>Your Order</p>
               <div className="bg-white rounded-[16px] overflow-hidden shadow-[0_1px_4px_rgba(44,24,16,0.07)]">
                 {orderItems.map((orderItem, index) => (
                   <div key={orderItem.id} className={`px-4 flex items-center gap-3 min-h-[54px] ${index < orderItems.length - 1 ? 'border-b border-[#F0E8E2]' : ''}`}>
@@ -176,9 +176,9 @@ Thanks!`
             </div>
 
             {/* Note */}
-            <div className="bg-[#F5EAE0] rounded-[14px] px-4 py-3 flex items-start gap-2.5">
-              <Coffee className="w-4 h-4 text-[#C8602A] flex-shrink-0 mt-0.5" />
-              <p className="text-[12px] text-[#6B4C3B] leading-relaxed">Your order opens in WhatsApp — just hit send! We'll have it ready for collection.</p>
+            <div className="rounded-[14px] px-4 py-3 flex items-start gap-2.5" style={{ backgroundColor: 'rgba(224,122,58,0.10)' }}>
+              <Coffee className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: '#E07A3A' }} />
+              <p className="text-[12px] leading-relaxed" style={{ color: '#5A6A7A' }}>Your order opens in WhatsApp — just hit send! We'll have it ready for collection.</p>
             </div>
 
             {/* Send CTA */}
