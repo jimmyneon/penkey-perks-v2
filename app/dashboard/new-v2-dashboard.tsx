@@ -158,33 +158,23 @@ export default function NewV2Dashboard() {
 
   // Sample vouchers for demo mode
   const sampleVouchers = [
-    { 
-      id: 1, 
-      template: { name: 'Free Any Coffee', description: 'Redeem for any coffee' }, 
-      expires_at: '2026-12-15', 
-      gradient: 'from-[#8D123F] to-[#A8224E]',
-      image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop'
+    {
+      id: 1,
+      template: { name: 'Free Any Coffee', description: 'Redeem for any coffee' },
+      expires_at: new Date(Date.now() + 28 * 86400000).toISOString(),
+      image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop',
     },
-    { 
-      id: 2, 
-      template: { name: 'Lucky Duck Spin', description: 'Spin to win prizes' }, 
-      expires_at: '2026-12-20', 
-      gradient: 'from-[#F4D8CC] to-[#F8E9E0]',
-      image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=400&h=300&fit=crop'
+    {
+      id: 2,
+      template: { name: 'Lucky Duck Spin', description: 'Spin to win a prize' },
+      expires_at: new Date(Date.now() + 14 * 86400000).toISOString(),
+      image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=400&h=300&fit=crop',
     },
-    { 
-      id: 3, 
-      template: { name: '£5 Lunch Reward', description: 'Off any lunch item' }, 
-      expires_at: '2026-12-25', 
-      gradient: 'from-[#214B39] to-[#2A5A40]',
-      image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=300&fit=crop'
-    },
-    { 
-      id: 4, 
-      template: { name: 'Morning Boost', description: 'Free coffee upgrade' }, 
-      expires_at: '2026-12-30', 
-      gradient: 'from-[#F3DCD4] to-[#F8E9E0]',
-      image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&h=300&fit=crop'
+    {
+      id: 3,
+      template: { name: '£5 Lunch Reward', description: 'Off any lunch item' },
+      expires_at: new Date(Date.now() + 23 * 86400000).toISOString(),
+      image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=300&fit=crop',
     },
   ]
 
@@ -192,7 +182,7 @@ export default function NewV2Dashboard() {
   const sampleCampaign = {
     id: 1,
     name: 'Rainy Day Double Beans',
-    description: 'On hot drinks until 2pm',
+    description: 'Any hot drink until 2pm — double the beans.',
     bean_multiplier: 2,
     image: 'https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=600&h=400&fit=crop'
   }
@@ -359,7 +349,7 @@ export default function NewV2Dashboard() {
 
           {/* ── ACTIVE CAMPAIGN ── dark green card ── */}
           <div>
-            <h2 className="text-[15px] font-extrabold uppercase tracking-[0.06em] mb-3" style={{ color: '#3D1A0E' }}>ACTIVE CAMPAIGN</h2>
+            <h2 className="text-[15px] font-extrabold uppercase tracking-[0.06em] mb-3" style={{ color: '#3D1A0E' }}>ON RIGHT NOW</h2>
             <div
               className="relative rounded-[20px] overflow-hidden cursor-pointer active:scale-[0.985] transition-all duration-200 shadow-[0_6px_24px_rgba(14,42,30,0.28)]"
               style={{ backgroundColor: '#1A3828', minHeight: '148px' }}

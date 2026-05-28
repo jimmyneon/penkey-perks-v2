@@ -7,7 +7,7 @@ import { Home, Gift, User, Scan, Megaphone } from 'lucide-react'
 const navItems = [
   { href: '/dashboard', icon: Home, label: 'Home' },
   { href: '/rewards', icon: Gift, label: 'Rewards' },
-  { href: '/campaigns', icon: Megaphone, label: 'Campaigns' },
+  { href: '/campaigns', icon: Megaphone, label: "What's on" },
   { href: '/profile', icon: User, label: 'Profile' },
 ]
 
