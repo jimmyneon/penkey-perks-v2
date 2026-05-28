@@ -265,13 +265,13 @@ export default function NewV2Dashboard() {
                   YOUR PROGRESS
                 </p>
                 {/* Stamp dots */}
-                <div className="flex flex-wrap gap-2 mb-3">
+                <div className="grid grid-cols-4 gap-3 mb-3">
                   {Array.from({ length: Math.min(stampTotal, 8) }).map((_, i) => {
                     const filled = i < currentBeans
                     return (
                       <div
                         key={i}
-                        className="w-8 h-8 rounded-full flex items-center justify-center"
+                        className="w-14 h-14 rounded-full flex items-center justify-center"
                         style={{
                           backgroundColor: filled ? 'rgba(255,255,255,0.2)' : 'transparent',
                           border: filled ? '2px solid rgba(255,255,255,0.4)' : '2px dashed rgba(255,255,255,0.25)',
@@ -280,7 +280,7 @@ export default function NewV2Dashboard() {
                         <img
                           src="/bean.png"
                           alt=""
-                          className="w-4 h-4 object-contain"
+                          className="w-8 h-8 object-contain"
                           style={{
                             filter: filled ? 'brightness(0) invert(1)' : 'brightness(0.4) grayscale(0.5)',
                             opacity: filled ? 1 : 0.6
@@ -310,12 +310,7 @@ export default function NewV2Dashboard() {
                   className="w-14 h-14 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: '#F8F5EF', border: '1.5px solid #E8E2D8' }}
                 >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#24364B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="7" width="20" height="14" rx="2"/>
-                    <path d="M12 7v-3a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v3"/>
-                    <path d="M16 21v-2a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-                    <circle cx="12" cy="14" r="2"/>
-                  </svg>
+                  <GiftIcon className="w-8 h-8" />
                 </div>
                 <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-center" style={{ color: '#F8F5EF' }}>
                   NEXT REWARD
@@ -371,6 +366,9 @@ export default function NewV2Dashboard() {
                 {currentBeans}
               </span>
               <span className="text-[20px] font-medium mb-1" style={{ color: '#8A96A0' }}>beans</span>
+            </div>
+            <div className="mb-5">
+              <BrushUnderline className="text-[#F28A2E] w-20" />
             </div>
             <div className="grid grid-cols-2 gap-4 pt-4" style={{ borderTop: '1px solid #E8E2D8' }}>
               <div className="flex items-start gap-3">
