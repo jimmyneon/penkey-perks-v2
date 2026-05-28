@@ -218,7 +218,7 @@ export default function NewV2Dashboard() {
   const firstName = firstNameRaw.charAt(0).toUpperCase() + firstNameRaw.slice(1).toLowerCase()
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: '#F4F7F9' }}>
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
 
         <div className="px-5 pt-14 pb-28 space-y-4">
@@ -236,10 +236,10 @@ export default function NewV2Dashboard() {
                   style={{ marginBottom: '2px', animation: 'heartPulse 0.6s ease-in-out 3' }} 
                 />
               </p>
-              <h1 className="text-[72px] font-extrabold leading-none tracking-tight mt-0.5" style={{ color: '#1C2B3A' }}>
+              <h1 className="text-[72px] font-extrabold leading-none tracking-tight mt-0.5" style={{ color: '#2C3E50' }}>
                 {firstName}
               </h1>
-              <p className="text-[13px] font-medium mt-1.5" style={{ color: '#1C2B3A' }}>
+              <p className="text-[13px] font-medium mt-1.5" style={{ color: '#2C3E50' }}>
                 Welcome to Penkey Perks
               </p>
             </div>
@@ -252,13 +252,13 @@ export default function NewV2Dashboard() {
           {/* ── YOUR PROGRESS ── */}
           <div
             className="rounded-[18px] overflow-hidden cursor-pointer active:scale-[0.985] transition-all duration-200"
-            style={{ backgroundColor: '#FDF4EB', boxShadow: '0 4px 20px rgba(28,43,58,0.12)' }}
+            style={{ backgroundColor: '#2C3E50', boxShadow: '0 4px 20px rgba(28,43,58,0.22)' }}
             onClick={() => setShowBeansPanel(true)}
           >
             <div className="flex">
               {/* Left: stamps */}
               <div className="flex-1 p-5 pr-3">
-                <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-3" style={{ color: '#8A6A5A' }}>
+                <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-3" style={{ color: 'rgba(255,255,255,0.5)' }}>
                   YOUR PROGRESS
                 </p>
                 {/* Stamp dots */}
@@ -270,22 +270,22 @@ export default function NewV2Dashboard() {
                         key={i}
                         className="w-8 h-8 rounded-full flex items-center justify-center"
                         style={{
-                          backgroundColor: filled ? 'rgba(224,122,58,0.15)' : 'transparent',
-                          border: filled ? '2px solid rgba(224,122,58,0.35)' : '2px dashed rgba(224,122,58,0.22)',
+                          backgroundColor: filled ? 'rgba(255,255,255,0.15)' : 'transparent',
+                          border: filled ? '2px solid rgba(255,255,255,0.35)' : '2px dashed rgba(255,255,255,0.22)',
                         }}
                       >
                         {filled && (
-                          <img src="/bean.png" alt="" className="w-4 h-4 object-contain" />
+                          <img src="/bean.png" alt="" className="w-4 h-4 object-contain" style={{ filter: 'brightness(0) invert(1)', opacity: 0.9 }} />
                         )}
                       </div>
                     )
                   })}
                 </div>
-                <p className="text-[18px] font-extrabold leading-tight" style={{ color: '#1C2B3A' }}>
+                <p className="text-[18px] font-extrabold text-white leading-tight">
                   {stampBeansNeeded} beans to your next treat
                 </p>
                 <div className="mt-1.5 w-12 h-[2.5px] rounded-full" style={{ backgroundColor: '#E07A3A' }} />
-                <p className="text-[11px] mt-2" style={{ color: '#8A6A5A' }}>
+                <p className="text-[11px] mt-2" style={{ color: 'rgba(255,255,255,0.45)' }}>
                   {nextMilestone} beans = a reward
                 </p>
               </div>
@@ -293,23 +293,23 @@ export default function NewV2Dashboard() {
               {/* Right: next reward */}
               <div
                 className="w-[110px] flex-shrink-0 flex flex-col items-center justify-center p-4 gap-2"
-                style={{ borderLeft: '1px solid rgba(224,122,58,0.15)' }}
+                style={{ borderLeft: '1px solid rgba(255,255,255,0.10)' }}
               >
                 <div
                   className="w-14 h-14 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: 'rgba(224,122,58,0.12)', border: '1.5px dashed rgba(224,122,58,0.30)' }}
+                  style={{ backgroundColor: 'rgba(255,255,255,0.10)', border: '1.5px dashed rgba(255,255,255,0.30)' }}
                 >
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E07A3A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="2" y="7" width="20" height="14" rx="2"/>
                     <path d="M12 7v-3a2 2 0 0 1 2-2h0a2 2 0 0 1 2 2v3"/>
                     <path d="M16 21v-2a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
                     <circle cx="12" cy="14" r="2"/>
                   </svg>
                 </div>
-                <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-center" style={{ color: '#8A6A5A' }}>
+                <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-center" style={{ color: 'rgba(255,255,255,0.45)' }}>
                   NEXT REWARD
                 </p>
-                <p className="text-[11px] font-semibold text-center leading-snug" style={{ color: '#1C2B3A' }}>
+                <p className="text-[11px] font-semibold text-white text-center leading-snug">
                   {nextMilestone} beans<br />= reward
                 </p>
               </div>
@@ -333,7 +333,7 @@ export default function NewV2Dashboard() {
                   </svg>
                   <span className="text-[10px] font-bold text-white uppercase tracking-wide" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.15)' }}>Perk unlocked</span>
                 </div>
-                <h3 className="text-[26px] font-extrabold leading-tight" style={{ color: '#1C2B3A' }}>
+                <h3 className="text-[26px] font-extrabold leading-tight" style={{ color: '#2C3E50' }}>
                   Nice one!
                 </h3>
                 <p className="text-[13px] font-medium mt-1 leading-snug" style={{ color: '#5A6A7A' }}>
@@ -356,7 +356,7 @@ export default function NewV2Dashboard() {
               YOUR BEAN BALANCE
             </p>
             <div className="flex items-end gap-4 mb-5">
-              <span className="text-[64px] font-extrabold leading-none tracking-tight" style={{ color: '#1C2B3A' }}>
+              <span className="text-[64px] font-extrabold leading-none tracking-tight" style={{ color: '#2C3E50' }}>
                 {currentBeans}
               </span>
               <span className="text-[20px] font-semibold mb-1" style={{ color: '#8A96A0' }}>beans</span>
@@ -367,7 +367,7 @@ export default function NewV2Dashboard() {
                   <img src="/bean.png" alt="" className="w-5 h-5 object-contain opacity-60" />
                 </div>
                 <div>
-                  <p className="text-[13px] font-semibold leading-tight" style={{ color: '#1C2B3A' }}>Collect beans</p>
+                  <p className="text-[13px] font-semibold leading-tight" style={{ color: '#2C3E50' }}>Collect beans</p>
                   <p className="text-[11px] mt-0.5 leading-snug" style={{ color: '#8A96A0' }}>Scan every time<br/>you visit</p>
                 </div>
               </div>
@@ -380,7 +380,7 @@ export default function NewV2Dashboard() {
                   </svg>
                 </div>
                 <div>
-                  <p className="text-[13px] font-semibold leading-tight" style={{ color: '#1C2B3A' }}>Get rewards</p>
+                  <p className="text-[13px] font-semibold leading-tight" style={{ color: '#2C3E50' }}>Get rewards</p>
                   <p className="text-[11px] mt-0.5 leading-snug" style={{ color: '#8A96A0' }}>Exchange {nextMilestone} beans<br/>for a voucher</p>
                 </div>
               </div>
