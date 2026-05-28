@@ -336,7 +336,6 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
             </p>
             <p className="text-[13px] font-medium mt-1" style={{ color: '#8A96A0' }}>
               Here&apos;s your Penkey Perks profile
-              <span className="ml-1" style={{ color: '#E07A3A' }}>&#x2756;</span>
             </p>
           </div>
           <div className="flex flex-col items-end gap-3 ml-3">
@@ -437,7 +436,22 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
         </div>
 
         {/* Community card */}
-        <img src="/local-banner.png" alt="Thanks for supporting local" className="w-full rounded-[18px]" />
+        <div className="rounded-[18px] overflow-hidden" style={{ backgroundColor: '#E0F2FE', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #BAE6FD' }}>
+          <div className="flex items-center p-4">
+            <div className="flex items-center gap-3 flex-1">
+              <div className="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center flex-shrink-0">
+                <img src="/heart.png" alt="" className="w-5 h-5 object-contain" />
+              </div>
+              <div className="text-left">
+                <p className="text-base font-bold" style={{ color: '#24364B' }}>Thanks for supporting local</p>
+                <p className="text-xs" style={{ color: '#5A6A7A' }}>Every visit to Penkey helps our community thrive</p>
+              </div>
+            </div>
+            <div className="w-24 h-24 flex-shrink-0">
+              <img src="/local.png" alt="" className="w-full h-full object-contain" />
+            </div>
+          </div>
+        </div>
 
         {/* Danger zone — subtle at bottom */}
         <div className="bg-white rounded-[18px] overflow-hidden" style={{ border: '1px solid #EDF1F4' }}>

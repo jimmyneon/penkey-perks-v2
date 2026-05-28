@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Gift, CheckCircle2, Clock, Star, QrCode, ShoppingBag, ScanLine, Circle, Unlock, ChevronRight as ChevronRight2 } from 'lucide-react'
+import { Gift, CheckCircle2, Clock, Star, QrCode, ShoppingBag, ScanLine, Circle, Unlock, ChevronRight as ChevronRight2, Sparkles, Coffee } from 'lucide-react'
 import Link from 'next/link'
 import QRCode from 'qrcode'
 import { useToast } from '@/hooks/use-toast'
@@ -186,10 +186,10 @@ export function UnifiedRewardsClient({
 
   // Fixed reward tiers — shown even when no DB rewards configured
   const fixedTiers = [
-    { beans: 2,  emoji: '✨', label: 'Free syrup shot',   sub: 'Add any flavour to your drink',    color: '#E07A3A' },
-    { beans: 8,  emoji: '☕', label: 'Free coffee',        sub: 'Any hot or cold coffee, on us',    color: '#2C3E50' },
-    { beans: 15, emoji: '🥐', label: 'Free snack',         sub: 'Pastry, toastie — your choice',    color: '#3D5A73' },
-    { beans: 25, emoji: '🍽️', label: 'Free meal',          sub: 'A full lunch, completely free',    color: '#1C2B3A' },
+    { beans: 2,  icon: <Sparkles className="w-4 h-4" />, label: 'Free syrup shot',   sub: 'Add any flavour to your drink',    color: '#E07A3A' },
+    { beans: 8,  icon: <Coffee className="w-4 h-4" />, label: 'Free coffee',        sub: 'Any hot or cold coffee, on us',    color: '#2C3E50' },
+    { beans: 15, icon: <ShoppingBag className="w-4 h-4" />, label: 'Free snack',         sub: 'Pastry, toastie — your choice',    color: '#3D5A73' },
+    { beans: 25, icon: <ShoppingBag className="w-4 h-4" />, label: 'Free meal',          sub: 'A full lunch, completely free',    color: '#1C2B3A' },
   ]
 
   return (
@@ -348,9 +348,9 @@ export function UnifiedRewardsClient({
                       backgroundColor: unlocked ? 'rgba(255,255,255,0.15)' : '#F0F4F7',
                     }}
                   >
-                    <span className="text-[18px] leading-none">{tier.emoji}</span>
+                    <span className="text-[18px] leading-none">{tier.icon}</span>
                     <span className="text-[9px] font-extrabold mt-0.5" style={{ color: unlocked ? 'rgba(255,255,255,0.7)' : '#8A9AAA' }}>
-                      {tier.beans} ☕
+                      {tier.beans}
                     </span>
                   </div>
                   <div className="flex-1 min-w-0">
