@@ -73,7 +73,7 @@ export function BottomSheet({
             dragElastic={0.2}
             dragSnapToOrigin={true}
             onDragEnd={handleDragEnd}
-            style={{ y }}
+            style={{ y, touchAction: 'none' }}
             className={cn(
               "fixed bottom-0 left-0 right-0 z-[10000] bg-cream-card rounded-t-3xl shadow-premium-xl max-h-[85vh] overflow-hidden",
               className
@@ -105,7 +105,10 @@ export function BottomSheet({
             )}
             
             {/* Content */}
-            <div className="overflow-y-auto max-h-[calc(85vh-120px)]">
+            <div 
+              className="overflow-y-auto max-h-[calc(85vh-120px)]"
+              style={{ touchAction: 'pan-y' }}
+            >
               {children}
             </div>
           </motion.div>
