@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { X, Search } from 'lucide-react'
+import { X } from 'lucide-react'
 
 interface Category {
   id: string
@@ -22,12 +21,6 @@ export function CategoryModal({
   onClose, 
   onSelectCategory 
 }: CategoryModalProps) {
-  const [searchQuery, setSearchQuery] = useState('')
-
-  const filteredCategories = categories.filter(cat =>
-    cat.name.toLowerCase().includes(searchQuery.toLowerCase())
-  )
-
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
       <div 
@@ -48,22 +41,9 @@ export function CategoryModal({
 
         {/* Content */}
         <div className="px-5 pb-6 space-y-4">
-          {/* Search */}
-          <div className="relative">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              placeholder="Search categories..."
-              className="w-full bg-white rounded-[16px] px-4 py-3 pl-10 outline-none text-[14px] placeholder:text-[#C8D4DC]"
-              style={{ border: '1px solid #E8E2D8', color: '#24364B' }}
-            />
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none w-4 h-4" style={{ color: '#A89080' }} />
-          </div>
-
           {/* Category list */}
           <div className="space-y-2">
-            {filteredCategories.map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => {

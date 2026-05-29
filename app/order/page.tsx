@@ -77,6 +77,7 @@ export default function OrderPage() {
   const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<any>(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [searchFocused, setSearchFocused] = useState(false)
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null)
   const [showOrderSummary, setShowOrderSummary] = useState(false)
   const [showPickupTime, setShowPickupTime] = useState(false)
@@ -95,6 +96,10 @@ export default function OrderPage() {
     'Sandwiches': 'Hot Food',
     'Toasties': 'Hot Food',
     'Penkey Meals': 'Hot Food',
+    'Retail food': 'Hot Food',
+    'Gifts': 'Hot Food',
+    'Fresh Lemonades': 'Cold Drinks',
+    'Penkey Salads': 'Hot Food',
   }
 
   const DISPLAY_CATEGORIES = ['Hot Drinks', 'Iced Drinks', 'Cold Drinks', 'Snacks', 'Bakery', 'Hot Food', 'Penkey Affogatos', 'Penkey Indulgence']
@@ -343,49 +348,46 @@ export default function OrderPage() {
             </div>
           </div>
 
-          {/* Category button */}
-          {displayCategories.length > 0 && (
-            <button
-              onClick={() => setShowCategoryModal(true)}
-              className="w-full px-4 py-3 rounded-[16px] flex items-center justify-between transition-all active:scale-[0.98]"
-              style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8' }}
-            >
-              <div className="flex items-center gap-3">
+          {/* Category and search row */}
+          <div className="flex gap-3">
+            {/* Category button - hide when search is focused */}
+            {!searchFocused && displayCategories.length > 0 && (
+              <button
+                onClick={() => setShowCategoryModal(true)}
+                className="flex-shrink-0 px-4 py-3 rounded-[16px] flex items-center gap-2 transition-all active:scale-[0.98]"
+                style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8' }}
+              >
                 <div 
-                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  className="w-8 h-8 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: selectedCategory ? displayCategories.find(c => c.id === selectedCategory)?.color : '#E8E2D8' }}
                 >
-                  <span className="text-[15px] font-bold" style={{ color: selectedCategory ? '#FFFFFF' : '#7A8A9A' }}>
+                  <span className="text-[13px] font-bold" style={{ color: selectedCategory ? '#FFFFFF' : '#7A8A9A' }}>
                     {selectedCategory ? displayCategories.find(c => c.id === selectedCategory)?.name.charAt(0) : 'All'}
                   </span>
                 </div>
-                <div className="text-left">
-                  <p className="text-[13px] font-semibold" style={{ color: '#24364B' }}>
-                    {selectedCategory ? displayCategories.find(c => c.id === selectedCategory)?.name : 'All Categories'}
-                  </p>
-                  <p className="text-[11px]" style={{ color: '#8A96A0' }}>Tap to change</p>
-                </div>
-              </div>
-              <svg className="w-5 h-5" style={{ color: '#A89080' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M6 9l6 6 6-6" />
-              </svg>
-            </button>
-          )}
+                <span className="text-[13px] font-semibold" style={{ color: '#24364B' }}>
+                  {selectedCategory ? displayCategories.find(c => c.id === selectedCategory)?.name : 'All'}
+                </span>
+              </button>
+            )}
 
-          {/* Search bar */}
-          <div className="relative">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              placeholder="Search menu..."
-              className="w-full bg-white rounded-[16px] px-4 py-3 pl-10 outline-none text-[14px] placeholder:text-[#C8D4DC]"
-              style={{ border: '1px solid #E8E2D8', color: '#24364B' }}
-            />
-            <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A89080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="M21 21l-4.35-4.35"/>
-            </svg>
+            {/* Search bar - expands to full width when focused */}
+            <div className={`relative ${searchFocused ? 'flex-1' : 'flex-1'}`}>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
+                placeholder="Search menu..."
+                className="w-full bg-white rounded-[16px] px-4 py-3 pl-10 outline-none text-[14px] placeholder:text-[#C8D4DC] transition-all"
+                style={{ border: '1px solid #E8E2D8', color: '#24364B' }}
+              />
+              <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A89080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+              </svg>
+            </div>
           </div>
 
           {/* Menu items grid */}

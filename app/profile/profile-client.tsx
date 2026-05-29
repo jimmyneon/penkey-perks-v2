@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Sheet } from '@/components/ui/sheet'
 import { ArrowLeft, User, Mail, Phone, Calendar, Lock, Trash2, PauseCircle, MapPin, Gift, AlertTriangle, QrCode, ChevronRight, Bell, Shield, X } from 'lucide-react'
 import Link from 'next/link'
 import { useToast } from '@/hooks/use-toast'
@@ -538,14 +539,17 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
 
       </div>
 
-      {/* Change Password Dialog */}
-      <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
-        <DialogContent className="sm:max-w-sm rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)]">
-          <DialogHeader>
-            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold">Change password</DialogTitle>
-            <DialogDescription className="text-[#8A96A0] text-[13px]">Enter a new password below</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3 pb-1">
+      {/* Change Password Sheet */}
+      <Sheet isOpen={showPasswordDialog} onClose={() => setShowPasswordDialog(false)} maxHeight="auto">
+        <div className="px-5 pt-4 pb-6 space-y-4">
+          {/* Header */}
+          <div className="flex items-center justify-between">
+            <h2 className="text-[20px] font-bold" style={{ color: '#24364B' }}>Change password</h2>
+            <button onClick={() => setShowPasswordDialog(false)} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8E2D8' }}>
+              <X className="w-4 h-4" style={{ color: '#24364B' }} />
+            </button>
+          </div>
+          <div className="space-y-3">
             <div className="bg-white rounded-[14px] overflow-hidden" style={{ border: '1px solid #EDF1F4' }}>
               <div className="px-4 flex items-center gap-3 min-h-[50px] border-b" style={{ borderColor: '#EDF1F4' }}>
                 <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="New password" className="flex-1 text-[14px] font-medium bg-transparent outline-none placeholder:text-[#C8D4DC] py-3" style={{ color: '#1C2B3A' }} />
@@ -559,17 +563,20 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
               <button onClick={handleChangePassword} disabled={isLoading} className="flex-1 py-3 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60" style={{ backgroundColor: '#2C3E50' }}>{isLoading ? 'Saving...' : 'Change'}</button>
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </Sheet>
 
-      {/* Pause Account Dialog */}
-      <Dialog open={showPauseDialog} onOpenChange={setShowPauseDialog}>
-        <DialogContent className="sm:max-w-sm rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)]">
-          <DialogHeader>
-            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold">Pause account?</DialogTitle>
-            <DialogDescription className="text-[#8A96A0] text-[13px]">Your data stays safe while paused</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3 pb-1">
+      {/* Pause Account Sheet */}
+      <Sheet isOpen={showPauseDialog} onClose={() => setShowPauseDialog(false)} maxHeight="auto">
+        <div className="px-5 pt-4 pb-6 space-y-4">
+          {/* Header */}
+          <div className="flex items-center justify-between">
+            <h2 className="text-[20px] font-bold" style={{ color: '#24364B' }}>Pause account?</h2>
+            <button onClick={() => setShowPauseDialog(false)} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8E2D8' }}>
+              <X className="w-4 h-4" style={{ color: '#24364B' }} />
+            </button>
+          </div>
+          <div className="space-y-3">
             <div className="rounded-[14px] p-4 space-y-2" style={{ backgroundColor: 'rgba(224,122,58,0.08)' }}>
               {['Your account will be paused', 'All your data stays safe', 'You can reactivate anytime'].map((t, i) => (
                 <div key={i} className="flex items-center gap-2">
@@ -583,17 +590,20 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
               <button onClick={handlePauseAccount} disabled={isLoading} className="flex-1 py-3 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60" style={{ backgroundColor: '#E07A3A' }}>{isLoading ? 'Pausing...' : 'Pause'}</button>
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </Sheet>
 
-      {/* Delete Account Dialog */}
-      <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <DialogContent className="sm:max-w-sm rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)]">
-          <DialogHeader>
-            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold">Delete account?</DialogTitle>
-            <DialogDescription className="text-[#8A96A0] text-[13px]">This action is permanent and cannot be undone</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3 pb-1">
+      {/* Delete Account Sheet */}
+      <Sheet isOpen={showDeleteDialog} onClose={() => setShowDeleteDialog(false)} maxHeight="auto">
+        <div className="px-5 pt-4 pb-6 space-y-4">
+          {/* Header */}
+          <div className="flex items-center justify-between">
+            <h2 className="text-[20px] font-bold" style={{ color: '#24364B' }}>Delete account?</h2>
+            <button onClick={() => setShowDeleteDialog(false)} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8E2D8' }}>
+              <X className="w-4 h-4" style={{ color: '#24364B' }} />
+            </button>
+          </div>
+          <div className="space-y-3">
             <div className="bg-red-50 rounded-[14px] p-4 space-y-2">
               {['All your data will be permanently deleted', 'Points and rewards will be lost', 'This cannot be undone'].map((t, i) => (
                 <div key={i} className="flex items-center gap-2">
@@ -610,16 +620,19 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
               <button onClick={handleDeleteAccount} disabled={isLoading || confirmText !== 'DELETE'} className="flex-1 py-3 bg-red-500 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-40">{isLoading ? 'Deleting...' : 'Delete'}</button>
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </Sheet>
 
-      {/* Settings Dialog */}
-      <Dialog open={showSettingsDialog} onOpenChange={setShowSettingsDialog}>
-        <DialogContent className="sm:max-w-md rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)] max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold">Settings</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 pb-1">
+      {/* Settings Sheet */}
+      <Sheet isOpen={showSettingsDialog} onClose={() => setShowSettingsDialog(false)} maxHeight="90vh">
+        <div className="px-5 pt-4 pb-6 space-y-4">
+          {/* Header */}
+          <div className="flex items-center justify-between">
+            <h2 className="text-[20px] font-bold" style={{ color: '#24364B' }}>Settings</h2>
+            <button onClick={() => setShowSettingsDialog(false)} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8E2D8' }}>
+              <X className="w-4 h-4" style={{ color: '#24364B' }} />
+            </button>
+          </div>
             {/* Personal Details Section */}
             <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid #EDF1F4' }}>
               <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
@@ -713,18 +726,19 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
             >
               {isLoading ? 'Saving...' : 'Save Changes'}
             </button>
-          </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </Sheet>
 
-      {/* Activity Dialog */}
-      <Dialog open={showQRDialog} onOpenChange={setShowQRDialog}>
-        <DialogContent className="sm:max-w-md rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)] max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold">My Activity</DialogTitle>
-            <DialogDescription className="text-[#8A96A0] text-[13px]">Your visits, stamps, and beans</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 pb-1">
+      {/* Activity Sheet */}
+      <Sheet isOpen={showQRDialog} onClose={() => setShowQRDialog(false)} maxHeight="90vh">
+        <div className="px-5 pt-4 pb-6 space-y-4">
+          {/* Header */}
+          <div className="flex items-center justify-between">
+            <h2 className="text-[20px] font-bold" style={{ color: '#24364B' }}>My Activity</h2>
+            <button onClick={() => setShowQRDialog(false)} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8E2D8' }}>
+              <X className="w-4 h-4" style={{ color: '#24364B' }} />
+            </button>
+          </div>
             {/* Stats cards */}
             <div className="grid grid-cols-2 gap-3">
               <div className="rounded-[16px] p-4 text-center" style={{ backgroundColor: '#FEF3EA', border: '1px solid #E07A3A' }}>
@@ -811,70 +825,71 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
                 <p className="text-[12px] text-center" style={{ color: '#8A96A0' }}>Show this to staff to earn stamps and beans</p>
               </div>
             </div>
+        </div>
+      </Sheet>
+
+      {/* Achievements Sheet */}
+      <Sheet isOpen={showAchievementsDialog} onClose={() => setShowAchievementsDialog(false)} maxHeight="90vh">
+        <div className="px-5 pt-4 pb-6 space-y-4">
+          {/* Header */}
+          <div className="flex items-center justify-between">
+            <h2 className="text-[20px] font-bold" style={{ color: '#24364B' }}>My Achievements</h2>
+            <button onClick={() => setShowAchievementsDialog(false)} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8E2D8' }}>
+              <X className="w-4 h-4" style={{ color: '#24364B' }} />
+            </button>
           </div>
-        </DialogContent>
-      </Dialog>
 
-      {/* Achievements Dialog */}
-      <Dialog open={showAchievementsDialog} onOpenChange={setShowAchievementsDialog}>
-        <DialogContent className="sm:max-w-md rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)] max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold">My Achievements</DialogTitle>
-            <DialogDescription className="text-[#8A96A0] text-[13px]">Badges and milestones you've earned</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 pb-1">
-            {userBadges && userBadges.length > 0 ? (
-              <div className="grid grid-cols-2 gap-3">
-                {userBadges.map((badge: any) => (
-                  <div key={badge.id} className="rounded-[16px] p-4 text-center" style={{ backgroundColor: '#FEF3EA', border: '1px solid #E07A3A' }}>
-                    <div className="w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center" style={{ backgroundColor: '#FFF' }}>
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#E07A3A" stroke="#E07A3A" strokeWidth="1" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                    <p className="text-[14px] font-bold" style={{ color: '#1C2B3A' }}>{badge.badges?.name || 'Badge'}</p>
-                    <p className="text-[11px] mt-1" style={{ color: '#8A96A0' }}>{badge.badges?.description || ''}</p>
+          {userBadges && userBadges.length > 0 ? (
+            <div className="grid grid-cols-2 gap-3">
+              {userBadges.map((badge: any) => (
+                <div key={badge.id} className="rounded-[16px] p-4 text-center" style={{ backgroundColor: '#FEF3EA', border: '1px solid #E07A3A' }}>
+                  <div className="w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center" style={{ backgroundColor: '#FFF' }}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#E07A3A" stroke="#E07A3A" strokeWidth="1" strokeLinejoin="round"/>
+                    </svg>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="rounded-[16px] p-8 text-center" style={{ backgroundColor: '#F4F7F9', border: '1px solid #EDF1F4' }}>
-                <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: '#FEF3EA' }}>
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#E07A3A" strokeWidth="1.5">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                  </svg>
+                  <p className="text-[14px] font-bold" style={{ color: '#1C2B3A' }}>{badge.badges?.name || 'Badge'}</p>
+                  <p className="text-[11px] mt-1" style={{ color: '#8A96A0' }}>{badge.badges?.description || ''}</p>
                 </div>
-                <p className="text-[15px] font-semibold mb-2" style={{ color: '#1C2B3A' }}>No badges yet</p>
-                <p className="text-[13px]" style={{ color: '#8A96A0' }}>Keep visiting to earn badges and unlock rewards!</p>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-[16px] p-8 text-center" style={{ backgroundColor: '#F4F7F9', border: '1px solid #EDF1F4' }}>
+              <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: '#FEF3EA' }}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#E07A3A" strokeWidth="1.5">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
               </div>
-            )}
+              <p className="text-[15px] font-semibold mb-2" style={{ color: '#1C2B3A' }}>No badges yet</p>
+              <p className="text-[13px]" style={{ color: '#8A96A0' }}>Keep visiting to earn badges and unlock rewards!</p>
+            </div>
+          )}
 
-            {/* Badge tiers info */}
-            <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid #EDF1F4' }}>
-              <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#AE9888' }}>Badge Tiers</p>
-              </div>
-              <div className="p-4 space-y-2">
-                {[
-                  { name: 'Visitor', beans: 0, color: '#A89080' },
-                  { name: 'Newcomer', beans: 50, color: '#8A96A0' },
-                  { name: 'Regular', beans: 100, color: '#E07A3A' },
-                  { name: 'Local Legend', beans: 200, color: '#2C3E50' },
-                  { name: 'Legendary', beans: 500, color: '#F28A2E' },
-                ].map((tier) => (
-                  <div key={tier.name} className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: tier.color }} />
-                      <span className="text-[13px]" style={{ color: '#1C2B3A' }}>{tier.name}</span>
-                    </div>
-                    <span className="text-[12px]" style={{ color: '#8A96A0' }}>{tier.beans}+ beans</span>
+          {/* Badge tiers info */}
+          <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid #EDF1F4' }}>
+            <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#AE9888' }}>Badge Tiers</p>
+            </div>
+            <div className="p-4 space-y-2">
+              {[
+                { name: 'Visitor', beans: 0, color: '#A89080' },
+                { name: 'Newcomer', beans: 50, color: '#8A96A0' },
+                { name: 'Regular', beans: 100, color: '#E07A3A' },
+                { name: 'Local Legend', beans: 200, color: '#2C3E50' },
+                { name: 'Legendary', beans: 500, color: '#F28A2E' },
+              ].map((tier) => (
+                <div key={tier.name} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: tier.color }} />
+                    <span className="text-[13px]" style={{ color: '#1C2B3A' }}>{tier.name}</span>
                   </div>
-                ))}
-              </div>
+                  <span className="text-[12px]" style={{ color: '#8A96A0' }}>{tier.beans}+ beans</span>
+                </div>
+              ))}
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </Sheet>
 
       <BottomNav />
     </div>

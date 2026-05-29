@@ -27,8 +27,6 @@ export default function NewV2Dashboard() {
   const [vouchers, setVouchers] = useState<any[]>([])
   const [badges, setBadges] = useState<any[]>([])
   const [campaigns, setCampaigns] = useState<any[]>([])
-  const [showQR, setShowQR] = useState(false)
-  const [qrCodeUrl, setQrCodeUrl] = useState('')
   const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<any>(null)
   const [selectedVoucher, setSelectedVoucher] = useState<any>(null)
@@ -37,7 +35,6 @@ export default function NewV2Dashboard() {
   const [showBeansPanel, setShowBeansPanel] = useState(false)
   const [showRewardsPanel, setShowRewardsPanel] = useState(false)
   const [voucherQrCode, setVoucherQrCode] = useState('')
-  const [brightness, setBrightness] = useState(1)
   const [converting, setConverting] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [nextReward, setNextReward] = useState<any>(null)
@@ -139,24 +136,6 @@ export default function NewV2Dashboard() {
     const supabase = createClient()
     await supabase.auth.signOut()
     router.push('/login')
-  }
-
-  const generateQRCode = async () => {
-    if (!user) return
-    
-    try {
-      const qrData = JSON.stringify({
-        type: 'customer',
-        id: user.id,
-        email: user.email,
-        timestamp: Date.now(),
-      })
-      const url = await QRCodeLib.toDataURL(qrData)
-      setQrCodeUrl(url)
-      setShowQR(true)
-    } catch (error) {
-      console.error('Error generating QR code:', error)
-    }
   }
 
   const generateVoucherQRCode = async (voucher: any) => {
@@ -541,7 +520,7 @@ export default function NewV2Dashboard() {
 
         </div>
 
-        <BottomNav onShowQRCode={() => setShowQR(true)} />
+        <BottomNav />
       </div>
 
       {/* Voucher / Perk Unlocked Dialog */}
@@ -781,59 +760,6 @@ export default function NewV2Dashboard() {
                 </div>
               </div>
             </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Profile QR Code Dialog */}
-      <Dialog open={showQR} onOpenChange={setShowQR}>
-        <DialogContent className="sm:max-w-sm rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)]">
-          <DialogHeader>
-            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold text-center">Your QR Code</DialogTitle>
-            <DialogDescription className="text-[#8A96A0] text-[13px] text-center">Show to staff to earn stamps and beans</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3 pb-1">
-            <div
-              className="rounded-[16px] p-5 flex items-center justify-center transition-all"
-              style={{
-                backgroundColor: '#F4F7F9',
-                border: '1px solid #EDF1F4',
-                filter: `brightness(${brightness})`
-              }}
-            >
-              {qrCodeUrl ? (
-                <img src={qrCodeUrl} alt="QR Code" className="w-52 h-52" />
-              ) : (
-                <div className="w-52 h-52 rounded-[12px] flex items-center justify-center" style={{ backgroundColor: '#EDF1F4' }}>
-                  <QrCode className="w-12 h-12" style={{ color: '#9AAAB8' }} />
-                </div>
-              )}
-            </div>
-            <div className="rounded-[14px] px-4 py-3" style={{ backgroundColor: '#F4F7F9', border: '1px solid #EDF1F4' }}>
-              <p className="text-[10px] font-bold uppercase tracking-[0.1em] mb-1" style={{ color: '#9AAAB8' }}>Staff can use this to</p>
-              <div className="flex gap-2 flex-wrap">
-                {['Check-ins', 'Add stamps', 'Award beans'].map((t) => (
-                  <span key={t} className="text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(224,122,58,0.12)', color: '#E07A3A' }}>{t}</span>
-                ))}
-              </div>
-            </div>
-            {/* Brightness control */}
-            <div className="px-4 py-2">
-              <div className="flex items-center gap-3">
-                <span className="text-[11px] font-medium" style={{ color: '#8A96A0' }}>Brightness</span>
-                <input
-                  type="range"
-                  min="0.5"
-                  max="2"
-                  step="0.1"
-                  value={brightness}
-                  onChange={(e) => setBrightness(parseFloat(e.target.value))}
-                  className="flex-1 h-2 rounded-full appearance-none cursor-pointer"
-                  style={{ backgroundColor: '#EDF1F4' }}
-                />
-              </div>
-            </div>
-            <button onClick={() => setShowQR(false)} className="w-full py-3.5 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all" style={{ backgroundColor: '#2C3E50' }}>Done</button>
           </div>
         </DialogContent>
       </Dialog>

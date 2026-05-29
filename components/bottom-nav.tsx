@@ -3,6 +3,10 @@
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Home, MessageCircle, QrCode, Gift, User } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { createClient } from '@/lib/supabase/client'
+import QRCodeLib from 'qrcode'
 
 const leftItems = [
   { href: '/dashboard', icon: Home, label: 'Home' },
@@ -20,6 +24,61 @@ interface BottomNavProps {
 
 export function BottomNav({ onShowQRCode }: BottomNavProps) {
   const pathname = usePathname()
+  const [showQR, setShowQR] = useState(false)
+  const [qrCodeUrl, setQrCodeUrl] = useState('')
+  const [user, setUser] = useState<any>(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (showQR && user) {
+      generateQRCode()
+    }
+  }, [showQR, user])
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const supabase = createClient()
+      const { data: { user: authUser } } = await supabase.auth.getUser()
+      setUser(authUser)
+    }
+    loadUser()
+  }, [])
+
+  const generateQRCode = async () => {
+    if (!user) return
+    
+    try {
+      const qrData = JSON.stringify({
+        type: 'customer',
+        id: user.id,
+        email: user.email,
+        timestamp: Date.now(),
+      })
+      const url = await QRCodeLib.toDataURL(qrData, {
+        width: 300,
+        margin: 2,
+        color: {
+          dark: '#2C3E50',
+          light: '#FFFEF7',
+        },
+      })
+      setQrCodeUrl(url)
+    } catch (error) {
+      console.error('Error generating QR code:', error)
+    }
+  }
+
+  const handleQRClick = () => {
+    if (onShowQRCode) {
+      onShowQRCode()
+    } else {
+      setShowQR(true)
+    }
+  }
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50">
@@ -69,7 +128,7 @@ export function BottomNav({ onShowQRCode }: BottomNavProps) {
 
             {/* Centre QR Code button */}
             <button
-              onClick={onShowQRCode}
+              onClick={handleQRClick}
               className="flex items-center justify-center flex-shrink-0 -mt-5 mx-2"
             >
               <div
@@ -109,6 +168,42 @@ export function BottomNav({ onShowQRCode }: BottomNavProps) {
           </div>
         </div>
       </div>
+
+      {/* QR Code Dialog */}
+      <Dialog open={showQR} onOpenChange={setShowQR}>
+        <DialogContent className="sm:max-w-sm rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)]">
+          <DialogHeader>
+            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold text-center">Your QR Code</DialogTitle>
+            <DialogDescription className="text-[#8A96A0] text-[13px] text-center">Show to staff to earn stamps and beans</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 pb-1">
+            <div
+              className="rounded-[16px] p-5 flex items-center justify-center"
+              style={{
+                backgroundColor: '#F4F7F9',
+                border: '1px solid #EDF1F4',
+              }}
+            >
+              {qrCodeUrl ? (
+                <img src={qrCodeUrl} alt="QR Code" className="w-52 h-52" />
+              ) : (
+                <div className="w-52 h-52 rounded-[12px] flex items-center justify-center" style={{ backgroundColor: '#EDF1F4' }}>
+                  <QrCode className="w-12 h-12" style={{ color: '#9AAAB8' }} />
+                </div>
+              )}
+            </div>
+            <div className="rounded-[14px] px-4 py-3" style={{ backgroundColor: '#F4F7F9', border: '1px solid #EDF1F4' }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.1em] mb-1" style={{ color: '#9AAAB8' }}>Staff can use this to</p>
+              <div className="flex gap-2 flex-wrap">
+                {['Check-ins', 'Add stamps', 'Award beans'].map((t) => (
+                  <span key={t} className="text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(224,122,58,0.12)', color: '#E07A3A' }}>{t}</span>
+                ))}
+              </div>
+            </div>
+            <button onClick={() => setShowQR(false)} className="w-full py-3.5 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all" style={{ backgroundColor: '#2C3E50' }}>Done</button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </nav>
   )
 }
