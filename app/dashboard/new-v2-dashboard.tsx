@@ -377,14 +377,14 @@ export default function NewV2Dashboard() {
             
             <div className="grid grid-cols-4 gap-3 mb-4">
               {[
-                { img: '/howworks/1.png', label: 'Visit Penkey' },
-                { img: '/howworks/2.png', label: 'Show QR code' },
-                { img: '/howworks/3.png', label: 'Earn beans' },
-                { img: '/howworks/4.png', label: 'Enjoy rewards' },
+                { img: '/howworks/1.png', label: '1. Visit Penkey' },
+                { img: '/howworks/2.png', label: '2. Show QR code' },
+                { img: '/howworks/3.png', label: '3. Earn beans' },
+                { img: '/howworks/4.png', label: '4. Enjoy rewards' },
               ].map((step) => (
                 <div key={step.img} className="text-center">
-                  <div className="w-20 h-20 rounded-full mx-auto mb-2 flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
-                    <img src={step.img} alt={step.label} className="w-16 h-16 object-contain" />
+                  <div className="w-40 h-40 rounded-full mx-auto mb-2 flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
+                    <img src={step.img} alt={step.label} className="w-32 h-32 object-contain" />
                   </div>
                   <p className="text-[11px] font-semibold leading-tight" style={{ color: '#24364B' }}>{step.label}</p>
                 </div>
