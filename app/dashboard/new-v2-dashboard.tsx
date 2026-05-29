@@ -280,25 +280,17 @@ export default function NewV2Dashboard() {
 
               {/* Right: next reward */}
               <div
-                className="w-[140px] flex-shrink-0 flex flex-col p-5 pl-4"
+                className="flex-1 p-5 pl-4 flex flex-col"
                 style={{ borderLeft: '1px solid rgba(255,255,255,0.12)' }}
               >
-                <p className="text-[9px] font-semibold uppercase tracking-[0.1em] mb-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: 'rgba(255,255,255,0.5)' }}>
                   NEXT REWARD
                 </p>
-                <p className="text-[15px] font-bold text-white leading-tight mb-3">
-                  Free coffee
-                </p>
-                <div className="flex items-center gap-2 mb-3">
-                  <div
-                    className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0"
-                    style={{ backgroundColor: '#F8F5EF', border: '1.5px solid #E8E2D8' }}
-                  >
-                    <GiftIcon className="w-12 h-12 object-contain" style={{ transform: 'scale(1.5)' }} />
-                  </div>
-                  <p className="text-[13px] font-semibold text-white">
-                    {stampBeansNeeded} beans away
+                <div className="flex items-center gap-3 mb-3">
+                  <p className="text-[15px] font-bold text-white leading-tight">
+                    Free coffee
                   </p>
+                  <img src="/coffeecup.png" alt="" className="w-24 h-24 object-contain" />
                 </div>
                 <div className="mb-2">
                   <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
