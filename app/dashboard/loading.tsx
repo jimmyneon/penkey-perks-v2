@@ -10,7 +10,7 @@ export default function DashboardLoading() {
         <div className="text-center">
           <div className="mb-4" style={{ animation: 'bounce 1.2s ease-in-out infinite' }}>
             <Image 
-              src="/duckie.png" 
+              src="/logo.png" 
               alt="Loading" 
               width={100} 
               height={100}
@@ -21,7 +21,7 @@ export default function DashboardLoading() {
             />
           </div>
           <p className="text-lg text-penkey-dark font-medium">Loading your dashboard...</p>
-          <p className="text-sm text-penkey-gray mt-2">Gathering your ducks!</p>
+          <p className="text-sm text-penkey-gray mt-2">Just a moment!</p>
         </div>
       </div>
       

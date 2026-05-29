@@ -9,8 +9,8 @@ export default function Loading() {
         <div className="mb-4">
           <div style={{ animation: 'bounce 1.2s ease-in-out infinite' }}>
             <Image 
-              src="/duckie.png" 
-              alt="Loading duck" 
+              src="/logo.png" 
+              alt="PENKEY Perks" 
               width={120} 
               height={120}
               className="mx-auto drop-shadow-lg"
