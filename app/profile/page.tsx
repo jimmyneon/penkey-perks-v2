@@ -20,6 +20,34 @@ export default async function ProfilePage() {
     .eq('id', user.id)
     .maybeSingle()
 
+  // Get bean balance
+  const { data: beanBalance } = await supabase
+    .from('bean_balances')
+    .select('*')
+    .eq('user_id', user.id)
+    .maybeSingle()
+
+  // Get user badges
+  const { data: userBadges } = await supabase
+    .from('user_badges')
+    .select('*, badges(*)')
+    .eq('user_id', user.id)
+
+  // Get active vouchers
+  const { data: userVouchers } = await supabase
+    .from('user_vouchers')
+    .select('*, voucher_templates(*)')
+    .eq('user_id', user.id)
+    .eq('status', 'active')
+
+  // Get recent purchases for favorite orders
+  const { data: purchases } = await supabase
+    .from('purchases')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(10)
+
   return (
     <ProfileClient 
       user={{
@@ -32,6 +60,10 @@ export default async function ProfilePage() {
         gps_consent: profile?.preferences?.gps_consent || false,
         marketing_consent: profile?.preferences?.marketing_consent || false,
       }}
+      beanBalance={beanBalance}
+      userBadges={userBadges || []}
+      userVouchers={userVouchers || []}
+      purchases={purchases || []}
     />
   )
 }

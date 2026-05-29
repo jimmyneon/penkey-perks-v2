@@ -32,9 +32,13 @@ interface ProfileClientProps {
     gps_consent: boolean
     marketing_consent: boolean
   }
+  beanBalance?: any
+  userBadges?: any[]
+  userVouchers?: any[]
+  purchases?: any[]
 }
 
-export function ProfileClient({ user: initialUser }: ProfileClientProps) {
+export function ProfileClient({ user: initialUser, beanBalance, userBadges, userVouchers, purchases }: ProfileClientProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [name, setName] = useState(initialUser.name)
   const [phone, setPhone] = useState(initialUser.phone)
@@ -326,7 +330,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
           <path d="M12 2a5 5 0 1 0 0 10A5 5 0 0 0 12 2z"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
         </svg>
       ),
-      label: 'My activity', sub: 'See your visits, stamps and beans', onPress: () => setShowQRDialog(true),
+      label: 'My activity', sub: `${beanBalance?.visit_count || 0} visits, ${beanBalance?.lifetime_beans || 0} lifetime beans`, onPress: () => setShowQRDialog(true),
     },
     {
       icon: (
@@ -334,7 +338,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
         </svg>
       ),
-      label: 'My achievements', sub: 'See your badges and milestones', onPress: () => {},
+      label: 'My achievements', sub: `${userBadges?.length || 0} badges earned`, onPress: () => {},
     },
     {
       icon: (
@@ -342,7 +346,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
           <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
         </svg>
       ),
-      label: 'My rewards', sub: 'View past rewards and vouchers', onPress: () => router.push('/rewards'),
+      label: 'My rewards', sub: `${userVouchers?.length || 0} active vouchers`, onPress: () => router.push('/rewards'),
     },
     {
       icon: (
@@ -350,7 +354,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
       ),
-      label: 'Favourite orders', sub: 'Your usuals, saved for quick ordering', onPress: () => router.push('/order'),
+      label: 'Favourite orders', sub: purchases && purchases.length > 0 ? `${purchases.length} recent orders` : 'No orders yet', onPress: () => router.push('/order'),
     },
     {
       icon: (
@@ -390,51 +394,84 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-0.5" style={{ color: '#9AAAB8' }}>YOUR LEVEL</p>
-            <p className="text-[18px] font-extrabold leading-tight" style={{ color: '#1C2B3A' }}>Local Legend</p>
-            <p className="text-[12px] mt-0.5" style={{ color: '#8A96A0' }}>72 beans until next level</p>
+            <p className="text-[18px] font-extrabold leading-tight" style={{ color: '#1C2B3A' }}>
+              {(() => {
+                const lifetimeBeans = beanBalance?.lifetime_beans || 0
+                if (lifetimeBeans >= 500) return 'Legendary'
+                if (lifetimeBeans >= 200) return 'Local Legend'
+                if (lifetimeBeans >= 100) return 'Regular'
+                if (lifetimeBeans >= 50) return 'Newcomer'
+                return 'Visitor'
+              })()}
+            </p>
+            <p className="text-[12px] mt-0.5" style={{ color: '#8A96A0' }}>
+              {(() => {
+                const lifetimeBeans = beanBalance?.lifetime_beans || 0
+                const nextLevel = lifetimeBeans < 50 ? 50 : lifetimeBeans < 100 ? 100 : lifetimeBeans < 200 ? 200 : 500
+                const beansUntil = nextLevel - lifetimeBeans
+                if (lifetimeBeans >= 500) return 'Max level reached!'
+                return `${beansUntil} beans until next level`
+              })()}
+            </p>
             <div className="mt-2 h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: '#EDF1F4' }}>
-              <div className="h-full rounded-full" style={{ width: '35%', backgroundColor: '#E07A3A' }} />
+              <div 
+                className="h-full rounded-full" 
+                style={{ 
+                  width: `${(() => {
+                    const lifetimeBeans = beanBalance?.lifetime_beans || 0
+                    const nextLevel = lifetimeBeans < 50 ? 50 : lifetimeBeans < 100 ? 100 : lifetimeBeans < 200 ? 200 : 500
+                    const prevLevel = lifetimeBeans < 50 ? 0 : lifetimeBeans < 100 ? 50 : lifetimeBeans < 200 ? 100 : 200
+                    if (lifetimeBeans >= 500) return '100'
+                    return `${((lifetimeBeans - prevLevel) / (nextLevel - prevLevel)) * 100}`
+                  })()}%`, 
+                  backgroundColor: '#E07A3A' 
+                }} 
+              />
             </div>
           </div>
           <div className="flex-shrink-0 text-right">
             <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-0.5" style={{ color: '#9AAAB8' }}>LIFETIME BEANS</p>
-            <p className="text-[32px] font-extrabold leading-none" style={{ color: '#1C2B3A' }}>128</p>
+            <p className="text-[32px] font-extrabold leading-none" style={{ color: '#1C2B3A' }}>{beanBalance?.lifetime_beans || 0}</p>
             <p className="text-[12px] italic mt-0.5" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>beans</p>
             <p className="text-[11px] mt-1" style={{ color: '#8A96A0' }}>Keep it up!</p>
           </div>
         </div>
 
         {/* Voucher card — dark slate, matches reference */}
-        <div
-          className="rounded-[18px] flex items-center gap-4 px-4 py-4 cursor-pointer active:scale-[0.985] transition-all"
-          style={{ backgroundColor: '#2C3E50', boxShadow: '0 4px 20px rgba(28,43,58,0.22)' }}
-          onClick={() => router.push('/rewards')}
-        >
-          {/* ticket icon with badge */}
-          <div className="relative flex-shrink-0">
-            <div className="w-14 h-14 rounded-[14px] flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.10)' }}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-              </svg>
-            </div>
-            <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-extrabold text-white" style={{ backgroundColor: '#E07A3A' }}>1</div>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-0.5" style={{ color: 'rgba(255,255,255,0.45)' }}>YOU HAVE A VOUCHER</p>
-            <p className="text-[18px] font-extrabold text-white leading-tight">Free coffee</p>
-            <p className="text-[12px] mt-0.5" style={{ color: 'rgba(255,255,255,0.45)' }}>Collect 8 stamps to earn</p>
-          </div>
-          <button
-            onClick={(e) => { e.stopPropagation(); router.push('/rewards') }}
-            className="flex-shrink-0 px-4 py-2.5 rounded-[12px] text-white text-[13px] font-bold flex items-center gap-1.5 active:opacity-80 transition-opacity"
-            style={{ backgroundColor: '#E07A3A' }}
+        {userVouchers && userVouchers.length > 0 ? (
+          <div
+            className="rounded-[18px] flex items-center gap-4 px-4 py-4 cursor-pointer active:scale-[0.985] transition-all"
+            style={{ backgroundColor: '#2C3E50', boxShadow: '0 4px 20px rgba(28,43,58,0.22)' }}
+            onClick={() => router.push('/rewards')}
           >
-            View voucher
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </button>
-        </div>
+            {/* ticket icon with badge */}
+            <div className="relative flex-shrink-0">
+              <div className="w-14 h-14 rounded-[14px] flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.10)' }}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                </svg>
+              </div>
+              <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-extrabold text-white" style={{ backgroundColor: '#E07A3A' }}>{userVouchers.length}</div>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-0.5" style={{ color: 'rgba(255,255,255,0.45)' }}>YOU HAVE {userVouchers.length} VOUCHER{userVouchers.length > 1 ? 'S' : ''}</p>
+              <p className="text-[18px] font-extrabold text-white leading-tight">{userVouchers[0]?.voucher_templates?.name || 'Reward'}</p>
+              <p className="text-[12px] mt-0.5" style={{ color: 'rgba(255,255,255,0.45)' }}>
+                {userVouchers.length > 1 ? `${userVouchers.length - 1} more available` : 'Ready to use'}
+              </p>
+            </div>
+            <button
+              onClick={(e) => { e.stopPropagation(); router.push('/rewards') }}
+              className="flex-shrink-0 px-4 py-2.5 rounded-[12px] text-white text-[13px] font-bold flex items-center gap-1.5 active:opacity-80 transition-opacity"
+              style={{ backgroundColor: '#E07A3A' }}
+            >
+              View voucher{userVouchers.length > 1 ? 's' : ''}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        ) : null}
 
         {/* Menu rows — clean list, matches reference */}
         <div className="bg-white rounded-[18px] overflow-hidden" style={{ border: '1px solid #EDF1F4', boxShadow: '0 2px 14px rgba(28,43,58,0.07)' }}>

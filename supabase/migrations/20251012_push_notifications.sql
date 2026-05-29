@@ -10,9 +10,9 @@
 
 CREATE TABLE IF NOT EXISTS public.push_subscriptions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- User
-  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
   
   -- Push subscription details (from browser)
   endpoint TEXT NOT NULL UNIQUE,
@@ -48,10 +48,10 @@ COMMENT ON TABLE public.push_subscriptions IS 'Web Push notification subscriptio
 
 CREATE TABLE IF NOT EXISTS public.push_notifications_log (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  
+
   -- References
   subscription_id UUID REFERENCES public.push_subscriptions(id) ON DELETE SET NULL,
-  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
   notification_id UUID REFERENCES public.notifications(id) ON DELETE SET NULL,
   
   -- Notification content
@@ -108,9 +108,9 @@ CREATE POLICY "Admins view all push subscriptions"
   FOR SELECT
   USING (
     EXISTS (
-      SELECT 1 FROM public.users
-      WHERE users.id = auth.uid()
-      AND users.role = 'admin'
+      SELECT 1 FROM public.staff_roles
+      WHERE staff_roles.user_id = auth.uid()
+      AND staff_roles.role IN ('admin', 'manager')
     )
   );
 
@@ -119,9 +119,9 @@ CREATE POLICY "Admins view all push logs"
   FOR SELECT
   USING (
     EXISTS (
-      SELECT 1 FROM public.users
-      WHERE users.id = auth.uid()
-      AND users.role = 'admin'
+      SELECT 1 FROM public.staff_roles
+      WHERE staff_roles.user_id = auth.uid()
+      AND staff_roles.role IN ('admin', 'manager')
     )
   );
 
