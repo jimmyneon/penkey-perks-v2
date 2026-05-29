@@ -242,9 +242,9 @@ export function NotificationBanner({
 
       // Track view if notification exists (server-side analytics)
       if (data?.id) {
-        const sessionId = sessionStorage.getItem('sessionId') || crypto.randomUUID()
+        const sessionId = sessionStorage.getItem('sessionId') || (typeof crypto !== 'undefined' ? crypto.randomUUID() : Math.random().toString(36))
         sessionStorage.setItem('sessionId', sessionId)
-        
+
         fetch('/api/notifications/track-view', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -252,7 +252,7 @@ export function NotificationBanner({
             userId,
             notificationId: data.id,
             sessionId,
-            userAgent: navigator.userAgent
+            userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown'
           })
         }).catch(err => {
           console.error('Failed to track view:', err)

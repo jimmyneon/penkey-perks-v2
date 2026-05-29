@@ -30,16 +30,18 @@ export function PushNotificationPrompt() {
 
     // Check if already subscribed
     checkSubscription()
-    
+
     // Load show count and last shown from localStorage
-    const stored = localStorage.getItem('notification-prompt-data')
-    if (stored) {
-      try {
-        const data = JSON.parse(stored)
-        setShowCount(data.showCount || 0)
-        setLastShown(data.lastShown || null)
-      } catch (e) {
-        console.error('Error parsing notification prompt data:', e)
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('notification-prompt-data')
+      if (stored) {
+        try {
+          const data = JSON.parse(stored)
+          setShowCount(data.showCount || 0)
+          setLastShown(data.lastShown || null)
+        } catch (e) {
+          console.error('Error parsing notification prompt data:', e)
+        }
       }
     }
   }, [])

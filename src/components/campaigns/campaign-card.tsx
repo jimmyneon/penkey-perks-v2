@@ -1,4 +1,5 @@
 import { Calendar, MapPin, Sparkles } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 interface CampaignCardProps {
   name: string
@@ -21,10 +22,16 @@ export function CampaignCard({
   locationRequired,
   isActive,
 }: CampaignCardProps) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const startDate = new Date(startAt)
   const endDate = new Date(endAt)
-  const now = new Date()
-  
+  const now = mounted ? new Date() : new Date(0)
+
   const isExpired = now > endDate
   const isUpcoming = now < startDate
 

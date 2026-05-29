@@ -1,7 +1,7 @@
 import { Gift, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import QRCodeLib from 'qrcode'
 
 interface VoucherCardProps {
@@ -17,6 +17,11 @@ interface VoucherCardProps {
 export function VoucherCard({ id, name, description, category, qrCode, expiresAt, status }: VoucherCardProps) {
   const [showQR, setShowQR] = useState(false)
   const [qrUrl, setQrUrl] = useState('')
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleShowQR = async () => {
     try {
@@ -28,7 +33,7 @@ export function VoucherCard({ id, name, description, category, qrCode, expiresAt
     }
   }
 
-  const isExpired = new Date(expiresAt) < new Date()
+  const isExpired = mounted ? new Date(expiresAt) < new Date() : false
   const isRedeemed = status === 'redeemed'
 
   return (
@@ -52,7 +57,7 @@ export function VoucherCard({ id, name, description, category, qrCode, expiresAt
         
         <div className="flex items-center gap-2 text-xs text-[#78716c] mb-4">
           <Clock className="h-3 w-3" />
-          <span>Expires: {new Date(expiresAt).toLocaleDateString()}</span>
+          <span>Expires: {mounted ? new Date(expiresAt).toLocaleDateString() : 'TBD'}</span>
         </div>
         
         {status === 'active' && !isExpired && (

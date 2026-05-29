@@ -73,7 +73,11 @@ export function StaffDashboardClient({
     return motivationalMessages[hash % motivationalMessages.length]
   }
 
-  const dailyMessage = getDailyMessage()
+  const [dailyMessage, setDailyMessage] = useState('')
+
+  useEffect(() => {
+    setDailyMessage(getDailyMessage())
+  }, [])
 
   const handleLogout = async () => {
     const supabase = createClient()

@@ -1,4 +1,5 @@
 import { Award } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 interface BadgeDisplayProps {
   name: string
@@ -17,9 +18,15 @@ const tierColors = {
 }
 
 export function BadgeDisplay({ name, description, tier, iconUrl, earnedAt }: BadgeDisplayProps) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   return (
     <div className="bg-[#f5f3ed] rounded-lg p-4 border border-[#e7e5e4] flex items-start gap-3">
-      <div 
+      <div
         className="w-12 h-12 rounded-full flex items-center justify-center"
         style={{ backgroundColor: tierColors[tier] }}
       >
@@ -32,7 +39,7 @@ export function BadgeDisplay({ name, description, tier, iconUrl, earnedAt }: Bad
       <div className="flex-1">
         <div className="flex items-center gap-2">
           <p className="font-medium text-[#1c1917]">{name}</p>
-          <span 
+          <span
             className="text-xs px-2 py-0.5 rounded-full text-white capitalize"
             style={{ backgroundColor: tierColors[tier] }}
           >
@@ -42,7 +49,7 @@ export function BadgeDisplay({ name, description, tier, iconUrl, earnedAt }: Bad
         <p className="text-sm text-[#78716c]">{description}</p>
         {earnedAt && (
           <p className="text-xs text-[#78716c] mt-1">
-            Earned: {new Date(earnedAt).toLocaleDateString()}
+            Earned: {mounted ? new Date(earnedAt).toLocaleDateString() : ''}
           </p>
         )}
       </div>

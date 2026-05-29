@@ -24,6 +24,7 @@ export default function CampaignsPage() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([])
   const [loading, setLoading] = useState(true)
   const [showCreateDialog, setShowCreateDialog] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -33,6 +34,10 @@ export default function CampaignsPage() {
     end_at: '',
     location_required: false,
   })
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     loadCampaigns()
@@ -87,7 +92,7 @@ export default function CampaignsPage() {
     }
   }
 
-  const now = new Date()
+  const now = mounted ? new Date() : new Date(0)
 
   const activeCampaigns = campaigns.filter(c => {
     const start = new Date(c.start_at)

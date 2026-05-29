@@ -18,8 +18,13 @@ interface BeanJarProps {
 export function BeanJar({ beans, nextReward }: BeanJarProps) {
   const [animatedBeans, setAnimatedBeans] = useState(0)
   const [showModal, setShowModal] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const targetBeans = nextReward?.beansRequired || beans
   const fillPercentage = Math.min((beans / targetBeans) * 100, 100)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
   
   // Animate bean count on mount
   useEffect(() => {
@@ -88,19 +93,19 @@ export function BeanJar({ beans, nextReward }: BeanJarProps) {
           >
             {/* Animated Beans Inside */}
             <div className="absolute inset-0 overflow-hidden">
-              {Array.from({ length: visibleBeanCount }).map((_, i) => (
+              {mounted && Array.from({ length: visibleBeanCount }).map((_, i) => (
                 <motion.span
                   key={i}
                   className="absolute text-2xl"
                   initial={{ y: -20, opacity: 0, scale: 0 }}
-                  animate={{ 
+                  animate={{
                     y: `${10 + Math.random() * 80}%`,
                     x: `${5 + Math.random() * 85}%`,
                     opacity: [0, 1, 0.8],
                     scale: [0, 1.2, 1],
                     rotate: Math.random() * 360
                   }}
-                  transition={{ 
+                  transition={{
                     delay: i * 0.05,
                     duration: 0.8,
                     ease: "easeOut"
