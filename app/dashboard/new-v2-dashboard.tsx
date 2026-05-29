@@ -38,6 +38,7 @@ export default function NewV2Dashboard() {
   const [showRewardsPanel, setShowRewardsPanel] = useState(false)
   const [voucherQrCode, setVoucherQrCode] = useState('')
   const [brightness, setBrightness] = useState(1)
+  const [converting, setConverting] = useState(false)
 
   useEffect(() => {
     loadData()
@@ -156,6 +157,60 @@ export default function NewV2Dashboard() {
       setVoucherQrCode(url)
     } catch (error) {
       console.error('Error generating voucher QR code:', error)
+    }
+  }
+
+  const convertToVoucher = async (beanThreshold: number) => {
+    if (!user || converting) return
+
+    setConverting(true)
+    try {
+      const supabase = createClient()
+
+      // Find the voucher template with matching bean threshold
+      const { data: templates } = await supabase
+        .from('voucher_templates')
+        .select('*')
+        .eq('bean_threshold', beanThreshold)
+        .eq('is_active', true)
+        .single()
+
+      if (!templates) {
+        alert('Voucher template not found')
+        return
+      }
+
+      // Call the conversion function via RPC
+      const { data, error } = await supabase.rpc('convert_beans_to_voucher', {
+        p_user_id: user.id,
+        p_voucher_template_id: templates.id,
+      })
+
+      if (error) {
+        console.error('Conversion error:', error)
+        alert(error.message || 'Failed to convert beans to voucher')
+        return
+      }
+
+      if (data.success) {
+        // Refresh bean balance
+        const newBalance = await getBeanBalance(user.id)
+        setBeanBalance(newBalance)
+
+        // Refresh vouchers
+        const newVouchers = await getActiveVouchers(user.id)
+        setVouchers(newVouchers)
+
+        setShowRewardsPanel(false)
+        alert('Voucher created successfully!')
+      } else {
+        alert(data.error || 'Failed to convert beans to voucher')
+      }
+    } catch (error) {
+      console.error('Conversion error:', error)
+      alert('Failed to convert beans to voucher')
+    } finally {
+      setConverting(false)
     }
   }
 
@@ -955,8 +1010,17 @@ export default function NewV2Dashboard() {
               {/* Buttons */}
               <div className="flex gap-3 mt-6">
                 <button
-                  onClick={() => setShowRewardsPanel(false)}
-                  className="flex-1 h-12 text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                  onClick={() => {
+                    // Find the next unlocked reward and convert it
+                    const nextUnlocked = [2, 8, 15, 25].find(threshold => currentBeans >= threshold)
+                    if (nextUnlocked) {
+                      convertToVoucher(nextUnlocked)
+                    } else {
+                      alert('You need at least 2 beans to convert to a voucher')
+                    }
+                  }}
+                  disabled={converting || currentBeans < 2}
+                  className="flex-1 h-12 text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{
                     backgroundColor: 'transparent',
                     border: '2px solid rgba(240,237,229,0.25)',
@@ -967,7 +1031,7 @@ export default function NewV2Dashboard() {
                     <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
                     <line x1="1" y1="10" x2="23" y2="10" />
                   </svg>
-                  Convert to voucher
+                  {converting ? 'Converting...' : 'Convert to voucher'}
                 </button>
                 <button
                   onClick={() => { setShowRewardsPanel(false); router.push('/rewards') }}
