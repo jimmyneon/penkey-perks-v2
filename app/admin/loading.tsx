@@ -1,7 +1,28 @@
+'use client'
+
+import Image from 'next/image'
+
 export default function AdminLoading() {
   return (
     <div className="min-h-screen bg-white">
-      <div className="container mx-auto px-4 py-6 space-y-6">
+      {/* Floating Logo Loading */}
+      <div className="fixed inset-0 flex items-center justify-center z-50 bg-white/80 backdrop-blur-sm">
+        <div className="text-center">
+          <div className="mb-4">
+            <Image 
+              src="/logo.png" 
+              alt="PENKEY Perks" 
+              width={100} 
+              height={100}
+              className="mx-auto drop-shadow-lg"
+            />
+          </div>
+          <p className="text-lg text-penkey-dark font-medium">Loading admin...</p>
+          <p className="text-sm text-penkey-gray mt-2">Just a moment!</p>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-6 space-y-6 opacity-50">
         {/* Header Skeleton */}
         <div className="space-y-2">
           <div className="h-8 w-48 bg-grey-light rounded animate-pulse" />

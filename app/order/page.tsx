@@ -83,49 +83,35 @@ export default function OrderPage() {
       <div className="w-full max-w-[430px] mx-auto">
 
         {/* Header */}
-        <div className="px-5 pt-14 pb-5 flex items-start justify-between">
-          <div className="flex-1">
-            <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
-              Coffee, your way.{' '}
-              <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px' }} />
-            </p>
-            <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#1C2B3A' }}>Order Now</h1>
-            <p className="text-[13px] font-medium mt-1.5 leading-snug" style={{ color: '#8A96A0' }}>
-              Place your order via WhatsApp<br />and we'll get it ready for you.
-            </p>
-          </div>
-          <div className="flex flex-col items-end gap-3 ml-6 flex-shrink-0">
-            <img src="/logo.png" alt="PENKEY Perks" className="h-24 w-auto object-contain" />
-          </div>
+        <div className="px-5 pt-14 pb-5">
+          <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
+            Coffee, your way.{' '}
+            <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px' }} />
+          </p>
+          <h1 className="text-[56px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#1C2B3A' }}>Order Ahead</h1>
+          <p className="text-[13px] font-medium mt-1.5 leading-snug" style={{ color: '#8A96A0' }}>
+            Skip the queue — order via WhatsApp
+          </p>
         </div>
 
         <div className="px-5 space-y-5">
 
           {/* WhatsApp info card */}
-          <div className="rounded-[18px] px-4 py-4 flex items-center gap-4" style={{ backgroundColor: 'rgba(224,122,58,0.09)', border: '1px solid rgba(224,122,58,0.18)' }}>
-            <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(37,211,102,0.12)' }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="#25D366">
+          <div className="rounded-[18px] p-4 flex items-center gap-3" style={{ backgroundColor: 'rgba(37,211,102,0.08)', border: '1px solid rgba(37,211,102,0.2)' }}>
+            <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#25D366' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.122.555 4.116 1.524 5.845L0 24l6.29-1.501A11.946 11.946 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.804 9.804 0 0 1-5.012-1.376l-.36-.214-3.733.891.932-3.617-.235-.372A9.808 9.808 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182 17.43 2.182 21.818 6.57 21.818 12c0 5.43-4.388 9.818-9.818 9.818z"/>
               </svg>
             </div>
-            <div>
-              <p className="text-[14px] font-extrabold leading-tight" style={{ color: '#1C2B3A' }}>We'll send your order to WhatsApp.</p>
-              <p className="text-[12px] mt-0.5 leading-snug" style={{ color: '#8A96A0' }}>You'll be able to review and send it before it's delivered to us.</p>
+            <div className="flex-1">
+              <p className="text-[13px] font-bold leading-tight" style={{ color: '#1C2B3A' }}>Order via WhatsApp</p>
+              <p className="text-[11px] mt-0.5 leading-snug" style={{ color: '#8A96A0' }}>Review before sending</p>
             </div>
           </div>
 
           {/* Pick-up time */}
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.12em] px-1 mb-2" style={{ color: '#9AAAB8' }}>Pick-up time</p>
-            <div className="bg-white rounded-[16px] px-4 py-4 flex items-center gap-4" style={{ border: '1px solid #EDF1F4', boxShadow: '0 1px 4px rgba(28,43,58,0.06)' }}>
-              <div className="w-9 h-9 rounded-[10px] flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F4F7F9', border: '1px solid #EDF1F4' }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9AAAB8" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-                </svg>
-              </div>
-              <p className="text-[12px] font-medium flex-1" style={{ color: '#8A96A0' }}>Choose when you'd like to pick up</p>
-            </div>
             <div className="flex gap-2.5 mt-2">
               <div className="flex-1 relative">
                 <select
@@ -152,30 +138,6 @@ export default function OrderPage() {
             </div>
           </div>
 
-          {/* Quick options */}
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.12em] px-1 mb-2" style={{ color: '#9AAAB8' }}>Quick options</p>
-            <div className="flex gap-2.5">
-              <button className="flex-1 bg-white rounded-[14px] px-3 py-3.5 flex items-center gap-3 active:bg-[#F4F7F9] transition-colors text-left" style={{ border: '1px solid #EDF1F4', boxShadow: '0 1px 4px rgba(28,43,58,0.06)' }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9AAAB8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
-                </svg>
-                <div>
-                  <p className="text-[12px] font-extrabold leading-tight" style={{ color: '#1C2B3A' }}>Load last order</p>
-                  <p className="text-[11px] mt-0.5" style={{ color: '#9AAAB8' }}>Flat White, Bacon Bap</p>
-                </div>
-              </button>
-              <button className="flex-1 bg-white rounded-[14px] px-3 py-3.5 flex items-center gap-3 active:bg-[#F4F7F9] transition-colors text-left" style={{ border: '1px solid #EDF1F4', boxShadow: '0 1px 4px rgba(28,43,58,0.06)' }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9AAAB8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
-                </svg>
-                <div className="flex-1">
-                  <p className="text-[12px] font-extrabold leading-tight" style={{ color: '#1C2B3A' }}>Choose from previous orders</p>
-                </div>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C8D4DC" strokeWidth="2.5" strokeLinecap="round"><path d="M9 18l6-6-6-6"/></svg>
-              </button>
-            </div>
-          </div>
 
           {/* Order items */}
           <div>
