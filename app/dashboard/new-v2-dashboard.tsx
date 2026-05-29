@@ -30,6 +30,7 @@ export default function NewV2Dashboard() {
   const [showQR, setShowQR] = useState(false)
   const [qrCodeUrl, setQrCodeUrl] = useState('')
   const [user, setUser] = useState<any>(null)
+  const [profile, setProfile] = useState<any>(null)
   const [selectedVoucher, setSelectedVoucher] = useState<any>(null)
   const [selectedFeatured, setSelectedFeatured] = useState<any>(null)
   const [showNotifications, setShowNotifications] = useState(false)
@@ -52,6 +53,18 @@ export default function NewV2Dashboard() {
       }
 
       setUser(authUser)
+
+      // Load user profile
+      try {
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', authUser.id)
+          .maybeSingle()
+        setProfile(profileData)
+      } catch (error) {
+        console.error('Error loading profile:', error)
+      }
 
       // Load bean balance - use fallback if table doesn't exist
       try {
@@ -219,7 +232,7 @@ export default function NewV2Dashboard() {
   const stampBeansNeeded = nextMilestone - currentBeans
   // Show stamps for the current milestone cycle
   const stampTotal = nextMilestone
-  const firstNameRaw = user?.user_metadata?.first_name || user?.user_metadata?.name?.split(' ')[0] || 'there'
+  const firstNameRaw = profile?.name || user?.user_metadata?.first_name || user?.user_metadata?.name?.split(' ')[0] || 'there'
   const firstName = firstNameRaw.charAt(0).toUpperCase() + firstNameRaw.slice(1).toLowerCase()
 
   return (
@@ -370,8 +383,8 @@ export default function NewV2Dashboard() {
                 { img: '/howworks/4.png', label: 'Enjoy rewards' },
               ].map((step) => (
                 <div key={step.img} className="text-center">
-                  <div className="w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
-                    <img src={step.img} alt={step.label} className="w-8 h-8 object-contain" />
+                  <div className="w-20 h-20 rounded-full mx-auto mb-2 flex items-center justify-center overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
+                    <img src={step.img} alt={step.label} className="w-16 h-16 object-contain" />
                   </div>
                   <p className="text-[11px] font-semibold leading-tight" style={{ color: '#24364B' }}>{step.label}</p>
                 </div>

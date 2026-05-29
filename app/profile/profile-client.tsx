@@ -347,6 +347,53 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
 
       <div className="px-4 pb-28 space-y-4">
 
+        {/* Edit Profile Section */}
+        <div className="bg-white rounded-[18px] overflow-hidden" style={{ border: '1px solid #EDF1F4', boxShadow: '0 2px 14px rgba(28,43,58,0.07)' }}>
+          <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4' }}>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#AE9888' }}>Personal Details</p>
+          </div>
+          <div className="p-4 space-y-4">
+            <div>
+              <Label className="text-[12px] font-semibold mb-2 block" style={{ color: '#5A6A7A' }}>Name</Label>
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your name"
+                className="text-[14px] rounded-[12px] border-[#EDF1F4] focus:border-[#E07A3A]"
+                style={{ backgroundColor: '#F9F7F2' }}
+              />
+            </div>
+            <div>
+              <Label className="text-[12px] font-semibold mb-2 block" style={{ color: '#5A6A7A' }}>Phone</Label>
+              <Input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Your phone number"
+                className="text-[14px] rounded-[12px] border-[#EDF1F4] focus:border-[#E07A3A]"
+                style={{ backgroundColor: '#F9F7F2' }}
+              />
+            </div>
+            <div>
+              <Label className="text-[12px] font-semibold mb-2 block" style={{ color: '#5A6A7A' }}>Date of Birth</Label>
+              <Input
+                type="date"
+                value={dateOfBirth}
+                onChange={(e) => setDateOfBirth(e.target.value)}
+                className="text-[14px] rounded-[12px] border-[#EDF1F4] focus:border-[#E07A3A]"
+                style={{ backgroundColor: '#F9F7F2' }}
+              />
+            </div>
+            <Button
+              onClick={handleSaveProfile}
+              disabled={isLoading}
+              className="w-full h-[48px] text-white text-[14px] font-bold rounded-[14px]"
+              style={{ backgroundColor: '#2C3E50' }}
+            >
+              {isLoading ? 'Saving...' : 'Save Changes'}
+            </Button>
+          </div>
+        </div>
+
         {/* Level card — matches reference */}
         <div className="bg-white rounded-[18px] flex items-center gap-4 px-4 py-4" style={{ border: '1px solid #EDF1F4', boxShadow: '0 2px 14px rgba(28,43,58,0.07)' }}>
           {/* Badge icon */}
