@@ -55,6 +55,10 @@ export default function OrderPage() {
   const [mounted, setMounted] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<any>(null)
+  const [searchQuery, setSearchQuery] = useState('')
+
+  // Customer-visible categories (hardcoded filter)
+  const CUSTOMER_VISIBLE_CATEGORIES = ['Coffee', 'Food', 'Snacks', 'Drinks', 'Bakery']
 
   // Prevent hydration mismatch
   useEffect(() => {
@@ -110,9 +114,14 @@ export default function OrderPage() {
         const cats = await catsRes.json()
         console.log('[Order Page] Items:', items)
         console.log('[Order Page] Categories:', cats)
+
+        // Filter to only customer-visible categories
+        const filteredCategories = cats.filter((cat: Category) =>
+          CUSTOMER_VISIBLE_CATEGORIES.includes(cat.name)
+        )
         setMenuItems(items)
-        setCategories(cats)
-        if (cats.length > 0) setSelectedCategory(cats[0].id)
+        setCategories(filteredCategories)
+        if (filteredCategories.length > 0) setSelectedCategory(filteredCategories[0].id)
       } catch (error) {
         console.error('[Order Page] Failed to fetch menu:', error)
       } finally {
@@ -236,13 +245,33 @@ export default function OrderPage() {
             </div>
           )}
 
+          {/* Search bar */}
+          <div className="relative">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Search menu..."
+              className="w-full bg-white rounded-[16px] px-4 py-3 pl-10 outline-none text-[14px] placeholder:text-[#C8D4DC]"
+              style={{ border: '1px solid #E8E2D8', color: '#24364B' }}
+            />
+            <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A89080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+          </div>
+
           {/* Menu items grid */}
           {loading ? (
             <div className="text-center py-8" style={{ color: '#7A8A9A' }}>Loading menu...</div>
           ) : (
             <div className="grid grid-cols-2 gap-3">
               {menuItems
-                .filter(item => !selectedCategory || item.categories?.id === selectedCategory)
+                .filter(item => {
+                  const matchesCategory = !selectedCategory || item.categories?.id === selectedCategory
+                  const matchesSearch = !searchQuery || item.name.toLowerCase().includes(searchQuery.toLowerCase())
+                  return matchesCategory && matchesSearch
+                })
                 .map((item) => (
                   <button
                     key={item.id}
