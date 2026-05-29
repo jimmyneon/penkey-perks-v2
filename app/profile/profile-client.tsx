@@ -88,46 +88,62 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
     setIsLoading(true)
 
     try {
-      // Get current profile to preserve existing preferences
-      const { data: currentProfile } = await supabase
+      // Check if profile exists
+      const { data: existingProfile } = await supabase
         .from('profiles')
-        .select('preferences')
+        .select('*')
         .eq('id', initialUser.id)
-        .single()
+        .maybeSingle()
 
-      const existingPreferences = currentProfile?.preferences || {}
+      const existingPreferences = existingProfile?.preferences || {}
 
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          name,
-          phone: phone || null,
-          date_of_birth: dateOfBirth || null,
-          preferences: {
-            ...existingPreferences,
-            gps_consent: gpsConsent,
-            marketing_consent: marketingConsent,
-          },
-        })
-        .eq('id', initialUser.id)
+      if (existingProfile) {
+        // Update existing profile
+        const { error } = await supabase
+          .from('profiles')
+          .update({
+            name,
+            phone: phone || null,
+            date_of_birth: dateOfBirth || null,
+            preferences: {
+              ...existingPreferences,
+              gps_consent: gpsConsent,
+              marketing_consent: marketingConsent,
+            },
+          })
+          .eq('id', initialUser.id)
 
-      if (error) throw error
+        if (error) throw error
+      } else {
+        // Create new profile
+        const { error } = await supabase
+          .from('profiles')
+          .insert({
+            id: initialUser.id,
+            email: initialUser.email,
+            name,
+            phone: phone || null,
+            date_of_birth: dateOfBirth || null,
+            preferences: {
+              gps_consent: gpsConsent,
+              marketing_consent: marketingConsent,
+            },
+          })
+
+        if (error) throw error
+      }
 
       toast({
         title: 'Saved',
         description: 'Your profile has been updated',
       })
 
-      // Immediately reflect the saved values in state (don't wait for server)
-      setName(name)
-      setPhone(phone || '')
-      setDateOfBirth(dateOfBirth || '')
-
       router.refresh()
     } catch (error: any) {
+      console.error('Profile save error:', error)
       toast({
         title: 'Error',
-        description: error.message,
+        description: error.message || 'Failed to save profile',
         variant: 'destructive',
       })
     } finally {
@@ -347,50 +363,69 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
 
       <div className="px-4 pb-28 space-y-4">
 
-        {/* Edit Profile Section */}
+        {/* Personal Details - Editable rows */}
         <div className="bg-white rounded-[18px] overflow-hidden" style={{ border: '1px solid #EDF1F4', boxShadow: '0 2px 14px rgba(28,43,58,0.07)' }}>
           <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4' }}>
             <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#AE9888' }}>Personal Details</p>
           </div>
-          <div className="p-4 space-y-4">
-            <div>
-              <Label className="text-[12px] font-semibold mb-2 block" style={{ color: '#5A6A7A' }}>Name</Label>
-              <Input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Your name"
-                className="text-[14px] rounded-[12px] border-[#EDF1F4] focus:border-[#E07A3A]"
-                style={{ backgroundColor: '#F9F7F2' }}
-              />
+          
+          {/* Name row */}
+          <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4' }}>
+            <div className="flex items-center gap-3 mb-2">
+              <User className="w-[17px] h-[17px] flex-shrink-0" strokeWidth={1.8} style={{ color: '#9A7A6A' }} />
+              <span className="text-[14px] font-medium" style={{ color: '#5A6A7A' }}>Name</span>
             </div>
-            <div>
-              <Label className="text-[12px] font-semibold mb-2 block" style={{ color: '#5A6A7A' }}>Phone</Label>
-              <Input
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="Your phone number"
-                className="text-[14px] rounded-[12px] border-[#EDF1F4] focus:border-[#E07A3A]"
-                style={{ backgroundColor: '#F9F7F2' }}
-              />
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your name"
+              className="w-full text-[14px] font-medium bg-transparent outline-none placeholder:text-[#C8D4DC] py-1"
+              style={{ color: '#261408' }}
+            />
+          </div>
+
+          {/* Phone row */}
+          <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4' }}>
+            <div className="flex items-center gap-3 mb-2">
+              <Phone className="w-[17px] h-[17px] flex-shrink-0" strokeWidth={1.8} style={{ color: '#9A7A6A' }} />
+              <span className="text-[14px] font-medium" style={{ color: '#5A6A7A' }}>Phone</span>
             </div>
-            <div>
-              <Label className="text-[12px] font-semibold mb-2 block" style={{ color: '#5A6A7A' }}>Date of Birth</Label>
-              <Input
-                type="date"
-                value={dateOfBirth}
-                onChange={(e) => setDateOfBirth(e.target.value)}
-                className="text-[14px] rounded-[12px] border-[#EDF1F4] focus:border-[#E07A3A]"
-                style={{ backgroundColor: '#F9F7F2' }}
-              />
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Your phone number"
+              className="w-full text-[14px] font-medium bg-transparent outline-none placeholder:text-[#C8D4DC] py-1"
+              style={{ color: '#261408' }}
+            />
+          </div>
+
+          {/* Date of birth row */}
+          <div className="px-4 py-3">
+            <div className="flex items-center gap-3 mb-2">
+              <Calendar className="w-[17px] h-[17px] flex-shrink-0" strokeWidth={1.8} style={{ color: '#9A7A6A' }} />
+              <span className="text-[14px] font-medium" style={{ color: '#5A6A7A' }}>Date of Birth</span>
             </div>
-            <Button
+            <input
+              type="date"
+              value={dateOfBirth}
+              onChange={(e) => setDateOfBirth(e.target.value)}
+              className="w-full text-[14px] font-medium bg-transparent outline-none placeholder:text-[#C8D4DC] py-1"
+              style={{ color: '#261408' }}
+            />
+          </div>
+
+          {/* Save button */}
+          <div className="px-4 py-3">
+            <button
               onClick={handleSaveProfile}
               disabled={isLoading}
-              className="w-full h-[48px] text-white text-[14px] font-bold rounded-[14px]"
+              className="w-full h-[48px] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60"
               style={{ backgroundColor: '#2C3E50' }}
             >
               {isLoading ? 'Saving...' : 'Save Changes'}
-            </Button>
+            </button>
           </div>
         </div>
 
