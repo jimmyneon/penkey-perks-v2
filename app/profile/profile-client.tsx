@@ -13,6 +13,13 @@ import { createClient } from '@/lib/supabase/client'
 import QRCodeLib from 'qrcode'
 import { BottomNav } from '@/components/bottom-nav'
 
+function getGreeting() {
+  const h = new Date().getHours()
+  if (h < 12) return 'Good morning'
+  if (h < 17) return 'Good afternoon'
+  return 'Good evening'
+}
+
 interface ProfileClientProps {
   user: {
     id: string
@@ -326,19 +333,18 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
     <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
 
       {/* Header — matches dashboard greeting style */}
-      <div className="px-5 pt-14 pb-5 flex items-start justify-between">
+      <div className="px-5 pt-10 pb-5 flex items-start justify-between">
         <div className="flex-1">
-          <p className="text-[18px] font-bold italic leading-tight" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>
-            {name ? `Hi, ` : 'Your profile'}
-            {name && <span style={{ fontStyle: 'normal', fontFamily: 'inherit', fontWeight: 800, color: '#E07A3A' }}>{name.split(' ')[0]}</span>}
-            {name && <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle ml-1" style={{ marginBottom: '2px' }} />}
+          <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
+            {name ? `${getGreeting()}, ` : 'Your profile'}
+            {name && <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px', animation: 'heartPulse 1.2s ease-in-out 3' }} />}
           </p>
-          <p className="text-[13px] font-medium mt-1" style={{ color: '#8A96A0' }}>
-            Here&apos;s your Penkey Perks profile
-          </p>
+          <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#24364B' }}>
+            {name ? name.split(' ')[0] : 'Profile'}
+          </h1>
         </div>
-        <div className="flex flex-col items-end gap-3 ml-6 flex-shrink-0">
-          <img src="/logo.png" alt="PENKEY Perks" className="h-10 w-auto" />
+        <div className="flex flex-col items-end ml-6">
+          <img src="/logo.png" alt="PENKEY Perks" className="h-36 w-auto object-contain" style={{ marginTop: '-28px' }} />
         </div>
       </div>
 
