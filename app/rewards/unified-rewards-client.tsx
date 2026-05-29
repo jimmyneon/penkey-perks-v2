@@ -61,6 +61,18 @@ export function UnifiedRewardsClient({
   const { toast } = useToast()
   const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
 
+  // Lock body scroll when QR dialog is open
+  useEffect(() => {
+    if (selectedEarnedReward) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [selectedEarnedReward])
+
   // Fetch voucher templates from database
   useEffect(() => {
     const fetchVoucherTemplates = async () => {
