@@ -52,7 +52,7 @@ export function BottomSheet({
     <AnimatePresence mode="wait">
       {open && (
         <>
-          {/* Backdrop - instant appearance, no drag-based opacity */}
+          {/* Backdrop - instant appearance */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -62,28 +62,27 @@ export function BottomSheet({
             onClick={() => onOpenChange(false)}
           />
           
-          {/* Sheet - drag only on handle area */}
+          {/* Sheet - entire sheet draggable with proper threshold */}
           <motion.div
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 35, stiffness: 250 }}
+            drag="y"
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={0.2}
+            dragSnapToOrigin={true}
+            onDragEnd={handleDragEnd}
+            style={{ y }}
             className={cn(
               "fixed bottom-0 left-0 right-0 z-[10000] bg-cream-card rounded-t-3xl shadow-premium-xl max-h-[85vh] overflow-hidden",
               className
             )}
           >
-            {/* Handle - only this area is draggable */}
-            <motion.div
-              drag="y"
-              dragConstraints={{ top: 0, bottom: 0 }}
-              dragElastic={0.2}
-              onDragEnd={handleDragEnd}
-              style={{ y }}
-              className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing"
-            >
+            {/* Handle */}
+            <div className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing">
               <div className="w-12 h-1.5 bg-brown/20 rounded-full" />
-            </motion.div>
+            </div>
             
             {/* Header */}
             {(title || showCloseButton) && (
@@ -93,7 +92,10 @@ export function BottomSheet({
                 )}
                 {showCloseButton && (
                   <button
-                    onClick={() => onOpenChange(false)}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      onOpenChange(false)
+                    }}
                     className="p-2 rounded-full hover:bg-blush transition-colors"
                   >
                     <X className="w-5 h-5 text-brown" />
