@@ -204,10 +204,10 @@ export default function OrderPage() {
   const updateItem = (id: string, field: keyof OrderItem, value: string | number) =>
     setOrderItems(prev => prev.map(i => i.id === id ? { ...i, [field]: value } : i))
 
-  const sendToWhatsApp = () => {
+  const sendToWhatsApp = async () => {
     const validItems = orderItems.filter(i => i.item.trim())
     if (validItems.length === 0) return
-    
+
     const orderText = validItems.map(i => {
       let itemLine = `${i.quantity}x ${i.item}`
       if (i.modifier) {
@@ -218,10 +218,44 @@ export default function OrderPage() {
       }
       return itemLine
     }).join('\n')
-    
+
     const total = validItems.reduce((sum, i) => sum + (i.totalPrice || 0), 0)
-    
+
     const message = `Hi Penkey!${userName ? ` It's ${userName}` : ''} — I'd like to place a collection order.${userPhone ? `\nMy number: ${userPhone}` : ''}\n\nPickup: ${pickupDay}, ${pickupTime}\n\nOrder:\n${orderText}\n\nTotal: £${total.toFixed(2)}${notes ? `\n\nNotes: ${notes}` : ''}\n\nThanks!`
+
+    // Save order to database
+    try {
+      const supabase = createClient()
+      const { data: { user: authUser } } = await supabase.auth.getUser()
+
+      if (authUser) {
+        const { error } = await supabase
+          .from('purchases')
+          .insert({
+            user_id: authUser.id,
+            total_amount: total,
+            items: validItems.map(i => ({
+              name: i.item,
+              quantity: i.quantity,
+              modifiers: i.modifier,
+              price: i.totalPrice
+            })),
+            metadata: {
+              pickup_day: pickupDay,
+              pickup_time: pickupTime,
+              notes: notes,
+              sent_via_whatsapp: true
+            }
+          })
+
+        if (error) {
+          console.error('Error saving order:', error)
+        }
+      }
+    } catch (error) {
+      console.error('Error saving order to database:', error)
+    }
+
     window.open(`https://wa.me/441590619472?text=${encodeURIComponent(message)}`, '_blank')
     setOrderSent(true)
   }

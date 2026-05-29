@@ -71,6 +71,7 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
   const [showPauseDialog, setShowPauseDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [showSettingsDialog, setShowSettingsDialog] = useState(false)
+  const [showAchievementsDialog, setShowAchievementsDialog] = useState(false)
   const [confirmText, setConfirmText] = useState('')
 
   // QR Code
@@ -330,7 +331,7 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
           <path d="M12 2a5 5 0 1 0 0 10A5 5 0 0 0 12 2z"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
         </svg>
       ),
-      label: 'My activity', sub: `${beanBalance?.visit_count || 0} visits, ${beanBalance?.lifetime_beans || 0} lifetime beans`, onPress: () => setShowQRDialog(true),
+      label: 'My activity', sub: beanBalance?.visit_count > 0 ? `${beanBalance.visit_count} visits, ${beanBalance.lifetime_beans || 0} beans` : 'Start earning beans on your first visit!', onPress: () => setShowQRDialog(true),
     },
     {
       icon: (
@@ -338,7 +339,7 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
         </svg>
       ),
-      label: 'My achievements', sub: `${userBadges?.length || 0} badges earned`, onPress: () => {},
+      label: 'My achievements', sub: userBadges && userBadges.length > 0 ? `${userBadges.length} badges earned` : 'Earn badges as you visit!', onPress: () => setShowAchievementsDialog(true),
     },
     {
       icon: (
@@ -346,7 +347,7 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
           <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
         </svg>
       ),
-      label: 'My rewards', sub: `${userVouchers?.length || 0} active vouchers`, onPress: () => router.push('/rewards'),
+      label: 'My rewards', sub: userVouchers && userVouchers.length > 0 ? `${userVouchers.length} active voucher${userVouchers.length > 1 ? 's' : ''}` : 'Redeem beans for rewards', onPress: () => router.push('/rewards'),
     },
     {
       icon: (
@@ -354,7 +355,7 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
       ),
-      label: 'Favourite orders', sub: purchases && purchases.length > 0 ? `${purchases.length} recent orders` : 'No orders yet', onPress: () => router.push('/order'),
+      label: 'Favourite orders', sub: purchases && purchases.length > 0 ? `${purchases.length} recent order${purchases.length > 1 ? 's' : ''}` : 'Your orders will appear here', onPress: () => router.push('/order'),
     },
     {
       icon: (
@@ -716,36 +717,165 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
         </DialogContent>
       </Dialog>
 
-      {/* Staff QR Code Dialog */}
+      {/* Activity Dialog */}
       <Dialog open={showQRDialog} onOpenChange={setShowQRDialog}>
-        <DialogContent className="sm:max-w-sm rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)]">
+        <DialogContent className="sm:max-w-md rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold text-center">Your QR Code</DialogTitle>
-            <DialogDescription className="text-[#8A96A0] text-[13px] text-center">Show to staff to earn stamps and beans</DialogDescription>
+            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold">My Activity</DialogTitle>
+            <DialogDescription className="text-[#8A96A0] text-[13px]">Your visits, stamps, and beans</DialogDescription>
           </DialogHeader>
-          <div className="space-y-3 pb-1">
-            <div className="rounded-[16px] p-5 flex items-center justify-center" style={{ backgroundColor: '#F4F7F9', border: '1px solid #EDF1F4' }}>
-              {qrCodeUrl ? (
-                <img src={qrCodeUrl} alt="QR Code" className="w-52 h-52" />
+          <div className="space-y-4 pb-1">
+            {/* Stats cards */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-[16px] p-4 text-center" style={{ backgroundColor: '#FEF3EA', border: '1px solid #E07A3A' }}>
+                <p className="text-[32px] font-extrabold" style={{ color: '#E07A3A' }}>{beanBalance?.visit_count || 0}</p>
+                <p className="text-[12px] font-semibold mt-1" style={{ color: '#1C2B3A' }}>Visits</p>
+              </div>
+              <div className="rounded-[16px] p-4 text-center" style={{ backgroundColor: '#F4F7F9', border: '1px solid #EDF1F4' }}>
+                <p className="text-[32px] font-extrabold" style={{ color: '#1C2B3A' }}>{beanBalance?.lifetime_beans || 0}</p>
+                <p className="text-[12px] font-semibold mt-1" style={{ color: '#8A96A0' }}>Lifetime Beans</p>
+              </div>
+            </div>
+
+            {/* Recent activity */}
+            <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid #EDF1F4' }}>
+              <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#AE9888' }}>Recent Activity</p>
+              </div>
+              {beanBalance?.visit_count > 0 ? (
+                <div className="p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#FEF3EA' }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E07A3A" strokeWidth="2">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-[13px] font-medium" style={{ color: '#1C2B3A' }}>Total visits</p>
+                        <p className="text-[11px]" style={{ color: '#8A96A0' }}>{beanBalance.visit_count} visits</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F4F7F9' }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2B3A" strokeWidth="2">
+                          <circle cx="12" cy="12" r="10"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-[13px] font-medium" style={{ color: '#1C2B3A' }}>Lifetime beans</p>
+                        <p className="text-[11px]" style={{ color: '#8A96A0' }}>{beanBalance.lifetime_beans} beans earned</p>
+                      </div>
+                    </div>
+                  </div>
+                  {beanBalance.last_visit_at && (
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F4F7F9' }}>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2B3A" strokeWidth="2">
+                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="text-[13px] font-medium" style={{ color: '#1C2B3A' }}>Last visit</p>
+                          <p className="text-[11px]" style={{ color: '#8A96A0' }}>
+                            {new Date(beanBalance.last_visit_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               ) : (
-                <div className="w-52 h-52 rounded-[12px] flex items-center justify-center" style={{ backgroundColor: '#EDF1F4' }}>
-                  <QrCode className="w-12 h-12" style={{ color: '#9AAAB8' }} />
+                <div className="p-6 text-center">
+                  <p className="text-[13px]" style={{ color: '#8A96A0' }}>No visits yet. Start earning beans on your first visit!</p>
                 </div>
               )}
             </div>
-            <div className="rounded-[14px] px-4 py-3" style={{ backgroundColor: '#F4F7F9', border: '1px solid #EDF1F4' }}>
-              <p className="text-[10px] font-bold uppercase tracking-[0.1em] mb-1" style={{ color: '#9AAAB8' }}>Staff can use this to</p>
-              <div className="flex gap-2 flex-wrap">
-                {['Check-ins', 'Add stamps', 'Award beans'].map((t) => (
-                  <span key={t} className="text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(224,122,58,0.12)', color: '#E07A3A' }}>{t}</span>
-                ))}
+
+            {/* QR Code section */}
+            <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid #EDF1F4' }}>
+              <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#AE9888' }}>Your QR Code</p>
+              </div>
+              <div className="p-5 flex flex-col items-center">
+                {qrCodeUrl ? (
+                  <img src={qrCodeUrl} alt="QR Code" className="w-48 h-48 mb-3" />
+                ) : (
+                  <div className="w-48 h-48 flex items-center justify-center" style={{ backgroundColor: '#F4F7F9' }}>
+                    <p className="text-[13px]" style={{ color: '#8A96A0' }}>Loading...</p>
+                  </div>
+                )}
+                <p className="text-[12px] text-center" style={{ color: '#8A96A0' }}>Show this to staff to earn stamps and beans</p>
               </div>
             </div>
-            <button onClick={() => setShowQRDialog(false)} className="w-full py-3.5 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all" style={{ backgroundColor: '#2C3E50' }}>Done</button>
           </div>
         </DialogContent>
       </Dialog>
-      
+
+      {/* Achievements Dialog */}
+      <Dialog open={showAchievementsDialog} onOpenChange={setShowAchievementsDialog}>
+        <DialogContent className="sm:max-w-md rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold">My Achievements</DialogTitle>
+            <DialogDescription className="text-[#8A96A0] text-[13px]">Badges and milestones you've earned</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 pb-1">
+            {userBadges && userBadges.length > 0 ? (
+              <div className="grid grid-cols-2 gap-3">
+                {userBadges.map((badge: any) => (
+                  <div key={badge.id} className="rounded-[16px] p-4 text-center" style={{ backgroundColor: '#FEF3EA', border: '1px solid #E07A3A' }}>
+                    <div className="w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center" style={{ backgroundColor: '#FFF' }}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#E07A3A" stroke="#E07A3A" strokeWidth="1" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    <p className="text-[14px] font-bold" style={{ color: '#1C2B3A' }}>{badge.badges?.name || 'Badge'}</p>
+                    <p className="text-[11px] mt-1" style={{ color: '#8A96A0' }}>{badge.badges?.description || ''}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-[16px] p-8 text-center" style={{ backgroundColor: '#F4F7F9', border: '1px solid #EDF1F4' }}>
+                <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: '#FEF3EA' }}>
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#E07A3A" strokeWidth="1.5">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                </div>
+                <p className="text-[15px] font-semibold mb-2" style={{ color: '#1C2B3A' }}>No badges yet</p>
+                <p className="text-[13px]" style={{ color: '#8A96A0' }}>Keep visiting to earn badges and unlock rewards!</p>
+              </div>
+            )}
+
+            {/* Badge tiers info */}
+            <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid #EDF1F4' }}>
+              <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#AE9888' }}>Badge Tiers</p>
+              </div>
+              <div className="p-4 space-y-2">
+                {[
+                  { name: 'Visitor', beans: 0, color: '#A89080' },
+                  { name: 'Newcomer', beans: 50, color: '#8A96A0' },
+                  { name: 'Regular', beans: 100, color: '#E07A3A' },
+                  { name: 'Local Legend', beans: 200, color: '#2C3E50' },
+                  { name: 'Legendary', beans: 500, color: '#F28A2E' },
+                ].map((tier) => (
+                  <div key={tier.name} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: tier.color }} />
+                      <span className="text-[13px]" style={{ color: '#1C2B3A' }}>{tier.name}</span>
+                    </div>
+                    <span className="text-[12px]" style={{ color: '#8A96A0' }}>{tier.beans}+ beans</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <BottomNav />
     </div>
   )
