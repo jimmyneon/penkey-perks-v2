@@ -707,6 +707,14 @@ CREATE POLICY "Users can view own bean balance"
   ON public.bean_balances FOR SELECT
   USING (auth.uid() = user_id);
 
+CREATE POLICY "Users can insert own bean balance"
+  ON public.bean_balances FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own bean balance"
+  ON public.bean_balances FOR UPDATE
+  USING (auth.uid() = user_id);
+
 CREATE POLICY "Staff can view all bean balances"
   ON public.bean_balances FOR SELECT
   USING (

@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { Home, MessageCircle, ScanLine, Gift, User } from 'lucide-react'
+import { Home, MessageCircle, QrCode, Gift, User } from 'lucide-react'
 
 const leftItems = [
   { href: '/dashboard', icon: Home, label: 'Home' },
@@ -76,7 +76,7 @@ export function BottomNav() {
                   border: '3px solid white',
                 }}
               >
-                <ScanLine className="w-[24px] h-[24px] text-white" strokeWidth={1.8} />
+                <QrCode className="w-[24px] h-[24px] text-white" strokeWidth={1.8} />
               </div>
             </Link>
 

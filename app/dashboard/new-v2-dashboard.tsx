@@ -232,8 +232,8 @@ export default function NewV2Dashboard() {
   const stampBeansNeeded = nextMilestone - currentBeans
   // Show stamps for the current milestone cycle
   const stampTotal = nextMilestone
-  const firstNameRaw = profile?.name || user?.user_metadata?.first_name || user?.user_metadata?.name?.split(' ')[0] || 'there'
-  const firstName = firstNameRaw.charAt(0).toUpperCase() + firstNameRaw.slice(1).toLowerCase()
+  const fullName = profile?.name || user?.user_metadata?.first_name || user?.user_metadata?.name || 'there'
+  const firstName = fullName.split(' ')[0].charAt(0).toUpperCase() + fullName.split(' ')[0].slice(1).toLowerCase()
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
