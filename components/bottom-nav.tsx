@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { Home, MessageCircle, ScanLine, Gift, User } from 'lucide-react'
+import { Home, MessageCircle, QrCode, Gift, User } from 'lucide-react'
 
 const leftItems = [
   { href: '/dashboard', icon: Home, label: 'Home' },
@@ -21,8 +21,13 @@ export function BottomNav() {
     <nav className="fixed bottom-0 left-0 right-0 z-50">
       <div className="w-full max-w-[430px] mx-auto px-4 pb-4">
         <div
-          className="backdrop-blur-xl shadow-[0_-1px_0_rgba(36,54,75,0.06),0_-4px_20px rgba(36,54,75,0.04)] rounded-[28px]"
-          style={{ backgroundColor: '#F9F7F2', WebkitBackdropFilter: 'blur(20px)' }}
+          className="backdrop-blur-xl rounded-[28px]"
+          style={{
+            backgroundColor: 'rgba(249,247,242,0.97)',
+            WebkitBackdropFilter: 'blur(20px)',
+            boxShadow: '0 -2px 0 rgba(36,54,75,0.06), 0 -8px 32px rgba(36,54,75,0.12), 0 4px 24px rgba(36,54,75,0.08)',
+            border: '1px solid rgba(36,54,75,0.08)',
+          }}
         >
           <div className="flex items-center h-[64px]">
 
@@ -64,15 +69,14 @@ export function BottomNav() {
               className="flex items-center justify-center flex-shrink-0 -mt-5 mx-2"
             >
               <div
-                className="w-[52px] h-[52px] rounded-full flex flex-col items-center justify-center gap-0.5 active:scale-95 transition-transform duration-150"
+                className="w-[60px] h-[60px] rounded-full flex items-center justify-center active:scale-95 transition-transform duration-150"
                 style={{
                   background: 'linear-gradient(135deg, #E87A2E 0%, #D66B1F 100%)',
-                  boxShadow: '0 3px 12px rgba(232,122,46,0.25)',
+                  boxShadow: '0 4px 16px rgba(232,122,46,0.4)',
                   border: '3px solid white',
                 }}
               >
-                <ScanLine className="w-[20px] h-[20px] text-white" strokeWidth={1.8} />
-                <span className="text-[7px] font-semibold text-white tracking-wide">SCAN</span>
+                <QrCode className="w-[24px] h-[24px] text-white" strokeWidth={1.8} />
               </div>
             </Link>
 

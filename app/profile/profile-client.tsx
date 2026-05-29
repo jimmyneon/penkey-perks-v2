@@ -59,8 +59,9 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
   // Account actions
   const [showPauseDialog, setShowPauseDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showSettingsDialog, setShowSettingsDialog] = useState(false)
   const [confirmText, setConfirmText] = useState('')
-  
+
   // QR Code
   const [showQRDialog, setShowQRDialog] = useState(false)
   const [qrCodeUrl, setQrCodeUrl] = useState<string>('')
@@ -88,46 +89,71 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
     setIsLoading(true)
 
     try {
-      // Get current profile to preserve existing preferences
-      const { data: currentProfile } = await supabase
+      console.log('Attempting to save profile for user:', initialUser.id)
+      console.log('Data to save:', { name, phone, dateOfBirth, gpsConsent, marketingConsent })
+
+      // Check if profile exists
+      const { data: existingProfile, error: checkError } = await supabase
         .from('profiles')
-        .select('preferences')
+        .select('*')
         .eq('id', initialUser.id)
-        .single()
+        .maybeSingle()
 
-      const existingPreferences = currentProfile?.preferences || {}
+      console.log('Profile check result:', { existingProfile, checkError })
 
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          name,
-          phone: phone || null,
-          date_of_birth: dateOfBirth || null,
-          preferences: {
-            ...existingPreferences,
-            gps_consent: gpsConsent,
-            marketing_consent: marketingConsent,
-          },
-        })
-        .eq('id', initialUser.id)
+      const existingPreferences = existingProfile?.preferences || {}
 
-      if (error) throw error
+      if (existingProfile) {
+        // Update existing profile
+        console.log('Updating existing profile')
+        const { error } = await supabase
+          .from('profiles')
+          .update({
+            name,
+            phone: phone || null,
+            date_of_birth: dateOfBirth || null,
+            preferences: {
+              ...existingPreferences,
+              gps_consent: gpsConsent,
+              marketing_consent: marketingConsent,
+            },
+          })
+          .eq('id', initialUser.id)
+
+        console.log('Update result:', error)
+        if (error) throw error
+      } else {
+        // Create new profile
+        console.log('Creating new profile')
+        const { error } = await supabase
+          .from('profiles')
+          .insert({
+            id: initialUser.id,
+            email: initialUser.email,
+            name,
+            phone: phone || null,
+            date_of_birth: dateOfBirth || null,
+            preferences: {
+              gps_consent: gpsConsent,
+              marketing_consent: marketingConsent,
+            },
+          })
+
+        console.log('Insert result:', error)
+        if (error) throw error
+      }
 
       toast({
         title: 'Saved',
         description: 'Your profile has been updated',
       })
 
-      // Immediately reflect the saved values in state (don't wait for server)
-      setName(name)
-      setPhone(phone || '')
-      setDateOfBirth(dateOfBirth || '')
-
       router.refresh()
     } catch (error: any) {
+      console.error('Profile save error:', error)
       toast({
         title: 'Error',
-        description: error.message,
+        description: error.message || 'Failed to save profile',
         variant: 'destructive',
       })
     } finally {
@@ -325,7 +351,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
           <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
         </svg>
       ),
-      label: 'Settings', sub: 'Notifications, privacy and more', onPress: () => setShowPasswordDialog(true),
+      label: 'Settings', sub: 'Notifications, privacy and more', onPress: () => setShowSettingsDialog(true),
     },
   ]
 
@@ -538,6 +564,107 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
               <button onClick={() => { setShowDeleteDialog(false); setConfirmText('') }} className="flex-1 py-3 text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all" style={{ backgroundColor: '#EDF1F4', color: '#5A6A7A' }}>Cancel</button>
               <button onClick={handleDeleteAccount} disabled={isLoading || confirmText !== 'DELETE'} className="flex-1 py-3 bg-red-500 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-40">{isLoading ? 'Deleting...' : 'Delete'}</button>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Settings Dialog */}
+      <Dialog open={showSettingsDialog} onOpenChange={setShowSettingsDialog}>
+        <DialogContent className="sm:max-w-md rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold">Settings</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 pb-1">
+            {/* Personal Details Section */}
+            <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid #EDF1F4' }}>
+              <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#AE9888' }}>Personal Details</p>
+              </div>
+              <div className="p-4 space-y-3">
+                <div>
+                  <Label className="text-[12px] font-semibold mb-1.5 block" style={{ color: '#5A6A7A' }}>Name</Label>
+                  <Input
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your name"
+                    className="text-[14px] rounded-[10px] border-[#EDF1F4] focus:border-[#E07A3A]"
+                    style={{ backgroundColor: '#F9F7F2' }}
+                  />
+                </div>
+                <div>
+                  <Label className="text-[12px] font-semibold mb-1.5 block" style={{ color: '#5A6A7A' }}>Phone</Label>
+                  <Input
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="Your phone number"
+                    className="text-[14px] rounded-[10px] border-[#EDF1F4] focus:border-[#E07A3A]"
+                    style={{ backgroundColor: '#F9F7F2' }}
+                  />
+                </div>
+                <div>
+                  <Label className="text-[12px] font-semibold mb-1.5 block" style={{ color: '#5A6A7A' }}>Date of Birth</Label>
+                  <Input
+                    type="date"
+                    value={dateOfBirth}
+                    onChange={(e) => setDateOfBirth(e.target.value)}
+                    className="text-[14px] rounded-[10px] border-[#EDF1F4] focus:border-[#E07A3A]"
+                    style={{ backgroundColor: '#F9F7F2' }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Preferences Section */}
+            <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid #EDF1F4' }}>
+              <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#AE9888' }}>Preferences</p>
+              </div>
+              <div className="p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[14px] font-medium" style={{ color: '#1C2B3A' }}>GPS Location</p>
+                    <p className="text-[12px]" style={{ color: '#8A96A0' }}>Allow location-based offers</p>
+                  </div>
+                  <Toggle on={gpsConsent} onToggle={() => setGpsConsent(!gpsConsent)} />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[14px] font-medium" style={{ color: '#1C2B3A' }}>Marketing</p>
+                    <p className="text-[12px]" style={{ color: '#8A96A0' }}>Receive promotional emails</p>
+                  </div>
+                  <Toggle on={marketingConsent} onToggle={() => setMarketingConsent(!marketingConsent)} />
+                </div>
+              </div>
+            </div>
+
+            {/* Security Section */}
+            <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid #EDF1F4' }}>
+              <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#AE9888' }}>Security</p>
+              </div>
+              <div className="p-4">
+                <button
+                  onClick={() => {
+                    setShowSettingsDialog(false)
+                    setShowPasswordDialog(true)
+                  }}
+                  className="w-full flex items-center justify-between py-2"
+                >
+                  <span className="text-[14px] font-medium" style={{ color: '#1C2B3A' }}>Change Password</span>
+                  <ChevronRight className="w-[15px] h-[15px] text-[#CCBDB4]" strokeWidth={1.8} />
+                </button>
+              </div>
+            </div>
+
+            {/* Save button */}
+            <button
+              onClick={handleSaveProfile}
+              disabled={isLoading}
+              className="w-full h-[48px] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60"
+              style={{ backgroundColor: '#2C3E50' }}
+            >
+              {isLoading ? 'Saving...' : 'Save Changes'}
+            </button>
           </div>
         </DialogContent>
       </Dialog>
