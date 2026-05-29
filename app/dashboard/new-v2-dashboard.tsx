@@ -262,7 +262,7 @@ export default function NewV2Dashboard() {
                     YOUR BEAN BALANCE
                   </p>
                   <div className="relative inline-block">
-                    <img src="/beanpile.png" alt="" className="object-contain absolute -top-2 -left-2 opacity-40" style={{ width: '640px', height: '640px' }} />
+                    <img src="/beanpile.png" alt="" className="w-[640px] h-[640px] object-contain absolute -top-2 -left-2 opacity-40" />
                     <div className="flex items-baseline gap-2 mb-1 relative z-10">
                       <span className="text-[56px] font-extrabold leading-none" style={{ color: '#F0EDE5' }}>{currentBeans}</span>
                     </div>
