@@ -41,7 +41,6 @@ export default function OrderPage() {
   const [orderItems, setOrderItems] = useState<OrderItem[]>([])
   const [userName, setUserName] = useState('')
   const [userPhone, setUserPhone] = useState('')
-  const [userOrgId, setUserOrgId] = useState<string | null>(null)
   const [menuItems, setMenuItems] = useState<MenuItem[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -51,40 +50,13 @@ export default function OrderPage() {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const supabase = createClient()
-        const { data: { user } } = await supabase.auth.getUser()
-        console.log('[Order Page] User:', user?.id)
-        if (!user) {
-          console.error('[Order Page] No user found')
-          setLoading(false)
-          return
-        }
-
-        // Get org_id from profile
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('org_id')
-          .eq('id', user.id)
-          .single()
-
-        console.log('[Order Page] Profile:', profile, 'Error:', profileError)
-
-        if (!profile?.org_id) {
-          console.error('[Order Page] No org_id found for user')
-          setLoading(false)
-          return
-        }
-
-        setUserOrgId(profile.org_id)
-        console.log('[Order Page] Org ID:', profile.org_id)
-
         const POS_URL = process.env.NEXT_PUBLIC_POS_URL || 'https://penkey-pos.vercel.app'
         console.log('[Order Page] POS URL:', POS_URL)
-        console.log('[Order Page] Fetching from:', `${POS_URL}/api/public/menu?org_id=${profile.org_id}`)
+        console.log('[Order Page] Fetching from:', `${POS_URL}/api/public/menu`)
 
         const [itemsRes, catsRes] = await Promise.all([
-          fetch(`${POS_URL}/api/public/menu?org_id=${profile.org_id}`),
-          fetch(`${POS_URL}/api/public/categories?org_id=${profile.org_id}`)
+          fetch(`${POS_URL}/api/public/menu`),
+          fetch(`${POS_URL}/api/public/categories`)
         ])
 
         console.log('[Order Page] Items response status:', itemsRes.status)
