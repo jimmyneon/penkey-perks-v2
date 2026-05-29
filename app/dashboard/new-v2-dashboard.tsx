@@ -257,7 +257,7 @@ export default function NewV2Dashboard() {
             <div className="flex">
               {/* Left: bean balance */}
               <div
-                className="flex-1 p-5 pr-4 flex flex-col justify-between relative cursor-pointer active:scale-[0.98] transition-all overflow-hidden"
+                className="flex-1 p-4 pr-3 flex flex-col justify-between relative cursor-pointer active:scale-[0.98] transition-all overflow-hidden"
                 onClick={() => setShowBeansPanel(true)}
               >
                 {/* Bean pile background */}
@@ -283,26 +283,26 @@ export default function NewV2Dashboard() {
 
               {/* Right: next reward */}
               <div
-                className="flex-1 p-5 pl-4 flex flex-col cursor-pointer active:scale-[0.98] transition-all"
+                className="flex-1 p-4 pl-3 flex flex-col cursor-pointer active:scale-[0.98] transition-all"
                 style={{ borderLeft: '1px solid rgba(240,237,229,0.12)' }}
                 onClick={() => setShowRewardsPanel(true)}
               >
                 <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#F0EDE5' }}>
                   NEXT REWARD
                 </p>
-                <div className="flex flex-col gap-3 mb-3">
-                  <p className="text-[20px] font-bold leading-tight" style={{ color: '#F28A2E' }}>
+                <div className="flex flex-col gap-2 mb-2">
+                  <p className="text-[18px] font-bold leading-tight" style={{ color: '#F28A2E' }}>
                     Free coffee
                   </p>
                   <div className="flex items-center justify-center">
-                    <img src="/coffeecup.png" alt="" className="w-40 h-40 object-contain" />
+                    <img src="/coffeecup.png" alt="" className="w-28 h-28 object-contain" />
                   </div>
                 </div>
-                <p className="text-[11px] font-medium mb-2" style={{ color: '#F0EDE5' }}>
+                <p className="text-[10px] font-medium mb-1.5" style={{ color: '#F0EDE5' }}>
                   {stampBeansNeeded} beans away
                 </p>
-                <div className="mb-2">
-                  <div className="h-2.5 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(240,237,229,0.2)' }}>
+                <div className="mb-1.5">
+                  <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(240,237,229,0.2)' }}>
                     <div
                       className="h-full rounded-full transition-all duration-300"
                       style={{
@@ -312,7 +312,7 @@ export default function NewV2Dashboard() {
                     />
                   </div>
                 </div>
-                <p className="text-[11px] font-medium" style={{ color: '#F0EDE5' }}>
+                <p className="text-[10px] font-medium" style={{ color: '#F0EDE5' }}>
                   0 - 25 beans
                 </p>
               </div>
@@ -359,45 +359,66 @@ export default function NewV2Dashboard() {
           )}
 
           {/* ── HOW IT WORKS ── */}
-          <div className="rounded-[18px] p-6" style={{ backgroundColor: '#F8F5EF', boxShadow: '0 2px 14px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}>
-            <h3 className="text-[18px] font-extrabold mb-4" style={{ color: '#24364B' }}>How it works</h3>
+          <div className="rounded-[18px] p-5" style={{ backgroundColor: '#F8F5EF', boxShadow: '0 2px 14px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}>
+            <h3 className="text-[16px] font-extrabold mb-4" style={{ color: '#24364B' }}>How it works</h3>
             
-            <div className="space-y-4">
-              {/* Earning beans */}
-              <div>
-                <p className="text-[13px] font-bold mb-2" style={{ color: '#E07A3A' }}>Earning beans</p>
-                <div className="space-y-1.5">
-                  <p className="text-[13px] leading-relaxed" style={{ color: '#5A6A7A' }}>
-                    • 1 bean for every visit
-                  </p>
-                  <p className="text-[13px] leading-relaxed" style={{ color: '#5A6A7A' }}>
-                    • Double beans on weekends
-                  </p>
-                  <p className="text-[13px] leading-relaxed" style={{ color: '#5A6A7A' }}>
-                    • Bonus beans during special campaigns
-                  </p>
+            <div className="grid grid-cols-4 gap-3 mb-4">
+              {/* Step 1 */}
+              <div className="text-center">
+                <div className="w-10 h-10 rounded-full mx-auto mb-2 flex items-center justify-center" style={{ backgroundColor: '#E07A3A' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  </svg>
                 </div>
+                <p className="text-[11px] font-semibold leading-tight" style={{ color: '#24364B' }}>Visit Penkey</p>
               </div>
 
-              {/* Redeeming rewards */}
-              <div>
-                <p className="text-[13px] font-bold mb-2" style={{ color: '#E07A3A' }}>Redeeming rewards</p>
-                <div className="space-y-1.5">
-                  <p className="text-[13px] leading-relaxed" style={{ color: '#5A6A7A' }}>
-                    • 2 beans = Free syrup shot
-                  </p>
-                  <p className="text-[13px] leading-relaxed" style={{ color: '#5A6A7A' }}>
-                    • 8 beans = Free coffee
-                  </p>
-                  <p className="text-[13px] leading-relaxed" style={{ color: '#5A6A7A' }}>
-                    • 15 beans = Free snack
-                  </p>
-                  <p className="text-[13px] leading-relaxed" style={{ color: '#5A6A7A' }}>
-                    • 25 beans = Free meal
-                  </p>
+              {/* Step 2 */}
+              <div className="text-center">
+                <div className="w-10 h-10 rounded-full mx-auto mb-2 flex items-center justify-center" style={{ backgroundColor: '#E07A3A' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <path d="M8 12h8" />
+                    <path d="M12 8v8" />
+                  </svg>
                 </div>
+                <p className="text-[11px] font-semibold leading-tight" style={{ color: '#24364B' }}>Show QR code</p>
+              </div>
+
+              {/* Step 3 */}
+              <div className="text-center">
+                <div className="w-10 h-10 rounded-full mx-auto mb-2 flex items-center justify-center" style={{ backgroundColor: '#E07A3A' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6v6l4 2" />
+                  </svg>
+                </div>
+                <p className="text-[11px] font-semibold leading-tight" style={{ color: '#24364B' }}>Earn beans</p>
+              </div>
+
+              {/* Step 4 */}
+              <div className="text-center">
+                <div className="w-10 h-10 rounded-full mx-auto mb-2 flex items-center justify-center" style={{ backgroundColor: '#E07A3A' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                  </svg>
+                </div>
+                <p className="text-[11px] font-semibold leading-tight" style={{ color: '#24364B' }}>Enjoy rewards</p>
               </div>
             </div>
+
+            <p className="text-[12px] leading-relaxed mb-3" style={{ color: '#5A6A7A' }}>
+              The more you visit, the more rewards you unlock
+            </p>
+
+            <Link 
+              href="/rewards"
+              className="inline-flex items-center gap-2 text-[12px] font-semibold"
+              style={{ color: '#E07A3A' }}
+            >
+              <img src="/heart.png" alt="" className="w-4 h-4 object-contain" />
+              View all rewards
+            </Link>
           </div>
 
           {/* ── THANKS FOR SUPPORTING LOCAL ── */}
