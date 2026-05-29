@@ -243,6 +243,9 @@ export default function NewV2Dashboard() {
               <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#24364B' }}>
                 {firstName}
               </h1>
+              <p className="text-[13px] font-medium mt-2 leading-snug" style={{ color: '#8A96A0' }}>
+                Welcome to Penkey Perks
+              </p>
             </div>
           </div>
 
@@ -261,13 +264,14 @@ export default function NewV2Dashboard() {
                   <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#F0EDE5' }}>
                     YOUR BEAN BALANCE
                   </p>
-                  <div className="relative inline-block">
-                    <img src="/beanpile.png" alt="" className="w-[180px] h-[180px] object-contain absolute -top-8 -left-6 opacity-25" />
+                  <div className="relative inline-block mb-2">
+                    <img src="/beanpile.png" alt="" className="w-[280px] h-[280px] object-contain absolute -top-20 -left-12 opacity-30" />
                     <div className="flex items-baseline gap-2 mb-1 relative z-10">
                       <span className="text-[56px] font-extrabold leading-none" style={{ color: '#F0EDE5' }}>{currentBeans}</span>
                     </div>
+                    <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>beans</p>
+                    <img src="/stroke.png" alt="" className="w-20 h-2 object-contain mt-1 opacity-60" />
                   </div>
-                  <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>beans</p>
                 </div>
                 <Link href="/rewards" className="inline-flex items-center gap-1 text-[11px] font-semibold" style={{ color: '#F28A2E' }} onClick={(e) => e.stopPropagation()}>
                   How it works
@@ -350,86 +354,23 @@ export default function NewV2Dashboard() {
             </div>
           )}
 
-          {/* ── YOUR BEAN STATS ── Enhanced with lifetime & status ── */}
+          {/* ── LIFETIME BEANS ── Simple display ── */}
           <div className="rounded-[18px] p-5" style={{ backgroundColor: '#F8F5EF', boxShadow: '0 2px 14px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}>
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex-1">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-2" style={{ color: '#8A96A0' }}>
-                  YOUR BEAN STATS
-                </p>
-                <div className="flex items-baseline gap-3 mb-1">
-                  <span className="text-[56px] font-bold leading-none tracking-tight" style={{ color: '#24364B' }}>
-                    {currentBeans}
-                  </span>
-                  <div>
-                    <p className="text-[14px] font-semibold leading-none" style={{ color: '#8A96A0' }}>beans</p>
-                    <p className="text-[11px] mt-0.5" style={{ color: '#E07A3A' }}>ready to use</p>
-                  </div>
-                </div>
-              </div>
-              {/* Status badge */}
-              <div className="flex flex-col items-end gap-2">
-                <div className="px-3 py-1.5 rounded-full" style={{ backgroundColor: 'rgba(224,122,58,0.12)', border: '1px solid rgba(224,122,58,0.2)' }}>
-                  <p className="text-[10px] font-extrabold uppercase tracking-wide" style={{ color: '#E07A3A' }}>
-                    {beanBalance?.visit_count >= 20 ? '⭐ VIP' : beanBalance?.visit_count >= 10 ? '💫 Regular' : '🌱 Growing'}
-                  </p>
-                </div>
-              </div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#8A96A0' }}>
+              LIFETIME BEANS
+            </p>
+            <div className="flex items-baseline gap-4 mb-2">
+              <span className="text-[64px] font-bold leading-none tracking-tight" style={{ color: '#24364B' }}>
+                {beanBalance?.lifetime_beans || 0}
+              </span>
+              <span className="text-[20px] font-medium mb-1" style={{ color: '#8A96A0' }}>beans</span>
             </div>
-
-            <div className="mb-4">
-              <BrushUnderline className="text-[#F28A2E] w-24" />
+            <div className="mb-3">
+              <BrushUnderline className="text-[#F28A2E] w-20" />
             </div>
-
-            {/* Stats grid */}
-            <div className="grid grid-cols-3 gap-3 mb-4">
-              <div className="text-center p-3 rounded-[12px]" style={{ backgroundColor: 'rgba(224,122,58,0.06)' }}>
-                <p className="text-[24px] font-extrabold leading-none" style={{ color: '#E07A3A' }}>
-                  {beanBalance?.lifetime_beans || 0}
-                </p>
-                <p className="text-[10px] font-semibold uppercase tracking-wide mt-1" style={{ color: '#8A96A0' }}>
-                  Lifetime
-                </p>
-              </div>
-              <div className="text-center p-3 rounded-[12px]" style={{ backgroundColor: 'rgba(224,122,58,0.06)' }}>
-                <p className="text-[24px] font-extrabold leading-none" style={{ color: '#E07A3A' }}>
-                  {beanBalance?.visit_count || 0}
-                </p>
-                <p className="text-[10px] font-semibold uppercase tracking-wide mt-1" style={{ color: '#8A96A0' }}>
-                  Visits
-                </p>
-              </div>
-              <div className="text-center p-3 rounded-[12px]" style={{ backgroundColor: 'rgba(224,122,58,0.06)' }}>
-                <p className="text-[24px] font-extrabold leading-none" style={{ color: '#E07A3A' }}>
-                  {stampBeansNeeded}
-                </p>
-                <p className="text-[10px] font-semibold uppercase tracking-wide mt-1" style={{ color: '#8A96A0' }}>
-                  To Next
-                </p>
-              </div>
-            </div>
-
-            {/* Quick actions */}
-            <div className="flex gap-2">
-              <button 
-                onClick={() => setShowBeansPanel(true)}
-                className="flex-1 py-3 px-4 rounded-[14px] flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
-                style={{ backgroundColor: '#2C3E50', color: 'white' }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>
-                </svg>
-                <span className="text-[13px] font-bold">View Stamps</span>
-              </button>
-              <Link 
-                href="/rewards"
-                className="flex-1 py-3 px-4 rounded-[14px] flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
-                style={{ backgroundColor: '#E07A3A', color: 'white' }}
-              >
-                <Gift className="w-4 h-4" />
-                <span className="text-[13px] font-bold">Rewards</span>
-              </Link>
-            </div>
+            <p className="text-[13px] font-medium leading-snug" style={{ color: '#8A96A0' }}>
+              Total beans collected since you joined
+            </p>
           </div>
 
           {/* ── THANKS FOR SUPPORTING LOCAL ── */}
@@ -645,100 +586,61 @@ export default function NewV2Dashboard() {
         </DialogContent>
       </Dialog>
 
-      {/* Rewards Panel Dialog - Redesigned */}
+      {/* Rewards Panel Dialog - All Rewards */}
       <Dialog open={showRewardsPanel} onOpenChange={setShowRewardsPanel}>
         <DialogContent className="sm:max-w-md rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 overflow-hidden border-0">
-          <div className="rounded-[24px] overflow-hidden" style={{ backgroundColor: '#F9F7F2' }}>
-            {/* Header with gradient */}
-            <div className="p-6 pb-4" style={{ background: 'linear-gradient(135deg, #2B3E52 0%, #24364A 100%)' }}>
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.12em]" style={{ color: 'rgba(255,255,255,0.6)' }}>
-                    REWARD TIERS
-                  </p>
-                  <h3 className="text-[24px] font-extrabold mt-1" style={{ color: 'white' }}>Your Rewards</h3>
-                </div>
-                <button onClick={() => setShowRewardsPanel(false)} className="text-white/50 hover:text-white transition-colors">
+          <div
+            className="rounded-[24px] overflow-hidden"
+            style={{ background: 'linear-gradient(135deg, #2B3E52 0%, #24364A 100%)' }}
+          >
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <p className="text-[12px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#F0EDE5' }}>
+                  ALL REWARDS
+                </p>
+                <button onClick={() => setShowRewardsPanel(false)} className="text-[#F0EDE5]/50 hover:text-[#F0EDE5] transition-colors">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M18 6L6 18M6 6l12 12" />
                   </svg>
                 </button>
               </div>
-              
-              {/* Current beans display */}
-              <div className="flex items-baseline gap-2">
-                <span className="text-[36px] font-extrabold leading-none" style={{ color: '#F28A2E' }}>{currentBeans}</span>
-                <span className="text-[14px] font-semibold" style={{ color: 'rgba(255,255,255,0.7)' }}>beans collected</span>
-              </div>
-            </div>
 
-            {/* Reward tiers */}
-            <div className="p-5 space-y-3">
-              {[
-                { beans: 2, name: 'Free syrup shot', desc: 'Add any flavour', icon: '✨' },
-                { beans: 8, name: 'Free coffee', desc: 'Any hot or cold coffee', icon: '☕' },
-                { beans: 15, name: 'Free snack', desc: 'Pastry or toastie', icon: '🥐' },
-                { beans: 25, name: 'Free meal', desc: 'Full lunch on us', icon: '🍽️' },
-              ].map((reward) => {
-                const unlocked = currentBeans >= reward.beans
-                const isNext = !unlocked && currentBeans < reward.beans && 
-                  (currentBeans >= (reward.beans === 2 ? 0 : reward.beans === 8 ? 2 : reward.beans === 15 ? 8 : 15))
-                
-                return (
+              <div className="space-y-3">
+                {[
+                  { beans: 2, name: 'Free syrup shot' },
+                  { beans: 8, name: 'Free coffee' },
+                  { beans: 15, name: 'Free snack' },
+                  { beans: 25, name: 'Free meal' },
+                ].map((reward) => (
                   <div
                     key={reward.beans}
-                    className="rounded-[16px] p-4 relative overflow-hidden"
-                    style={{ 
-                      backgroundColor: unlocked ? 'rgba(224,122,58,0.08)' : 'white',
-                      border: `2px solid ${isNext ? '#E07A3A' : unlocked ? 'rgba(224,122,58,0.2)' : '#E8E2D8'}`,
-                      boxShadow: isNext ? '0 4px 12px rgba(224,122,58,0.15)' : '0 1px 3px rgba(0,0,0,0.05)'
-                    }}
+                    className="flex items-center justify-between p-3 rounded-[12px]"
+                    style={{ backgroundColor: 'rgba(240,237,229,0.08)' }}
                   >
-                    {isNext && (
-                      <div className="absolute top-2 right-2 px-2 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wide" style={{ backgroundColor: '#E07A3A', color: 'white' }}>
-                        Next
-                      </div>
-                    )}
                     <div className="flex items-center gap-3">
-                      <div className="text-[32px]">{reward.icon}</div>
-                      <div className="flex-1">
-                        <p className="text-[15px] font-extrabold leading-tight" style={{ color: '#1C2B3A' }}>
-                          {reward.name}
-                        </p>
-                        <p className="text-[12px] mt-0.5" style={{ color: '#8A96A0' }}>{reward.desc}</p>
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: currentBeans >= reward.beans ? '#F28A2E' : 'rgba(240,237,229,0.2)' }}>
+                        <Gift className="w-5 h-5" style={{ color: currentBeans >= reward.beans ? 'white' : '#F0EDE5' }} />
                       </div>
-                      <div className="text-right">
-                        {unlocked ? (
-                          <div className="flex flex-col items-end">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E07A3A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
-                            </svg>
-                            <p className="text-[10px] font-bold mt-1" style={{ color: '#E07A3A' }}>Unlocked!</p>
-                          </div>
-                        ) : (
-                          <div className="text-center">
-                            <p className="text-[20px] font-extrabold leading-none" style={{ color: isNext ? '#E07A3A' : '#8A96A0' }}>
-                              {reward.beans}
-                            </p>
-                            <p className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: '#8A96A0' }}>beans</p>
-                          </div>
-                        )}
+                      <div>
+                        <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>{reward.name}</p>
+                        <p className="text-[11px]" style={{ color: 'rgba(240,237,229,0.6)' }}>{reward.beans} beans</p>
                       </div>
                     </div>
+                    {currentBeans >= reward.beans && (
+                      <span className="text-[10px] font-semibold px-2 py-1 rounded-full" style={{ backgroundColor: '#F28A2E', color: 'white' }}>
+                        Unlocked
+                      </span>
+                    )}
                   </div>
-                )
-              })}
-            </div>
+                ))}
+              </div>
 
-            {/* Footer CTA */}
-            <div className="p-5 pt-0">
               <button
                 onClick={() => { setShowRewardsPanel(false); router.push('/rewards') }}
-                className="w-full py-4 text-white text-[15px] font-bold rounded-[16px] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-                style={{ backgroundColor: '#2C3E50', boxShadow: '0 4px 12px rgba(44,62,80,0.3)' }}
+                className="w-full mt-6 py-4 text-white text-sm font-bold rounded-[16px] active:scale-[0.98] transition-all"
+                style={{ backgroundColor: '#F28A2E', boxShadow: '0 4px 12px rgba(242,138,46,0.3)' }}
               >
-                <Gift className="w-5 h-5" />
-                View All Rewards & Redeem
+                View All Rewards
               </button>
             </div>
           </div>
