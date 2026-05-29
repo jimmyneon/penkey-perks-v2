@@ -27,11 +27,11 @@ export function PickupTimeModal({
         onClick={onClose}
       />
       <div 
-        className="relative bg-white rounded-t-[24px] w-full animate-sheet-up"
+        className="relative bg-white rounded-t-[24px] w-full max-h-[85vh] overflow-y-auto animate-sheet-up"
         style={{ backgroundColor: '#F9F7F2' }}
       >
         {/* Header */}
-        <div className="px-5 pt-4 pb-3 flex items-center justify-between" style={{ backgroundColor: '#F9F7F2' }}>
+        <div className="sticky top-0 px-5 pt-4 pb-3 flex items-center justify-between" style={{ backgroundColor: '#F9F7F2' }}>
           <h2 className="text-[20px] font-bold" style={{ color: '#24364B' }}>Pick-up Time</h2>
           <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8E2D8' }}>
             <X className="w-4 h-4" style={{ color: '#24364B' }} />

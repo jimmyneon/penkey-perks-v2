@@ -46,6 +46,7 @@ interface Category {
   id: string
   name: string
   color: string
+  displayCategory?: string
 }
 
 const TIME_SLOTS = ['ASAP', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00']
@@ -69,6 +70,7 @@ export default function OrderPage() {
   const [userPhone, setUserPhone] = useState('')
   const [menuItems, setMenuItems] = useState<MenuItem[]>([])
   const [categories, setCategories] = useState<Category[]>([])
+  const [displayCategories, setDisplayCategories] = useState<Category[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [mounted, setMounted] = useState(false)
@@ -81,8 +83,21 @@ export default function OrderPage() {
   const [showNotes, setShowNotes] = useState(false)
   const [showCategoryModal, setShowCategoryModal] = useState(false)
 
-  // Customer-visible categories (reorganized)
-  const CUSTOMER_VISIBLE_CATEGORIES = ['Hot Drinks - Coffee', 'Hot Drinks - Tea', 'Iced Drinks - Coffee', 'Drinks fridge', 'Penkey Milkshakes', 'Snacks', 'Bakes and Sweets', 'Hot Baps', 'Sandwiches', 'Toasties', 'Penkey Meals', 'Penkey Affogatos', 'Penkey Indulgence']
+  // Customer-visible categories (reorganized with merged categories)
+  const CATEGORY_MAPPINGS: Record<string, string> = {
+    'Hot Drinks - Coffee': 'Hot Drinks',
+    'Hot Drinks - Tea': 'Hot Drinks',
+    'Iced Drinks - Coffee': 'Iced Drinks',
+    'Drinks fridge': 'Cold Drinks',
+    'Penkey Milkshakes': 'Cold Drinks',
+    'Bakes and Sweets': 'Bakery',
+    'Hot Baps': 'Hot Food',
+    'Sandwiches': 'Hot Food',
+    'Toasties': 'Hot Food',
+    'Penkey Meals': 'Hot Food',
+  }
+
+  const DISPLAY_CATEGORIES = ['Hot Drinks', 'Iced Drinks', 'Cold Drinks', 'Snacks', 'Bakery', 'Hot Food', 'Penkey Affogatos', 'Penkey Indulgence']
 
   // Prevent hydration mismatch
   useEffect(() => {
@@ -139,13 +154,27 @@ export default function OrderPage() {
         console.log('[Order Page] Items:', items)
         console.log('[Order Page] Categories:', cats)
 
-        // Filter to only customer-visible categories
-        const filteredCategories = cats.filter((cat: Category) =>
-          CUSTOMER_VISIBLE_CATEGORIES.includes(cat.name)
-        )
+        // Map categories to display categories and create merged category list
+        const categoriesWithMapping = cats.map((cat: Category) => ({
+          ...cat,
+          displayCategory: CATEGORY_MAPPINGS[cat.name] || cat.name
+        }))
+        
+        // Get unique display categories
+        const displayCategoryNames = Array.from(
+          new Set(categoriesWithMapping.map((c: Category) => c.displayCategory))
+        ) as string[]
+        
+        const uniqueDisplayCategories: Category[] = displayCategoryNames.map((name: string) => ({
+          id: name,
+          name,
+          color: '#F97316', // Default color for merged categories
+        }))
+        
         setMenuItems(items)
-        setCategories(filteredCategories)
-        if (filteredCategories.length > 0) setSelectedCategory(filteredCategories[0].id)
+        setCategories(categoriesWithMapping)
+        setDisplayCategories(uniqueDisplayCategories)
+        if (uniqueDisplayCategories.length > 0) setSelectedCategory(uniqueDisplayCategories[0].id)
       } catch (error) {
         console.error('[Order Page] Failed to fetch menu:', error)
       } finally {
@@ -315,7 +344,7 @@ export default function OrderPage() {
           </div>
 
           {/* Category button */}
-          {categories.length > 0 && (
+          {displayCategories.length > 0 && (
             <button
               onClick={() => setShowCategoryModal(true)}
               className="w-full px-4 py-3 rounded-[16px] flex items-center justify-between transition-all active:scale-[0.98]"
@@ -324,15 +353,15 @@ export default function OrderPage() {
               <div className="flex items-center gap-3">
                 <div 
                   className="w-10 h-10 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: selectedCategory ? categories.find(c => c.id === selectedCategory)?.color : '#E8E2D8' }}
+                  style={{ backgroundColor: selectedCategory ? displayCategories.find(c => c.id === selectedCategory)?.color : '#E8E2D8' }}
                 >
                   <span className="text-[15px] font-bold" style={{ color: selectedCategory ? '#FFFFFF' : '#7A8A9A' }}>
-                    {selectedCategory ? categories.find(c => c.id === selectedCategory)?.name.charAt(0) : 'All'}
+                    {selectedCategory ? displayCategories.find(c => c.id === selectedCategory)?.name.charAt(0) : 'All'}
                   </span>
                 </div>
                 <div className="text-left">
                   <p className="text-[13px] font-semibold" style={{ color: '#24364B' }}>
-                    {selectedCategory ? categories.find(c => c.id === selectedCategory)?.name : 'All Categories'}
+                    {selectedCategory ? displayCategories.find(c => c.id === selectedCategory)?.name : 'All Categories'}
                   </p>
                   <p className="text-[11px]" style={{ color: '#8A96A0' }}>Tap to change</p>
                 </div>
@@ -366,7 +395,9 @@ export default function OrderPage() {
             <div className="grid grid-cols-2 gap-3">
               {menuItems
                 .filter(item => {
-                  const matchesCategory = !selectedCategory || item.categories?.id === selectedCategory
+                  const itemCategory = categories.find(c => c.id === item.categories?.id)
+                  const itemDisplayCategory = itemCategory?.displayCategory || itemCategory?.name
+                  const matchesCategory = !selectedCategory || itemDisplayCategory === selectedCategory
                   const matchesSearch = !searchQuery || item.name.toLowerCase().includes(searchQuery.toLowerCase())
                   return matchesCategory && matchesSearch
                 })
@@ -453,7 +484,7 @@ export default function OrderPage() {
       {/* Category Modal */}
       {showCategoryModal && (
         <CategoryModal
-          categories={categories}
+          categories={displayCategories}
           selectedCategory={selectedCategory}
           onClose={() => setShowCategoryModal(false)}
           onSelectCategory={setSelectedCategory}
