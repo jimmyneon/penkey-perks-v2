@@ -257,23 +257,25 @@ export default function NewV2Dashboard() {
             <div className="flex">
               {/* Left: bean balance */}
               <div
-                className="flex-1 p-5 pr-4 flex flex-col justify-between relative cursor-pointer active:scale-[0.98] transition-all"
+                className="flex-1 p-5 pr-4 flex flex-col justify-between relative cursor-pointer active:scale-[0.98] transition-all overflow-hidden"
                 onClick={() => setShowBeansPanel(true)}
               >
-                <div>
+                {/* Bean pile background - MUCH LARGER */}
+                <img src="/beanpile.png" alt="" className="absolute inset-0 w-full h-full object-cover opacity-20" style={{ transform: 'scale(1.5)' }} />
+                
+                <div className="relative z-10">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#F0EDE5' }}>
                     YOUR BEAN BALANCE
                   </p>
-                  <div className="relative inline-block mb-2">
-                    <img src="/beanpile.png" alt="" className="w-[280px] h-[280px] object-contain absolute -top-20 -left-12 opacity-30" />
-                    <div className="flex items-baseline gap-2 mb-1 relative z-10">
+                  <div className="mb-2">
+                    <div className="flex items-baseline gap-2 mb-1">
                       <span className="text-[56px] font-extrabold leading-none" style={{ color: '#F0EDE5' }}>{currentBeans}</span>
                     </div>
                     <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>beans</p>
                     <img src="/stroke.png" alt="" className="w-20 h-2 object-contain mt-1 opacity-60" />
                   </div>
                 </div>
-                <Link href="/rewards" className="inline-flex items-center gap-1 text-[11px] font-semibold" style={{ color: '#F28A2E' }} onClick={(e) => e.stopPropagation()}>
+                <Link href="/rewards" className="inline-flex items-center gap-1 text-[11px] font-semibold relative z-10" style={{ color: '#F28A2E' }} onClick={(e) => e.stopPropagation()}>
                   How it works
                   <ChevronRight className="w-3 h-3" />
                 </Link>
