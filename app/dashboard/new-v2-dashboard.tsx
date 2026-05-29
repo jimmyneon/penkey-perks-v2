@@ -444,82 +444,91 @@ export default function NewV2Dashboard() {
         <BottomNav />
       </div>
 
-      {/* Voucher Detail Dialog */}
+      {/* Voucher / Perk Unlocked Dialog */}
       <Dialog open={!!selectedVoucher} onOpenChange={() => setSelectedVoucher(null)}>
-        <DialogContent className="sm:max-w-sm rounded-[24px] shadow-[0_24px_64px_rgba(36,54,75,0.2)] p-0 overflow-hidden border-0">
+        <DialogContent className="sm:max-w-sm rounded-[28px] shadow-[0_24px_64px_rgba(36,54,75,0.18)] p-0 overflow-hidden border-0">
           <div style={{ backgroundColor: '#F4EFE7' }}>
-            {/* Header */}
-            <div className="flex items-start justify-between p-5 pb-4">
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.15em]" style={{ color: '#A89080' }}>PERK UNLOCKED</p>
-                <p className="text-[22px] font-extrabold mt-1 leading-tight" style={{ color: '#24364B' }}>
-                  {selectedVoucher?.template?.name || 'Your Reward'}
-                </p>
-                {selectedVoucher?.template?.description && (
-                  <p className="text-[13px] mt-1 leading-snug" style={{ color: '#7A6058' }}>
-                    {selectedVoucher.template.description}
-                  </p>
-                )}
-              </div>
+
+            {/* Top hero area — cream with close button */}
+            <div className="relative px-5 pt-5 pb-4">
+              {/* Single close button */}
               <button
                 onClick={() => setSelectedVoucher(null)}
-                className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1"
-                style={{ backgroundColor: 'rgba(36,54,75,0.08)', color: '#24364B' }}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: 'rgba(36,54,75,0.1)', color: '#24364B' }}
               >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
               </button>
+
+              {/* Perk unlocked badge */}
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-3" style={{ border: '1.5px solid #F28A2E' }}>
+                <svg width="8" height="8" viewBox="0 0 10 10" fill="#F28A2E"><circle cx="5" cy="5" r="4"/></svg>
+                <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#F28A2E' }}>Perk unlocked</span>
+              </div>
+
+              {/* Hero row: text left, coffee cup right */}
+              <div className="flex items-center justify-between pr-4">
+                <div className="flex-1 pr-2">
+                  <h2 className="text-[28px] font-extrabold leading-tight" style={{ color: '#24364B' }}>
+                    Nice one!
+                  </h2>
+                  <p className="text-[22px] font-bold mt-0.5 leading-tight" style={{ color: '#F28A2E' }}>
+                    {selectedVoucher?.template?.name || 'Your reward'}
+                  </p>
+                  <p className="text-[13px] mt-2 leading-snug" style={{ color: '#5A6A7A' }}>
+                    {selectedVoucher?.template?.description || "You've earned this — show it to our staff and enjoy it on us."}{' '}
+                    <img src="/heart.png" alt="" className="inline-block w-4 h-4 object-contain align-middle" style={{ transform: 'rotate(-10deg)' }} />
+                  </p>
+                </div>
+                <img src="/coffeecup.png" alt="" className="w-24 h-24 object-contain flex-shrink-0" />
+              </div>
             </div>
 
             {/* Divider */}
-            <div style={{ height: '1px', backgroundColor: 'rgba(36,54,75,0.08)', marginLeft: 20, marginRight: 20 }} />
+            <div className="mx-5" style={{ height: '1px', backgroundColor: 'rgba(36,54,75,0.1)' }} />
 
-            {/* How to redeem */}
+            {/* QR code section */}
             <div className="px-5 py-4">
-              <p className="text-[11px] font-semibold uppercase tracking-wide mb-3" style={{ color: '#A89080' }}>How to redeem</p>
-              <div className="flex flex-col gap-2">
-                {['Show this screen to a member of staff', 'They will scan the QR code below', 'Enjoy your reward!'].map((step, i) => (
-                  <div key={i} className="flex items-center gap-2.5">
-                    <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F28A2E' }}>
-                      <span className="text-[9px] font-bold text-white">{i + 1}</span>
-                    </div>
-                    <p className="text-[12px]" style={{ color: '#4A3830' }}>{step}</p>
+              <p className="text-[12px] font-semibold mb-3 text-center" style={{ color: '#7A6A5A' }}>
+                Show this QR code to a member of staff to redeem
+              </p>
+
+              {voucherQrCode ? (
+                <div className="flex flex-col items-center gap-2">
+                  <div
+                    className="rounded-[20px] p-4"
+                    style={{ backgroundColor: '#ffffff', boxShadow: '0 3px 16px rgba(36,54,75,0.1)', border: '1px solid rgba(36,54,75,0.07)' }}
+                  >
+                    <img src={voucherQrCode} alt="Voucher QR Code" className="w-52 h-52" />
                   </div>
-                ))}
-              </div>
+                </div>
+              ) : (
+                <div className="h-52 flex items-center justify-center rounded-[20px]" style={{ backgroundColor: 'rgba(36,54,75,0.05)' }}>
+                  <p className="text-[13px]" style={{ color: '#A89080' }}>Generating…</p>
+                </div>
+              )}
+
+              {/* Expiry note */}
+              {selectedVoucher?.expires_at && (
+                <p className="text-[11px] text-center mt-2" style={{ color: '#A89080' }}>
+                  Expires {new Date(selectedVoucher.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                </p>
+              )}
             </div>
 
-            {/* QR Code */}
-            {voucherQrCode ? (
-              <div className="flex flex-col items-center gap-2 px-5 pb-2">
-                <div className="rounded-[18px] p-3.5 shadow-[0_2px_12px_rgba(36,54,75,0.1)]" style={{ backgroundColor: '#ffffff', border: '1px solid rgba(36,54,75,0.07)' }}>
-                  <img src={voucherQrCode} alt="Voucher QR Code" className="w-52 h-52" />
-                </div>
-                <p className="text-[11px] text-center" style={{ color: '#A89080' }}>Present to staff to redeem</p>
-              </div>
-            ) : (
-              <div className="flex items-center justify-center py-8">
-                <p className="text-[12px]" style={{ color: '#A89080' }}>Generating QR code...</p>
-              </div>
-            )}
-
-            {/* Expiry + Button */}
-            <div className="px-5 pb-5 pt-3">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: '#A89080' }}>Expires</span>
-                <span className="text-[12px] font-bold" style={{ color: '#24364B' }}>
-                  {selectedVoucher?.expires_at ? new Date(selectedVoucher.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'No expiry'}
-                </span>
-              </div>
+            {/* Done button */}
+            <div className="px-5 pb-6">
               <button
                 onClick={() => setSelectedVoucher(null)}
-                className="w-full h-12 text-white text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all"
-                style={{ backgroundColor: '#F28A2E', boxShadow: '0 4px 16px rgba(242,138,46,0.3)' }}
+                className="w-full h-[52px] text-white font-bold rounded-[16px] text-[15px] active:scale-[0.98] transition-all"
+                style={{ backgroundColor: '#F28A2E', boxShadow: '0 4px 16px rgba(242,138,46,0.35)' }}
               >
-                Done
+                Done, thanks!
               </button>
             </div>
+
           </div>
         </DialogContent>
       </Dialog>
