@@ -1,17 +1,120 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { MenuItem } from '@/app/order/page'
-import { X, Plus, Minus } from 'lucide-react'
+import { X, Plus, Minus, Check } from 'lucide-react'
 
 interface ItemModalProps {
   item: MenuItem
   onClose: () => void
-  onAdd: (item: MenuItem, quantity: number) => void
+  onAdd: (item: MenuItem, quantity: number, selectedModifiers: any[]) => void
+}
+
+interface SelectedModifier {
+  group_id: string
+  group_name: string
+  option_id: string
+  option_name: string
+  price_adjustment: number
 }
 
 export function ItemModal({ item, onClose, onAdd }: ItemModalProps) {
   const [quantity, setQuantity] = useState(1)
+  const [selectedModifiers, setSelectedModifiers] = useState<SelectedModifier[]>([])
+  const [selectedVariant, setSelectedVariant] = useState(
+    item.item_variants?.find((v: any) => v.is_default) || item.item_variants?.[0] || null
+  )
+
+  // Initialize default modifiers
+  useEffect(() => {
+    if (item.modifier_groups) {
+      const defaults: SelectedModifier[] = []
+      item.modifier_groups.forEach((group: any) => {
+        group.modifier_options
+          .filter((opt: any) => opt.is_default)
+          .forEach((opt: any) => {
+            defaults.push({
+              group_id: group.id,
+              group_name: group.name,
+              option_id: opt.id,
+              option_name: opt.name,
+              price_adjustment: opt.price_adjustment
+            })
+          })
+      })
+      setSelectedModifiers(defaults)
+    }
+  }, [item])
+
+  const toggleModifier = (groupId: string, groupName: string, optionId: string, optionName: string, priceAdjustment: number, selectionType: string, maxSelections: number | null) => {
+    const isSelected = selectedModifiers.some(m => m.option_id === optionId)
+    
+    if (isSelected) {
+      setSelectedModifiers(prev => prev.filter(m => m.option_id !== optionId))
+    } else {
+      // Check max selections
+      const groupSelections = selectedModifiers.filter(m => m.group_id === groupId).length
+      if (maxSelections && groupSelections >= maxSelections) {
+        // Remove the first selection (FIFO)
+        setSelectedModifiers(prev => {
+          const groupMods = prev.filter(m => m.group_id === groupId)
+          const otherMods = prev.filter(m => m.group_id !== groupId)
+          return [...otherMods, ...groupMods.slice(1), {
+            group_id: groupId,
+            group_name: groupName,
+            option_id: optionId,
+            option_name: optionName,
+            price_adjustment: priceAdjustment
+          }]
+        })
+      } else {
+        // For single selection, clear other options in the group
+        if (selectionType === 'required' && maxSelections === 1) {
+          setSelectedModifiers(prev => [
+            ...prev.filter(m => m.group_id !== groupId),
+            {
+              group_id: groupId,
+              group_name: groupName,
+              option_id: optionId,
+              option_name: optionName,
+              price_adjustment: priceAdjustment
+            }
+          ])
+        } else {
+          setSelectedModifiers(prev => [...prev, {
+            group_id: groupId,
+            group_name: groupName,
+            option_id: optionId,
+            option_name: optionName,
+            price_adjustment: priceAdjustment
+          }])
+        }
+      }
+    }
+  }
+
+  const calculateTotal = () => {
+    let total = (selectedVariant?.price || item.base_price) * quantity
+    selectedModifiers.forEach(mod => {
+      total += mod.price_adjustment * quantity
+    })
+    return total
+  }
+
+  const canAdd = () => {
+    if (!item.modifier_groups) return true
+    
+    // Check required groups
+    for (const group of item.modifier_groups) {
+      if (group.selection_type === 'required') {
+        const selectedCount = selectedModifiers.filter(m => m.group_id === group.id).length
+        if (selectedCount < group.min_selections) {
+          return false
+        }
+      }
+    }
+    return true
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4">
@@ -49,16 +152,17 @@ export function ItemModal({ item, onClose, onAdd }: ItemModalProps) {
                 {item.item_variants.map((variant) => (
                   <button
                     key={variant.id}
+                    onClick={() => setSelectedVariant(variant)}
                     className="w-full px-4 py-3 rounded-[12px] text-left flex items-center justify-between"
                     style={{ 
-                      backgroundColor: variant.is_default ? '#24364B' : '#F4EFE7',
+                      backgroundColor: selectedVariant?.id === variant.id ? '#24364B' : '#F4EFE7',
                       border: '1px solid #E8E2D8'
                     }}
                   >
-                    <span className="text-[14px] font-semibold" style={{ color: variant.is_default ? '#F9F7F2' : '#24364B' }}>
+                    <span className="text-[14px] font-semibold" style={{ color: selectedVariant?.id === variant.id ? '#F9F7F2' : '#24364B' }}>
                       {variant.name}
                     </span>
-                    <span className="text-[14px] font-bold" style={{ color: variant.is_default ? '#F9F7F2' : '#F28A2E' }}>
+                    <span className="text-[14px] font-bold" style={{ color: selectedVariant?.id === variant.id ? '#F9F7F2' : '#F28A2E' }}>
                       £{variant.price.toFixed(2)}
                     </span>
                   </button>
@@ -66,6 +170,73 @@ export function ItemModal({ item, onClose, onAdd }: ItemModalProps) {
               </div>
             </div>
           )}
+
+          {/* Modifier Groups */}
+          {item.modifier_groups && item.modifier_groups.map((group: any) => {
+            const selectedInGroup = selectedModifiers.filter(m => m.group_id === group.id)
+            const isRequired = group.selection_type === 'required'
+            const isValid = selectedInGroup.length >= group.min_selections
+            
+            return (
+              <div key={group.id}>
+                <div className="flex items-center gap-2 mb-2">
+                  <p className="text-[12px] font-bold uppercase tracking-[0.12em]" style={{ color: '#A89080' }}>
+                    {group.name}
+                  </p>
+                  {isRequired && (
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: '#FFE5E5', color: '#DC2626' }}>
+                      Required
+                    </span>
+                  )}
+                  {!isValid && isRequired && (
+                    <span className="text-[10px] font-semibold" style={{ color: '#DC2626' }}>
+                      (min {group.min_selections})
+                    </span>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  {group.modifier_options.map((option: any) => {
+                    const isSelected = selectedModifiers.some(m => m.option_id === option.id)
+                    return (
+                      <button
+                        key={option.id}
+                        onClick={() => toggleModifier(
+                          group.id, 
+                          group.name, 
+                          option.id, 
+                          option.name, 
+                          option.price_adjustment,
+                          group.selection_type,
+                          group.max_selections
+                        )}
+                        className="w-full px-4 py-3 rounded-[12px] text-left flex items-center justify-between"
+                        style={{ 
+                          backgroundColor: isSelected ? '#24364B' : '#F4EFE7',
+                          border: '1px solid #E8E2D8',
+                          opacity: !isSelected && group.max_selections && selectedInGroup.length >= group.max_selections ? 0.5 : 1
+                        }}
+                        disabled={!isSelected && group.max_selections && selectedInGroup.length >= group.max_selections}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-5 h-5 rounded-full flex items-center justify-center ${isSelected ? 'bg-white' : 'bg-transparent'}`} style={{ border: '2px solid #24364B' }}>
+                            {isSelected && <Check className="w-3 h-3" style={{ color: '#24364B' }} />}
+                          </div>
+                          <span className="text-[14px] font-semibold" style={{ color: isSelected ? '#F9F7F2' : '#24364B' }}>
+                            {option.name}
+                          </span>
+                        </div>
+                        {option.price_adjustment > 0 && (
+                          <span className="text-[14px] font-bold" style={{ color: isSelected ? '#F9F7F2' : '#F28A2E' }}>
+                            +£{option.price_adjustment.toFixed(2)}
+                          </span>
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })}
 
           {/* Quantity */}
           <div>
@@ -97,14 +268,15 @@ export function ItemModal({ item, onClose, onAdd }: ItemModalProps) {
           <div className="flex items-center justify-between pt-2" style={{ borderTop: '1px solid #E8E2D8' }}>
             <span className="text-[14px]" style={{ color: '#8A96A0' }}>Total</span>
             <span className="text-[24px] font-bold" style={{ color: '#F28A2E' }}>
-              £{(item.base_price * quantity).toFixed(2)}
+              £{calculateTotal().toFixed(2)}
             </span>
           </div>
 
           {/* Add button */}
           <button
-            onClick={() => onAdd(item, quantity)}
-            className="w-full py-4 rounded-[16px] text-white font-bold text-[15px] active:scale-[0.98] transition-all"
+            onClick={() => onAdd(item, quantity, selectedModifiers)}
+            disabled={!canAdd()}
+            className="w-full py-4 rounded-[16px] text-white font-bold text-[15px] active:scale-[0.98] transition-all disabled:opacity-40"
             style={{ backgroundColor: '#24364B' }}
           >
             Add to order

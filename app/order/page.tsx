@@ -15,6 +15,8 @@ interface OrderItem {
   itemId?: string
   modifier: string
   quantity: number
+  selectedModifiers?: any[]
+  totalPrice?: number
 }
 
 interface MenuItem {
@@ -24,6 +26,19 @@ interface MenuItem {
   base_price: number
   categories?: { id: string; name: string; color: string }
   item_variants?: Array<{ id: string; name: string; price: number; is_default: boolean }>
+  modifier_groups?: Array<{
+    id: string
+    name: string
+    selection_type: 'optional' | 'required' | 'multiple'
+    min_selections: number
+    max_selections: number | null
+    modifier_options: Array<{
+      id: string
+      name: string
+      price_adjustment: number
+      is_default: boolean
+    }>
+  }>
 }
 
 interface Category {
@@ -154,7 +169,19 @@ export default function OrderPage() {
     setSelectedItem(menuItem)
   }
 
-  const handleAddToOrder = (menuItem: MenuItem, quantity: number) => {
+  const handleAddToOrder = (menuItem: MenuItem, quantity: number, selectedModifiers: any[]) => {
+    // Calculate total price including modifiers
+    let basePrice = menuItem.base_price
+    selectedModifiers.forEach(mod => {
+      basePrice += mod.price_adjustment
+    })
+    const totalPrice = basePrice * quantity
+
+    // Format modifier string for display
+    const modifierString = selectedModifiers.length > 0
+      ? selectedModifiers.map(m => m.option_name).join(', ')
+      : ''
+
     const existing = orderItems.find(i => i.itemId === menuItem.id)
     if (existing) {
       updateItem(existing.id, 'quantity', existing.quantity + quantity)
@@ -163,8 +190,10 @@ export default function OrderPage() {
         id: Date.now().toString(),
         item: menuItem.name,
         itemId: menuItem.id,
-        modifier: '',
-        quantity
+        modifier: modifierString,
+        quantity,
+        selectedModifiers,
+        totalPrice
       }])
     }
     setSelectedItem(null)
@@ -176,8 +205,21 @@ export default function OrderPage() {
   const sendToWhatsApp = () => {
     const validItems = orderItems.filter(i => i.item.trim())
     if (validItems.length === 0) return
-    const orderText = validItems.map(i => `${i.quantity}x ${i.item}${i.modifier ? ` (${i.modifier})` : ''}`).join('\n')
-    const message = `Hi Penkey!${userName ? ` It's ${userName}` : ''} — I'd like to place a collection order.${userPhone ? `\nMy number: ${userPhone}` : ''}\n\nPickup: ${pickupDay}, ${pickupTime}\n\nOrder:\n${orderText}${notes ? `\n\nNotes: ${notes}` : ''}\n\nThanks!`
+    
+    const orderText = validItems.map(i => {
+      let itemLine = `${i.quantity}x ${i.item}`
+      if (i.modifier) {
+        itemLine += ` (${i.modifier})`
+      }
+      if (i.totalPrice) {
+        itemLine += ` - £${i.totalPrice.toFixed(2)}`
+      }
+      return itemLine
+    }).join('\n')
+    
+    const total = validItems.reduce((sum, i) => sum + (i.totalPrice || 0), 0)
+    
+    const message = `Hi Penkey!${userName ? ` It's ${userName}` : ''} — I'd like to place a collection order.${userPhone ? `\nMy number: ${userPhone}` : ''}\n\nPickup: ${pickupDay}, ${pickupTime}\n\nOrder:\n${orderText}\n\nTotal: £${total.toFixed(2)}${notes ? `\n\nNotes: ${notes}` : ''}\n\nThanks!`
     window.open(`https://wa.me/441590619472?text=${encodeURIComponent(message)}`, '_blank')
     setOrderSent(true)
   }
