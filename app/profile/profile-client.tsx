@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast'
 import { createClient } from '@/lib/supabase/client'
 import QRCodeLib from 'qrcode'
 import { BottomNav } from '@/components/bottom-nav'
+import { PushNotificationToggle } from '@/components/push-notification-toggle'
 
 function getGreeting() {
   const h = new Date().getHours()
@@ -639,6 +640,9 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
                     <p className="text-[12px]" style={{ color: '#8A96A0' }}>Receive promotional emails</p>
                   </div>
                   <Toggle on={marketingConsent} onToggle={() => setMarketingConsent(!marketingConsent)} />
+                </div>
+                <div className="pt-1">
+                  <PushNotificationToggle />
                 </div>
               </div>
             </div>

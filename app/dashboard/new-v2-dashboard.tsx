@@ -186,7 +186,6 @@ export default function NewV2Dashboard() {
         .from('voucher_templates')
         .select('*')
         .eq('bean_threshold', beanThreshold)
-        .eq('is_active', true)
         .single()
 
       if (!templates) {
