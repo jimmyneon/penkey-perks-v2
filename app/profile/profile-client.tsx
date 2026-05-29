@@ -343,9 +343,6 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
             {name ? name.split(' ')[0] : 'Profile'}
           </h1>
         </div>
-        <div className="flex flex-col items-end ml-6">
-          <img src="/logo.png" alt="PENKEY Perks" className="h-36 w-auto object-contain" style={{ marginTop: '-28px' }} />
-        </div>
       </div>
 
       <div className="px-4 pb-28 space-y-4">

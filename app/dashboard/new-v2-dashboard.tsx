@@ -244,10 +244,6 @@ export default function NewV2Dashboard() {
                 {firstName}
               </h1>
             </div>
-            {/* Right: wordmark */}
-            <div className="flex flex-col items-end ml-6">
-              <img src="/logo.png" alt="PENKEY Perks" className="h-36 w-auto object-contain" style={{ marginTop: '-28px' }} />
-            </div>
           </div>
 
           {/* ── YOUR PROGRESS ── */}
