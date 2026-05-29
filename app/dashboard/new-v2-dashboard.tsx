@@ -40,6 +40,7 @@ export default function NewV2Dashboard() {
   const [brightness, setBrightness] = useState(1)
   const [converting, setConverting] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [nextReward, setNextReward] = useState<any>(null)
 
   // Prevent hydration mismatch
   useEffect(() => {
@@ -49,6 +50,13 @@ export default function NewV2Dashboard() {
   useEffect(() => {
     loadData()
   }, [])
+
+  // Load next reward from database
+  useEffect(() => {
+    if (beanBalance) {
+      getNextRewardThreshold(beanBalance.current_beans).then(setNextReward)
+    }
+  }, [beanBalance])
 
   const loadData = async () => {
     try {
@@ -228,15 +236,7 @@ export default function NewV2Dashboard() {
     )
   }
 
-  const [nextReward, setNextReward] = useState<any>(null)
   const currentBeans = beanBalance?.current_beans || 0
-
-  // Load next reward from database
-  useEffect(() => {
-    if (beanBalance) {
-      getNextRewardThreshold(beanBalance.current_beans).then(setNextReward)
-    }
-  }, [beanBalance])
 
   const targetBeans = nextReward?.threshold || 8
   const progress = (currentBeans / targetBeans) * 100
