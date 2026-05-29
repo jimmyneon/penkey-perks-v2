@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { getBeanBalance, getActiveVouchers, getUserBadges, getActiveCampaigns, getNextRewardThreshold } from '@/lib/supabase/queries'
+import { getBeanBalance, getActiveVouchers, getUserBadges, getActiveCampaigns, getNextRewardThreshold, getAllVoucherTemplates } from '@/lib/supabase/queries'
 import { Bell, Coffee, Gift, TrendingUp, QrCode, BarChart3, ChevronRight, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -43,6 +43,7 @@ export default function NewV2Dashboard() {
   const [nextReward, setNextReward] = useState<any>(null)
   const [showVoucherSelection, setShowVoucherSelection] = useState(false)
   const [availableVouchers, setAvailableVouchers] = useState<any[]>([])
+  const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
 
   // Prevent hydration mismatch
   useEffect(() => {
@@ -59,6 +60,11 @@ export default function NewV2Dashboard() {
       getNextRewardThreshold(beanBalance.current_beans).then(setNextReward)
     }
   }, [beanBalance])
+
+  // Load voucher templates from database
+  useEffect(() => {
+    getAllVoucherTemplates().then(setVoucherTemplates)
+  }, [])
 
   const loadData = async () => {
     try {
@@ -905,12 +911,32 @@ export default function NewV2Dashboard() {
 
               {/* Journey list */}
               {(() => {
-                const milestones = [
-                  { beans: 2, name: 'Free Syrup Shot', icon: 'syrup' },
-                  { beans: 8, name: 'Any Coffee', icon: 'coffee' },
-                  { beans: 15, name: 'Free Snack', icon: 'cookie' },
-                  { beans: 25, name: 'Lunch Deal', icon: 'sandwich' },
-                ]
+                // Use voucher templates from database, fallback to hardcoded if empty
+                const milestones = voucherTemplates.length > 0 
+                  ? voucherTemplates.map(t => ({ 
+                      beans: t.bean_threshold, 
+                      name: t.name, 
+                      category: t.category,
+                      description: t.description 
+                    }))
+                  : [
+                      { beans: 2, name: 'Free Syrup Shot', category: 'enhancer', description: '' },
+                      { beans: 8, name: 'Any Coffee', category: 'coffee', description: '' },
+                      { beans: 15, name: 'Free Snack', category: 'major', description: '' },
+                      { beans: 25, name: 'Lunch Deal', category: 'major', description: '' },
+                    ]
+                
+                // Map category to icon
+                const getIconForCategory = (category: string) => {
+                  switch(category) {
+                    case 'enhancer': return 'syrup'
+                    case 'coffee': return 'coffee'
+                    case 'major': return 'cookie'
+                    case 'wheel_spin': return 'gift'
+                    default: return 'coffee'
+                  }
+                }
+                
                 const CX = 28
                 const STD_H = 80
                 const NEXT_H = 114
@@ -943,6 +969,7 @@ export default function NewV2Dashboard() {
                     const isNext = !unlocked && (index === 0 || currentBeans >= arr[index - 1].beans)
                     const beansToGo = reward.beans - currentBeans
                     const rowH = rowHeights[index]
+                    const icon = getIconForCategory(reward.category)
 
                     return (
                       <div
@@ -965,7 +992,7 @@ export default function NewV2Dashboard() {
                               opacity: (!unlocked && !isNext) ? 0.5 : 1,
                             }}
                           >
-                            {reward.icon === 'syrup' && (
+                            {icon === 'syrup' && (
                               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={unlocked ? '#F28A2E' : 'rgba(240,237,229,0.6)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M8 3h8v2a4 4 0 0 1-4 4 4 4 0 0 1-4-4V3z" />
                                 <path d="M12 9v3" />
@@ -973,7 +1000,7 @@ export default function NewV2Dashboard() {
                                 <rect x="7" y="12" width="10" height="9" rx="2" />
                               </svg>
                             )}
-                            {reward.icon === 'coffee' && (
+                            {icon === 'coffee' && (
                               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={isNext ? '#F28A2E' : unlocked ? '#F28A2E' : 'rgba(240,237,229,0.6)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M17 8h1a4 4 0 0 1 0 8h-1" />
                                 <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z" />
@@ -982,7 +1009,7 @@ export default function NewV2Dashboard() {
                                 <line x1="14" y1="2" x2="14" y2="5" />
                               </svg>
                             )}
-                            {reward.icon === 'cookie' && (
+                            {icon === 'cookie' && (
                               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(240,237,229,0.6)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                 <circle cx="12" cy="12" r="9" />
                                 <circle cx="8" cy="9" r="1.5" fill="rgba(240,237,229,0.6)" stroke="none" />
@@ -991,12 +1018,13 @@ export default function NewV2Dashboard() {
                                 <circle cx="14.5" cy="14" r="1.5" fill="rgba(240,237,229,0.6)" stroke="none" />
                               </svg>
                             )}
-                            {reward.icon === 'sandwich' && (
+                            {icon === 'gift' && (
                               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(240,237,229,0.6)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M3 11h18" />
-                                <path d="M3 7c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v4H3V7z" />
-                                <path d="M3 15h18" />
-                                <path d="M5 19h14a2 2 0 0 0 2-2v-2H3v2a2 2 0 0 0 2 2z" />
+                                <rect x="3" y="8" width="18" height="12" rx="2" />
+                                <path d="M12 8V3" />
+                                <path d="M12 3H8" />
+                                <path d="M12 3H16" />
+                                <path d="M12 8v12" />
                               </svg>
                             )}
                           </div>

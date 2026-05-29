@@ -266,3 +266,19 @@ export async function getNextRewardThreshold(currentBeans: number): Promise<{ th
     description: '',
   }
 }
+
+// Fetch all voucher templates for rewards display
+export async function getAllVoucherTemplates(): Promise<Array<{ id: string; name: string; description: string; category: string; bean_threshold: number }>> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('voucher_templates')
+    .select('id, name, description, category, bean_threshold')
+    .order('bean_threshold', { ascending: true })
+
+  if (error || !data) {
+    console.error('Error fetching voucher templates:', error)
+    return []
+  }
+
+  return data
+}
