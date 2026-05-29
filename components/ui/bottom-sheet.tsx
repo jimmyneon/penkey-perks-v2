@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from "framer-motion"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -22,6 +22,15 @@ export function BottomSheet({
   showCloseButton = true,
   className,
 }: BottomSheetProps) {
+  const y = useMotionValue(0)
+  const opacity = useTransform(y, [-150, 0], [0, 1])
+
+  const handleDragEnd = (_: any, info: PanInfo) => {
+    if (info.offset.y > 100) {
+      onOpenChange(false)
+    }
+  }
+
   return (
     <AnimatePresence>
       {open && (
@@ -32,8 +41,9 @@ export function BottomSheet({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
             onClick={() => onOpenChange(false)}
+            style={{ opacity }}
           />
           
           {/* Sheet */}
@@ -42,13 +52,18 @@ export function BottomSheet({
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            drag="y"
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={0.2}
+            onDragEnd={handleDragEnd}
+            style={{ y }}
             className={cn(
-              "fixed bottom-0 left-0 right-0 z-50 bg-cream-card rounded-t-3xl shadow-premium-xl max-h-[85vh] overflow-hidden",
+              "fixed bottom-0 left-0 right-0 z-50 bg-cream-card rounded-t-3xl shadow-premium-xl max-h-[85vh] overflow-hidden touch-none",
               className
             )}
           >
             {/* Handle */}
-            <div className="flex justify-center pt-3 pb-2">
+            <div className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing">
               <div className="w-12 h-1.5 bg-brown/20 rounded-full" />
             </div>
             
