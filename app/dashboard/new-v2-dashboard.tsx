@@ -269,6 +269,9 @@ export default function NewV2Dashboard() {
                   <span className="text-[48px] font-extrabold leading-none" style={{ color: 'white' }}>{currentBeans}</span>
                   <span className="text-[14px] font-semibold" style={{ color: 'rgba(255,255,255,0.5)' }}>collected</span>
                 </div>
+                <div className="mb-3">
+                  <img src="/beanpile.png" alt="" className="w-20 h-20 object-contain" />
+                </div>
                 <p className="text-[16px] font-bold text-white leading-tight mb-1">
                   {stampBeansNeeded} beans to your next treat
                 </p>
