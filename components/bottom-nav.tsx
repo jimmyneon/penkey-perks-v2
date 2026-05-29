@@ -69,15 +69,14 @@ export function BottomNav() {
               className="flex items-center justify-center flex-shrink-0 -mt-5 mx-2"
             >
               <div
-                className="w-[52px] h-[52px] rounded-full flex flex-col items-center justify-center gap-0.5 active:scale-95 transition-transform duration-150"
+                className="w-[60px] h-[60px] rounded-full flex items-center justify-center active:scale-95 transition-transform duration-150"
                 style={{
                   background: 'linear-gradient(135deg, #E87A2E 0%, #D66B1F 100%)',
-                  boxShadow: '0 3px 12px rgba(232,122,46,0.25)',
+                  boxShadow: '0 4px 16px rgba(232,122,46,0.4)',
                   border: '3px solid white',
                 }}
               >
-                <ScanLine className="w-[20px] h-[20px] text-white" strokeWidth={1.8} />
-                <span className="text-[7px] font-semibold text-white tracking-wide">SCAN</span>
+                <ScanLine className="w-[24px] h-[24px] text-white" strokeWidth={1.8} />
               </div>
             </Link>
 

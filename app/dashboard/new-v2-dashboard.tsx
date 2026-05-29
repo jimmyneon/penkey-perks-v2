@@ -446,25 +446,25 @@ export default function NewV2Dashboard() {
 
       {/* Voucher Detail Dialog */}
       <Dialog open={!!selectedVoucher} onOpenChange={() => setSelectedVoucher(null)}>
-        <DialogContent className="sm:max-w-sm rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.3)] p-0 overflow-hidden border-0">
-          <div style={{ background: 'linear-gradient(160deg, #2B3E52 0%, #1e2d3d 100%)' }}>
+        <DialogContent className="sm:max-w-sm rounded-[24px] shadow-[0_24px_64px_rgba(36,54,75,0.2)] p-0 overflow-hidden border-0">
+          <div style={{ backgroundColor: '#F4EFE7' }}>
             {/* Header */}
-            <div className="flex items-start justify-between p-5 pb-0">
+            <div className="flex items-start justify-between p-5 pb-4">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.15em]" style={{ color: 'rgba(240,237,229,0.7)' }}>PERK UNLOCKED</p>
-                <p className="text-[20px] font-extrabold mt-1" style={{ color: '#F0EDE5' }}>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.15em]" style={{ color: '#A89080' }}>PERK UNLOCKED</p>
+                <p className="text-[22px] font-extrabold mt-1 leading-tight" style={{ color: '#24364B' }}>
                   {selectedVoucher?.template?.name || 'Your Reward'}
                 </p>
                 {selectedVoucher?.template?.description && (
-                  <p className="text-[12px] mt-1" style={{ color: 'rgba(240,237,229,0.55)' }}>
+                  <p className="text-[13px] mt-1 leading-snug" style={{ color: '#7A6058' }}>
                     {selectedVoucher.template.description}
                   </p>
                 )}
               </div>
               <button
                 onClick={() => setSelectedVoucher(null)}
-                className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                style={{ backgroundColor: 'rgba(240,237,229,0.1)', color: '#F0EDE5' }}
+                className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-1"
+                style={{ backgroundColor: 'rgba(36,54,75,0.08)', color: '#24364B' }}
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <path d="M18 6L6 18M6 6l12 12" />
@@ -472,32 +472,50 @@ export default function NewV2Dashboard() {
               </button>
             </div>
 
-            {/* Expiry */}
-            <div className="mx-5 mt-3 px-3 py-2 rounded-[10px]" style={{ backgroundColor: 'rgba(240,237,229,0.07)', border: '1px solid rgba(240,237,229,0.1)' }}>
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: 'rgba(240,237,229,0.5)' }}>Expires</span>
-                <span className="text-[12px] font-bold" style={{ color: '#F28A2E' }}>
-                  {selectedVoucher?.expires_at ? new Date(selectedVoucher.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'No expiry'}
-                </span>
+            {/* Divider */}
+            <div style={{ height: '1px', backgroundColor: 'rgba(36,54,75,0.08)', marginLeft: 20, marginRight: 20 }} />
+
+            {/* How to redeem */}
+            <div className="px-5 py-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wide mb-3" style={{ color: '#A89080' }}>How to redeem</p>
+              <div className="flex flex-col gap-2">
+                {['Show this screen to a member of staff', 'They will scan the QR code below', 'Enjoy your reward!'].map((step, i) => (
+                  <div key={i} className="flex items-center gap-2.5">
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#F28A2E' }}>
+                      <span className="text-[9px] font-bold text-white">{i + 1}</span>
+                    </div>
+                    <p className="text-[12px]" style={{ color: '#4A3830' }}>{step}</p>
+                  </div>
+                ))}
               </div>
             </div>
 
             {/* QR Code */}
-            {voucherQrCode && (
-              <div className="flex flex-col items-center gap-3 p-5">
-                <div className="rounded-[20px] p-4" style={{ backgroundColor: '#ffffff' }}>
-                  <img src={voucherQrCode} alt="Voucher QR Code" className="w-48 h-48" />
+            {voucherQrCode ? (
+              <div className="flex flex-col items-center gap-2 px-5 pb-2">
+                <div className="rounded-[18px] p-3.5 shadow-[0_2px_12px_rgba(36,54,75,0.1)]" style={{ backgroundColor: '#ffffff', border: '1px solid rgba(36,54,75,0.07)' }}>
+                  <img src={voucherQrCode} alt="Voucher QR Code" className="w-52 h-52" />
                 </div>
-                <p className="text-[11px] text-center" style={{ color: 'rgba(240,237,229,0.5)' }}>Show this to staff to redeem</p>
+                <p className="text-[11px] text-center" style={{ color: '#A89080' }}>Present to staff to redeem</p>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center py-8">
+                <p className="text-[12px]" style={{ color: '#A89080' }}>Generating QR code...</p>
               </div>
             )}
 
-            {/* Button */}
-            <div className="px-5 pb-5">
+            {/* Expiry + Button */}
+            <div className="px-5 pb-5 pt-3">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: '#A89080' }}>Expires</span>
+                <span className="text-[12px] font-bold" style={{ color: '#24364B' }}>
+                  {selectedVoucher?.expires_at ? new Date(selectedVoucher.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'No expiry'}
+                </span>
+              </div>
               <button
                 onClick={() => setSelectedVoucher(null)}
                 className="w-full h-12 text-white text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all"
-                style={{ backgroundColor: '#F28A2E', boxShadow: '0 4px 16px rgba(242,138,46,0.35)' }}
+                style={{ backgroundColor: '#F28A2E', boxShadow: '0 4px 16px rgba(242,138,46,0.3)' }}
               >
                 Done
               </button>
@@ -688,33 +706,51 @@ export default function NewV2Dashboard() {
               </div>
 
               {/* Journey list */}
+              {(() => {
+                const milestones = [
+                  { beans: 2, name: 'Free Syrup Shot', icon: 'syrup' },
+                  { beans: 8, name: 'Any Coffee', icon: 'coffee' },
+                  { beans: 15, name: 'Free Snack', icon: 'cookie' },
+                  { beans: 25, name: 'Lunch Deal', icon: 'sandwich' },
+                ]
+                const CX = 28
+                const STD_H = 80
+                const NEXT_H = 114
+                const GAP = 10
+                const nextIdx = milestones.findIndex((r, i, arr) =>
+                  currentBeans < r.beans && (i === 0 || currentBeans >= arr[i - 1].beans)
+                )
+                const rowHeights = milestones.map((_, i) => i === nextIdx ? NEXT_H : STD_H)
+                let totalH = 0
+                const circleCYs: number[] = []
+                rowHeights.forEach((h, i) => {
+                  circleCYs.push(totalH + h / 2)
+                  totalH += h + (i < rowHeights.length - 1 ? GAP : 0)
+                })
+                let pathD = `M ${CX} ${circleCYs[0]}`
+                for (let i = 1; i < circleCYs.length; i++) {
+                  const midY = (circleCYs[i - 1] + circleCYs[i]) / 2
+                  const bx = i % 2 === 1 ? CX + 16 : CX - 16
+                  pathD += ` Q ${bx} ${midY} ${CX} ${circleCYs[i]}`
+                }
+                return (
               <div className="relative">
-                {/* Dashed vertical connector line through circle centres */}
-                <div
-                  className="absolute"
-                  style={{
-                    left: '27px',
-                    top: '28px',
-                    bottom: '28px',
-                    width: '2px',
-                    background: 'repeating-linear-gradient(to bottom, #F28A2E 0px, #F28A2E 6px, transparent 6px, transparent 12px)',
-                    opacity: 0.45,
-                  }}
-                />
+                <svg className="absolute left-0 top-0 pointer-events-none" width="56" height={totalH} style={{ zIndex: 0 }}>
+                  <path d={pathD} fill="none" stroke="#F28A2E" strokeWidth="2.5" strokeDasharray="5 6" strokeLinecap="round" opacity="0.55" />
+                </svg>
 
-                <div className="space-y-3">
-                  {[
-                    { beans: 2, name: 'Free Syrup Shot', icon: 'syrup' },
-                    { beans: 8, name: 'Any Coffee', icon: 'coffee' },
-                    { beans: 15, name: 'Free Snack', icon: 'cookie' },
-                    { beans: 25, name: 'Lunch Deal', icon: 'sandwich' },
-                  ].map((reward, index, arr) => {
+                <div>
+                  {milestones.map((reward, index, arr) => {
                     const unlocked = currentBeans >= reward.beans
                     const isNext = !unlocked && (index === 0 || currentBeans >= arr[index - 1].beans)
                     const beansToGo = reward.beans - currentBeans
+                    const rowH = rowHeights[index]
 
                     return (
-                      <div key={reward.beans} className="flex items-center gap-3 relative">
+                      <div
+                        key={reward.beans}
+                        className="flex items-center gap-3 relative"
+                        style={{ height: rowH, marginTop: index > 0 ? GAP : 0 }}>
 
                         {/* Circle icon */}
                         <div className="relative flex-shrink-0 z-10">
@@ -855,6 +891,8 @@ export default function NewV2Dashboard() {
                   })}
                 </div>
               </div>
+                )
+              })()}
 
               {/* Buttons */}
               <div className="flex gap-3 mt-6">
