@@ -1,15 +1,13 @@
 -- Seed data for Penkey Perks V2
 -- This creates sample data to demonstrate the app
 
--- Insert sample voucher templates
+-- Insert standard voucher templates
 INSERT INTO voucher_templates (name, description, category, bean_threshold, expiry_days) VALUES
-('Free Syrup', 'Add any syrup to your drink for free', 'enhancer', 5, 30),
-('Mini Brownie', 'Get a free mini brownie with any drink', 'enhancer', 5, 30),
-('Bonus Beans', 'Get 2 bonus beans on your next visit', 'enhancer', 5, 30),
-('Free Standard Coffee', 'Any standard coffee: latte, cappuccino, flat white, americano, tea', 'coffee', 8, 30),
-('Free Iced Coffee', 'Any iced coffee: iced latte, iced americano', 'coffee', 8, 30),
-('Golden Duck Reward', 'Sandwich, toastie, or lunch combo', 'lunch', 20, 30),
-('Mystery Reward', 'Surprise reward from the chef', 'special', 20, 30);
+('Free Syrup', 'Add any vanilla or flavoured syrup to your coffee or tea for free', 'enhancer', 2, 30),
+('Free Biscuit', 'Get a free biscuit with any drink', 'enhancer', 5, 30),
+('Free Coffee or Tea', 'Any standard coffee or tea: latte, cappuccino, flat white, americano, tea', 'coffee', 8, 30),
+('Milkshake Voucher', 'Free milkshake of your choice', 'major', 15, 30),
+('Premium Hot Bun', 'Free premium hot bun: sausage roll, pasty, or hot sandwich', 'major', 25, 30);
 
 -- Insert sample badges
 INSERT INTO badges (name, description, tier, requirement_type, requirement_value, icon_url) VALUES

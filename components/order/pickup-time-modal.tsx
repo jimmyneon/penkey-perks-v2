@@ -1,7 +1,6 @@
 'use client'
 
 import { X } from 'lucide-react'
-import { useEffect } from 'react'
 
 interface PickupTimeModalProps {
   pickupDay: string
@@ -14,32 +13,25 @@ interface PickupTimeModalProps {
 const TIME_SLOTS = ['ASAP', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00']
 const DAY_OPTIONS = ['Today', 'Tomorrow']
 
-export function PickupTimeModal({
-  pickupDay,
-  pickupTime,
-  onClose,
-  onDayChange,
-  onTimeChange
+export function PickupTimeModal({ 
+  pickupDay, 
+  pickupTime, 
+  onClose, 
+  onDayChange, 
+  onTimeChange 
 }: PickupTimeModalProps) {
-  useEffect(() => {
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
-  }, [])
-
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4">
+      <div 
+        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       />
-      <div
-        className="relative bg-white rounded-t-[24px] sm:rounded-[24px] w-full max-h-[85vh] overflow-y-auto animate-in slide-in-from-bottom duration-300 ease-out"
+      <div 
+        className="relative bg-white rounded-t-[24px] sm:rounded-[24px] w-full max-w-[400px]"
         style={{ backgroundColor: '#F9F7F2' }}
       >
         {/* Header */}
-        <div className="sticky top-0 px-5 pt-4 pb-3 flex items-center justify-between" style={{ backgroundColor: '#F9F7F2' }}>
+        <div className="px-5 pt-4 pb-3 flex items-center justify-between" style={{ backgroundColor: '#F9F7F2' }}>
           <h2 className="text-[20px] font-bold" style={{ color: '#24364B' }}>Pick-up Time</h2>
           <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8E2D8' }}>
             <X className="w-4 h-4" style={{ color: '#24364B' }} />
