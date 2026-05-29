@@ -634,135 +634,197 @@ export default function NewV2Dashboard() {
         </DialogContent>
       </Dialog>
 
-      {/* Rewards Panel Dialog - Horizontal Bean Journey */}
+      {/* Rewards Panel Dialog */}
       <Dialog open={showRewardsPanel} onOpenChange={setShowRewardsPanel}>
-        <DialogContent className="sm:max-w-lg rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 overflow-hidden border-0">
-          <div
-            className="rounded-[24px] overflow-hidden"
-            style={{ background: 'linear-gradient(135deg, #2B3E52 0%, #24364A 100%)' }}
-          >
-            <div className="p-6">
+        <DialogContent className="sm:max-w-[380px] rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 border-0 overflow-hidden">
+          <div style={{ background: 'linear-gradient(160deg, #2B3E52 0%, #1e2d3d 100%)' }} className="overflow-y-auto max-h-[90vh]">
+            <div className="p-5">
+
               {/* Header */}
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-start justify-between mb-5">
                 <div>
-                  <p className="text-[12px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#F0EDE5' }}>
-                    YOUR JOURNEY
-                  </p>
-                  <p className="text-[20px] font-extrabold mt-1" style={{ color: '#F28A2E' }}>
-                    {currentBeans} beans
-                  </p>
-                  <p className="text-[11px] mt-1" style={{ color: 'rgba(240,237,229,0.6)' }}>
-                    {stampBeansNeeded} beans until next reward
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.15em]" style={{ color: 'rgba(240,237,229,0.7)' }}>YOUR JOURNEY</p>
+                  <div className="flex items-baseline gap-2 mt-1">
+                    <span className="text-[32px] font-extrabold leading-none" style={{ color: '#F28A2E' }}>{currentBeans}</span>
+                    <span className="text-[18px] font-bold" style={{ color: '#F0EDE5' }}>beans</span>
+                  </div>
+                  <p className="text-[12px] mt-1" style={{ color: 'rgba(240,237,229,0.55)' }}>
+                    {stampBeansNeeded} beans away from your next reward
                   </p>
                 </div>
-                <button onClick={() => setShowRewardsPanel(false)} className="text-[#F0EDE5]/50 hover:text-[#F0EDE5] transition-colors">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <button
+                  onClick={() => setShowRewardsPanel(false)}
+                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
+                  style={{ backgroundColor: 'rgba(240,237,229,0.1)', color: '#F0EDE5' }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <path d="M18 6L6 18M6 6l12 12" />
                   </svg>
                 </button>
               </div>
 
-              {/* Vertical bean journey */}
-              <div className="relative pl-16 py-4">
-                {/* Curved path SVG on left side running down */}
-                <svg className="absolute left-6 top-0 bottom-0 w-8 h-full" viewBox="0 0 40 300" preserveAspectRatio="none">
-                  <path 
-                    d="M 20 0 Q 35 75, 20 150 T 20 300" 
-                    fill="none" 
-                    stroke="rgba(240,237,229,0.25)" 
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                </svg>
+              {/* Journey list */}
+              <div className="relative">
+                {/* Dashed vertical connector line through circle centres */}
+                <div
+                  className="absolute"
+                  style={{
+                    left: '27px',
+                    top: '28px',
+                    bottom: '28px',
+                    width: '2px',
+                    background: 'repeating-linear-gradient(to bottom, #F28A2E 0px, #F28A2E 6px, transparent 6px, transparent 12px)',
+                    opacity: 0.45,
+                  }}
+                />
 
-                {/* Bean markers positioned vertically along the path */}
-                <div className="relative space-y-8">
+                <div className="space-y-3">
                   {[
-                    { beans: 2, name: 'Free Syrup Shot', topPercent: 10 },
-                    { beans: 8, name: 'Free Coffee', topPercent: 35 },
-                    { beans: 15, name: 'Free Snack', topPercent: 60 },
-                    { beans: 25, name: 'Free Meal', topPercent: 85 },
-                  ].map((reward) => {
+                    { beans: 2, name: 'Free Syrup Shot', icon: 'syrup' },
+                    { beans: 8, name: 'Any Coffee', icon: 'coffee' },
+                    { beans: 15, name: 'Free Snack', icon: 'cookie' },
+                    { beans: 25, name: 'Lunch Deal', icon: 'sandwich' },
+                  ].map((reward, index, arr) => {
                     const unlocked = currentBeans >= reward.beans
-                    const isNext = !unlocked && currentBeans < reward.beans
-                    
+                    const isNext = !unlocked && (index === 0 || currentBeans >= arr[index - 1].beans)
+                    const beansToGo = reward.beans - currentBeans
+
                     return (
-                      <div 
-                        key={reward.beans}
-                        className="relative flex items-center gap-4"
-                      >
-                        {/* Bean icon on the path */}
-                        <div 
-                          className="absolute -left-10 flex items-center justify-center"
-                          style={{ top: '50%', transform: 'translateY(-50%)' }}
-                        >
-                          {unlocked ? (
-                            <div 
-                              className="w-10 h-10 rounded-full flex items-center justify-center"
-                              style={{ backgroundColor: '#F28A2E' }}
+                      <div key={reward.beans} className="flex items-center gap-3 relative">
+
+                        {/* Circle icon */}
+                        <div className="relative flex-shrink-0 z-10">
+                          <div
+                            className="w-14 h-14 rounded-full flex items-center justify-center"
+                            style={{
+                              backgroundColor: '#1a2b3c',
+                              border: isNext
+                                ? '2px solid #F28A2E'
+                                : unlocked
+                                ? '2px solid rgba(242,138,46,0.4)'
+                                : '2px solid rgba(240,237,229,0.15)',
+                              boxShadow: isNext ? '0 0 0 4px rgba(242,138,46,0.18)' : 'none',
+                              opacity: (!unlocked && !isNext) ? 0.5 : 1,
+                            }}
+                          >
+                            {reward.icon === 'syrup' && (
+                              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={unlocked ? '#F28A2E' : 'rgba(240,237,229,0.6)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M8 3h8v2a4 4 0 0 1-4 4 4 4 0 0 1-4-4V3z" />
+                                <path d="M12 9v3" />
+                                <path d="M9 12h6" />
+                                <rect x="7" y="12" width="10" height="9" rx="2" />
+                              </svg>
+                            )}
+                            {reward.icon === 'coffee' && (
+                              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={isNext ? '#F28A2E' : unlocked ? '#F28A2E' : 'rgba(240,237,229,0.6)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M17 8h1a4 4 0 0 1 0 8h-1" />
+                                <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z" />
+                                <line x1="6" y1="2" x2="6" y2="5" />
+                                <line x1="10" y1="2" x2="10" y2="5" />
+                                <line x1="14" y1="2" x2="14" y2="5" />
+                              </svg>
+                            )}
+                            {reward.icon === 'cookie' && (
+                              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(240,237,229,0.6)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="9" />
+                                <circle cx="8" cy="9" r="1.5" fill="rgba(240,237,229,0.6)" stroke="none" />
+                                <circle cx="15" cy="9" r="1.5" fill="rgba(240,237,229,0.6)" stroke="none" />
+                                <circle cx="9" cy="14.5" r="1.5" fill="rgba(240,237,229,0.6)" stroke="none" />
+                                <circle cx="14.5" cy="14" r="1.5" fill="rgba(240,237,229,0.6)" stroke="none" />
+                              </svg>
+                            )}
+                            {reward.icon === 'sandwich' && (
+                              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(240,237,229,0.6)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M3 11h18" />
+                                <path d="M3 7c0-1.1.9-2 2-2h14a2 2 0 0 1 2 2v4H3V7z" />
+                                <path d="M3 15h18" />
+                                <path d="M5 19h14a2 2 0 0 0 2-2v-2H3v2a2 2 0 0 0 2 2z" />
+                              </svg>
+                            )}
+                          </div>
+
+                          {/* Tick badge for unlocked */}
+                          {unlocked && (
+                            <div
+                              className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center"
+                              style={{ backgroundColor: '#F28A2E', border: '2px solid #1e2d3d' }}
                             >
-                              <img 
-                                src="/bean.png" 
-                                alt="" 
-                                className="w-6 h-6 object-contain"
-                                style={{ filter: 'brightness(0) invert(1)' }} 
-                              />
-                            </div>
-                          ) : (
-                            <div 
-                              className="w-10 h-10 rounded-full flex items-center justify-center"
-                              style={{ 
-                                backgroundColor: 'transparent',
-                                border: '2px solid rgba(240,237,229,0.3)'
-                              }}
-                            >
-                              <img 
-                                src="/bean.png" 
-                                alt="" 
-                                className="w-6 h-6 object-contain"
-                                style={{ opacity: isNext ? 0.6 : 0.3 }} 
-                              />
+                              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M2 6l3 3 5-5" />
+                              </svg>
                             </div>
                           )}
                         </div>
-                        
-                        {/* Reward info to the right */}
-                        <div className="pl-8 flex-1">
-                          <div className="flex items-center gap-3">
-                            <p 
-                              className="text-[14px] font-bold"
-                              style={{ color: unlocked ? '#F0EDE5' : isNext ? '#F0EDE5' : 'rgba(240,237,229,0.4)' }}
-                            >
-                              {reward.name}
-                            </p>
-                            <p 
-                              className="text-[12px] font-bold"
-                              style={{ color: unlocked ? '#F28A2E' : isNext ? '#F28A2E' : 'rgba(240,237,229,0.4)' }}
-                            >
-                              {reward.beans} beans
-                            </p>
-                          </div>
-                          {isNext && (
-                            <div className="mt-2">
-                              <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(240,237,229,0.2)' }}>
-                                <div
-                                  className="h-full rounded-full transition-all duration-300"
-                                  style={{
-                                    width: `${(currentBeans / reward.beans) * 100}%`,
-                                    backgroundColor: '#F28A2E'
-                                  }}
-                                />
-                              </div>
-                              <p className="text-[10px] mt-1" style={{ color: 'rgba(240,237,229,0.6)' }}>
-                                {currentBeans} / {reward.beans}
+
+                        {/* Card */}
+                        <div
+                          className="flex-1 rounded-[14px] px-3 py-3"
+                          style={{
+                            backgroundColor: isNext ? 'rgba(242,138,46,0.08)' : 'rgba(240,237,229,0.05)',
+                            border: isNext
+                              ? '1.5px solid #F28A2E'
+                              : '1px solid rgba(240,237,229,0.1)',
+                          }}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[14px] font-bold leading-tight" style={{ color: unlocked || isNext ? '#F0EDE5' : 'rgba(240,237,229,0.45)' }}>
+                                {reward.name}
                               </p>
+                              <p className="text-[11px] mt-0.5" style={{ color: 'rgba(240,237,229,0.45)' }}>
+                                {reward.beans} beans
+                              </p>
+
+                              {/* Progress bar for current target */}
+                              {isNext && (
+                                <div className="mt-2">
+                                  <p className="text-[11px] mb-1.5" style={{ color: 'rgba(240,237,229,0.6)' }}>
+                                    {currentBeans} / {reward.beans} beans
+                                  </p>
+                                  <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(240,237,229,0.15)' }}>
+                                    <div
+                                      className="h-full rounded-full"
+                                      style={{
+                                        width: `${Math.min((currentBeans / reward.beans) * 100, 100)}%`,
+                                        backgroundColor: '#F28A2E',
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              )}
                             </div>
-                          )}
-                          {unlocked && (
-                            <span className="text-[9px] font-bold px-2 py-0.5 rounded-full mt-1 inline-block" style={{ backgroundColor: 'rgba(242,138,46,0.2)', color: '#F28A2E' }}>
-                              Unlocked
-                            </span>
-                          )}
+
+                            {/* Right badges */}
+                            <div className="flex-shrink-0">
+                              {unlocked && (
+                                <span
+                                  className="text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1"
+                                  style={{ backgroundColor: 'rgba(240,237,229,0.12)', color: '#F0EDE5' }}
+                                >
+                                  Unlocked
+                                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#F28A2E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M2 6l3 3 5-5" />
+                                  </svg>
+                                </span>
+                              )}
+                              {isNext && (
+                                <span
+                                  className="text-[10px] font-bold px-2.5 py-1 rounded-full"
+                                  style={{ backgroundColor: '#F28A2E', color: 'white' }}
+                                >
+                                  Next reward
+                                </span>
+                              )}
+                              {!unlocked && !isNext && (
+                                <span
+                                  className="text-[10px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap"
+                                  style={{ backgroundColor: 'rgba(240,237,229,0.08)', color: 'rgba(240,237,229,0.5)' }}
+                                >
+                                  {beansToGo} beans to go
+                                </span>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     )
@@ -770,71 +832,46 @@ export default function NewV2Dashboard() {
                 </div>
               </div>
 
-              {/* Current progress info */}
-              <div className="mt-4 p-4 rounded-[16px]" style={{ backgroundColor: 'rgba(240,237,229,0.05)' }}>
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#F0EDE5' }}>
-                      NEXT REWARD
-                    </p>
-                    <p className="text-[14px] font-bold mt-1" style={{ color: '#F28A2E' }}>
-                      {stampBeansNeeded} beans to go
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#F0EDE5' }}>
-                      PROGRESS
-                    </p>
-                    <p className="text-[14px] font-bold mt-1" style={{ color: '#F28A2E' }}>
-                      {currentBeans} / {nextMilestone}
-                    </p>
-                  </div>
-                </div>
-                <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(240,237,229,0.2)' }}>
-                  <div
-                    className="h-full rounded-full transition-all duration-300"
-                    style={{
-                      width: `${Math.min((currentBeans / nextMilestone) * 100, 100)}%`,
-                      backgroundColor: '#F28A2E'
-                    }}
-                  />
-                </div>
-              </div>
-
               {/* Buttons */}
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={() => setShowRewardsPanel(false)}
-                  className="flex-1 py-3 text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
-                  style={{ 
+                  className="flex-1 h-12 text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                  style={{
                     backgroundColor: 'transparent',
-                    border: '2px solid rgba(240,237,229,0.3)',
-                    color: '#F0EDE5'
+                    border: '2px solid rgba(240,237,229,0.25)',
+                    color: '#F28A2E',
                   }}
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6" />
-                    <path d="M13 5V2" />
-                    <path d="M13 21v-3" />
-                    <path d="M2 12h20" />
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                    <line x1="1" y1="10" x2="23" y2="10" />
                   </svg>
-                  Convert To Voucher
+                  Convert to voucher
                 </button>
                 <button
                   onClick={() => { setShowRewardsPanel(false); router.push('/rewards') }}
-                  className="flex-1 py-3 text-white text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all"
-                  style={{ backgroundColor: '#F28A2E', boxShadow: '0 4px 12px rgba(242,138,46,0.3)' }}
+                  className="flex-1 h-12 text-white text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                  style={{ backgroundColor: '#F28A2E', boxShadow: '0 4px 16px rgba(242,138,46,0.35)' }}
                 >
-                  View All Rewards
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 12 20 22 4 22 4 12" />
+                    <rect x="2" y="7" width="20" height="5" />
+                    <line x1="12" y1="22" x2="12" y2="7" />
+                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+                  </svg>
+                  View all rewards
                 </button>
               </div>
 
               {/* Footer */}
-              <div className="mt-6 text-center">
-                <p className="text-[11px]" style={{ color: 'rgba(240,237,229,0.4)' }}>
-                  Thanks for supporting local
+              <div className="mt-5 text-center">
+                <p className="text-[11px] italic" style={{ color: 'rgba(240,237,229,0.35)' }}>
+                  ♡ Thanks for supporting local ♡
                 </p>
               </div>
+
             </div>
           </div>
         </DialogContent>
