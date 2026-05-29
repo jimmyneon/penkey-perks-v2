@@ -261,7 +261,7 @@ export default function NewV2Dashboard() {
                 onClick={() => setShowBeansPanel(true)}
               >
                 {/* Bean pile background */}
-                <img src="/beanpile.png" alt="" className="absolute inset-0 w-full h-full object-cover opacity-25" style={{ transform: 'scale(1.2)' }} />
+                <img src="/beanpile.png" alt="" className="absolute inset-0 w-full h-full object-cover opacity-20" style={{ transform: 'scale(1.0)' }} />
                 
                 <div className="relative z-10">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#F0EDE5' }}>
@@ -272,7 +272,7 @@ export default function NewV2Dashboard() {
                       <span className="text-[56px] font-extrabold leading-none" style={{ color: '#F0EDE5' }}>{currentBeans}</span>
                     </div>
                     <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>beans</p>
-                    <img src="/stroke.png" alt="" className="w-24 h-2 object-contain mt-1 opacity-60" style={{ marginLeft: '-4px' }} />
+                    <img src="/stroke.png" alt="" className="w-24 h-2 object-contain mt-1 opacity-60" style={{ marginLeft: '-8px' }} />
                   </div>
                 </div>
                 <Link href="/rewards" className="inline-flex items-center gap-1 text-[11px] font-semibold relative z-10" style={{ color: '#F28A2E' }} onClick={(e) => e.stopPropagation()}>
@@ -295,7 +295,7 @@ export default function NewV2Dashboard() {
                     Free coffee
                   </p>
                   <div className="flex items-center justify-center">
-                    <img src="/coffeecup.png" alt="" className="w-32 h-32 object-contain" />
+                    <img src="/coffeecup.png" alt="" className="w-40 h-40 object-contain" />
                   </div>
                 </div>
                 <p className="text-[11px] font-medium mb-2" style={{ color: '#F0EDE5' }}>
@@ -358,23 +358,46 @@ export default function NewV2Dashboard() {
             </div>
           )}
 
-          {/* ── LIFETIME BEANS ── Simple display ── */}
-          <div className="rounded-[18px] p-5" style={{ backgroundColor: '#F8F5EF', boxShadow: '0 2px 14px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#8A96A0' }}>
-              LIFETIME BEANS
-            </p>
-            <div className="flex items-baseline gap-4 mb-2">
-              <span className="text-[64px] font-bold leading-none tracking-tight" style={{ color: '#24364B' }}>
-                {beanBalance?.lifetime_beans || 0}
-              </span>
-              <span className="text-[20px] font-medium mb-1" style={{ color: '#8A96A0' }}>beans</span>
+          {/* ── HOW IT WORKS ── */}
+          <div className="rounded-[18px] p-6" style={{ backgroundColor: '#F8F5EF', boxShadow: '0 2px 14px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}>
+            <h3 className="text-[18px] font-extrabold mb-4" style={{ color: '#24364B' }}>How it works</h3>
+            
+            <div className="space-y-4">
+              {/* Earning beans */}
+              <div>
+                <p className="text-[13px] font-bold mb-2" style={{ color: '#E07A3A' }}>Earning beans</p>
+                <div className="space-y-1.5">
+                  <p className="text-[13px] leading-relaxed" style={{ color: '#5A6A7A' }}>
+                    • 1 bean for every visit
+                  </p>
+                  <p className="text-[13px] leading-relaxed" style={{ color: '#5A6A7A' }}>
+                    • Double beans on weekends
+                  </p>
+                  <p className="text-[13px] leading-relaxed" style={{ color: '#5A6A7A' }}>
+                    • Bonus beans during special campaigns
+                  </p>
+                </div>
+              </div>
+
+              {/* Redeeming rewards */}
+              <div>
+                <p className="text-[13px] font-bold mb-2" style={{ color: '#E07A3A' }}>Redeeming rewards</p>
+                <div className="space-y-1.5">
+                  <p className="text-[13px] leading-relaxed" style={{ color: '#5A6A7A' }}>
+                    • 2 beans = Free syrup shot
+                  </p>
+                  <p className="text-[13px] leading-relaxed" style={{ color: '#5A6A7A' }}>
+                    • 8 beans = Free coffee
+                  </p>
+                  <p className="text-[13px] leading-relaxed" style={{ color: '#5A6A7A' }}>
+                    • 15 beans = Free snack
+                  </p>
+                  <p className="text-[13px] leading-relaxed" style={{ color: '#5A6A7A' }}>
+                    • 25 beans = Free meal
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="mb-3">
-              <BrushUnderline className="text-[#F28A2E] w-20" />
-            </div>
-            <p className="text-[13px] font-medium leading-snug" style={{ color: '#8A96A0' }}>
-              Total beans collected since you joined
-            </p>
           </div>
 
           {/* ── THANKS FOR SUPPORTING LOCAL ── */}
