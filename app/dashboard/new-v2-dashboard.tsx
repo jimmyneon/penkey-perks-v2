@@ -166,9 +166,17 @@ export default function NewV2Dashboard() {
     )
   }
 
-  const nextReward = beanBalance ? getNextRewardThreshold(beanBalance.current_beans) : null
+  const [nextReward, setNextReward] = useState<any>(null)
   const currentBeans = beanBalance?.current_beans || 0
-  const targetBeans = 8 // Free coffee is 8 beans
+
+  // Load next reward from database
+  useEffect(() => {
+    if (beanBalance) {
+      getNextRewardThreshold(beanBalance.current_beans).then(setNextReward)
+    }
+  }, [beanBalance])
+
+  const targetBeans = nextReward?.threshold || 8
   const progress = (currentBeans / targetBeans) * 100
   const beansNeeded = targetBeans - currentBeans
   const circumference = 2 * Math.PI * 58
@@ -305,14 +313,14 @@ export default function NewV2Dashboard() {
                 </p>
                 <div className="flex flex-col gap-2 mb-2">
                   <p className="text-[18px] font-bold leading-tight" style={{ color: '#F28A2E' }}>
-                    Free coffee
+                    {nextReward?.reward || 'Loading...'}
                   </p>
                   <div className="flex items-center justify-center">
                     <img src="/coffeecup.png" alt="" className="w-36 h-36 object-contain" />
                   </div>
                 </div>
                 <p className="text-[10px] font-medium mb-1.5" style={{ color: '#F0EDE5' }}>
-                  {stampBeansNeeded} beans away
+                  {nextReward?.beansNeeded || 0} beans away
                 </p>
                 <div className="mb-1.5">
                   <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(240,237,229,0.2)' }}>

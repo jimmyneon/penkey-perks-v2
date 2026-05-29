@@ -9,8 +9,24 @@ import { useRouter } from 'next/navigation'
 interface OrderItem {
   id: string
   item: string
+  itemId?: string
   modifier: string
   quantity: number
+}
+
+interface MenuItem {
+  id: string
+  name: string
+  description?: string
+  base_price: number
+  categories?: { id: string; name: string; color: string }
+  item_variants?: Array<{ id: string; name: string; price: number; is_default: boolean }>
+}
+
+interface Category {
+  id: string
+  name: string
+  color: string
 }
 
 const TIME_SLOTS = ['ASAP', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00']
@@ -22,11 +38,36 @@ export default function OrderPage() {
   const [pickupDay, setPickupDay] = useState('Today')
   const [pickupTime, setPickupTime] = useState('ASAP')
   const [notes, setNotes] = useState('')
-  const [orderItems, setOrderItems] = useState<OrderItem[]>([
-    { id: '1', item: '', modifier: '', quantity: 1 }
-  ])
+  const [orderItems, setOrderItems] = useState<OrderItem[]>([])
   const [userName, setUserName] = useState('')
   const [userPhone, setUserPhone] = useState('')
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  // Fetch menu from POS API
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const POS_URL = process.env.NEXT_PUBLIC_POS_URL || 'http://localhost:3001'
+        const [itemsRes, catsRes] = await Promise.all([
+          fetch(`${POS_URL}/api/public/menu`),
+          fetch(`${POS_URL}/api/public/categories`)
+        ])
+        const items = await itemsRes.json()
+        const cats = await catsRes.json()
+        setMenuItems(items)
+        setCategories(cats)
+        if (cats.length > 0) setSelectedCategory(cats[0].id)
+      } catch (error) {
+        console.error('Failed to fetch menu:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchMenu()
+  }, [])
 
   useEffect(() => {
     const supabase = createClient()
@@ -40,8 +81,21 @@ export default function OrderPage() {
     })
   }, [])
 
-  const addItem = () => setOrderItems(prev => [...prev, { id: Date.now().toString(), item: '', modifier: '', quantity: 1 }])
-  const removeItem = (id: string) => { if (orderItems.length > 1) setOrderItems(prev => prev.filter(i => i.id !== id)) }
+  const addItem = (menuItem: MenuItem) => {
+    const existing = orderItems.find(i => i.itemId === menuItem.id)
+    if (existing) {
+      updateItem(existing.id, 'quantity', existing.quantity + 1)
+    } else {
+      setOrderItems(prev => [...prev, {
+        id: Date.now().toString(),
+        item: menuItem.name,
+        itemId: menuItem.id,
+        modifier: '',
+        quantity: 1
+      }])
+    }
+  }
+  const removeItem = (id: string) => setOrderItems(prev => prev.filter(i => i.id !== id))
   const updateItem = (id: string, field: keyof OrderItem, value: string | number) =>
     setOrderItems(prev => prev.map(i => i.id === id ? { ...i, [field]: value } : i))
 
@@ -82,184 +136,165 @@ export default function OrderPage() {
     <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
       <div className="w-full max-w-[430px] mx-auto">
 
-        {/* Header */}
-        <div className="px-5 pt-14 pb-5">
-          <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
-            Coffee, your way.{' '}
-            <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px' }} />
-          </p>
-          <h1 className="text-[56px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#1C2B3A' }}>Order Ahead</h1>
-          <p className="text-[13px] font-medium mt-1.5 leading-snug" style={{ color: '#8A96A0' }}>
+        {/* Header - cleaner, matching dashboard */}
+        <div className="px-5 pt-14 pb-6">
+          <h1 className="text-[32px] font-bold leading-tight" style={{ color: '#24364B' }}>Order Ahead</h1>
+          <p className="text-[14px] mt-1 leading-snug" style={{ color: '#7A8A9A' }}>
             Skip the queue — order via WhatsApp
           </p>
         </div>
 
-        <div className="px-5 space-y-5">
+        <div className="px-5 space-y-4">
 
-          {/* WhatsApp info card */}
-          <div className="rounded-[18px] p-4 flex items-center gap-3" style={{ backgroundColor: 'rgba(37,211,102,0.08)', border: '1px solid rgba(37,211,102,0.2)' }}>
-            <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#25D366' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-              </svg>
+          {/* Category tabs */}
+          {categories.length > 0 && (
+            <div className="flex gap-2 overflow-x-auto pb-2 -mx-5 px-5">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`px-4 py-2 rounded-full text-[13px] font-semibold whitespace-nowrap transition-all ${
+                    selectedCategory === cat.id ? 'text-white' : ''
+                  }`}
+                  style={{
+                    backgroundColor: selectedCategory === cat.id ? cat.color : '#F4EFE7',
+                    color: selectedCategory === cat.id ? '#24364B' : '#7A8A9A'
+                  }}
+                >
+                  {cat.name}
+                </button>
+              ))}
             </div>
-            <div className="flex-1">
-              <p className="text-[13px] font-bold leading-tight" style={{ color: '#1C2B3A' }}>Order via WhatsApp</p>
-              <p className="text-[11px] mt-0.5 leading-snug" style={{ color: '#8A96A0' }}>Review before sending</p>
-            </div>
-          </div>
+          )}
 
-          {/* Pick-up time */}
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.12em] px-1 mb-2" style={{ color: '#9AAAB8' }}>Pick-up time</p>
-            <div className="flex gap-2.5 mt-2">
+          {/* Menu items grid */}
+          {loading ? (
+            <div className="text-center py-8" style={{ color: '#7A8A9A' }}>Loading menu...</div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3">
+              {menuItems
+                .filter(item => !selectedCategory || item.categories?.id === selectedCategory)
+                .map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => addItem(item)}
+                    className="bg-white rounded-[14px] p-3 text-left active:scale-[0.98] transition-all"
+                    style={{ border: '1px solid #E8E2D8' }}
+                  >
+                    <p className="text-[14px] font-bold leading-tight" style={{ color: '#24364B' }}>{item.name}</p>
+                    {item.description && (
+                      <p className="text-[11px] mt-1 leading-snug" style={{ color: '#7A8A9A' }}>{item.description}</p>
+                    )}
+                    <p className="text-[13px] font-bold mt-2" style={{ color: '#F28A2E' }}>£{item.base_price.toFixed(2)}</p>
+                  </button>
+                ))}
+            </div>
+          )}
+
+          {/* Pick-up time - cleaner card */}
+          <div className="rounded-[18px] p-4" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8' }}>
+            <p className="text-[11px] font-bold uppercase tracking-[0.12em] mb-3" style={{ color: '#A89080' }}>Pick-up time</p>
+            <div className="flex gap-3">
               <div className="flex-1 relative">
                 <select
                   value={pickupDay}
                   onChange={e => setPickupDay(e.target.value)}
-                  className="w-full appearance-none bg-white rounded-[14px] px-4 py-3.5 text-[14px] font-semibold pr-8"
-                  style={{ border: '1px solid #EDF1F4', color: '#1C2B3A', boxShadow: '0 1px 4px rgba(28,43,58,0.06)' }}
+                  className="w-full appearance-none bg-white rounded-[12px] px-4 py-3 text-[14px] font-semibold pr-8"
+                  style={{ border: '1px solid #E8E2D8', color: '#24364B' }}
                 >
                   {DAY_OPTIONS.map(d => <option key={d}>{d}</option>)}
                 </select>
-                <svg className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9AAAB8" strokeWidth="2.5" strokeLinecap="round"><path d="M6 9l6 6 6-6"/></svg>
+                <svg className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A89080" strokeWidth="2.5" strokeLinecap="round"><path d="M6 9l6 6 6-6"/></svg>
               </div>
               <div className="flex-1 relative">
                 <select
                   value={pickupTime}
                   onChange={e => setPickupTime(e.target.value)}
-                  className="w-full appearance-none bg-white rounded-[14px] px-4 py-3.5 text-[14px] font-semibold pr-8"
-                  style={{ border: '1px solid #EDF1F4', color: '#1C2B3A', boxShadow: '0 1px 4px rgba(28,43,58,0.06)' }}
+                  className="w-full appearance-none bg-white rounded-[12px] px-4 py-3 text-[14px] font-semibold pr-8"
+                  style={{ border: '1px solid #E8E2D8', color: '#24364B' }}
                 >
                   {TIME_SLOTS.map(t => <option key={t}>{t}</option>)}
                 </select>
-                <svg className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9AAAB8" strokeWidth="2.5" strokeLinecap="round"><path d="M6 9l6 6 6-6"/></svg>
+                <svg className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A89080" strokeWidth="2.5" strokeLinecap="round"><path d="M6 9l6 6 6-6"/></svg>
               </div>
             </div>
           </div>
 
-
-          {/* Order items */}
-          <div>
-            <div className="flex items-center justify-between px-1 mb-2">
-              <p className="text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: '#9AAAB8' }}>Your order</p>
-              <button onClick={addItem} className="flex items-center gap-1 text-[12px] font-bold" style={{ color: '#E07A3A' }}>
-                Add items
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E07A3A" strokeWidth="2.5" strokeLinecap="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-              </button>
-            </div>
-            <div className="bg-white rounded-[16px] overflow-hidden" style={{ border: '1px solid #EDF1F4', boxShadow: '0 1px 4px rgba(28,43,58,0.06)' }}>
-              {orderItems.map((orderItem, index) => (
-                <div key={orderItem.id} className={`px-4 pt-3 pb-3 ${index < orderItems.length - 1 ? 'border-b' : ''}`} style={{ borderColor: '#EDF1F4' }}>
-                  <div className="flex items-center gap-3">
-                    {/* Qty badge */}
-                    <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[11px] font-extrabold flex-shrink-0" style={{ backgroundColor: '#E07A3A' }}>
-                      {orderItem.quantity}
+          {/* Order summary - shows selected items */}
+          {orderItems.length > 0 && (
+            <div className="rounded-[18px] overflow-hidden" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8' }}>
+              <div className="px-4 py-3 border-b" style={{ borderColor: '#E8E2D8' }}>
+                <p className="text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: '#A89080' }}>Your order ({orderItems.length})</p>
+              </div>
+              <div className="p-4 space-y-2">
+                {orderItems.map((orderItem) => (
+                  <div key={orderItem.id} className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0" style={{ backgroundColor: '#F28A2E' }}>
+                        {orderItem.quantity}
+                      </div>
+                      <div>
+                        <p className="text-[14px] font-semibold" style={{ color: '#24364B' }}>{orderItem.item}</p>
+                        {orderItem.modifier && (
+                          <p className="text-[11px]" style={{ color: '#7A8A9A' }}>{orderItem.modifier}</p>
+                        )}
+                      </div>
                     </div>
-                    <input
-                      value={orderItem.item}
-                      onChange={e => updateItem(orderItem.id, 'item', e.target.value)}
-                      placeholder="Flat white, Bacon bap…"
-                      className="flex-1 text-[14px] font-semibold bg-transparent outline-none placeholder:text-[#C8D4DC]"
-                      style={{ color: '#1C2B3A' }}
-                    />
-                    <div className="flex items-center gap-1.5 flex-shrink-0">
-                      <button onClick={() => updateItem(orderItem.id, 'quantity', Math.max(1, orderItem.quantity - 1))} className="w-6 h-6 rounded-lg font-bold flex items-center justify-center text-[16px]" style={{ backgroundColor: '#EDF1F4', color: '#2C3E50' }}>−</button>
-                      <button onClick={() => updateItem(orderItem.id, 'quantity', orderItem.quantity + 1)} className="w-6 h-6 rounded-lg font-bold flex items-center justify-center text-[16px]" style={{ backgroundColor: '#EDF1F4', color: '#2C3E50' }}>+</button>
-                      {orderItems.length > 1 && (
-                        <button onClick={() => removeItem(orderItem.id)} className="w-6 h-6 flex items-center justify-center" style={{ color: '#C8D4DC' }}>
-                          <X className="w-3.5 h-3.5" />
-                        </button>
-                      )}
+                    <div className="flex items-center gap-2">
+                      <button onClick={() => updateItem(orderItem.id, 'quantity', Math.max(1, orderItem.quantity - 1))} className="w-6 h-6 rounded-lg font-bold flex items-center justify-center text-[14px]" style={{ backgroundColor: '#F4EFE7', color: '#24364B' }}>−</button>
+                      <button onClick={() => updateItem(orderItem.id, 'quantity', orderItem.quantity + 1)} className="w-6 h-6 rounded-lg font-bold flex items-center justify-center text-[14px]" style={{ backgroundColor: '#F4EFE7', color: '#24364B' }}>+</button>
+                      <button onClick={() => removeItem(orderItem.id)} className="w-6 h-6 flex items-center justify-center" style={{ color: '#C8D4DC' }}>
+                        <X className="w-3.5 h-3.5" />
+                      </button>
                     </div>
                   </div>
-                  <input
-                    value={orderItem.modifier}
-                    onChange={e => updateItem(orderItem.id, 'modifier', e.target.value)}
-                    placeholder="e.g. Oat milk, brown sauce…"
-                    className="mt-1 ml-9 text-[12px] bg-transparent outline-none placeholder:text-[#C8D4DC] w-full"
-                    style={{ color: '#8A96A0' }}
-                  />
-                </div>
-              ))}
-              <button
-                onClick={addItem}
-                className="w-full px-4 min-h-[46px] flex items-center justify-center gap-2 border-t active:bg-[#F4F7F9] transition-colors"
-                style={{ borderColor: '#EDF1F4' }}
-              >
-                <Plus className="w-3.5 h-3.5" style={{ color: '#9AAAB8' }} />
-                <span className="text-[13px] font-semibold" style={{ color: '#9AAAB8' }}>Add another item</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Notes */}
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.12em] px-1 mb-2" style={{ color: '#9AAAB8' }}>Notes (optional)</p>
-            <div className="bg-white rounded-[16px] px-4 py-3.5 flex items-start gap-3" style={{ border: '1px solid #EDF1F4', boxShadow: '0 1px 4px rgba(28,43,58,0.06)' }}>
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9AAAB8" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 flex-shrink-0">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
-              </svg>
-              <div className="flex-1">
-                <textarea
-                  value={notes}
-                  onChange={e => setNotes(e.target.value.slice(0, 120))}
-                  placeholder="Extra napkins please."
-                  rows={2}
-                  className="w-full bg-transparent outline-none resize-none text-[14px] placeholder:text-[#C8D4DC]"
-                  style={{ color: '#1C2B3A' }}
-                />
-                <p className="text-right text-[11px]" style={{ color: '#C8D4DC' }}>{notes.length}/120</p>
+                ))}
               </div>
             </div>
+          )}
+
+          {/* Notes - cleaner card */}
+          <div className="rounded-[18px] p-4" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8' }}>
+            <p className="text-[11px] font-bold uppercase tracking-[0.12em] mb-3" style={{ color: '#A89080' }}>Notes (optional)</p>
+            <textarea
+              value={notes}
+              onChange={e => setNotes(e.target.value.slice(0, 120))}
+              placeholder="Extra napkins please."
+              rows={2}
+              className="w-full bg-white rounded-[12px] px-4 py-3 outline-none resize-none text-[14px] placeholder:text-[#C8D4DC]"
+              style={{ border: '1px solid #E8E2D8', color: '#24364B' }}
+            />
+            <p className="text-right text-[11px] mt-1" style={{ color: '#A89080' }}>{notes.length}/120</p>
           </div>
 
-          {/* Don't forget scan card */}
-          <div className="rounded-[18px] px-4 py-4 flex items-center gap-4 overflow-hidden relative" style={{ backgroundColor: 'rgba(66,110,185,0.08)', border: '1px solid rgba(66,110,185,0.14)' }}>
-            <div className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(66,110,185,0.15)' }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#426EB9" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
-              </svg>
-            </div>
+          {/* Scan reminder - simpler */}
+          <div className="rounded-[18px] px-4 py-4 flex items-center gap-3" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8' }}>
+            <img src="/coffeecup.png" alt="" className="w-10 h-10 object-contain flex-shrink-0" />
             <div className="flex-1">
-              <p className="text-[14px] font-extrabold leading-tight" style={{ color: '#1C2B3A' }}>Don't forget!</p>
-              <p className="text-[12px] mt-0.5 leading-snug" style={{ color: '#5A6A7A' }}>Scan in-store when you collect to earn your stamps and beans.</p>
-            </div>
-            {/* Coffee cup SVG illustration */}
-            <div className="flex-shrink-0 opacity-80">
-              <svg width="52" height="62" viewBox="0 0 52 62" fill="none">
-                <rect x="8" y="18" width="30" height="36" rx="4" fill="white" stroke="#EDF1F4" strokeWidth="1.5"/>
-                <path d="M8 22h30" stroke="#EDF1F4" strokeWidth="1.5"/>
-                <path d="M38 26h5a4 4 0 0 1 0 8h-5" stroke="#9AAAB8" strokeWidth="1.5" strokeLinecap="round"/>
-                <rect x="14" y="10" width="18" height="8" rx="2" fill="#EDF1F4"/>
-                <path d="M14 54h18" stroke="#EDF1F4" strokeWidth="2" strokeLinecap="round"/>
-                <text x="23" y="42" textAnchor="middle" fill="#1C2B3A" fontSize="8" fontWeight="800" fontFamily="sans-serif">PEN</text>
-                <text x="23" y="50" textAnchor="middle" fill="#E07A3A" fontSize="7" fontWeight="800" fontFamily="sans-serif">KEY</text>
-              </svg>
+              <p className="text-[13px] font-bold leading-tight" style={{ color: '#24364B' }}>Scan in-store</p>
+              <p className="text-[11px] mt-0.5 leading-snug" style={{ color: '#7A8A9A' }}>Earn stamps and beans when you collect</p>
             </div>
           </div>
 
         </div>
       </div>
 
-      {/* Sticky Send CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 px-4 pb-24 pt-3" style={{ background: 'linear-gradient(to top, white 70%, rgba(255,255,255,0))' }}>
+      {/* Sticky Send CTA - cleaner */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 px-4 pb-24 pt-3" style={{ background: 'linear-gradient(to top, #F9F7F2 70%, rgba(249,247,242,0))' }}>
         <div className="max-w-[430px] mx-auto">
           <button
             onClick={sendToWhatsApp}
             disabled={!canSend}
-            className="w-full rounded-[18px] flex items-center px-5 gap-3 active:scale-[0.98] transition-all disabled:opacity-40"
-            style={{ backgroundColor: '#1C2B3A', minHeight: '60px', boxShadow: '0 4px 24px rgba(28,43,58,0.30)' }}
+            className="w-full rounded-[16px] flex items-center px-5 gap-3 active:scale-[0.98] transition-all disabled:opacity-40"
+            style={{ backgroundColor: '#F28A2E', minHeight: '56px', boxShadow: '0 4px 16px rgba(242,138,46,0.3)' }}
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="white" className="flex-shrink-0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" className="flex-shrink-0">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-              <path d="M12 0C5.373 0 0 5.373 0 12c0 2.122.555 4.116 1.524 5.845L0 24l6.29-1.501A11.946 11.946 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.804 9.804 0 0 1-5.012-1.376l-.36-.214-3.733.891.932-3.617-.235-.372A9.808 9.808 0 0 1 2.182 12C2.182 6.57 6.57 2.182 12 2.182 17.43 2.182 21.818 6.57 21.818 12c0 5.43-4.388 9.818-9.818 9.818z"/>
             </svg>
             <div className="flex-1 text-left">
-              <p className="text-white font-extrabold text-[16px] leading-tight">Send order via WhatsApp</p>
-              <p className="text-[11px] leading-none mt-0.5" style={{ color: 'rgba(255,255,255,0.5)' }}>You'll review it in WhatsApp before sending</p>
+              <p className="text-white font-bold text-[15px] leading-tight">Send via WhatsApp</p>
             </div>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
           </button>
