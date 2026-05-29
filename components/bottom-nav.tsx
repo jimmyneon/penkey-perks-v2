@@ -170,36 +170,40 @@ export function BottomNav({ onShowQRCode }: BottomNavProps) {
       </div>
 
       {/* QR Code Bottom Sheet */}
-      <BottomSheet open={showQR} onOpenChange={setShowQR} title="Your QR Code">
-        <BottomSheetContent>
-          <p className="text-[13px] text-center mb-4" style={{ color: '#8A96A0' }}>Show to staff to earn stamps and beans</p>
+      <BottomSheet open={showQR} onOpenChange={setShowQR} showCloseButton={false}>
+        <BottomSheetContent className="flex flex-col items-center">
+          <div className="text-center mb-6">
+            <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
+              Your QR Code
+            </p>
+            <p className="text-[13px] mt-1" style={{ color: '#8A96A0' }}>
+              Show to staff to earn beans
+            </p>
+          </div>
           
           <div
-            className="rounded-[16px] p-5 flex items-center justify-center mb-4"
+            className="rounded-[24px] p-6 flex items-center justify-center mb-6"
             style={{
-              backgroundColor: '#F4F7F9',
-              border: '1px solid #EDF1F4',
+              backgroundColor: '#ffffff',
+              boxShadow: '0 4px 20px rgba(36,54,75,0.12)',
+              border: '1px solid #E8E2D8',
             }}
           >
             {qrCodeUrl ? (
-              <img src={qrCodeUrl} alt="QR Code" className="w-52 h-52" />
+              <img src={qrCodeUrl} alt="QR Code" className="w-56 h-56" />
             ) : (
-              <div className="w-52 h-52 rounded-[12px] flex items-center justify-center" style={{ backgroundColor: '#EDF1F4' }}>
-                <QrCode className="w-12 h-12" style={{ color: '#9AAAB8' }} />
+              <div className="w-56 h-56 rounded-[20px] flex items-center justify-center" style={{ backgroundColor: '#F4EFE7' }}>
+                <QrCode className="w-16 h-16" style={{ color: '#C4AFA8' }} />
               </div>
             )}
           </div>
           
-          <div className="rounded-[14px] px-4 py-3 mb-4" style={{ backgroundColor: '#F4F7F9', border: '1px solid #EDF1F4' }}>
-            <p className="text-[10px] font-bold uppercase tracking-[0.1em] mb-1" style={{ color: '#9AAAB8' }}>Staff can use this to</p>
-            <div className="flex gap-2 flex-wrap">
-              {['Check-ins', 'Add stamps', 'Award beans'].map((t) => (
-                <span key={t} className="text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(224,122,58,0.12)', color: '#E07A3A' }}>{t}</span>
-              ))}
-            </div>
+          <div className="flex items-center gap-2">
+            <img src="/heart.png" alt="" className="w-4 h-4 object-contain" />
+            <p className="text-[12px]" style={{ color: '#8A96A0' }}>
+              Swipe down to close
+            </p>
           </div>
-          
-          <button onClick={() => setShowQR(false)} className="w-full py-3.5 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all" style={{ backgroundColor: '#2C3E50' }}>Done</button>
         </BottomSheetContent>
       </BottomSheet>
     </nav>
