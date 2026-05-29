@@ -36,14 +36,20 @@ All endpoints require:
 
 **Endpoint**: `POST /api/pos/scan`
 
-**Description**: Scans either a profile QR or voucher QR and returns customer info + voucher data
+**Description**: Scans either a profile QR, voucher QR, or POS JSON format and returns customer info + voucher data
 
 **Request Body**:
 ```json
 {
-  "qr_data": "PROFILE-abc123..."  // or "VOUCHER-xyz-uuid-1234567890"
+  "qr_data": "PROFILE-abc123..."  // or "VOUCHER-xyz-uuid-1234567890" or JSON string
 }
 ```
+
+**Supported QR Data Formats:**
+
+1. **Perks Profile QR**: `PROFILE-{hex}` - Customer's profile QR from Perks app
+2. **Perks Voucher QR**: `VOUCHER-{random}-{customer_id}-{timestamp}` - Voucher QR from Perks app
+3. **POS JSON Format**: `{"type":"customer","id":"uuid","email":"...","timestamp":...}` - POS app's current format
 
 **Response (Profile QR)**:
 ```json

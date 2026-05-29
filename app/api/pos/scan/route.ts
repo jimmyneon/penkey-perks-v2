@@ -58,14 +58,25 @@ export async function POST(request: NextRequest) {
 
     // Parse QR data to determine type
     if (qr_data.startsWith('PROFILE-')) {
-      // Profile QR code
+      // Profile QR code (Perks format)
       return await handleProfileQR(qr_data, supabase, corsHeaders)
     } else if (qr_data.startsWith('VOUCHER-')) {
-      // Voucher QR code
+      // Voucher QR code (Perks format)
       return await handleVoucherQR(qr_data, supabase, corsHeaders)
     } else {
+      // Try to parse as JSON (POS format)
+      try {
+        const parsed = JSON.parse(qr_data)
+        if (parsed.type === 'customer' && parsed.id) {
+          // POS customer QR format
+          return await handleCustomerJSON(parsed, supabase, corsHeaders)
+        }
+      } catch (e) {
+        // Not valid JSON
+      }
+      
       return NextResponse.json(
-        { error: 'Invalid QR code format' },
+        { error: 'Invalid QR code format. Expected PROFILE-{hex}, VOUCHER-{random}-{customer_id}-{timestamp}, or JSON customer data' },
         { status: 400, headers: corsHeaders }
       )
     }
@@ -256,5 +267,87 @@ async function handleVoucherQR(qrData: string, supabase: any, corsHeaders: Recor
       bean_threshold: voucher.voucher_templates?.bean_threshold,
       expires_at: voucher.expires_at,
     },
+  }, { headers: corsHeaders })
+}
+
+async function handleCustomerJSON(customerData: any, supabase: any, corsHeaders: Record<string, string>) {
+  // POS JSON format: { type: "customer", id: "...", email: "...", timestamp: ... }
+  const customerId = customerData.id
+
+  // Find customer by ID
+  const { data: customer, error } = await supabase
+    .from('profiles')
+    .select(`
+      id,
+      email,
+      name,
+      phone,
+      avatar_url,
+      created_at
+    `)
+    .eq('id', customerId)
+    .single()
+
+  if (error || !customer) {
+    return NextResponse.json(
+      { error: 'Customer not found' },
+      { status: 404, headers: corsHeaders }
+    )
+  }
+
+  // Get bean balance
+  const { data: beanBalance } = await supabase
+    .from('bean_balances')
+    .select('*')
+    .eq('user_id', customer.id)
+    .single()
+
+  // Get active vouchers
+  const { data: vouchers } = await supabase
+    .from('user_vouchers')
+    .select(`
+      id,
+      qr_code,
+      status,
+      expires_at,
+      voucher_templates (
+        id,
+        name,
+        description,
+        category,
+        bean_threshold
+      )
+    `)
+    .eq('user_id', customer.id)
+    .eq('status', 'active')
+    .gt('expires_at', new Date().toISOString())
+
+  // Check if already visited today
+  const today = new Date().toISOString().split('T')[0]
+  const { data: todayVisit } = await supabase
+    .from('daily_visits')
+    .select('base_bean_awarded')
+    .eq('user_id', customer.id)
+    .eq('visit_date', today)
+    .single()
+
+  const canAwardBean = !todayVisit || !todayVisit.base_bean_awarded
+
+  return NextResponse.json({
+    type: 'profile',
+    customer: {
+      id: customer.id,
+      name: customer.name,
+      email: customer.email,
+      phone: customer.phone,
+      avatar_url: customer.avatar_url,
+    },
+    bean_balance: {
+      current_beans: beanBalance?.current_beans || 0,
+      lifetime_beans: beanBalance?.lifetime_beans || 0,
+      visit_count: beanBalance?.visit_count || 0,
+    },
+    vouchers: vouchers || [],
+    can_award_bean: canAwardBean,
   }, { headers: corsHeaders })
 }

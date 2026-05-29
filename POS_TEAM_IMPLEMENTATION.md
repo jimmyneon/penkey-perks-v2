@@ -54,6 +54,14 @@ Body:
   }
 ```
 
+**Supported QR Data Formats:**
+
+1. **Perks Profile QR**: `PROFILE-{hex}` - Customer's profile QR from Perks app
+2. **Perks Voucher QR**: `VOUCHER-{random}-{customer_id}-{timestamp}` - Voucher QR from Perks app
+3. **POS JSON Format**: `{"type":"customer","id":"uuid","email":"...","timestamp":...}` - Your current format
+
+All three formats are now supported by the API.
+
 ### Step 3: Display Customer Info
 The API returns customer data. Show this in a popup/modal:
 
