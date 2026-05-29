@@ -1,10 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Check, Plus, X } from 'lucide-react'
+import { Check, Plus, X, ShoppingBag, Clock, Search } from 'lucide-react'
 import { BottomNav } from '@/components/bottom-nav'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import { ItemModal } from '@/components/order/item-modal'
+import { OrderSummaryModal } from '@/components/order/order-summary-modal'
+import { PickupTimeModal } from '@/components/order/pickup-time-modal'
 
 interface OrderItem {
   id: string
@@ -56,6 +59,10 @@ export default function OrderPage() {
   const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<any>(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null)
+  const [showOrderSummary, setShowOrderSummary] = useState(false)
+  const [showPickupTime, setShowPickupTime] = useState(false)
+  const [showNotes, setShowNotes] = useState(false)
 
   // Customer-visible categories (hardcoded filter)
   const CUSTOMER_VISIBLE_CATEGORIES = ['Coffee', 'Food', 'Snacks', 'Drinks', 'Bakery']
@@ -144,18 +151,23 @@ export default function OrderPage() {
   }, [])
 
   const addItem = (menuItem: MenuItem) => {
+    setSelectedItem(menuItem)
+  }
+
+  const handleAddToOrder = (menuItem: MenuItem, quantity: number) => {
     const existing = orderItems.find(i => i.itemId === menuItem.id)
     if (existing) {
-      updateItem(existing.id, 'quantity', existing.quantity + 1)
+      updateItem(existing.id, 'quantity', existing.quantity + quantity)
     } else {
       setOrderItems(prev => [...prev, {
         id: Date.now().toString(),
         item: menuItem.name,
         itemId: menuItem.id,
         modifier: '',
-        quantity: 1
+        quantity
       }])
     }
+    setSelectedItem(null)
   }
   const removeItem = (id: string) => setOrderItems(prev => prev.filter(i => i.id !== id))
   const updateItem = (id: string, field: keyof OrderItem, value: string | number) =>
@@ -289,117 +301,68 @@ export default function OrderPage() {
             </div>
           )}
 
-          {/* Pick-up time - cleaner card */}
-          <div className="rounded-[18px] p-4" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8', boxShadow: '0 2px 12px rgba(36,54,75,0.08)' }}>
-            <p className="text-[11px] font-bold uppercase tracking-[0.12em] mb-3" style={{ color: '#A89080' }}>Pick-up time</p>
-            <div className="flex gap-3">
-              <div className="flex-1 relative">
-                <select
-                  value={pickupDay}
-                  onChange={e => setPickupDay(e.target.value)}
-                  className="w-full appearance-none bg-white rounded-[12px] px-4 py-3 text-[14px] font-semibold pr-8"
-                  style={{ border: '1px solid #E8E2D8', color: '#24364B' }}
-                >
-                  {DAY_OPTIONS.map(d => <option key={d}>{d}</option>)}
-                </select>
-                <svg className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A89080" strokeWidth="2.5" strokeLinecap="round"><path d="M6 9l6 6 6-6"/></svg>
-              </div>
-              <div className="flex-1 relative">
-                <select
-                  value={pickupTime}
-                  onChange={e => setPickupTime(e.target.value)}
-                  className="w-full appearance-none bg-white rounded-[12px] px-4 py-3 text-[14px] font-semibold pr-8"
-                  style={{ border: '1px solid #E8E2D8', color: '#24364B' }}
-                >
-                  {TIME_SLOTS.map(t => <option key={t}>{t}</option>)}
-                </select>
-                <svg className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A89080" strokeWidth="2.5" strokeLinecap="round"><path d="M6 9l6 6 6-6"/></svg>
-              </div>
-            </div>
-          </div>
-
-          {/* Order summary - shows selected items */}
-          {orderItems.length > 0 && (
-            <div className="rounded-[18px] overflow-hidden" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8', boxShadow: '0 2px 12px rgba(36,54,75,0.08)' }}>
-              <div className="px-4 py-3 border-b" style={{ borderColor: '#E8E2D8' }}>
-                <p className="text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: '#A89080' }}>Your order ({orderItems.length})</p>
-              </div>
-              <div className="p-4 space-y-2">
-                {orderItems.map((orderItem) => (
-                  <div key={orderItem.id} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0" style={{ backgroundColor: '#F28A2E' }}>
-                        {orderItem.quantity}
-                      </div>
-                      <div>
-                        <p className="text-[14px] font-semibold" style={{ color: '#24364B' }}>{orderItem.item}</p>
-                        {orderItem.modifier && (
-                          <p className="text-[11px]" style={{ color: '#7A8A9A' }}>{orderItem.modifier}</p>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button onClick={() => updateItem(orderItem.id, 'quantity', Math.max(1, orderItem.quantity - 1))} className="w-6 h-6 rounded-lg font-bold flex items-center justify-center text-[14px]" style={{ backgroundColor: '#F4EFE7', color: '#24364B' }}>−</button>
-                      <button onClick={() => updateItem(orderItem.id, 'quantity', orderItem.quantity + 1)} className="w-6 h-6 rounded-lg font-bold flex items-center justify-center text-[14px]" style={{ backgroundColor: '#F4EFE7', color: '#24364B' }}>+</button>
-                      <button onClick={() => removeItem(orderItem.id)} className="w-6 h-6 flex items-center justify-center" style={{ color: '#C8D4DC' }}>
-                        <X className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Notes - cleaner card */}
-          <div className="rounded-[18px] p-4" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8', boxShadow: '0 2px 12px rgba(36,54,75,0.08)' }}>
-            <p className="text-[11px] font-bold uppercase tracking-[0.12em] mb-3" style={{ color: '#A89080' }}>Notes (optional)</p>
-            <textarea
-              value={notes}
-              onChange={e => setNotes(e.target.value.slice(0, 120))}
-              placeholder="Extra napkins please."
-              rows={2}
-              className="w-full bg-white rounded-[12px] px-4 py-3 outline-none resize-none text-[14px] placeholder:text-[#C8D4DC]"
-              style={{ border: '1px solid #E8E2D8', color: '#24364B' }}
-            />
-            <p className="text-right text-[11px] mt-1" style={{ color: '#A89080' }}>{notes.length}/120</p>
-          </div>
-
-          {/* Scan reminder - simpler */}
-          <div className="rounded-[18px] px-4 py-4 flex items-center gap-3" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8', boxShadow: '0 2px 12px rgba(36,54,75,0.08)' }}>
-            <img src="/coffeecup.png" alt="" className="w-10 h-10 object-contain flex-shrink-0" />
-            <div className="flex-1">
-              <p className="text-[13px] font-bold leading-tight" style={{ color: '#24364B' }}>Scan in-store</p>
-              <p className="text-[11px] mt-0.5 leading-snug" style={{ color: '#7A8A9A' }}>Earn stamps and beans when you collect</p>
-            </div>
-          </div>
-
         </div>
       </div>
 
-      {/* Sticky Send CTA - cleaner */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 px-4 pb-24 pt-3" style={{ background: 'linear-gradient(to top, #F9F7F2 70%, rgba(249,247,242,0))' }}>
-        <div className="max-w-[430px] mx-auto">
-          <button
-            onClick={sendToWhatsApp}
-            disabled={!canSend}
-            className="w-full rounded-[16px] flex items-center px-5 gap-3 active:scale-[0.98] transition-all disabled:opacity-40"
-            style={{ backgroundColor: '#F28A2E', minHeight: '56px', boxShadow: '0 4px 16px rgba(242,138,46,0.3)' }}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" className="flex-shrink-0">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-            </svg>
-            <div className="flex-1 text-left">
-              <p className="text-white font-bold text-[15px] leading-tight">Send via WhatsApp</p>
-            </div>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-          </button>
-        </div>
+      {/* Floating action buttons */}
+      <div className="fixed bottom-20 left-4 right-4 z-40 flex gap-3">
+        <button
+          onClick={() => setShowPickupTime(true)}
+          className="flex-1 rounded-[16px] flex items-center justify-center gap-2 py-3 active:scale-[0.98] transition-all"
+          style={{ backgroundColor: '#24364B' }}
+        >
+          <Clock className="w-5 h-5 text-white" />
+          <span className="text-white font-semibold text-[14px]">{pickupDay}, {pickupTime}</span>
+        </button>
+        <button
+          onClick={() => setShowOrderSummary(true)}
+          className="flex-1 rounded-[16px] flex items-center justify-center gap-2 py-3 active:scale-[0.98] transition-all relative"
+          style={{ backgroundColor: '#F28A2E' }}
+        >
+          <ShoppingBag className="w-5 h-5 text-white" />
+          <span className="text-white font-semibold text-[14px]">Order</span>
+          {orderItems.length > 0 && (
+            <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center text-white text-[11px] font-bold" style={{ backgroundColor: '#24364B' }}>
+              {orderItems.length}
+            </span>
+          )}
+        </button>
       </div>
 
       <BottomNav />
+
+      {/* Item Modal */}
+      {selectedItem && (
+        <ItemModal
+          item={selectedItem}
+          onClose={() => setSelectedItem(null)}
+          onAdd={handleAddToOrder}
+        />
+      )}
+
+      {/* Order Summary Modal */}
+      {showOrderSummary && (
+        <OrderSummaryModal
+          orderItems={orderItems}
+          onClose={() => setShowOrderSummary(false)}
+          onUpdateItem={updateItem}
+          onRemoveItem={removeItem}
+          onSend={sendToWhatsApp}
+          notes={notes}
+          onNotesChange={setNotes}
+        />
+      )}
+
+      {/* Pickup Time Modal */}
+      {showPickupTime && (
+        <PickupTimeModal
+          pickupDay={pickupDay}
+          pickupTime={pickupTime}
+          onClose={() => setShowPickupTime(false)}
+          onDayChange={setPickupDay}
+          onTimeChange={setPickupTime}
+        />
+      )}
     </div>
   )
 }
