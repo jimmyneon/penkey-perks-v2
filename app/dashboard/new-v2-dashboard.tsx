@@ -662,12 +662,12 @@ export default function NewV2Dashboard() {
                 </button>
               </div>
 
-              {/* Horizontal bean journey */}
-              <div className="relative py-12 px-4">
-                {/* Wavy path SVG - matching reference curve pattern */}
-                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 140" preserveAspectRatio="none">
+              {/* Vertical bean journey */}
+              <div className="relative pl-16 py-4">
+                {/* Curved path SVG on left side running down */}
+                <svg className="absolute left-6 top-0 bottom-0 w-8 h-full" viewBox="0 0 40 300" preserveAspectRatio="none">
                   <path 
-                    d="M 20 70 Q 60 40, 100 70 T 180 70 T 260 70 T 340 70 T 380 70" 
+                    d="M 20 0 Q 35 75, 20 150 T 20 300" 
                     fill="none" 
                     stroke="rgba(240,237,229,0.25)" 
                     strokeWidth="3"
@@ -675,13 +675,13 @@ export default function NewV2Dashboard() {
                   />
                 </svg>
 
-                {/* Bean markers following the curve exactly */}
-                <div className="relative h-full">
+                {/* Bean markers positioned vertically along the path */}
+                <div className="relative space-y-8">
                   {[
-                    { beans: 2, name: 'Free Syrup Shot', percent: 15, topPercent: 50 },
-                    { beans: 8, name: 'Free Coffee', percent: 35, topPercent: 35 },
-                    { beans: 15, name: 'Free Snack', percent: 55, topPercent: 50 },
-                    { beans: 25, name: 'Free Meal', percent: 75, topPercent: 65 },
+                    { beans: 2, name: 'Free Syrup Shot', topPercent: 10 },
+                    { beans: 8, name: 'Free Coffee', topPercent: 35 },
+                    { beans: 15, name: 'Free Snack', topPercent: 60 },
+                    { beans: 25, name: 'Free Meal', topPercent: 85 },
                   ].map((reward) => {
                     const unlocked = currentBeans >= reward.beans
                     const isNext = !unlocked && currentBeans < reward.beans
@@ -689,11 +689,13 @@ export default function NewV2Dashboard() {
                     return (
                       <div 
                         key={reward.beans}
-                        className="absolute flex flex-col items-center"
-                        style={{ left: `${reward.percent}%`, top: `${reward.topPercent}%`, transform: 'translate(-50%, -50%)' }}
+                        className="relative flex items-center gap-4"
                       >
-                        {/* Bean icon - filled for unlocked, outlined for locked */}
-                        <div className="relative mb-2">
+                        {/* Bean icon on the path */}
+                        <div 
+                          className="absolute -left-10 flex items-center justify-center"
+                          style={{ top: '50%', transform: 'translateY(-50%)' }}
+                        >
                           {unlocked ? (
                             <div 
                               className="w-10 h-10 rounded-full flex items-center justify-center"
@@ -724,21 +726,44 @@ export default function NewV2Dashboard() {
                           )}
                         </div>
                         
-                        {/* Bean count */}
-                        <p 
-                          className="text-[11px] font-bold mb-0.5"
-                          style={{ color: unlocked ? '#F28A2E' : isNext ? '#F28A2E' : 'rgba(240,237,229,0.4)' }}
-                        >
-                          {reward.beans}
-                        </p>
-                        
-                        {/* Reward name */}
-                        <p 
-                          className="text-[9px] font-semibold text-center whitespace-nowrap"
-                          style={{ color: unlocked ? '#F0EDE5' : isNext ? '#F0EDE5' : 'rgba(240,237,229,0.4)' }}
-                        >
-                          {reward.name}
-                        </p>
+                        {/* Reward info to the right */}
+                        <div className="pl-8 flex-1">
+                          <div className="flex items-center gap-3">
+                            <p 
+                              className="text-[14px] font-bold"
+                              style={{ color: unlocked ? '#F0EDE5' : isNext ? '#F0EDE5' : 'rgba(240,237,229,0.4)' }}
+                            >
+                              {reward.name}
+                            </p>
+                            <p 
+                              className="text-[12px] font-bold"
+                              style={{ color: unlocked ? '#F28A2E' : isNext ? '#F28A2E' : 'rgba(240,237,229,0.4)' }}
+                            >
+                              {reward.beans} beans
+                            </p>
+                          </div>
+                          {isNext && (
+                            <div className="mt-2">
+                              <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(240,237,229,0.2)' }}>
+                                <div
+                                  className="h-full rounded-full transition-all duration-300"
+                                  style={{
+                                    width: `${(currentBeans / reward.beans) * 100}%`,
+                                    backgroundColor: '#F28A2E'
+                                  }}
+                                />
+                              </div>
+                              <p className="text-[10px] mt-1" style={{ color: 'rgba(240,237,229,0.6)' }}>
+                                {currentBeans} / {reward.beans}
+                              </p>
+                            </div>
+                          )}
+                          {unlocked && (
+                            <span className="text-[9px] font-bold px-2 py-0.5 rounded-full mt-1 inline-block" style={{ backgroundColor: 'rgba(242,138,46,0.2)', color: '#F28A2E' }}>
+                              Unlocked
+                            </span>
+                          )}
+                        </div>
                       </div>
                     )
                   })}
