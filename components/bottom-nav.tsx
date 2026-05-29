@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Home, MessageCircle, QrCode, Gift, User } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { BottomSheet, BottomSheetContent } from '@/components/ui/bottom-sheet'
 import { createClient } from '@/lib/supabase/client'
 import QRCodeLib from 'qrcode'
 
@@ -169,41 +169,39 @@ export function BottomNav({ onShowQRCode }: BottomNavProps) {
         </div>
       </div>
 
-      {/* QR Code Dialog */}
-      <Dialog open={showQR} onOpenChange={setShowQR}>
-        <DialogContent className="sm:max-w-sm rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)]">
-          <DialogHeader>
-            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold text-center">Your QR Code</DialogTitle>
-            <DialogDescription className="text-[#8A96A0] text-[13px] text-center">Show to staff to earn stamps and beans</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3 pb-1">
-            <div
-              className="rounded-[16px] p-5 flex items-center justify-center"
-              style={{
-                backgroundColor: '#F4F7F9',
-                border: '1px solid #EDF1F4',
-              }}
-            >
-              {qrCodeUrl ? (
-                <img src={qrCodeUrl} alt="QR Code" className="w-52 h-52" />
-              ) : (
-                <div className="w-52 h-52 rounded-[12px] flex items-center justify-center" style={{ backgroundColor: '#EDF1F4' }}>
-                  <QrCode className="w-12 h-12" style={{ color: '#9AAAB8' }} />
-                </div>
-              )}
-            </div>
-            <div className="rounded-[14px] px-4 py-3" style={{ backgroundColor: '#F4F7F9', border: '1px solid #EDF1F4' }}>
-              <p className="text-[10px] font-bold uppercase tracking-[0.1em] mb-1" style={{ color: '#9AAAB8' }}>Staff can use this to</p>
-              <div className="flex gap-2 flex-wrap">
-                {['Check-ins', 'Add stamps', 'Award beans'].map((t) => (
-                  <span key={t} className="text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(224,122,58,0.12)', color: '#E07A3A' }}>{t}</span>
-                ))}
+      {/* QR Code Bottom Sheet */}
+      <BottomSheet open={showQR} onOpenChange={setShowQR} title="Your QR Code">
+        <BottomSheetContent>
+          <p className="text-[13px] text-center mb-4" style={{ color: '#8A96A0' }}>Show to staff to earn stamps and beans</p>
+          
+          <div
+            className="rounded-[16px] p-5 flex items-center justify-center mb-4"
+            style={{
+              backgroundColor: '#F4F7F9',
+              border: '1px solid #EDF1F4',
+            }}
+          >
+            {qrCodeUrl ? (
+              <img src={qrCodeUrl} alt="QR Code" className="w-52 h-52" />
+            ) : (
+              <div className="w-52 h-52 rounded-[12px] flex items-center justify-center" style={{ backgroundColor: '#EDF1F4' }}>
+                <QrCode className="w-12 h-12" style={{ color: '#9AAAB8' }} />
               </div>
-            </div>
-            <button onClick={() => setShowQR(false)} className="w-full py-3.5 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all" style={{ backgroundColor: '#2C3E50' }}>Done</button>
+            )}
           </div>
-        </DialogContent>
-      </Dialog>
+          
+          <div className="rounded-[14px] px-4 py-3 mb-4" style={{ backgroundColor: '#F4F7F9', border: '1px solid #EDF1F4' }}>
+            <p className="text-[10px] font-bold uppercase tracking-[0.1em] mb-1" style={{ color: '#9AAAB8' }}>Staff can use this to</p>
+            <div className="flex gap-2 flex-wrap">
+              {['Check-ins', 'Add stamps', 'Award beans'].map((t) => (
+                <span key={t} className="text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(224,122,58,0.12)', color: '#E07A3A' }}>{t}</span>
+              ))}
+            </div>
+          </div>
+          
+          <button onClick={() => setShowQR(false)} className="w-full py-3.5 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all" style={{ backgroundColor: '#2C3E50' }}>Done</button>
+        </BottomSheetContent>
+      </BottomSheet>
     </nav>
   )
 }
