@@ -505,24 +505,24 @@ export default function NewV2Dashboard() {
           >
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <p className="text-[12px] font-semibold uppercase tracking-[0.12em]" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                <p className="text-[12px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#F0EDE5' }}>
                   YOUR PROGRESS
                 </p>
-                <button onClick={() => setShowBeansPanel(false)} className="text-white/50 hover:text-white transition-colors">
+                <button onClick={() => setShowBeansPanel(false)} className="text-[#F0EDE5]/50 hover:text-[#F0EDE5] transition-colors">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M18 6L6 18M6 6l12 12" />
                   </svg>
                 </button>
               </div>
 
-              {/* Large stamps grid */}
-              <div className="grid grid-cols-4 gap-4 mb-6">
-                {Array.from({ length: 8 }).map((_, i) => {
+              {/* Large stamps grid - 25 stamps */}
+              <div className="grid grid-cols-5 gap-3 mb-6">
+                {Array.from({ length: 25 }).map((_, i) => {
                   const filled = i < currentBeans
                   return (
                     <div
                       key={i}
-                      className="w-20 h-20 rounded-full flex items-center justify-center"
+                      className="w-14 h-14 rounded-full flex items-center justify-center"
                       style={{
                         backgroundColor: filled ? '#F0EDE5' : 'transparent',
                         border: filled ? '2px solid #E0D8CC' : '2px dashed #F0EDE5',
@@ -531,7 +531,7 @@ export default function NewV2Dashboard() {
                       <img
                         src="/bean.png"
                         alt=""
-                        className="w-16 h-16 object-contain"
+                        className="w-10 h-10 object-contain"
                         style={{
                           filter: filled ? 'brightness(0) invert(1)' : 'brightness(0.4) grayscale(0.5)',
                           opacity: filled ? 1 : 0.6
@@ -544,13 +544,13 @@ export default function NewV2Dashboard() {
 
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <p className="text-[32px] font-bold text-white leading-tight">
+                  <p className="text-[32px] font-bold leading-tight" style={{ color: '#F0EDE5' }}>
                     {stampBeansNeeded} beans to your next treat
                   </p>
                   <div className="mt-2">
                     <BrushUnderline className="text-[#F28A2E] w-24" />
                   </div>
-                  <p className="text-[13px] mt-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                  <p className="text-[13px] mt-2" style={{ color: '#F0EDE5' }}>
                     {nextMilestone} beans = a reward
                   </p>
                 </div>
@@ -558,7 +558,7 @@ export default function NewV2Dashboard() {
                 {/* Right: next reward */}
                 <div
                   className="w-[130px] flex-shrink-0 flex flex-col items-center justify-center p-4 gap-2"
-                  style={{ borderLeft: '1px solid rgba(255,255,255,0.12)' }}
+                  style={{ borderLeft: '1px solid rgba(240,237,229,0.12)' }}
                 >
                   <div
                     className="w-20 h-20 rounded-full flex items-center justify-center overflow-hidden"
@@ -576,31 +576,67 @@ export default function NewV2Dashboard() {
               </div>
 
               {/* Balance info */}
-              <div className="mt-6 pt-6" style={{ borderTop: '1px solid rgba(255,255,255,0.12)' }}>
+              <div className="mt-6 pt-6" style={{ borderTop: '1px solid rgba(240,237,229,0.12)' }}>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] mb-1" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] mb-1" style={{ color: '#F0EDE5' }}>
                       LIFETIME BEANS
                     </p>
-                    <p className="text-[28px] font-bold text-white leading-none">
+                    <p className="text-[28px] font-bold leading-none" style={{ color: '#F0EDE5' }}>
                       {beanBalance?.lifetime_beans || 0}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] mb-1" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] mb-1" style={{ color: '#F0EDE5' }}>
                       VISITS
                     </p>
-                    <p className="text-[28px] font-bold text-white leading-none">
+                    <p className="text-[28px] font-bold leading-none" style={{ color: '#F0EDE5' }}>
                       {beanBalance?.visit_count || 0}
                     </p>
                   </div>
                 </div>
               </div>
 
+              {/* All Rewards Section */}
+              <div className="mt-6 pt-6" style={{ borderTop: '1px solid rgba(240,237,229,0.12)' }}>
+                <p className="text-[12px] font-semibold uppercase tracking-[0.12em] mb-4" style={{ color: '#F0EDE5' }}>
+                  ALL REWARDS
+                </p>
+                <div className="space-y-3">
+                  {[
+                    { beans: 2, name: 'Free syrup shot' },
+                    { beans: 8, name: 'Free coffee' },
+                    { beans: 15, name: 'Free snack' },
+                    { beans: 25, name: 'Free meal' },
+                  ].map((reward) => (
+                    <div
+                      key={reward.beans}
+                      className="flex items-center justify-between p-3 rounded-[12px]"
+                      style={{ backgroundColor: 'rgba(240,237,229,0.08)' }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: currentBeans >= reward.beans ? '#F28A2E' : 'rgba(240,237,229,0.2)' }}>
+                          <Gift className="w-5 h-5" style={{ color: currentBeans >= reward.beans ? 'white' : '#F0EDE5' }} />
+                        </div>
+                        <div>
+                          <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>{reward.name}</p>
+                          <p className="text-[11px]" style={{ color: 'rgba(240,237,229,0.6)' }}>{reward.beans} beans</p>
+                        </div>
+                      </div>
+                      {currentBeans >= reward.beans && (
+                        <span className="text-[10px] font-semibold px-2 py-1 rounded-full" style={{ backgroundColor: '#F28A2E', color: 'white' }}>
+                          Unlocked
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <button
                 onClick={() => { setShowBeansPanel(false); router.push('/rewards') }}
-                className="w-full mt-6 py-4 bg-[#F28A2E] text-white text-sm font-bold rounded-[16px] active:scale-[0.98] transition-all"
-                style={{ boxShadow: '0 4px 12px rgba(242,138,46,0.3)' }}
+                className="w-full mt-6 py-4 text-white text-sm font-bold rounded-[16px] active:scale-[0.98] transition-all"
+                style={{ backgroundColor: '#F28A2E', boxShadow: '0 4px 12px rgba(242,138,46,0.3)' }}
               >
                 View All Rewards
               </button>
