@@ -147,8 +147,8 @@ export default function NewV2Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#faf9f6]">
-        <div className="text-gray-600">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F4F1EA' }}>
+        <img src="/logo.png" alt="Penkey Perks" className="w-32 h-32 object-contain opacity-80" />
       </div>
     )
   }
@@ -446,38 +446,62 @@ export default function NewV2Dashboard() {
 
       {/* Voucher Detail Dialog */}
       <Dialog open={!!selectedVoucher} onOpenChange={() => setSelectedVoucher(null)}>
-        <DialogContent className="sm:max-w-sm rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 overflow-hidden border-0">
-          {selectedVoucher?.image && (
-            <div className="relative h-44 overflow-hidden">
-              <img src={selectedVoucher.image} alt="" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-              <div className="absolute bottom-4 left-4">
-                <h3 className="font-bold text-white text-lg leading-tight">{selectedVoucher?.template?.name}</h3>
+        <DialogContent className="sm:max-w-sm rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.3)] p-0 overflow-hidden border-0">
+          <div style={{ background: 'linear-gradient(160deg, #2B3E52 0%, #1e2d3d 100%)' }}>
+            {/* Header */}
+            <div className="flex items-start justify-between p-5 pb-0">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.15em]" style={{ color: 'rgba(240,237,229,0.7)' }}>PERK UNLOCKED</p>
+                <p className="text-[20px] font-extrabold mt-1" style={{ color: '#F0EDE5' }}>
+                  {selectedVoucher?.template?.name || 'Your Reward'}
+                </p>
+                {selectedVoucher?.template?.description && (
+                  <p className="text-[12px] mt-1" style={{ color: 'rgba(240,237,229,0.55)' }}>
+                    {selectedVoucher.template.description}
+                  </p>
+                )}
+              </div>
+              <button
+                onClick={() => setSelectedVoucher(null)}
+                className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ backgroundColor: 'rgba(240,237,229,0.1)', color: '#F0EDE5' }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Expiry */}
+            <div className="mx-5 mt-3 px-3 py-2 rounded-[10px]" style={{ backgroundColor: 'rgba(240,237,229,0.07)', border: '1px solid rgba(240,237,229,0.1)' }}>
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: 'rgba(240,237,229,0.5)' }}>Expires</span>
+                <span className="text-[12px] font-bold" style={{ color: '#F28A2E' }}>
+                  {selectedVoucher?.expires_at ? new Date(selectedVoucher.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'No expiry'}
+                </span>
               </div>
             </div>
-          )}
-          <div className="p-5 space-y-4 bg-white">
-            <p className="text-[13px] text-[#6B4C3B] leading-relaxed">{selectedVoucher?.template?.description}</p>
-            <div className="flex items-center gap-2 py-2 border-t border-[#F0E6DE]">
-              <span className="text-[11px] font-semibold text-[#9A7A6A] uppercase tracking-wide">Expires</span>
-              <span className="text-[12px] font-bold text-[#7B1234]">
-                {selectedVoucher?.expires_at ? new Date(selectedVoucher.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'N/A'}
-              </span>
-            </div>
+
+            {/* QR Code */}
             {voucherQrCode && (
-              <div className="flex flex-col items-center gap-2 pt-2">
-                <div className="bg-[#FAF8F5] rounded-[16px] p-4 border border-[#EEE0D8]">
-                  <img src={voucherQrCode} alt="Voucher QR Code" className="w-44 h-44" />
+              <div className="flex flex-col items-center gap-3 p-5">
+                <div className="rounded-[20px] p-4" style={{ backgroundColor: '#ffffff' }}>
+                  <img src={voucherQrCode} alt="Voucher QR Code" className="w-48 h-48" />
                 </div>
-                <p className="text-[11px] text-[#9A7A6A] text-center">Show to staff to redeem this voucher</p>
+                <p className="text-[11px] text-center" style={{ color: 'rgba(240,237,229,0.5)' }}>Show this to staff to redeem</p>
               </div>
             )}
-            <button
-              onClick={() => setSelectedVoucher(null)}
-              className="w-full py-3 bg-[#2C1810] text-white text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all"
-            >
-              Close
-            </button>
+
+            {/* Button */}
+            <div className="px-5 pb-5">
+              <button
+                onClick={() => setSelectedVoucher(null)}
+                className="w-full h-12 text-white text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all"
+                style={{ backgroundColor: '#F28A2E', boxShadow: '0 4px 16px rgba(242,138,46,0.35)' }}
+              >
+                Done
+              </button>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

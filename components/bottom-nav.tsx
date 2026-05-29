@@ -21,8 +21,13 @@ export function BottomNav() {
     <nav className="fixed bottom-0 left-0 right-0 z-50">
       <div className="w-full max-w-[430px] mx-auto px-4 pb-4">
         <div
-          className="backdrop-blur-xl shadow-[0_-1px_0_rgba(36,54,75,0.06),0_-4px_20px rgba(36,54,75,0.04)] rounded-[28px]"
-          style={{ backgroundColor: '#F9F7F2', WebkitBackdropFilter: 'blur(20px)' }}
+          className="backdrop-blur-xl rounded-[28px]"
+          style={{
+            backgroundColor: 'rgba(249,247,242,0.97)',
+            WebkitBackdropFilter: 'blur(20px)',
+            boxShadow: '0 -2px 0 rgba(36,54,75,0.06), 0 -8px 32px rgba(36,54,75,0.12), 0 4px 24px rgba(36,54,75,0.08)',
+            border: '1px solid rgba(36,54,75,0.08)',
+          }}
         >
           <div className="flex items-center h-[64px]">
 
