@@ -109,6 +109,22 @@ export default function OrderPage() {
     setMounted(true)
   }, [])
 
+  // Load reorder items from sessionStorage
+  useEffect(() => {
+    if (mounted) {
+      const reorderItems = sessionStorage.getItem('reorderItems')
+      if (reorderItems) {
+        try {
+          const items = JSON.parse(reorderItems)
+          setOrderItems(items)
+          sessionStorage.removeItem('reorderItems')
+        } catch (error) {
+          console.error('Error parsing reorder items:', error)
+        }
+      }
+    }
+  }, [mounted])
+
   // Load user profile
   useEffect(() => {
     const loadProfile = async () => {
