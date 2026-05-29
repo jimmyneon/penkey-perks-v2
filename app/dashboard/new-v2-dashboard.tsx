@@ -34,6 +34,7 @@ export default function NewV2Dashboard() {
   const [selectedFeatured, setSelectedFeatured] = useState<any>(null)
   const [showNotifications, setShowNotifications] = useState(false)
   const [showBeansPanel, setShowBeansPanel] = useState(false)
+  const [showRewardsPanel, setShowRewardsPanel] = useState(false)
   const [voucherQrCode, setVoucherQrCode] = useState('')
 
   useEffect(() => {
@@ -251,13 +252,15 @@ export default function NewV2Dashboard() {
 
           {/* ── YOUR PROGRESS ── */}
           <div
-            className="rounded-[18px] overflow-hidden cursor-pointer active:scale-[0.985] transition-all duration-200"
+            className="rounded-[18px] overflow-hidden active:scale-[0.985] transition-all duration-200"
             style={{ background: 'linear-gradient(135deg, #2B3E52 0%, #24364A 100%)', boxShadow: '0 4px 20px rgba(36,54,75,0.15)' }}
-            onClick={() => setShowBeansPanel(true)}
           >
             <div className="flex">
               {/* Left: bean balance */}
-              <div className="flex-1 p-5 pr-4 flex flex-col justify-between relative">
+              <div
+                className="flex-1 p-5 pr-4 flex flex-col justify-between relative cursor-pointer active:scale-[0.98] transition-all"
+                onClick={() => setShowBeansPanel(true)}
+              >
                 <div>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#F0EDE5' }}>
                     YOUR BEAN BALANCE
@@ -270,7 +273,7 @@ export default function NewV2Dashboard() {
                   </div>
                   <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>beans</p>
                 </div>
-                <Link href="/rewards" className="inline-flex items-center gap-1 text-[11px] font-semibold" style={{ color: '#F28A2E' }}>
+                <Link href="/rewards" className="inline-flex items-center gap-1 text-[11px] font-semibold" style={{ color: '#F28A2E' }} onClick={(e) => e.stopPropagation()}>
                   How it works
                   <ChevronRight className="w-3 h-3" />
                 </Link>
@@ -278,8 +281,9 @@ export default function NewV2Dashboard() {
 
               {/* Right: next reward */}
               <div
-                className="flex-1 p-5 pl-4 flex flex-col"
+                className="flex-1 p-5 pl-4 flex flex-col cursor-pointer active:scale-[0.98] transition-all"
                 style={{ borderLeft: '1px solid rgba(240,237,229,0.12)' }}
+                onClick={() => setShowRewardsPanel(true)}
               >
                 <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#F0EDE5' }}>
                   NEXT REWARD
@@ -498,7 +502,7 @@ export default function NewV2Dashboard() {
         </DialogContent>
       </Dialog>
 
-      {/* Beans Panel Dialog */}
+      {/* Beans Panel Dialog - Stamps Only */}
       <Dialog open={showBeansPanel} onOpenChange={setShowBeansPanel}>
         <DialogContent className="sm:max-w-md rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 overflow-hidden border-0">
           <div
@@ -508,7 +512,7 @@ export default function NewV2Dashboard() {
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <p className="text-[12px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#F0EDE5' }}>
-                  YOUR PROGRESS
+                  YOUR STAMP CARD
                 </p>
                 <button onClick={() => setShowBeansPanel(false)} className="text-[#F0EDE5]/50 hover:text-[#F0EDE5] transition-colors">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -598,45 +602,62 @@ export default function NewV2Dashboard() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
-              {/* All Rewards Section */}
-              <div className="mt-6 pt-6" style={{ borderTop: '1px solid rgba(240,237,229,0.12)' }}>
-                <p className="text-[12px] font-semibold uppercase tracking-[0.12em] mb-4" style={{ color: '#F0EDE5' }}>
+      {/* Rewards Panel Dialog - All Rewards */}
+      <Dialog open={showRewardsPanel} onOpenChange={setShowRewardsPanel}>
+        <DialogContent className="sm:max-w-md rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 overflow-hidden border-0">
+          <div
+            className="rounded-[24px] overflow-hidden"
+            style={{ background: 'linear-gradient(135deg, #2B3E52 0%, #24364A 100%)' }}
+          >
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <p className="text-[12px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#F0EDE5' }}>
                   ALL REWARDS
                 </p>
-                <div className="space-y-3">
-                  {[
-                    { beans: 2, name: 'Free syrup shot' },
-                    { beans: 8, name: 'Free coffee' },
-                    { beans: 15, name: 'Free snack' },
-                    { beans: 25, name: 'Free meal' },
-                  ].map((reward) => (
-                    <div
-                      key={reward.beans}
-                      className="flex items-center justify-between p-3 rounded-[12px]"
-                      style={{ backgroundColor: 'rgba(240,237,229,0.08)' }}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: currentBeans >= reward.beans ? '#F28A2E' : 'rgba(240,237,229,0.2)' }}>
-                          <Gift className="w-5 h-5" style={{ color: currentBeans >= reward.beans ? 'white' : '#F0EDE5' }} />
-                        </div>
-                        <div>
-                          <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>{reward.name}</p>
-                          <p className="text-[11px]" style={{ color: 'rgba(240,237,229,0.6)' }}>{reward.beans} beans</p>
-                        </div>
+                <button onClick={() => setShowRewardsPanel(false)} className="text-[#F0EDE5]/50 hover:text-[#F0EDE5] transition-colors">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                {[
+                  { beans: 2, name: 'Free syrup shot' },
+                  { beans: 8, name: 'Free coffee' },
+                  { beans: 15, name: 'Free snack' },
+                  { beans: 25, name: 'Free meal' },
+                ].map((reward) => (
+                  <div
+                    key={reward.beans}
+                    className="flex items-center justify-between p-3 rounded-[12px]"
+                    style={{ backgroundColor: 'rgba(240,237,229,0.08)' }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: currentBeans >= reward.beans ? '#F28A2E' : 'rgba(240,237,229,0.2)' }}>
+                        <Gift className="w-5 h-5" style={{ color: currentBeans >= reward.beans ? 'white' : '#F0EDE5' }} />
                       </div>
-                      {currentBeans >= reward.beans && (
-                        <span className="text-[10px] font-semibold px-2 py-1 rounded-full" style={{ backgroundColor: '#F28A2E', color: 'white' }}>
-                          Unlocked
-                        </span>
-                      )}
+                      <div>
+                        <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>{reward.name}</p>
+                        <p className="text-[11px]" style={{ color: 'rgba(240,237,229,0.6)' }}>{reward.beans} beans</p>
+                      </div>
                     </div>
-                  ))}
-                </div>
+                    {currentBeans >= reward.beans && (
+                      <span className="text-[10px] font-semibold px-2 py-1 rounded-full" style={{ backgroundColor: '#F28A2E', color: 'white' }}>
+                        Unlocked
+                      </span>
+                    )}
+                  </div>
+                ))}
               </div>
 
               <button
-                onClick={() => { setShowBeansPanel(false); router.push('/rewards') }}
+                onClick={() => { setShowRewardsPanel(false); router.push('/rewards') }}
                 className="w-full mt-6 py-4 text-white text-sm font-bold rounded-[16px] active:scale-[0.98] transition-all"
                 style={{ backgroundColor: '#F28A2E', boxShadow: '0 4px 12px rgba(242,138,46,0.3)' }}
               >
