@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { getBeanBalance, getActiveVouchers, getUserBadges, getActiveCampaigns, getNextRewardThreshold } from '@/lib/supabase/queries'
 import { Bell, Coffee, Gift, TrendingUp, QrCode, BarChart3, ChevronRight, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import QRCodeLib from 'qrcode'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { BottomNav } from '@/components/bottom-nav'
@@ -259,38 +260,16 @@ export default function NewV2Dashboard() {
             onClick={() => setShowBeansPanel(true)}
           >
             <div className="flex">
-              {/* Left: stamps */}
+              {/* Left: bean counter */}
               <div className="flex-1 p-5 pr-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                  YOUR PROGRESS
+                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                  YOUR BEANS
                 </p>
-                {/* Stamp dots */}
-                <div className="grid grid-cols-4 gap-3 mb-3">
-                  {Array.from({ length: 8 }).map((_, i) => {
-                    const filled = i < currentBeans
-                    return (
-                      <div
-                        key={i}
-                        className="w-16 h-16 rounded-full flex items-center justify-center"
-                        style={{
-                          backgroundColor: filled ? '#F0EDE5' : 'transparent',
-                          border: filled ? '2px solid #E0D8CC' : '2px dashed #F0EDE5',
-                        }}
-                      >
-                        <img
-                          src="/bean.png"
-                          alt=""
-                          className="w-12 h-12 object-contain"
-                          style={{
-                            filter: filled ? 'brightness(0) invert(1)' : 'brightness(0.4) grayscale(0.5)',
-                            opacity: filled ? 1 : 0.6
-                          }}
-                        />
-                      </div>
-                    )
-                  })}
+                <div className="flex items-baseline gap-2 mb-3">
+                  <span className="text-[48px] font-extrabold leading-none" style={{ color: 'white' }}>{currentBeans}</span>
+                  <span className="text-[14px] font-semibold" style={{ color: 'rgba(255,255,255,0.5)' }}>collected</span>
                 </div>
-                <p className="text-[18px] font-bold text-white leading-tight">
+                <p className="text-[16px] font-bold text-white leading-tight mb-1">
                   {stampBeansNeeded} beans to your next treat
                 </p>
                 <div className="mt-1.5">
@@ -299,6 +278,10 @@ export default function NewV2Dashboard() {
                 <p className="text-[11px] mt-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
                   {nextMilestone} beans = a reward
                 </p>
+                <Link href="/rewards" className="inline-flex items-center gap-1 mt-3 text-[11px] font-semibold" style={{ color: '#F28A2E' }}>
+                  How it works
+                  <ChevronRight className="w-3 h-3" />
+                </Link>
               </div>
 
               {/* Right: next reward */}
