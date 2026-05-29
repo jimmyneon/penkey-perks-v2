@@ -440,7 +440,7 @@ export default function OrderPage() {
       </div>
 
       {/* Floating action buttons */}
-      <div className="fixed bottom-24 left-4 right-4 z-40 flex gap-3">
+      <div className="fixed bottom-24 left-5 right-5 z-40 flex gap-3">
         <button
           onClick={() => setShowPickupTime(true)}
           className="flex-1 rounded-[16px] flex items-center justify-center gap-2 py-3 active:scale-[0.98] transition-all"
