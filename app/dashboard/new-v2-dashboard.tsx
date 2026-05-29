@@ -663,25 +663,25 @@ export default function NewV2Dashboard() {
               </div>
 
               {/* Horizontal bean journey */}
-              <div className="relative py-10 px-2">
-                {/* Wavy path SVG - more pronounced curve */}
-                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 120" preserveAspectRatio="none">
+              <div className="relative py-12 px-4">
+                {/* Wavy path SVG - matching reference curve pattern */}
+                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 140" preserveAspectRatio="none">
                   <path 
-                    d="M 20 60 Q 80 30, 140 60 T 260 60 T 380 60" 
+                    d="M 20 70 Q 60 40, 100 70 T 180 70 T 260 70 T 340 70 T 380 70" 
                     fill="none" 
-                    stroke="rgba(240,237,229,0.2)" 
-                    strokeWidth="4"
+                    stroke="rgba(240,237,229,0.25)" 
+                    strokeWidth="3"
                     strokeLinecap="round"
                   />
                 </svg>
 
-                {/* Bean markers along the path at varying heights */}
+                {/* Bean markers following the curve exactly */}
                 <div className="relative h-full">
                   {[
-                    { beans: 2, name: 'Free Syrup Shot', percent: 12, topPercent: 50 },
-                    { beans: 8, name: 'Free Coffee', percent: 37, topPercent: 40 },
-                    { beans: 15, name: 'Free Snack', percent: 62, topPercent: 50 },
-                    { beans: 25, name: 'Free Meal', percent: 87, topPercent: 60 },
+                    { beans: 2, name: 'Free Syrup Shot', percent: 15, topPercent: 50 },
+                    { beans: 8, name: 'Free Coffee', percent: 35, topPercent: 35 },
+                    { beans: 15, name: 'Free Snack', percent: 55, topPercent: 50 },
+                    { beans: 25, name: 'Free Meal', percent: 75, topPercent: 65 },
                   ].map((reward) => {
                     const unlocked = currentBeans >= reward.beans
                     const isNext = !unlocked && currentBeans < reward.beans
@@ -692,25 +692,41 @@ export default function NewV2Dashboard() {
                         className="absolute flex flex-col items-center"
                         style={{ left: `${reward.percent}%`, top: `${reward.topPercent}%`, transform: 'translate(-50%, -50%)' }}
                       >
-                        {/* Bean icon */}
-                        <div className="relative mb-3">
-                          <img 
-                            src="/bean.png" 
-                            alt="" 
-                            className="w-12 h-12 object-contain"
-                            style={{ 
-                              opacity: unlocked ? 1 : isNext ? 0.8 : 0.3,
-                              filter: unlocked ? 'none' : 'grayscale(100%)'
-                            }} 
-                          />
-                          {unlocked && (
-                            <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full border-2" style={{ backgroundColor: '#F28A2E', borderColor: '#2B3E52' }} />
+                        {/* Bean icon - filled for unlocked, outlined for locked */}
+                        <div className="relative mb-2">
+                          {unlocked ? (
+                            <div 
+                              className="w-10 h-10 rounded-full flex items-center justify-center"
+                              style={{ backgroundColor: '#F28A2E' }}
+                            >
+                              <img 
+                                src="/bean.png" 
+                                alt="" 
+                                className="w-6 h-6 object-contain"
+                                style={{ filter: 'brightness(0) invert(1)' }} 
+                              />
+                            </div>
+                          ) : (
+                            <div 
+                              className="w-10 h-10 rounded-full flex items-center justify-center"
+                              style={{ 
+                                backgroundColor: 'transparent',
+                                border: '2px solid rgba(240,237,229,0.3)'
+                              }}
+                            >
+                              <img 
+                                src="/bean.png" 
+                                alt="" 
+                                className="w-6 h-6 object-contain"
+                                style={{ opacity: isNext ? 0.6 : 0.3 }} 
+                              />
+                            </div>
                           )}
                         </div>
                         
                         {/* Bean count */}
                         <p 
-                          className="text-[12px] font-bold mb-1"
+                          className="text-[11px] font-bold mb-0.5"
                           style={{ color: unlocked ? '#F28A2E' : isNext ? '#F28A2E' : 'rgba(240,237,229,0.4)' }}
                         >
                           {reward.beans}
@@ -718,23 +734,11 @@ export default function NewV2Dashboard() {
                         
                         {/* Reward name */}
                         <p 
-                          className="text-[10px] font-semibold text-center whitespace-nowrap"
+                          className="text-[9px] font-semibold text-center whitespace-nowrap"
                           style={{ color: unlocked ? '#F0EDE5' : isNext ? '#F0EDE5' : 'rgba(240,237,229,0.4)' }}
                         >
                           {reward.name}
                         </p>
-
-                        {/* Status badge */}
-                        {unlocked && (
-                          <span className="text-[8px] font-bold px-2 py-0.5 rounded-full mt-1" style={{ backgroundColor: 'rgba(242,138,46,0.2)', color: '#F28A2E' }}>
-                            Unlocked
-                          </span>
-                        )}
-                        {isNext && (
-                          <span className="text-[8px] font-bold px-2 py-0.5 rounded-full mt-1" style={{ backgroundColor: '#F28A2E', color: 'white' }}>
-                            Next
-                          </span>
-                        )}
                       </div>
                     )
                   })}
