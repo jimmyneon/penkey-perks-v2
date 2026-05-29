@@ -1,6 +1,6 @@
 'use client'
 
-import { X } from 'lucide-react'
+import { ChevronLeft } from 'lucide-react'
 import { PushNotificationToggle } from '@/components/push-notification-toggle'
 
 interface PreferencesSheetProps {
@@ -32,32 +32,33 @@ export function PreferencesSheet({
   onMarketingConsentChange
 }: PreferencesSheetProps) {
   return (
-    <div className="px-5 pt-4 pb-6 space-y-4">
+    <div className="px-5 pt-4 pb-6 space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-[20px] font-bold" style={{ color: '#24364B' }}>Preferences</h2>
         <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8E2D8' }}>
-          <X className="w-4 h-4" style={{ color: '#24364B' }} />
+          <ChevronLeft className="w-4 h-4" style={{ color: '#24364B' }} />
         </button>
+        <h2 className="text-[20px] font-bold" style={{ color: '#24364B' }}>Preferences</h2>
+        <div className="w-8" />
       </div>
 
       {/* Preferences */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
+      <div className="space-y-4">
+        <div className="flex items-center justify-between py-2">
           <div>
             <p className="text-[14px] font-medium" style={{ color: '#1C2B3A' }}>GPS Location</p>
             <p className="text-[12px]" style={{ color: '#8A96A0' }}>Allow location-based offers</p>
           </div>
           <Toggle on={gpsConsent} onToggle={() => onGpsConsentChange(!gpsConsent)} />
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between py-2">
           <div>
             <p className="text-[14px] font-medium" style={{ color: '#1C2B3A' }}>Marketing</p>
             <p className="text-[12px]" style={{ color: '#8A96A0' }}>Receive promotional emails</p>
           </div>
           <Toggle on={marketingConsent} onToggle={() => onMarketingConsentChange(!marketingConsent)} />
         </div>
-        <div className="pt-1">
+        <div className="pt-2">
           <PushNotificationToggle />
         </div>
       </div>

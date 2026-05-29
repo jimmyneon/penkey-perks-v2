@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode } from 'react'
+import { ReactNode, useEffect } from 'react'
 
 interface SheetProps {
   isOpen: boolean
@@ -10,6 +10,17 @@ interface SheetProps {
 }
 
 export function Sheet({ isOpen, onClose, children, maxHeight = '85vh' }: SheetProps) {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
+
   if (!isOpen) return null
 
   return (

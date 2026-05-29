@@ -1,8 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
 import { Bell } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
@@ -63,8 +61,8 @@ export function PushNotificationToggle({ onToggle, disabled }: PushNotificationT
     return outputArray
   }
 
-  const handleToggle = async (checked: boolean | string) => {
-    console.log('Push toggle clicked:', checked)
+  const handleToggle = async () => {
+    console.log('Push toggle clicked:', isEnabled)
     
     if (!isSupported) {
       toast({
@@ -78,7 +76,7 @@ export function PushNotificationToggle({ onToggle, disabled }: PushNotificationT
     setIsLoading(true)
 
     try {
-      if (checked) {
+      if (!isEnabled) {
         console.log('Enabling push notifications...')
         
         // Enable push notifications
@@ -196,22 +194,20 @@ export function PushNotificationToggle({ onToggle, disabled }: PushNotificationT
   }
 
   return (
-    <div className="flex items-start gap-3">
-      <Checkbox
-        id="push-notifications"
-        checked={isEnabled}
-        onCheckedChange={handleToggle}
-        disabled={disabled || isLoading}
-      />
-      <div className="flex-1">
-        <Label htmlFor="push-notifications" className="flex items-center gap-2 cursor-pointer font-medium">
-          <Bell className="w-4 h-4 text-penkey-orange" />
-          Push Notifications
-        </Label>
-        <p className="text-xs text-penkey-gray mt-1">
-          Get instant alerts about rewards, special offers, and important updates - even when you're not on the app! 🔔
-        </p>
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-[14px] font-medium" style={{ color: '#1C2B3A' }}>Push Notifications</p>
+        <p className="text-[12px]" style={{ color: '#8A96A0' }}>Get instant alerts about rewards and offers</p>
       </div>
+      <button
+        onClick={handleToggle}
+        disabled={disabled || isLoading}
+        className={`w-12 h-7 rounded-full p-1 transition-all ${isEnabled ? 'bg-[#E07A3A]' : 'bg-[#E8E2D8]'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+      >
+        <div
+          className={`w-5 h-5 rounded-full bg-white transition-all ${isEnabled ? 'translate-x-5' : 'translate-x-0'}`}
+        />
+      </button>
     </div>
   )
 }
