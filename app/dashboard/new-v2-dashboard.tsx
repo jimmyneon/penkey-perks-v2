@@ -224,10 +224,10 @@ export default function NewV2Dashboard() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
-        <div className="px-5 pt-14 pb-28 space-y-5">
+        <div className="px-5 pt-10 pb-28 space-y-5">
 
           {/* ── HEADER ── */}
-          <div className="flex items-start justify-between pt-1">
+          <div className="flex items-start justify-between">
             {/* Left: greeting */}
             <div className="flex-1">
               <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
@@ -242,14 +242,10 @@ export default function NewV2Dashboard() {
               <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#24364B' }}>
                 {firstName}
               </h1>
-              <p className="text-[13px] font-medium mt-1.5 flex items-center gap-1.5" style={{ color: '#F28A2E' }}>
-                Welcome to Penkey Perks
-                <SparkLines className="text-[#F28A2E] w-12 h-12" />
-              </p>
             </div>
             {/* Right: wordmark */}
             <div className="flex flex-col items-end ml-6">
-              <img src="/logo.png" alt="PENKEY Perks" className="h-24 w-auto object-contain" />
+              <img src="/logo.png" alt="PENKEY Perks" className="h-28 w-auto object-contain" />
             </div>
           </div>
 
