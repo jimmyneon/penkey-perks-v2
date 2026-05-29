@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import { ItemModal } from '@/components/order/item-modal'
 import { OrderSummaryModal } from '@/components/order/order-summary-modal'
 import { PickupTimeModal } from '@/components/order/pickup-time-modal'
+import { CategoryModal } from '@/components/order/category-modal'
 
 interface OrderItem {
   id: string
@@ -78,9 +79,10 @@ export default function OrderPage() {
   const [showOrderSummary, setShowOrderSummary] = useState(false)
   const [showPickupTime, setShowPickupTime] = useState(false)
   const [showNotes, setShowNotes] = useState(false)
+  const [showCategoryModal, setShowCategoryModal] = useState(false)
 
-  // Customer-visible categories (hardcoded filter)
-  const CUSTOMER_VISIBLE_CATEGORIES = ['Hot Drinks - Coffee', 'Retail food', 'Snacks', 'Drinks fridge', 'Bakes and Sweets', 'Hot Baps', 'Sandwiches', 'Hot Drinks - Tea', 'Penkey Meals', 'Toasties', 'Penkey Affogatos', 'Penkey Salads', 'Iced Drinks - Coffee', 'Fresh Lemonades', 'Penkey Milkshakes', 'Gifts', 'Penkey Indulgence', 'Specials']
+  // Customer-visible categories (reorganized)
+  const CUSTOMER_VISIBLE_CATEGORIES = ['Hot Drinks - Coffee', 'Hot Drinks - Tea', 'Iced Drinks - Coffee', 'Drinks fridge', 'Penkey Milkshakes', 'Snacks', 'Bakes and Sweets', 'Hot Baps', 'Sandwiches', 'Toasties', 'Penkey Meals', 'Penkey Affogatos', 'Penkey Indulgence']
 
   // Prevent hydration mismatch
   useEffect(() => {
@@ -278,25 +280,33 @@ export default function OrderPage() {
             </div>
           </div>
 
-          {/* Category tabs */}
+          {/* Category button */}
           {categories.length > 0 && (
-            <div className="flex gap-2 overflow-x-auto pb-2 -mx-5 px-5">
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-4 py-2 rounded-full text-[13px] font-semibold whitespace-nowrap transition-all ${
-                    selectedCategory === cat.id ? 'text-white' : ''
-                  }`}
-                  style={{
-                    backgroundColor: selectedCategory === cat.id ? cat.color : '#F4EFE7',
-                    color: selectedCategory === cat.id ? '#24364B' : '#7A8A9A'
-                  }}
+            <button
+              onClick={() => setShowCategoryModal(true)}
+              className="w-full px-4 py-3 rounded-[16px] flex items-center justify-between transition-all active:scale-[0.98]"
+              style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8' }}
+            >
+              <div className="flex items-center gap-3">
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: selectedCategory ? categories.find(c => c.id === selectedCategory)?.color : '#E8E2D8' }}
                 >
-                  {cat.name}
-                </button>
-              ))}
-            </div>
+                  <span className="text-[15px] font-bold" style={{ color: selectedCategory ? '#FFFFFF' : '#7A8A9A' }}>
+                    {selectedCategory ? categories.find(c => c.id === selectedCategory)?.name.charAt(0) : 'All'}
+                  </span>
+                </div>
+                <div className="text-left">
+                  <p className="text-[13px] font-semibold" style={{ color: '#24364B' }}>
+                    {selectedCategory ? categories.find(c => c.id === selectedCategory)?.name : 'All Categories'}
+                  </p>
+                  <p className="text-[11px]" style={{ color: '#8A96A0' }}>Tap to change</p>
+                </div>
+              </div>
+              <svg className="w-5 h-5" style={{ color: '#A89080' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 9l6 6 6-6" />
+              </svg>
+            </button>
           )}
 
           {/* Search bar */}
@@ -347,7 +357,7 @@ export default function OrderPage() {
       </div>
 
       {/* Floating action buttons */}
-      <div className="fixed bottom-20 left-4 right-4 z-40 flex gap-3">
+      <div className="fixed bottom-24 left-4 right-4 z-40 flex gap-3">
         <button
           onClick={() => setShowPickupTime(true)}
           className="flex-1 rounded-[16px] flex items-center justify-center gap-2 py-3 active:scale-[0.98] transition-all"
@@ -403,6 +413,16 @@ export default function OrderPage() {
           onClose={() => setShowPickupTime(false)}
           onDayChange={setPickupDay}
           onTimeChange={setPickupTime}
+        />
+      )}
+
+      {/* Category Modal */}
+      {showCategoryModal && (
+        <CategoryModal
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onClose={() => setShowCategoryModal(false)}
+          onSelectCategory={setSelectedCategory}
         />
       )}
     </div>
