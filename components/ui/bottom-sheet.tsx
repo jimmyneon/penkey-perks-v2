@@ -23,7 +23,6 @@ export function BottomSheet({
   className,
 }: BottomSheetProps) {
   const y = useMotionValue(0)
-  const opacity = useTransform(y, [-150, 0], [0, 1])
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     if (info.offset.y > 100) {
@@ -53,37 +52,38 @@ export function BottomSheet({
     <AnimatePresence mode="wait">
       {open && (
         <>
-          {/* Backdrop */}
+          {/* Backdrop - instant appearance, no drag-based opacity */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.15 }}
             className="fixed inset-0 bg-black/60 backdrop-blur-md z-[9999]"
             onClick={() => onOpenChange(false)}
-            style={{ opacity }}
           />
           
-          {/* Sheet */}
+          {/* Sheet - drag only on handle area */}
           <motion.div
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 35, stiffness: 250 }}
-            drag="y"
-            dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={0.2}
-            onDragEnd={handleDragEnd}
-            style={{ y }}
             className={cn(
-              "fixed bottom-0 left-0 right-0 z-[10000] bg-cream-card rounded-t-3xl shadow-premium-xl max-h-[85vh] overflow-hidden touch-none",
+              "fixed bottom-0 left-0 right-0 z-[10000] bg-cream-card rounded-t-3xl shadow-premium-xl max-h-[85vh] overflow-hidden",
               className
             )}
           >
-            {/* Handle */}
-            <div className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing">
+            {/* Handle - only this area is draggable */}
+            <motion.div
+              drag="y"
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={0.2}
+              onDragEnd={handleDragEnd}
+              style={{ y }}
+              className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing"
+            >
               <div className="w-12 h-1.5 bg-brown/20 rounded-full" />
-            </div>
+            </motion.div>
             
             {/* Header */}
             {(title || showCloseButton) && (
