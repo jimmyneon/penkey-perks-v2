@@ -257,14 +257,16 @@ export default function NewV2Dashboard() {
           >
             <div className="flex">
               {/* Left: bean balance */}
-              <div className="flex-1 p-5 pr-4 flex flex-col justify-between">
+              <div className="flex-1 p-5 pr-4 flex flex-col justify-between relative">
                 <div>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#F0EDE5' }}>
                     YOUR BEAN BALANCE
                   </p>
-                  <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-[56px] font-extrabold leading-none" style={{ color: '#F0EDE5' }}>{currentBeans}</span>
-                    <img src="/beanpile.png" alt="" className="w-12 h-12 object-contain" />
+                  <div className="relative inline-block">
+                    <img src="/beanpile.png" alt="" className="w-36 h-36 object-contain absolute -top-2 -left-2 -z-10 opacity-40" />
+                    <div className="flex items-baseline gap-2 mb-1 relative z-10">
+                      <span className="text-[56px] font-extrabold leading-none" style={{ color: '#F0EDE5' }}>{currentBeans}</span>
+                    </div>
                   </div>
                   <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>beans</p>
                 </div>
@@ -320,11 +322,11 @@ export default function NewV2Dashboard() {
               }}
             >
               <div className="p-5 pr-[120px]">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style={{ backgroundColor: '#F28A2E', boxShadow: '0 2px 8px rgba(242,138,46,0.25)' }}>
-                  <svg width="10" height="10" viewBox="0 0 10 10" fill="white">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style={{ border: '1.5px solid #F28A2E' }}>
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="#F28A2E">
                     <circle cx="5" cy="5" r="4"/>
                   </svg>
-                  <span className="text-[10px] font-semibold uppercase tracking-wide text-white">Perk unlocked</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: '#F28A2E' }}>Perk unlocked</span>
                 </div>
                 <h3 className="text-[26px] font-bold leading-tight" style={{ color: '#24364B' }}>
                   Nice one!
