@@ -32,6 +32,13 @@ interface Category {
 const TIME_SLOTS = ['ASAP', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00']
 const DAY_OPTIONS = ['Today', 'Tomorrow']
 
+function getGreeting() {
+  const h = new Date().getHours()
+  if (h < 12) return 'Good morning'
+  if (h < 17) return 'Good afternoon'
+  return 'Good evening'
+}
+
 export default function OrderPage() {
   const router = useRouter()
   const [orderSent, setOrderSent] = useState(false)
@@ -45,6 +52,37 @@ export default function OrderPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
+  const [user, setUser] = useState<any>(null)
+  const [profile, setProfile] = useState<any>(null)
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Load user profile
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const supabase = createClient()
+        const { data: { user: authUser } } = await supabase.auth.getUser()
+        if (!authUser) return
+
+        setUser(authUser)
+
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', authUser.id)
+          .maybeSingle()
+        setProfile(profileData)
+      } catch (error) {
+        console.error('Error loading profile:', error)
+      }
+    }
+    loadProfile()
+  }, [])
 
   // Fetch menu from POS API
   useEffect(() => {
@@ -147,19 +185,35 @@ export default function OrderPage() {
     )
   }
 
+  const fullName = profile?.name || user?.user_metadata?.first_name || user?.user_metadata?.name || 'there'
+  const firstName = fullName.split(' ')[0].charAt(0).toUpperCase() + fullName.split(' ')[0].slice(1).toLowerCase()
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
-      <div className="w-full max-w-[430px] mx-auto">
+      <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
+        <div className="px-5 pt-10 pb-28 space-y-5">
 
-        {/* Header - cleaner, matching dashboard */}
-        <div className="px-5 pt-14 pb-6">
-          <h1 className="text-[32px] font-bold leading-tight" style={{ color: '#24364B' }}>Order Ahead</h1>
-          <p className="text-[14px] mt-1 leading-snug" style={{ color: '#7A8A9A' }}>
-            Skip the queue — order via WhatsApp
-          </p>
-        </div>
-
-        <div className="px-5 space-y-4">
+          {/* ── HEADER ── */}
+          <div className="flex items-start justify-between">
+            {/* Left: greeting */}
+            <div className="flex-1">
+              <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
+                {mounted ? getGreeting() : 'Hello'},{' '}
+                <img
+                  src="/heart.png"
+                  alt=""
+                  className="inline-block w-5 h-5 object-contain align-middle"
+                  style={{ marginBottom: '2px', animation: 'heartPulse 1.2s ease-in-out 3' }}
+                />
+              </p>
+              <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#24364B' }}>
+                {firstName}
+              </h1>
+              <p className="text-[13px] font-medium mt-2 leading-snug" style={{ color: '#8A96A0' }}>
+                Order ahead — skip the queue
+              </p>
+            </div>
+          </div>
 
           {/* Category tabs */}
           {categories.length > 0 && (
@@ -193,21 +247,21 @@ export default function OrderPage() {
                   <button
                     key={item.id}
                     onClick={() => addItem(item)}
-                    className="bg-white rounded-[14px] p-3 text-left active:scale-[0.98] transition-all"
-                    style={{ border: '1px solid #E8E2D8' }}
+                    className="bg-white rounded-[18px] p-4 text-left active:scale-[0.98] transition-all"
+                    style={{ border: '1px solid #E8E2D8', boxShadow: '0 2px 8px rgba(36,54,75,0.06)' }}
                   >
-                    <p className="text-[14px] font-bold leading-tight" style={{ color: '#24364B' }}>{item.name}</p>
+                    <p className="text-[15px] font-bold leading-tight" style={{ color: '#24364B' }}>{item.name}</p>
                     {item.description && (
-                      <p className="text-[11px] mt-1 leading-snug" style={{ color: '#7A8A9A' }}>{item.description}</p>
+                      <p className="text-[12px] mt-1.5 leading-snug" style={{ color: '#8A96A0' }}>{item.description}</p>
                     )}
-                    <p className="text-[13px] font-bold mt-2" style={{ color: '#F28A2E' }}>£{item.base_price.toFixed(2)}</p>
+                    <p className="text-[14px] font-bold mt-3" style={{ color: '#F28A2E' }}>£{item.base_price.toFixed(2)}</p>
                   </button>
                 ))}
             </div>
           )}
 
           {/* Pick-up time - cleaner card */}
-          <div className="rounded-[18px] p-4" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8' }}>
+          <div className="rounded-[18px] p-4" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8', boxShadow: '0 2px 12px rgba(36,54,75,0.08)' }}>
             <p className="text-[11px] font-bold uppercase tracking-[0.12em] mb-3" style={{ color: '#A89080' }}>Pick-up time</p>
             <div className="flex gap-3">
               <div className="flex-1 relative">
@@ -237,7 +291,7 @@ export default function OrderPage() {
 
           {/* Order summary - shows selected items */}
           {orderItems.length > 0 && (
-            <div className="rounded-[18px] overflow-hidden" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8' }}>
+            <div className="rounded-[18px] overflow-hidden" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8', boxShadow: '0 2px 12px rgba(36,54,75,0.08)' }}>
               <div className="px-4 py-3 border-b" style={{ borderColor: '#E8E2D8' }}>
                 <p className="text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: '#A89080' }}>Your order ({orderItems.length})</p>
               </div>
@@ -269,7 +323,7 @@ export default function OrderPage() {
           )}
 
           {/* Notes - cleaner card */}
-          <div className="rounded-[18px] p-4" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8' }}>
+          <div className="rounded-[18px] p-4" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8', boxShadow: '0 2px 12px rgba(36,54,75,0.08)' }}>
             <p className="text-[11px] font-bold uppercase tracking-[0.12em] mb-3" style={{ color: '#A89080' }}>Notes (optional)</p>
             <textarea
               value={notes}
@@ -283,7 +337,7 @@ export default function OrderPage() {
           </div>
 
           {/* Scan reminder - simpler */}
-          <div className="rounded-[18px] px-4 py-4 flex items-center gap-3" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8' }}>
+          <div className="rounded-[18px] px-4 py-4 flex items-center gap-3" style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8', boxShadow: '0 2px 12px rgba(36,54,75,0.08)' }}>
             <img src="/coffeecup.png" alt="" className="w-10 h-10 object-contain flex-shrink-0" />
             <div className="flex-1">
               <p className="text-[13px] font-bold leading-tight" style={{ color: '#24364B' }}>Scan in-store</p>
