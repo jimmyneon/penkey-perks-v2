@@ -100,6 +100,9 @@ export default function OrderPage() {
     'Gifts': 'Hot Food',
     'Fresh Lemonades': 'Cold Drinks',
     'Penkey Salads': 'Hot Food',
+    'Specials': 'Hot Food',
+    'Soap': 'Hot Food',
+    'Side Salad': 'Hot Food',
   }
 
   const DISPLAY_CATEGORIES = ['Hot Drinks', 'Iced Drinks', 'Cold Drinks', 'Snacks', 'Bakery', 'Hot Food', 'Penkey Affogatos', 'Penkey Indulgence']
@@ -340,7 +343,7 @@ export default function OrderPage() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
-        <div className="px-5 pt-10 pb-36 space-y-5">
+        <div className="px-5 pt-10 pb-44 space-y-5">
 
           {/* ── HEADER ── */}
           <div className="flex items-start justify-between">
@@ -440,28 +443,30 @@ export default function OrderPage() {
       </div>
 
       {/* Floating action buttons */}
-      <div className="fixed bottom-24 left-5 right-5 z-40 flex gap-3">
-        <button
-          onClick={() => setShowPickupTime(true)}
-          className="flex-1 rounded-[16px] flex items-center justify-center gap-2 py-3 active:scale-[0.98] transition-all"
-          style={{ backgroundColor: '#24364B' }}
-        >
-          <Clock className="w-5 h-5 text-white" />
-          <span className="text-white font-semibold text-[14px]">{pickupDay}, {pickupTime}</span>
-        </button>
-        <button
-          onClick={() => setShowOrderSummary(true)}
-          className="flex-1 rounded-[16px] flex items-center justify-center gap-2 py-3 active:scale-[0.98] transition-all relative"
-          style={{ backgroundColor: '#F28A2E' }}
-        >
-          <ShoppingBag className="w-5 h-5 text-white" />
-          <span className="text-white font-semibold text-[14px]">Order</span>
-          {orderItems.length > 0 && (
-            <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center text-white text-[11px] font-bold" style={{ backgroundColor: '#24364B' }}>
-              {orderItems.length}
-            </span>
-          )}
-        </button>
+      <div className="fixed bottom-24 left-0 right-0 z-40 flex justify-center px-5">
+        <div className="w-full max-w-[430px] grid grid-cols-2 gap-3">
+          <button
+            onClick={() => setShowPickupTime(true)}
+            className="rounded-[16px] flex items-center justify-center gap-2 py-3 active:scale-[0.98] transition-all"
+            style={{ backgroundColor: '#24364B' }}
+          >
+            <Clock className="w-5 h-5 text-white" />
+            <span className="text-white font-semibold text-[14px]">{pickupDay}, {pickupTime}</span>
+          </button>
+          <button
+            onClick={() => setShowOrderSummary(true)}
+            className="rounded-[16px] flex items-center justify-center gap-2 py-3 active:scale-[0.98] transition-all relative"
+            style={{ backgroundColor: '#F28A2E' }}
+          >
+            <ShoppingBag className="w-5 h-5 text-white" />
+            <span className="text-white font-semibold text-[14px]">Order</span>
+            {orderItems.length > 0 && (
+              <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center text-white text-[11px] font-bold" style={{ backgroundColor: '#24364B' }}>
+                {orderItems.length}
+              </span>
+            )}
+          </button>
+        </div>
       </div>
 
       <BottomNav />

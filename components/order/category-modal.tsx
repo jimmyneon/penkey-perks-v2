@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { X } from 'lucide-react'
 
 interface Category {
@@ -21,8 +22,16 @@ export function CategoryModal({
   onClose, 
   onSelectCategory 
 }: CategoryModalProps) {
+  // Lock body scroll when modal opens
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [])
+
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center">
       <div 
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
