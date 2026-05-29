@@ -10,7 +10,9 @@ Add a setting in the POS app for:
 - **Perks App Domain**: The URL of the Perks app (e.g., `https://perks.penkey.co.uk`)
 - **API Key**: The PERKS_API_KEY for authentication
 
-These should be configurable in the POS app settings so they can be changed without code updates.
+These should be stored locally in the POS app settings (not sent to Perks). Get the API key from the Perks team and configure it in your POS app settings screen.
+
+**Note**: You do NOT need to call any Perks API to configure these settings. Just store them in your POS app's local settings/storage.
 
 ## UI Requirements
 

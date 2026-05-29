@@ -283,7 +283,7 @@ export default function OrderPage() {
 
       if (authUser) {
         const { error } = await supabase
-          .from('purchases')
+          .from('user_orders')
           .insert({
             user_id: authUser.id,
             total_amount: total,

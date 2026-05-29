@@ -34,7 +34,7 @@ export function FavoriteOrdersSheet({ isOpen, onClose }: FavoriteOrdersSheetProp
         if (!user) return
 
         const { data } = await supabase
-          .from('purchases')
+          .from('user_orders')
           .select('*')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
