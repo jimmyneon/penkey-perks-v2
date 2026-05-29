@@ -664,24 +664,24 @@ export default function NewV2Dashboard() {
 
               {/* Horizontal bean journey */}
               <div className="relative py-10 px-2">
-                {/* Wavy path SVG */}
-                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 100" preserveAspectRatio="none">
+                {/* Wavy path SVG - more pronounced curve */}
+                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 120" preserveAspectRatio="none">
                   <path 
-                    d="M 20 50 Q 100 20, 200 50 T 380 50" 
+                    d="M 20 60 Q 80 30, 140 60 T 260 60 T 380 60" 
                     fill="none" 
-                    stroke="rgba(240,237,229,0.15)" 
-                    strokeWidth="3"
+                    stroke="rgba(240,237,229,0.2)" 
+                    strokeWidth="4"
                     strokeLinecap="round"
                   />
                 </svg>
 
-                {/* Bean markers along the path */}
+                {/* Bean markers along the path at varying heights */}
                 <div className="relative h-full">
                   {[
-                    { beans: 2, name: 'Free Syrup Shot', percent: 12 },
-                    { beans: 8, name: 'Free Coffee', percent: 37 },
-                    { beans: 15, name: 'Free Snack', percent: 62 },
-                    { beans: 25, name: 'Free Meal', percent: 87 },
+                    { beans: 2, name: 'Free Syrup Shot', percent: 12, topPercent: 50 },
+                    { beans: 8, name: 'Free Coffee', percent: 37, topPercent: 40 },
+                    { beans: 15, name: 'Free Snack', percent: 62, topPercent: 50 },
+                    { beans: 25, name: 'Free Meal', percent: 87, topPercent: 60 },
                   ].map((reward) => {
                     const unlocked = currentBeans >= reward.beans
                     const isNext = !unlocked && currentBeans < reward.beans
@@ -690,7 +690,7 @@ export default function NewV2Dashboard() {
                       <div 
                         key={reward.beans}
                         className="absolute flex flex-col items-center"
-                        style={{ left: `${reward.percent}%`, top: '50%', transform: 'translate(-50%, -50%)' }}
+                        style={{ left: `${reward.percent}%`, top: `${reward.topPercent}%`, transform: 'translate(-50%, -50%)' }}
                       >
                         {/* Bean icon */}
                         <div className="relative mb-3">
