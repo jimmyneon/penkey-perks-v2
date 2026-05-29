@@ -15,11 +15,18 @@ export function PushNotificationToggle({ onToggle, disabled }: PushNotificationT
   const [isEnabled, setIsEnabled] = useState(false)
   const [isSupported, setIsSupported] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const { toast } = useToast()
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+
     // Check if push notifications are supported
-    const supported = 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window
+    const supported = typeof window !== 'undefined' && 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window
     setIsSupported(supported)
 
     if (supported) {
@@ -27,7 +34,7 @@ export function PushNotificationToggle({ onToggle, disabled }: PushNotificationT
       setIsEnabled(Notification.permission === 'granted')
       checkSubscription()
     }
-  }, [])
+  }, [mounted])
 
   const checkSubscription = async () => {
     try {

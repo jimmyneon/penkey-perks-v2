@@ -60,7 +60,7 @@ export function DashboardClient({
     const threshold = 80
 
     const handleTouchStart = (e: TouchEvent) => {
-      if (window.scrollY === 0) {
+      if (typeof window !== 'undefined' && window.scrollY === 0) {
         startY = e.touches[0].clientY
         setPullStartY(startY)
       }
@@ -68,11 +68,11 @@ export function DashboardClient({
 
     const handleTouchMove = (e: TouchEvent) => {
       if (startY === 0) return
-      
+
       const currentY = e.touches[0].clientY
       const distance = currentY - startY
 
-      if (distance > 0 && window.scrollY === 0) {
+      if (distance > 0 && typeof window !== 'undefined' && window.scrollY === 0) {
         setPullDistance(Math.min(distance, threshold * 1.5))
       }
     }

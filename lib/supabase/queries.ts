@@ -240,7 +240,6 @@ export async function getNextRewardThreshold(currentBeans: number): Promise<{ th
   const { data, error } = await supabase
     .from('voucher_templates')
     .select('name, description, bean_threshold')
-    .eq('is_active', true)
     .order('bean_threshold', { ascending: true })
 
   if (error || !data) {

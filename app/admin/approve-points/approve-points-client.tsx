@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
@@ -43,7 +43,7 @@ interface ApprovePointsClientProps {
   adminId: string
 }
 
-export function ApprovePointsClient({ 
+export function ApprovePointsClient({
   pendingAwards: initialPending,
   approvedAwards,
   rejectedAwards,
@@ -52,15 +52,20 @@ export function ApprovePointsClient({
   const [pendingAwards, setPendingAwards] = useState(initialPending)
   const [processing, setProcessing] = useState<string | null>(null)
   const [viewingProof, setViewingProof] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
   const { toast } = useToast()
   const router = useRouter()
 
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp)
-    const now = new Date()
+    const now = mounted ? new Date() : new Date(timestamp)
     const diffMs = now.getTime() - date.getTime()
     const diffMins = Math.floor(diffMs / 60000)
-    
+
     if (diffMins < 1) return 'Just now'
     if (diffMins < 60) return `${diffMins} min ago`
     const diffHours = Math.floor(diffMins / 60)

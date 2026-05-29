@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Error({
   error,
@@ -9,9 +10,17 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
+  const [mounted, setMounted] = useState(false)
+  const router = useRouter()
+
   useEffect(() => {
+    setMounted(true)
     console.error('Application error:', error)
   }, [error])
+
+  const handleGoHome = () => {
+    router.push('/')
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-white">
@@ -31,7 +40,7 @@ export default function Error({
             Try Again
           </button>
           <button
-            onClick={() => window.location.href = '/'}
+            onClick={handleGoHome}
             className="px-4 py-2 border border-gray-300 rounded-lg"
           >
             Go Home

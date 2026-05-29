@@ -9,9 +9,16 @@ interface BeanIconProps {
 
 export function BeanIcon({ className = '', size = 'md' }: BeanIconProps) {
   const [emojiSupported, setEmojiSupported] = useState(true)
-  
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   // Check if emoji is supported
   useEffect(() => {
+    if (!mounted || typeof document === 'undefined') return
+
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
     if (ctx) {
@@ -22,7 +29,7 @@ export function BeanIcon({ className = '', size = 'md' }: BeanIconProps) {
         setEmojiSupported(false)
       }
     }
-  }, [])
+  }, [mounted])
   
   const sizeClasses = {
     sm: 'w-4 h-4 text-sm',

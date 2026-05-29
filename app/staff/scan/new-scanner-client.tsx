@@ -45,8 +45,14 @@ export function NewScannerClient() {
   const [confirmationData, setConfirmationData] = useState<ConfirmationData | null>(null)
   const [showSuccess, setShowSuccess] = useState(false)
   const [successData, setSuccessData] = useState<ConfirmationData | null>(null)
+  const [mounted, setMounted] = useState(false)
   const { toast } = useToast()
   const scannerRef = useRef<Html5Qrcode | null>(null)
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Initialize and start scanner when modal opens
   useEffect(() => {
@@ -799,11 +805,11 @@ export function NewScannerClient() {
 
               {/* Timestamp */}
               <div className="text-center text-xs text-gray-500">
-                Redeemed at {new Date().toLocaleTimeString('en-GB', { 
-                  hour: '2-digit', 
+                Redeemed at {mounted ? new Date().toLocaleTimeString('en-GB', {
+                  hour: '2-digit',
                   minute: '2-digit',
                   second: '2-digit'
-                })}
+                }) : '00:00:00'}
               </div>
 
               {/* Close Button */}

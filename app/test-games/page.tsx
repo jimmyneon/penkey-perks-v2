@@ -32,7 +32,12 @@ export default function TestGamesPage() {
   const [loading, setLoading] = useState(true)
   const [dbStatus, setDbStatus] = useState<'checking' | 'connected' | 'error'>('checking')
   const [playHistory, setPlayHistory] = useState<any[]>([])
+  const [mounted, setMounted] = useState(false)
   const supabase = createClient()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const allGames: GameInfo[] = [
     {
@@ -400,7 +405,7 @@ export default function TestGamesPage() {
                       <div>
                         <p className="font-medium text-sm">{play.mini_games?.display_name || 'Unknown Game'}</p>
                         <p className="text-xs text-penkey-gray">
-                          {new Date(play.created_at).toLocaleString()}
+                          {mounted ? new Date(play.created_at).toLocaleString() : ''}
                         </p>
                       </div>
                     </div>

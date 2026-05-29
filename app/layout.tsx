@@ -6,7 +6,6 @@ import { QueryProvider } from '@/components/providers/query-provider'
 import { CacheProvider } from '@/components/providers/cache-provider'
 import { ErrorBoundary } from '@/components/error-boundary'
 import { ServiceWorkerManager } from '@/components/service-worker-manager'
-import { PromotionalOffersProvider } from '@/components/providers/promotional-offers-provider'
 
 // Penkey typography system - Manrope for premium feel
 const manrope = Manrope({ 
@@ -50,11 +49,9 @@ export default function RootLayout({
         <ErrorBoundary>
           <CacheProvider>
             <QueryProvider>
-              <PromotionalOffersProvider>
-                <ServiceWorkerManager />
-                {children}
-                <Toaster />
-              </PromotionalOffersProvider>
+              <ServiceWorkerManager />
+              {children}
+              <Toaster />
             </QueryProvider>
           </CacheProvider>
         </ErrorBoundary>

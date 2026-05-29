@@ -39,10 +39,26 @@ export default function NewV2Dashboard() {
   const [voucherQrCode, setVoucherQrCode] = useState('')
   const [brightness, setBrightness] = useState(1)
   const [converting, setConverting] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const [nextReward, setNextReward] = useState<any>(null)
+  const [showVoucherSelection, setShowVoucherSelection] = useState(false)
+  const [availableVouchers, setAvailableVouchers] = useState<any[]>([])
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     loadData()
   }, [])
+
+  // Load next reward from database
+  useEffect(() => {
+    if (beanBalance) {
+      getNextRewardThreshold(beanBalance.current_beans).then(setNextReward)
+    }
+  }, [beanBalance])
 
   const loadData = async () => {
     try {
@@ -172,7 +188,6 @@ export default function NewV2Dashboard() {
         .from('voucher_templates')
         .select('*')
         .eq('bean_threshold', beanThreshold)
-        .eq('is_active', true)
         .single()
 
       if (!templates) {
@@ -214,6 +229,42 @@ export default function NewV2Dashboard() {
     }
   }
 
+  const openVoucherSelection = async () => {
+    if (!user) return
+
+    try {
+      const supabase = createClient()
+
+      // Get all active voucher templates the user can afford
+      const { data: templates } = await supabase
+        .from('voucher_templates')
+        .select('*')
+        .eq('is_active', true)
+        .order('bean_threshold', { ascending: true })
+
+      if (!templates) return
+
+      // Get user's active vouchers to check which ones they already have
+      const { data: activeVouchers } = await supabase
+        .from('user_vouchers')
+        .select('voucher_template_id')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+
+      const activeTemplateIds = new Set(activeVouchers?.map(v => v.voucher_template_id) || [])
+
+      // Filter to only show vouchers they can afford and don't already have
+      const available = templates.filter(t =>
+        currentBeans >= t.bean_threshold && !activeTemplateIds.has(t.id)
+      )
+
+      setAvailableVouchers(available)
+      setShowVoucherSelection(true)
+    } catch (error) {
+      console.error('Error fetching voucher options:', error)
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F4F1EA' }}>
@@ -222,15 +273,7 @@ export default function NewV2Dashboard() {
     )
   }
 
-  const [nextReward, setNextReward] = useState<any>(null)
   const currentBeans = beanBalance?.current_beans || 0
-
-  // Load next reward from database
-  useEffect(() => {
-    if (beanBalance) {
-      getNextRewardThreshold(beanBalance.current_beans).then(setNextReward)
-    }
-  }, [beanBalance])
 
   const targetBeans = nextReward?.threshold || 8
   const progress = (currentBeans / targetBeans) * 100
@@ -309,7 +352,7 @@ export default function NewV2Dashboard() {
             {/* Left: greeting */}
             <div className="flex-1">
               <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
-                {getGreeting()},{' '}
+                {mounted ? getGreeting() : 'Hello'},{' '}
                 <img 
                   src="/heart.png" 
                   alt="" 
@@ -789,6 +832,48 @@ export default function NewV2Dashboard() {
         </DialogContent>
       </Dialog>
 
+      {/* Voucher Selection Dialog */}
+      <Dialog open={showVoucherSelection} onOpenChange={setShowVoucherSelection}>
+        <DialogContent className="sm:max-w-sm rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)]">
+          <DialogHeader>
+            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold text-center">Choose Your Voucher</DialogTitle>
+            <DialogDescription className="text-[#8A96A0] text-[13px] text-center">Select a reward to convert your beans</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 pb-1">
+            {availableVouchers.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-[#8A96A0] text-sm">No vouchers available</p>
+                <p className="text-[#8A96A0] text-xs mt-1">You need at least 2 beans to convert</p>
+              </div>
+            ) : (
+              availableVouchers.map((voucher) => (
+                <button
+                  key={voucher.id}
+                  onClick={() => convertToVoucher(voucher.bean_threshold)}
+                  disabled={converting}
+                  className="w-full rounded-[16px] p-4 text-left active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{
+                    backgroundColor: '#F4F7F9',
+                    border: '1px solid #EDF1F4',
+                  }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <p className="text-[#1C2B3A] text-sm font-bold">{voucher.name}</p>
+                      <p className="text-[#8A96A0] text-xs mt-0.5">{voucher.description}</p>
+                    </div>
+                    <div className="text-right ml-3">
+                      <p className="text-[#E07A3A] text-sm font-bold">{voucher.bean_threshold} beans</p>
+                    </div>
+                  </div>
+                </button>
+              ))
+            )}
+            <button onClick={() => setShowVoucherSelection(false)} className="w-full py-3.5 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all" style={{ backgroundColor: '#2C3E50' }}>Cancel</button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Rewards Panel Dialog */}
       <Dialog open={showRewardsPanel} onOpenChange={setShowRewardsPanel}>
         <DialogContent className="sm:max-w-[380px] rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 border-0 overflow-hidden">
@@ -1010,16 +1095,8 @@ export default function NewV2Dashboard() {
               {/* Buttons */}
               <div className="flex gap-3 mt-6">
                 <button
-                  onClick={() => {
-                    // Find the next unlocked reward and convert it
-                    const nextUnlocked = [2, 8, 15, 25].find(threshold => currentBeans >= threshold)
-                    if (nextUnlocked) {
-                      convertToVoucher(nextUnlocked)
-                    } else {
-                      alert('You need at least 2 beans to convert to a voucher')
-                    }
-                  }}
-                  disabled={converting || currentBeans < 2}
+                  onClick={openVoucherSelection}
+                  disabled={currentBeans < 2}
                   className="flex-1 h-12 text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{
                     backgroundColor: 'transparent',
@@ -1031,7 +1108,7 @@ export default function NewV2Dashboard() {
                     <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
                     <line x1="1" y1="10" x2="23" y2="10" />
                   </svg>
-                  {converting ? 'Converting...' : 'Convert to voucher'}
+                  Convert to voucher
                 </button>
                 <button
                   onClick={() => { setShowRewardsPanel(false); router.push('/rewards') }}

@@ -1,19 +1,28 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
 
 export function RainyEffect() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
+
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
       {[...Array(20)].map((_, i) => (
         <motion.div
           key={i}
           className="absolute w-0.5 h-8 bg-blue-400"
-          initial={{ 
-            top: -20, 
-            left: `${Math.random() * 100}%` 
+          initial={{
+            top: -20,
+            left: `${Math.random() * 100}%`
           }}
-          animate={{ 
+          animate={{
             top: '110%',
             transition: {
               duration: Math.random() * 1 + 0.5,
@@ -68,17 +77,25 @@ export function SunnyEffect() {
 }
 
 export function SnowEffect() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
+
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-40">
       {[...Array(15)].map((_, i) => (
         <motion.div
           key={i}
           className="absolute w-2 h-2 bg-white rounded-full"
-          initial={{ 
-            top: -20, 
-            left: `${Math.random() * 100}%` 
+          initial={{
+            top: -20,
+            left: `${Math.random() * 100}%`
           }}
-          animate={{ 
+          animate={{
             top: '110%',
             x: [0, Math.random() * 40 - 20, 0],
             transition: {
@@ -95,17 +112,25 @@ export function SnowEffect() {
 }
 
 export function CloudyEffect() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
+
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
       {[...Array(3)].map((_, i) => (
         <motion.div
           key={i}
           className="absolute w-24 h-12 bg-gray-300 rounded-full blur-xl"
-          initial={{ 
+          initial={{
             top: `${Math.random() * 50}%`,
             left: '-10%'
           }}
-          animate={{ 
+          animate={{
             left: '110%',
             transition: {
               duration: 20 + Math.random() * 10,
@@ -121,6 +146,14 @@ export function CloudyEffect() {
 }
 
 export function HotEffect() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
+
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
       {[...Array(5)].map((_, i) => (

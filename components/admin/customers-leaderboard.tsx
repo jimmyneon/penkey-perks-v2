@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -48,8 +48,13 @@ export function CustomersLeaderboard({ customers: initialCustomers }: CustomersL
   const [isLoading, setIsLoading] = useState(false)
   const [sortBy, setSortBy] = useState<SortOption>('beans')
   const [showShareDialog, setShowShareDialog] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const { toast } = useToast()
   const router = useRouter()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Sort and filter customers
   const sortedAndFilteredCustomers = useMemo(() => {
@@ -171,11 +176,11 @@ export function CustomersLeaderboard({ customers: initialCustomers }: CustomersL
   }
 
   const handleShare = async () => {
-    const shareText = `🏆 Penkey Perks Leaderboard 🏆\n\n${topThree.map((customer, idx) => 
+    const shareText = `🏆 Penkey Perks Leaderboard 🏆\n\n${topThree.map((customer, idx) =>
       `${idx === 0 ? '🥇' : idx === 1 ? '🥈' : '🥉'} ${customer.name} - ${customer.stats.beans} beans`
     ).join('\n')}\n\nJoin us at Penkey Coffee!`
 
-    if (navigator.share) {
+    if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({
           title: 'Penkey Perks Leaderboard',
@@ -188,7 +193,7 @@ export function CustomersLeaderboard({ customers: initialCustomers }: CustomersL
       } catch (error) {
         // User cancelled or error occurred
       }
-    } else {
+    } else if (typeof navigator !== 'undefined' && navigator.clipboard) {
       // Fallback: copy to clipboard
       navigator.clipboard.writeText(shareText)
       toast({
