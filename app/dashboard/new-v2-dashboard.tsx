@@ -261,7 +261,7 @@ export default function NewV2Dashboard() {
                 onClick={() => setShowBeansPanel(true)}
               >
                 {/* Bean pile background */}
-                <img src="/beanpile.png" alt="" className="absolute inset-0 w-full h-full object-cover opacity-20" style={{ transform: 'scale(1.0)' }} />
+                <img src="/beanpile.png" alt="" className="absolute inset-0 w-full h-full object-cover opacity-15" style={{ transform: 'scale(0.8)' }} />
                 
                 <div className="relative z-10">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#F0EDE5' }}>
@@ -291,7 +291,7 @@ export default function NewV2Dashboard() {
                   NEXT REWARD
                 </p>
                 <div className="flex flex-col gap-3 mb-3">
-                  <p className="text-[20px] font-bold leading-tight" style={{ color: '#F0EDE5' }}>
+                  <p className="text-[20px] font-bold leading-tight" style={{ color: '#F28A2E' }}>
                     Free coffee
                   </p>
                   <div className="flex items-center justify-center">
@@ -302,11 +302,11 @@ export default function NewV2Dashboard() {
                   {stampBeansNeeded} beans away
                 </p>
                 <div className="mb-2">
-                  <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(240,237,229,0.15)' }}>
+                  <div className="h-2.5 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(240,237,229,0.2)' }}>
                     <div
-                      className="h-full rounded-full"
+                      className="h-full rounded-full transition-all duration-300"
                       style={{
-                        width: `${(currentBeans / 25) * 100}%`,
+                        width: `${Math.min((currentBeans / nextMilestone) * 100, 100)}%`,
                         backgroundColor: '#F28A2E'
                       }}
                     />
