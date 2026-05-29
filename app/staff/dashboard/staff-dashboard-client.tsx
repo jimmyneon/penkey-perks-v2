@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { 
-  QrCode, 
-  Gift, 
-  Users, 
+import {
+  QrCode,
+  Gift,
+  Users,
   TrendingUp,
   Coffee,
   User,
@@ -39,12 +39,18 @@ interface StaffDashboardClientProps {
   }>
 }
 
-export function StaffDashboardClient({ 
-  staffName, 
+export function StaffDashboardClient({
+  staffName,
   stats,
   topCustomers
 }: StaffDashboardClientProps) {
   const [selectedStat, setSelectedStat] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Motivational messages
   const motivationalMessages = [
@@ -111,7 +117,7 @@ export function StaffDashboardClient({
                     <Coffee className="w-6 h-6 text-penkey-orange" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm text-penkey-gray">Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'afternoon' : 'evening'},</p>
+                    <p className="text-sm text-penkey-gray">Good {mounted ? (new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 18 ? 'afternoon' : 'evening') : 'morning'},</p>
                     <h2 className="text-xl font-bold text-penkey-dark truncate">{staffName || 'Staff Member'}</h2>
                   </div>
                 </div>
@@ -126,8 +132,8 @@ export function StaffDashboardClient({
               {/* Quick Info - Useful stats */}
               <div className="hidden md:flex flex-col gap-2 text-right">
                 <div>
-                  <p className="text-2xl font-bold text-penkey-orange">{new Date().toLocaleDateString('en-US', { weekday: 'short' })}</p>
-                  <p className="text-xs text-penkey-gray">{new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                  <p className="text-2xl font-bold text-penkey-orange">{mounted ? new Date().toLocaleDateString('en-US', { weekday: 'short' }) : 'Mon'}</p>
+                  <p className="text-xs text-penkey-gray">{mounted ? new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Jan 1'}</p>
                 </div>
               </div>
             </div>

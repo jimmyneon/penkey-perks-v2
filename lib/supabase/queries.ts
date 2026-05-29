@@ -234,28 +234,36 @@ export async function getRecentBeanTransactions(userId: string, limit = 10): Pro
   return data || []
 }
 
-// Helper function to get next reward threshold
-export function getNextRewardThreshold(currentBeans: number): { threshold: number; beansNeeded: number; reward: string } {
-  const thresholds = [
-    { threshold: 5, reward: 'Enhancer Voucher' },
-    { threshold: 8, reward: 'Free Coffee' },
-    { threshold: 20, reward: 'Golden Duck Reward' },
-  ]
-  
-  for (const t of thresholds) {
-    if (currentBeans < t.threshold) {
+// Helper function to get next reward threshold from database
+export async function getNextRewardThreshold(currentBeans: number): Promise<{ threshold: number; beansNeeded: number; reward: string; description: string }> {
+  const supabase = createClient()
+  const { data, error } = await supabase
+    .from('voucher_templates')
+    .select('name, description, bean_threshold')
+    .eq('is_active', true)
+    .order('bean_threshold', { ascending: true })
+
+  if (error || !data) {
+    console.error('Error fetching voucher templates:', error)
+    return { threshold: 0, beansNeeded: 0, reward: 'Error loading rewards', description: '' }
+  }
+
+  for (const template of data) {
+    if (currentBeans < template.bean_threshold) {
       return {
-        threshold: t.threshold,
-        beansNeeded: t.threshold - currentBeans,
-        reward: t.reward,
+        threshold: template.bean_threshold,
+        beansNeeded: template.bean_threshold - currentBeans,
+        reward: template.name,
+        description: template.description || '',
       }
     }
   }
-  
+
   // Max level reached
   return {
-    threshold: 20,
+    threshold: 0,
     beansNeeded: 0,
-    reward: 'Golden Duck Reward',
+    reward: 'All rewards unlocked',
+    description: '',
   }
 }

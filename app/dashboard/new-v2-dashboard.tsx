@@ -7,7 +7,7 @@ import { Bell, Coffee, Gift, TrendingUp, QrCode, BarChart3, ChevronRight, Sparkl
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import QRCodeLib from 'qrcode'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { BottomNav } from '@/components/bottom-nav'
 import { BrushUnderline } from '@/components/ui/brush-underline'
 import { SparkLines } from '@/components/ui/spark-lines'
@@ -37,6 +37,14 @@ export default function NewV2Dashboard() {
   const [showBeansPanel, setShowBeansPanel] = useState(false)
   const [showRewardsPanel, setShowRewardsPanel] = useState(false)
   const [voucherQrCode, setVoucherQrCode] = useState('')
+  const [brightness, setBrightness] = useState(1)
+  const [converting, setConverting] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     loadData()
@@ -158,6 +166,60 @@ export default function NewV2Dashboard() {
     }
   }
 
+  const convertToVoucher = async (beanThreshold: number) => {
+    if (!user || converting) return
+
+    setConverting(true)
+    try {
+      const supabase = createClient()
+
+      // Find the voucher template with matching bean threshold
+      const { data: templates } = await supabase
+        .from('voucher_templates')
+        .select('*')
+        .eq('bean_threshold', beanThreshold)
+        .eq('is_active', true)
+        .single()
+
+      if (!templates) {
+        alert('Voucher template not found')
+        return
+      }
+
+      // Call the conversion function via RPC
+      const { data, error } = await supabase.rpc('convert_beans_to_voucher', {
+        p_user_id: user.id,
+        p_voucher_template_id: templates.id,
+      })
+
+      if (error) {
+        console.error('Conversion error:', error)
+        alert(error.message || 'Failed to convert beans to voucher')
+        return
+      }
+
+      if (data.success) {
+        // Refresh bean balance
+        const newBalance = await getBeanBalance(user.id)
+        setBeanBalance(newBalance)
+
+        // Refresh vouchers
+        const newVouchers = await getActiveVouchers(user.id)
+        setVouchers(newVouchers)
+
+        setShowRewardsPanel(false)
+        alert('Voucher created successfully!')
+      } else {
+        alert(data.error || 'Failed to convert beans to voucher')
+      }
+    } catch (error) {
+      console.error('Conversion error:', error)
+      alert('Failed to convert beans to voucher')
+    } finally {
+      setConverting(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F4F1EA' }}>
@@ -166,9 +228,17 @@ export default function NewV2Dashboard() {
     )
   }
 
-  const nextReward = beanBalance ? getNextRewardThreshold(beanBalance.current_beans) : null
+  const [nextReward, setNextReward] = useState<any>(null)
   const currentBeans = beanBalance?.current_beans || 0
-  const targetBeans = 8 // Free coffee is 8 beans
+
+  // Load next reward from database
+  useEffect(() => {
+    if (beanBalance) {
+      getNextRewardThreshold(beanBalance.current_beans).then(setNextReward)
+    }
+  }, [beanBalance])
+
+  const targetBeans = nextReward?.threshold || 8
   const progress = (currentBeans / targetBeans) * 100
   const beansNeeded = targetBeans - currentBeans
   const circumference = 2 * Math.PI * 58
@@ -245,7 +315,7 @@ export default function NewV2Dashboard() {
             {/* Left: greeting */}
             <div className="flex-1">
               <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
-                {getGreeting()},{' '}
+                {mounted ? getGreeting() : 'Hello'},{' '}
                 <img 
                   src="/heart.png" 
                   alt="" 
@@ -305,14 +375,14 @@ export default function NewV2Dashboard() {
                 </p>
                 <div className="flex flex-col gap-2 mb-2">
                   <p className="text-[18px] font-bold leading-tight" style={{ color: '#F28A2E' }}>
-                    Free coffee
+                    {nextReward?.reward || 'Loading...'}
                   </p>
                   <div className="flex items-center justify-center">
                     <img src="/coffeecup.png" alt="" className="w-36 h-36 object-contain" />
                   </div>
                 </div>
                 <p className="text-[10px] font-medium mb-1.5" style={{ color: '#F0EDE5' }}>
-                  {stampBeansNeeded} beans away
+                  {nextReward?.beansNeeded || 0} beans away
                 </p>
                 <div className="mb-1.5">
                   <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(240,237,229,0.2)' }}>
@@ -428,7 +498,7 @@ export default function NewV2Dashboard() {
 
         </div>
 
-        <BottomNav />
+        <BottomNav onShowQRCode={() => setShowQR(true)} />
       </div>
 
       {/* Voucher / Perk Unlocked Dialog */}
@@ -672,6 +742,59 @@ export default function NewV2Dashboard() {
         </DialogContent>
       </Dialog>
 
+      {/* Profile QR Code Dialog */}
+      <Dialog open={showQR} onOpenChange={setShowQR}>
+        <DialogContent className="sm:max-w-sm rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)]">
+          <DialogHeader>
+            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold text-center">Your QR Code</DialogTitle>
+            <DialogDescription className="text-[#8A96A0] text-[13px] text-center">Show to staff to earn stamps and beans</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3 pb-1">
+            <div
+              className="rounded-[16px] p-5 flex items-center justify-center transition-all"
+              style={{
+                backgroundColor: '#F4F7F9',
+                border: '1px solid #EDF1F4',
+                filter: `brightness(${brightness})`
+              }}
+            >
+              {qrCodeUrl ? (
+                <img src={qrCodeUrl} alt="QR Code" className="w-52 h-52" />
+              ) : (
+                <div className="w-52 h-52 rounded-[12px] flex items-center justify-center" style={{ backgroundColor: '#EDF1F4' }}>
+                  <QrCode className="w-12 h-12" style={{ color: '#9AAAB8' }} />
+                </div>
+              )}
+            </div>
+            <div className="rounded-[14px] px-4 py-3" style={{ backgroundColor: '#F4F7F9', border: '1px solid #EDF1F4' }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.1em] mb-1" style={{ color: '#9AAAB8' }}>Staff can use this to</p>
+              <div className="flex gap-2 flex-wrap">
+                {['Check-ins', 'Add stamps', 'Award beans'].map((t) => (
+                  <span key={t} className="text-[11px] font-semibold px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(224,122,58,0.12)', color: '#E07A3A' }}>{t}</span>
+                ))}
+              </div>
+            </div>
+            {/* Brightness control */}
+            <div className="px-4 py-2">
+              <div className="flex items-center gap-3">
+                <span className="text-[11px] font-medium" style={{ color: '#8A96A0' }}>Brightness</span>
+                <input
+                  type="range"
+                  min="0.5"
+                  max="2"
+                  step="0.1"
+                  value={brightness}
+                  onChange={(e) => setBrightness(parseFloat(e.target.value))}
+                  className="flex-1 h-2 rounded-full appearance-none cursor-pointer"
+                  style={{ backgroundColor: '#EDF1F4' }}
+                />
+              </div>
+            </div>
+            <button onClick={() => setShowQR(false)} className="w-full py-3.5 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all" style={{ backgroundColor: '#2C3E50' }}>Done</button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Rewards Panel Dialog */}
       <Dialog open={showRewardsPanel} onOpenChange={setShowRewardsPanel}>
         <DialogContent className="sm:max-w-[380px] rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 border-0 overflow-hidden">
@@ -893,8 +1016,17 @@ export default function NewV2Dashboard() {
               {/* Buttons */}
               <div className="flex gap-3 mt-6">
                 <button
-                  onClick={() => setShowRewardsPanel(false)}
-                  className="flex-1 h-12 text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                  onClick={() => {
+                    // Find the next unlocked reward and convert it
+                    const nextUnlocked = [2, 8, 15, 25].find(threshold => currentBeans >= threshold)
+                    if (nextUnlocked) {
+                      convertToVoucher(nextUnlocked)
+                    } else {
+                      alert('You need at least 2 beans to convert to a voucher')
+                    }
+                  }}
+                  disabled={converting || currentBeans < 2}
+                  className="flex-1 h-12 text-sm font-bold rounded-[14px] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{
                     backgroundColor: 'transparent',
                     border: '2px solid rgba(240,237,229,0.25)',
@@ -905,7 +1037,7 @@ export default function NewV2Dashboard() {
                     <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
                     <line x1="1" y1="10" x2="23" y2="10" />
                   </svg>
-                  Convert to voucher
+                  {converting ? 'Converting...' : 'Convert to voucher'}
                 </button>
                 <button
                   onClick={() => { setShowRewardsPanel(false); router.push('/rewards') }}

@@ -41,6 +41,7 @@ export default function OrderPage() {
   const [orderItems, setOrderItems] = useState<OrderItem[]>([])
   const [userName, setUserName] = useState('')
   const [userPhone, setUserPhone] = useState('')
+  const [userOrgId, setUserOrgId] = useState<string | null>(null)
   const [menuItems, setMenuItems] = useState<MenuItem[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -50,11 +51,35 @@ export default function OrderPage() {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const POS_URL = process.env.NEXT_PUBLIC_POS_URL || 'http://localhost:3001'
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) return
+
+        // Get org_id from profile
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('org_id')
+          .eq('id', user.id)
+          .single()
+
+        if (!profile?.org_id) {
+          console.error('No org_id found for user')
+          setLoading(false)
+          return
+        }
+
+        setUserOrgId(profile.org_id)
+
+        const POS_URL = process.env.NEXT_PUBLIC_POS_URL || 'https://pos.penkey.co.uk'
         const [itemsRes, catsRes] = await Promise.all([
-          fetch(`${POS_URL}/api/public/menu`),
-          fetch(`${POS_URL}/api/public/categories`)
+          fetch(`${POS_URL}/api/public/menu?org_id=${profile.org_id}`),
+          fetch(`${POS_URL}/api/public/categories?org_id=${profile.org_id}`)
         ])
+
+        if (!itemsRes.ok || !catsRes.ok) {
+          throw new Error('Failed to fetch from POS API')
+        }
+
         const items = await itemsRes.json()
         const cats = await catsRes.json()
         setMenuItems(items)

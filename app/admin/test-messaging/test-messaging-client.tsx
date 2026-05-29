@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -26,7 +26,13 @@ interface TestResult {
 export function TestMessagingClient({ userEmail, userId }: TestMessagingClientProps) {
   const [results, setResults] = useState<TestResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const { toast } = useToast()
+
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Push notification test state
   const [pushTitle, setPushTitle] = useState('🎉 Test Push Notification')
@@ -479,7 +485,7 @@ export function TestMessagingClient({ userEmail, userId }: TestMessagingClientPr
                                 {result.type}
                               </Badge>
                               <span className="text-xs text-gray-500">
-                                {new Date().toLocaleTimeString()}
+                                {mounted ? new Date().toLocaleTimeString() : ''}
                               </span>
                             </div>
                             <p className="text-sm font-medium text-gray-900">

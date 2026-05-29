@@ -41,6 +41,12 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
 
   const [gpsConsent, setGpsConsent] = useState(initialUser.gps_consent)
   const [marketingConsent, setMarketingConsent] = useState(initialUser.marketing_consent)
+  const [mounted, setMounted] = useState(false)
+
+  // Prevent hydration mismatch by only setting mounted after client render
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Sync state if server re-renders with fresh data (after router.refresh)
   useEffect(() => {
@@ -362,7 +368,7 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
       <div className="px-5 pt-10 pb-5 flex items-start justify-between">
         <div className="flex-1">
           <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
-            {name ? `${getGreeting()}, ` : 'Your profile'}
+            {name ? `${mounted ? getGreeting() : 'Hello'}, ` : 'Your profile'}
             {name && <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px', animation: 'heartPulse 1.2s ease-in-out 3' }} />}
           </p>
           <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#24364B' }}>
