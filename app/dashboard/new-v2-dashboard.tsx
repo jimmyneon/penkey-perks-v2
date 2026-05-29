@@ -259,14 +259,14 @@ export default function NewV2Dashboard() {
               {/* Left: bean balance */}
               <div className="flex-1 p-5 pr-4 flex flex-col justify-between">
                 <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#F0EDE5' }}>
                     YOUR BEAN BALANCE
                   </p>
                   <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-[56px] font-extrabold leading-none" style={{ color: 'white' }}>{currentBeans}</span>
-                    <img src="/bean.png" alt="" className="w-10 h-10 object-contain" style={{ filter: 'brightness(0) invert(1)' }} />
+                    <span className="text-[56px] font-extrabold leading-none" style={{ color: '#F0EDE5' }}>{currentBeans}</span>
+                    <img src="/beanpile.png" alt="" className="w-12 h-12 object-contain" />
                   </div>
-                  <p className="text-[14px] font-semibold" style={{ color: 'rgba(255,255,255,0.5)' }}>beans</p>
+                  <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>beans</p>
                 </div>
                 <Link href="/rewards" className="inline-flex items-center gap-1 text-[11px] font-semibold" style={{ color: '#F28A2E' }}>
                   How it works
@@ -277,19 +277,19 @@ export default function NewV2Dashboard() {
               {/* Right: next reward */}
               <div
                 className="flex-1 p-5 pl-4 flex flex-col"
-                style={{ borderLeft: '1px solid rgba(255,255,255,0.12)' }}
+                style={{ borderLeft: '1px solid rgba(240,237,229,0.12)' }}
               >
-                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#F0EDE5' }}>
                   NEXT REWARD
                 </p>
                 <div className="flex items-center gap-3 mb-3">
-                  <p className="text-[15px] font-bold text-white leading-tight">
+                  <p className="text-[15px] font-bold leading-tight" style={{ color: '#F0EDE5' }}>
                     Free coffee
                   </p>
                   <img src="/coffeecup.png" alt="" className="w-24 h-24 object-contain" />
                 </div>
                 <div className="mb-2">
-                  <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
+                  <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(240,237,229,0.15)' }}>
                     <div
                       className="h-full rounded-full"
                       style={{
@@ -299,7 +299,7 @@ export default function NewV2Dashboard() {
                     />
                   </div>
                 </div>
-                <p className="text-[11px] font-medium" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                <p className="text-[11px] font-medium" style={{ color: '#F0EDE5' }}>
                   {currentBeans} / {nextMilestone} beans
                 </p>
               </div>
