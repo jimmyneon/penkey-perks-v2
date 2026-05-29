@@ -59,6 +59,30 @@ export function UnifiedRewardsClient({
   const [redeemedRewardData, setRedeemedRewardData] = useState<any>(null)
   const router = useRouter()
   const { toast } = useToast()
+  const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
+
+  // Fetch voucher templates from database
+  useEffect(() => {
+    const fetchVoucherTemplates = async () => {
+      try {
+        const supabase = createClient()
+        const { data, error } = await supabase
+          .from('voucher_templates')
+          .select('*')
+          .order('bean_threshold', { ascending: true })
+        
+        if (error) {
+          console.error('Error fetching voucher templates:', error)
+        } else {
+          setVoucherTemplates(data || [])
+        }
+      } catch (error) {
+        console.error('Error fetching voucher templates:', error)
+      }
+    }
+    
+    fetchVoucherTemplates()
+  }, [])
 
   const activeRewards = userRewards.filter(r => r.status === 'active')
   const redeemedRewards = userRewards.filter(r => r.status === 'redeemed')
@@ -184,13 +208,32 @@ export function UnifiedRewardsClient({
     ? Math.min((currentPoints / nextReward.points_required) * 100, 100)
     : 100
 
-  // Fixed reward tiers — shown even when no DB rewards configured
-  const fixedTiers = [
-    { beans: 2,  icon: <Sparkles className="w-4 h-4" />, label: 'Free syrup shot',   sub: 'Add any flavour to your drink',    color: '#E07A3A' },
-    { beans: 8,  icon: <Coffee className="w-4 h-4" />, label: 'Free coffee',        sub: 'Any hot or cold coffee, on us',    color: '#2C3E50' },
-    { beans: 15, icon: <ShoppingBag className="w-4 h-4" />, label: 'Free snack',         sub: 'Pastry, toastie — your choice',    color: '#3D5A73' },
-    { beans: 25, icon: <ShoppingBag className="w-4 h-4" />, label: 'Free meal',          sub: 'A full lunch, completely free',    color: '#1C2B3A' },
-  ]
+  // Map voucher templates to display format
+  const getIconForCategory = (category: string) => {
+    switch (category) {
+      case 'enhancer': return <Sparkles className="w-4 h-4" />
+      case 'coffee': return <Coffee className="w-4 h-4" />
+      case 'major': return <ShoppingBag className="w-4 h-4" />
+      default: return <Gift className="w-4 h-4" />
+    }
+  }
+
+  const getColorForCategory = (category: string) => {
+    switch (category) {
+      case 'enhancer': return '#E07A3A'
+      case 'coffee': return '#2C3E50'
+      case 'major': return '#1C2B3A'
+      default: return '#3D5A73'
+    }
+  }
+
+  const rewardTiers = voucherTemplates.map(template => ({
+    beans: template.bean_threshold,
+    icon: getIconForCategory(template.category),
+    label: template.name,
+    sub: template.description,
+    color: getColorForCategory(template.category),
+  }))
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
@@ -389,7 +432,7 @@ export function UnifiedRewardsClient({
         <section>
           <p className="text-[13px] font-bold mb-2.5 px-1" style={{ color: '#1C2B3A' }}>What you can earn</p>
           <div className="space-y-2.5">
-            {fixedTiers.map((tier) => {
+            {rewardTiers.map((tier) => {
               const unlocked = currentPoints >= tier.beans
               const isNext = nextReward?.points_required === tier.beans
               return (
