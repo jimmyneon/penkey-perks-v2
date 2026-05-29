@@ -19,7 +19,7 @@ interface OrderItem {
   totalPrice?: number
 }
 
-interface MenuItem {
+export interface MenuItem {
   id: string
   name: string
   description?: string
