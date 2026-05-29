@@ -85,6 +85,16 @@ BEGIN
     RETURN jsonb_build_object('success', false, 'error', 'Not enough beans', 'required', v_template.bean_threshold, 'available', v_balance.current_beans);
   END IF;
 
+  -- Check if user already has an active voucher of this type
+  IF EXISTS (
+    SELECT 1 FROM public.user_vouchers
+    WHERE user_id = p_user_id
+    AND voucher_template_id = p_voucher_template_id
+    AND status = 'active'
+  ) THEN
+    RETURN jsonb_build_object('success', false, 'error', 'You already have an active voucher of this type');
+  END IF;
+
   -- Deduct beans from balance
   UPDATE public.bean_balances
   SET current_beans = current_beans - v_template.bean_threshold,
