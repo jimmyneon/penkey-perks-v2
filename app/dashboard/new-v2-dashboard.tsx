@@ -288,6 +288,9 @@ export default function NewV2Dashboard() {
                   </p>
                   <img src="/coffeecup.png" alt="" className="w-24 h-24 object-contain" />
                 </div>
+                <p className="text-[13px] font-semibold mb-2" style={{ color: '#F0EDE5' }}>
+                  {stampBeansNeeded} beans away
+                </p>
                 <div className="mb-2">
                   <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(240,237,229,0.15)' }}>
                     <div
@@ -300,7 +303,7 @@ export default function NewV2Dashboard() {
                   </div>
                 </div>
                 <p className="text-[11px] font-medium" style={{ color: '#F0EDE5' }}>
-                  {currentBeans} / {nextMilestone} beans
+                  0 - {nextMilestone} beans
                 </p>
               </div>
             </div>
