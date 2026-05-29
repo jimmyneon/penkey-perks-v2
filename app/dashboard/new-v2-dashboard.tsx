@@ -260,8 +260,8 @@ export default function NewV2Dashboard() {
                 className="flex-1 p-5 pr-4 flex flex-col justify-between relative cursor-pointer active:scale-[0.98] transition-all overflow-hidden"
                 onClick={() => setShowBeansPanel(true)}
               >
-                {/* Bean pile background - MUCH LARGER */}
-                <img src="/beanpile.png" alt="" className="absolute inset-0 w-full h-full object-cover opacity-20" style={{ transform: 'scale(1.5)' }} />
+                {/* Bean pile background */}
+                <img src="/beanpile.png" alt="" className="absolute inset-0 w-full h-full object-cover opacity-25" style={{ transform: 'scale(1.2)' }} />
                 
                 <div className="relative z-10">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#F0EDE5' }}>
@@ -272,7 +272,7 @@ export default function NewV2Dashboard() {
                       <span className="text-[56px] font-extrabold leading-none" style={{ color: '#F0EDE5' }}>{currentBeans}</span>
                     </div>
                     <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>beans</p>
-                    <img src="/stroke.png" alt="" className="w-20 h-2 object-contain mt-1 opacity-60" />
+                    <img src="/stroke.png" alt="" className="w-24 h-2 object-contain mt-1 opacity-60" style={{ marginLeft: '-4px' }} />
                   </div>
                 </div>
                 <Link href="/rewards" className="inline-flex items-center gap-1 text-[11px] font-semibold relative z-10" style={{ color: '#F28A2E' }} onClick={(e) => e.stopPropagation()}>
@@ -290,11 +290,13 @@ export default function NewV2Dashboard() {
                 <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#F0EDE5' }}>
                   NEXT REWARD
                 </p>
-                <div className="flex items-center gap-3 mb-3">
-                  <p className="text-[24px] font-bold leading-tight" style={{ color: '#F0EDE5' }}>
+                <div className="flex flex-col gap-3 mb-3">
+                  <p className="text-[20px] font-bold leading-tight" style={{ color: '#F0EDE5' }}>
                     Free coffee
                   </p>
-                  <img src="/coffeecup.png" alt="" className="w-24 h-24 object-contain" />
+                  <div className="flex items-center justify-center">
+                    <img src="/coffeecup.png" alt="" className="w-32 h-32 object-contain" />
+                  </div>
                 </div>
                 <p className="text-[11px] font-medium mb-2" style={{ color: '#F0EDE5' }}>
                   {stampBeansNeeded} beans away
