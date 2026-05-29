@@ -245,7 +245,7 @@ export default function NewV2Dashboard() {
             </div>
             {/* Right: wordmark */}
             <div className="flex flex-col items-end ml-6">
-              <img src="/logo.png" alt="PENKEY Perks" className="h-36 w-auto object-contain" />
+              <img src="/logo.png" alt="PENKEY Perks" className="h-36 w-auto object-contain" style={{ marginTop: '-8px' }} />
             </div>
           </div>
 
@@ -263,7 +263,7 @@ export default function NewV2Dashboard() {
                     YOUR BEAN BALANCE
                   </p>
                   <div className="relative inline-block">
-                    <img src="/beanpile.png" alt="" className="w-36 h-36 object-contain absolute -top-2 -left-2 -z-10 opacity-40" />
+                    <img src="/beanpile.png" alt="" className="w-36 h-36 object-contain absolute -top-2 -left-2 -z-10 opacity-60" />
                     <div className="flex items-baseline gap-2 mb-1 relative z-10">
                       <span className="text-[56px] font-extrabold leading-none" style={{ color: '#F0EDE5' }}>{currentBeans}</span>
                     </div>
@@ -285,12 +285,12 @@ export default function NewV2Dashboard() {
                   NEXT REWARD
                 </p>
                 <div className="flex items-center gap-3 mb-3">
-                  <p className="text-[15px] font-bold leading-tight" style={{ color: '#F0EDE5' }}>
+                  <p className="text-[56px] font-bold leading-none" style={{ color: '#F0EDE5' }}>
                     Free coffee
                   </p>
-                  <img src="/coffeecup.png" alt="" className="w-24 h-24 object-contain" />
+                  <img src="/coffeecup.png" alt="" className="w-48 h-48 object-contain" />
                 </div>
-                <p className="text-[13px] font-semibold mb-2" style={{ color: '#F0EDE5' }}>
+                <p className="text-[11px] font-medium mb-2" style={{ color: '#F0EDE5' }}>
                   {stampBeansNeeded} beans away
                 </p>
                 <div className="mb-2">
@@ -298,14 +298,14 @@ export default function NewV2Dashboard() {
                     <div
                       className="h-full rounded-full"
                       style={{
-                        width: `${(currentBeans / nextMilestone) * 100}%`,
+                        width: `${(currentBeans / 25) * 100}%`,
                         backgroundColor: '#F28A2E'
                       }}
                     />
                   </div>
                 </div>
                 <p className="text-[11px] font-medium" style={{ color: '#F0EDE5' }}>
-                  0 - {nextMilestone} beans
+                  0 - 25 beans
                 </p>
               </div>
             </div>
