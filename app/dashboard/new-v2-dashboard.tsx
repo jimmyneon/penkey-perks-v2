@@ -245,7 +245,7 @@ export default function NewV2Dashboard() {
             </div>
             {/* Right: wordmark */}
             <div className="flex flex-col items-end ml-6">
-              <img src="/logo.png" alt="PENKEY Perks" className="h-28 w-auto object-contain" />
+              <img src="/logo.png" alt="PENKEY Perks" className="h-36 w-auto object-contain" />
             </div>
           </div>
 
