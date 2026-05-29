@@ -80,7 +80,7 @@ export default function OrderPage() {
   const [showNotes, setShowNotes] = useState(false)
 
   // Customer-visible categories (hardcoded filter)
-  const CUSTOMER_VISIBLE_CATEGORIES = ['Coffee', 'Food', 'Snacks', 'Drinks', 'Bakery']
+  const CUSTOMER_VISIBLE_CATEGORIES = ['Hot Drinks - Coffee', 'Retail food', 'Snacks', 'Drinks fridge', 'Bakes and Sweets', 'Hot Baps', 'Sandwiches', 'Hot Drinks - Tea', 'Penkey Meals', 'Toasties', 'Penkey Affogatos', 'Penkey Salads', 'Iced Drinks - Coffee', 'Fresh Lemonades', 'Penkey Milkshakes', 'Gifts', 'Penkey Indulgence', 'Specials']
 
   // Prevent hydration mismatch
   useEffect(() => {

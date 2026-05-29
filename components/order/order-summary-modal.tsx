@@ -33,13 +33,13 @@ export function OrderSummaryModal({
   const total = orderItems.reduce((sum, item) => sum + (parseFloat(item.item.match(/£(\d+\.?\d*)/)?.[1] || '0') * item.quantity), 0)
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-end justify-center">
       <div 
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
       />
       <div 
-        className="relative bg-white rounded-t-[24px] sm:rounded-[24px] w-full max-w-[400px] max-h-[85vh] overflow-y-auto"
+        className="relative bg-white rounded-t-[24px] w-full max-h-[85vh] overflow-y-auto animate-sheet-up"
         style={{ backgroundColor: '#F9F7F2' }}
       >
         {/* Header */}
