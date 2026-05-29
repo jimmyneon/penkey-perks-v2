@@ -14,7 +14,11 @@ const rightItems = [
   { href: '/profile', icon: User, label: 'Profile' },
 ]
 
-export function BottomNav() {
+interface BottomNavProps {
+  onShowQRCode?: () => void
+}
+
+export function BottomNav({ onShowQRCode }: BottomNavProps) {
   const pathname = usePathname()
 
   return (
@@ -63,9 +67,9 @@ export function BottomNav() {
               )
             })}
 
-            {/* Centre Scan button — smaller, softer, more subtle */}
-            <Link
-              href="/scan"
+            {/* Centre QR Code button */}
+            <button
+              onClick={onShowQRCode}
               className="flex items-center justify-center flex-shrink-0 -mt-5 mx-2"
             >
               <div
@@ -78,7 +82,7 @@ export function BottomNav() {
               >
                 <QrCode className="w-[24px] h-[24px] text-white" strokeWidth={1.8} />
               </div>
-            </Link>
+            </button>
 
             {/* Right two items */}
             {rightItems.map((item) => {
