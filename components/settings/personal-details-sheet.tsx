@@ -10,6 +10,7 @@ import { DatePickerSheet } from '@/components/date-picker-sheet'
 interface PersonalDetailsSheetProps {
   isOpen: boolean
   onClose: () => void
+  onBack?: () => void
   name: string
   phone: string
   dateOfBirth: string
@@ -23,6 +24,7 @@ interface PersonalDetailsSheetProps {
 export function PersonalDetailsSheet({
   isOpen,
   onClose,
+  onBack,
   name,
   phone,
   dateOfBirth,
@@ -45,7 +47,7 @@ export function PersonalDetailsSheet({
       <div className="px-5 pt-4 pb-6 space-y-5">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8E2D8' }}>
+          <button onClick={onBack || onClose} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8E2D8' }}>
             <ChevronLeft className="w-4 h-4" style={{ color: '#24364B' }} />
           </button>
           <h2 className="text-[20px] font-bold" style={{ color: '#24364B' }}>Personal Details</h2>

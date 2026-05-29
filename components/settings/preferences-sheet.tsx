@@ -6,6 +6,7 @@ import { PushNotificationToggle } from '@/components/push-notification-toggle'
 interface PreferencesSheetProps {
   isOpen: boolean
   onClose: () => void
+  onBack?: () => void
   gpsConsent: boolean
   marketingConsent: boolean
   onGpsConsentChange: (value: boolean) => void
@@ -26,6 +27,7 @@ const Toggle = ({ on, onToggle }: { on: boolean; onToggle: () => void }) => (
 export function PreferencesSheet({
   isOpen,
   onClose,
+  onBack,
   gpsConsent,
   marketingConsent,
   onGpsConsentChange,
@@ -35,7 +37,7 @@ export function PreferencesSheet({
     <div className="px-5 pt-4 pb-6 space-y-5">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8E2D8' }}>
+        <button onClick={onBack || onClose} className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E8E2D8' }}>
           <ChevronLeft className="w-4 h-4" style={{ color: '#24364B' }} />
         </button>
         <h2 className="text-[20px] font-bold" style={{ color: '#24364B' }}>Preferences</h2>

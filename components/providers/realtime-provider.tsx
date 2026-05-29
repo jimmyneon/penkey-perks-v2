@@ -171,6 +171,43 @@ export function RealtimeProvider({ userId, children }: RealtimeProviderProps) {
       )
       .subscribe()
 
+    // Subscribe to voucher redemptions (user_vouchers table)
+    const vouchersChannel = supabase
+      .channel(`user-vouchers-${userId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'user_vouchers',
+          filter: `user_id=eq.${userId}`,
+        },
+        (payload) => {
+          console.log('[Realtime] Voucher updated:', payload)
+          
+          // Check if voucher was redeemed
+          if (payload.new.status === 'redeemed' && payload.old.status === 'active') {
+            console.log('[Realtime] Voucher redeemed! Triggering animation...')
+            
+            // Dispatch custom event for voucher redemption
+            const event = new CustomEvent('voucher-redeemed', {
+              detail: {
+                voucherId: payload.new.id,
+                voucherName: payload.new.name || 'Voucher',
+              }
+            })
+            window.dispatchEvent(event)
+          }
+          
+          // Invalidate vouchers cache
+          queryClient.invalidateQueries({ queryKey: ['user-vouchers', userId] })
+          
+          // Refresh the page data
+          router.refresh()
+        }
+      )
+      .subscribe()
+
     // Cleanup subscriptions on unmount
     return () => {
       console.log('[Realtime] Cleaning up subscriptions')
@@ -180,6 +217,7 @@ export function RealtimeProvider({ userId, children }: RealtimeProviderProps) {
       supabase.removeChannel(stampsChannel)
       supabase.removeChannel(gamePlaysChannel)
       supabase.removeChannel(promoOffersChannel)
+      supabase.removeChannel(vouchersChannel)
     }
   }, [userId, router, toast, queryClient, supabase])
 

@@ -38,7 +38,7 @@ export function FavoriteOrdersSheet({ isOpen, onClose }: FavoriteOrdersSheetProp
           .select('*')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false })
-          .limit(20)
+          .limit(5)
 
         setPurchases(data || [])
       } catch (error) {

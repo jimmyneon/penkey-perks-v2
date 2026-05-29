@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface DatePickerSheetProps {
@@ -14,6 +14,10 @@ export function DatePickerSheet({ isOpen, onClose, value, onChange }: DatePicker
   const [day, setDay] = useState<number>(1)
   const [month, setMonth] = useState<number>(1)
   const [year, setYear] = useState<number>(2000)
+  
+  const dayRef = useRef<HTMLDivElement>(null)
+  const monthRef = useRef<HTMLDivElement>(null)
+  const yearRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (value) {
@@ -23,6 +27,28 @@ export function DatePickerSheet({ isOpen, onClose, value, onChange }: DatePicker
       setYear(date.getFullYear())
     }
   }, [value])
+
+  useEffect(() => {
+    if (isOpen) {
+      // Scroll to selected values after a short delay to allow render
+      setTimeout(() => {
+        const scrollToSelected = (ref: React.RefObject<HTMLDivElement>, index: number) => {
+          if (ref.current) {
+            const buttons = ref.current.querySelectorAll('button')
+            if (buttons[index]) {
+              buttons[index].scrollIntoView({ behavior: 'smooth', block: 'center' })
+            }
+          }
+        }
+        
+        scrollToSelected(dayRef, day - 1)
+        scrollToSelected(monthRef, month - 1)
+        
+        const yearIndex = new Date().getFullYear() - year
+        scrollToSelected(yearRef, yearIndex)
+      }, 100)
+    }
+  }, [isOpen, day, month, year])
 
   const handleSave = () => {
     const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
@@ -58,7 +84,7 @@ export function DatePickerSheet({ isOpen, onClose, value, onChange }: DatePicker
           <div className="px-3 py-2 border-b text-center" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
             <span className="text-[11px] font-semibold uppercase" style={{ color: '#AE9888' }}>Day</span>
           </div>
-          <div className="h-48 overflow-y-auto">
+          <div ref={dayRef} className="h-48 overflow-y-auto">
             <div className="py-2" />
             {days.map((d) => (
               <button
@@ -80,7 +106,7 @@ export function DatePickerSheet({ isOpen, onClose, value, onChange }: DatePicker
           <div className="px-3 py-2 border-b text-center" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
             <span className="text-[11px] font-semibold uppercase" style={{ color: '#AE9888' }}>Month</span>
           </div>
-          <div className="h-48 overflow-y-auto">
+          <div ref={monthRef} className="h-48 overflow-y-auto">
             <div className="py-2" />
             {months.map((m, index) => (
               <button
@@ -102,7 +128,7 @@ export function DatePickerSheet({ isOpen, onClose, value, onChange }: DatePicker
           <div className="px-3 py-2 border-b text-center" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
             <span className="text-[11px] font-semibold uppercase" style={{ color: '#AE9888' }}>Year</span>
           </div>
-          <div className="h-48 overflow-y-auto">
+          <div ref={yearRef} className="h-48 overflow-y-auto">
             <div className="py-2" />
             {years.map((y) => (
               <button

@@ -695,6 +695,10 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
         <PersonalDetailsSheet
           isOpen={showPersonalDetailsSheet}
           onClose={() => setShowPersonalDetailsSheet(false)}
+          onBack={() => {
+            setShowPersonalDetailsSheet(false)
+            setShowSettingsDialog(true)
+          }}
           name={name}
           phone={phone}
           dateOfBirth={dateOfBirth}
@@ -711,6 +715,10 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
         <PreferencesSheet
           isOpen={showPreferencesSheet}
           onClose={() => setShowPreferencesSheet(false)}
+          onBack={() => {
+            setShowPreferencesSheet(false)
+            setShowSettingsDialog(true)
+          }}
           gpsConsent={gpsConsent}
           marketingConsent={marketingConsent}
           onGpsConsentChange={setGpsConsent}
