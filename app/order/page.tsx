@@ -53,40 +53,58 @@ export default function OrderPage() {
       try {
         const supabase = createClient()
         const { data: { user } } = await supabase.auth.getUser()
-        if (!user) return
+        console.log('[Order Page] User:', user?.id)
+        if (!user) {
+          console.error('[Order Page] No user found')
+          setLoading(false)
+          return
+        }
 
         // Get org_id from profile
-        const { data: profile } = await supabase
+        const { data: profile, error: profileError } = await supabase
           .from('profiles')
           .select('org_id')
           .eq('id', user.id)
           .single()
 
+        console.log('[Order Page] Profile:', profile, 'Error:', profileError)
+
         if (!profile?.org_id) {
-          console.error('No org_id found for user')
+          console.error('[Order Page] No org_id found for user')
           setLoading(false)
           return
         }
 
         setUserOrgId(profile.org_id)
+        console.log('[Order Page] Org ID:', profile.org_id)
 
         const POS_URL = process.env.NEXT_PUBLIC_POS_URL || 'https://penkey-pos.vercel.app'
+        console.log('[Order Page] POS URL:', POS_URL)
+        console.log('[Order Page] Fetching from:', `${POS_URL}/api/public/menu?org_id=${profile.org_id}`)
+
         const [itemsRes, catsRes] = await Promise.all([
           fetch(`${POS_URL}/api/public/menu?org_id=${profile.org_id}`),
           fetch(`${POS_URL}/api/public/categories?org_id=${profile.org_id}`)
         ])
 
+        console.log('[Order Page] Items response status:', itemsRes.status)
+        console.log('[Order Page] Categories response status:', catsRes.status)
+
         if (!itemsRes.ok || !catsRes.ok) {
+          const errorText = await (itemsRes.ok ? catsRes.text() : itemsRes.text())
+          console.error('[Order Page] API error response:', errorText)
           throw new Error('Failed to fetch from POS API')
         }
 
         const items = await itemsRes.json()
         const cats = await catsRes.json()
+        console.log('[Order Page] Items:', items)
+        console.log('[Order Page] Categories:', cats)
         setMenuItems(items)
         setCategories(cats)
         if (cats.length > 0) setSelectedCategory(cats[0].id)
       } catch (error) {
-        console.error('Failed to fetch menu:', error)
+        console.error('[Order Page] Failed to fetch menu:', error)
       } finally {
         setLoading(false)
       }
