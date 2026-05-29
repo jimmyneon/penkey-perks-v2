@@ -260,28 +260,19 @@ export default function NewV2Dashboard() {
             onClick={() => setShowBeansPanel(true)}
           >
             <div className="flex">
-              {/* Left: bean counter */}
-              <div className="flex-1 p-5 pr-3">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                  YOUR BEANS
-                </p>
-                <div className="flex items-baseline gap-2 mb-3">
-                  <span className="text-[48px] font-extrabold leading-none" style={{ color: 'white' }}>{currentBeans}</span>
-                  <span className="text-[14px] font-semibold" style={{ color: 'rgba(255,255,255,0.5)' }}>collected</span>
+              {/* Left: bean balance */}
+              <div className="flex-1 p-5 pr-4 flex flex-col justify-between">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                    YOUR BEAN BALANCE
+                  </p>
+                  <div className="flex items-baseline gap-2 mb-1">
+                    <span className="text-[56px] font-extrabold leading-none" style={{ color: 'white' }}>{currentBeans}</span>
+                    <img src="/bean.png" alt="" className="w-10 h-10 object-contain" style={{ filter: 'brightness(0) invert(1)' }} />
+                  </div>
+                  <p className="text-[14px] font-semibold" style={{ color: 'rgba(255,255,255,0.5)' }}>beans</p>
                 </div>
-                <div className="mb-3">
-                  <img src="/beanpile.png" alt="" className="w-20 h-20 object-contain" />
-                </div>
-                <p className="text-[16px] font-bold text-white leading-tight mb-1">
-                  {stampBeansNeeded} beans to your next treat
-                </p>
-                <div className="mt-1.5">
-                  <BrushUnderline className="text-[#F28A2E] w-16" />
-                </div>
-                <p className="text-[11px] mt-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                  {nextMilestone} beans = a reward
-                </p>
-                <Link href="/rewards" className="inline-flex items-center gap-1 mt-3 text-[11px] font-semibold" style={{ color: '#F28A2E' }}>
+                <Link href="/rewards" className="inline-flex items-center gap-1 text-[11px] font-semibold" style={{ color: '#F28A2E' }}>
                   How it works
                   <ChevronRight className="w-3 h-3" />
                 </Link>
@@ -289,20 +280,39 @@ export default function NewV2Dashboard() {
 
               {/* Right: next reward */}
               <div
-                className="w-[110px] flex-shrink-0 flex flex-col items-center justify-center p-4 gap-2"
+                className="w-[140px] flex-shrink-0 flex flex-col p-5 pl-4"
                 style={{ borderLeft: '1px solid rgba(255,255,255,0.12)' }}
               >
-                <div
-                  className="w-16 h-16 rounded-full flex items-center justify-center overflow-hidden"
-                  style={{ backgroundColor: '#F8F5EF', border: '1.5px solid #E8E2D8' }}
-                >
-                  <GiftIcon className="w-16 h-16 object-contain" style={{ transform: 'scale(1.5)' }} />
-                </div>
-                <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-center" style={{ color: '#F8F5EF' }}>
+                <p className="text-[9px] font-semibold uppercase tracking-[0.1em] mb-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
                   NEXT REWARD
                 </p>
-                <p className="text-[11px] font-medium text-center leading-snug" style={{ color: '#F8F5EF' }}>
-                  {nextMilestone} beans<br />= reward
+                <p className="text-[15px] font-bold text-white leading-tight mb-3">
+                  Free coffee
+                </p>
+                <div className="flex items-center gap-2 mb-3">
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0"
+                    style={{ backgroundColor: '#F8F5EF', border: '1.5px solid #E8E2D8' }}
+                  >
+                    <GiftIcon className="w-12 h-12 object-contain" style={{ transform: 'scale(1.5)' }} />
+                  </div>
+                  <p className="text-[13px] font-semibold text-white">
+                    {stampBeansNeeded} beans away
+                  </p>
+                </div>
+                <div className="mb-2">
+                  <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}>
+                    <div
+                      className="h-full rounded-full"
+                      style={{
+                        width: `${(currentBeans / nextMilestone) * 100}%`,
+                        backgroundColor: '#F28A2E'
+                      }}
+                    />
+                  </div>
+                </div>
+                <p className="text-[11px] font-medium" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                  {currentBeans} / {nextMilestone} beans
                 </p>
               </div>
             </div>
