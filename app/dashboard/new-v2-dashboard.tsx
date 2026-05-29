@@ -634,9 +634,9 @@ export default function NewV2Dashboard() {
         </DialogContent>
       </Dialog>
 
-      {/* Rewards Panel Dialog - Vertical Journey */}
+      {/* Rewards Panel Dialog - Horizontal Bean Journey */}
       <Dialog open={showRewardsPanel} onOpenChange={setShowRewardsPanel}>
-        <DialogContent className="sm:max-w-md rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 overflow-hidden border-0">
+        <DialogContent className="sm:max-w-lg rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 overflow-hidden border-0">
           <div
             className="rounded-[24px] overflow-hidden"
             style={{ background: 'linear-gradient(135deg, #2B3E52 0%, #24364A 100%)' }}
@@ -662,133 +662,113 @@ export default function NewV2Dashboard() {
                 </button>
               </div>
 
-              {/* Vertical journey */}
-              <div className="relative pl-12 py-4">
-                {/* Curved path SVG */}
-                <svg className="absolute left-5 top-0 bottom-0 w-2 h-full" viewBox="0 0 10 300" preserveAspectRatio="none">
+              {/* Horizontal bean journey */}
+              <div className="relative py-10 px-2">
+                {/* Wavy path SVG */}
+                <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 100" preserveAspectRatio="none">
                   <path 
-                    d="M 5 0 Q 15 75, 5 150 T 5 300" 
+                    d="M 20 50 Q 100 20, 200 50 T 380 50" 
                     fill="none" 
-                    stroke="rgba(240,237,229,0.2)" 
-                    strokeWidth="2"
+                    stroke="rgba(240,237,229,0.15)" 
+                    strokeWidth="3"
                     strokeLinecap="round"
                   />
                 </svg>
 
-                {/* Milestones */}
-                <div className="space-y-6">
+                {/* Bean markers along the path */}
+                <div className="relative h-full">
                   {[
-                    { beans: 2, name: 'Free Syrup Shot', icon: 'bottle' },
-                    { beans: 8, name: 'Free Coffee', icon: 'coffee' },
-                    { beans: 15, name: 'Free Snack', icon: 'cookie' },
-                    { beans: 25, name: 'Free Meal', icon: 'sandwich' },
-                  ].map((reward, index) => {
+                    { beans: 2, name: 'Free Syrup Shot', percent: 12 },
+                    { beans: 8, name: 'Free Coffee', percent: 37 },
+                    { beans: 15, name: 'Free Snack', percent: 62 },
+                    { beans: 25, name: 'Free Meal', percent: 87 },
+                  ].map((reward) => {
                     const unlocked = currentBeans >= reward.beans
-                    const isNext = !unlocked && currentBeans < reward.beans && 
-                      (index === 0 || currentBeans >= [2, 8, 15][index - 1])
+                    const isNext = !unlocked && currentBeans < reward.beans
                     
                     return (
-                      <div key={reward.beans} className="relative">
-                        {/* Milestone marker */}
-                        <div 
-                          className="absolute -left-12 top-0 w-10 h-10 rounded-full flex items-center justify-center"
-                          style={{ 
-                            backgroundColor: unlocked ? '#F28A2E' : isNext ? '#F28A2E' : 'rgba(240,237,229,0.1)',
-                            border: isNext ? '2px solid #F28A2E' : unlocked ? '2px solid #F28A2E' : '1px solid rgba(240,237,229,0.2)',
-                            boxShadow: isNext ? '0 0 0 4px rgba(242,138,46,0.2)' : 'none'
-                          }}
-                        >
-                          {reward.icon === 'bottle' && (
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={unlocked || isNext ? 'white' : 'rgba(240,237,229,0.4)'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M9 2h6v2H9z" />
-                              <path d="M12 4v2" />
-                              <path d="M8 6h8v14a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2V6z" />
-                            </svg>
-                          )}
-                          {reward.icon === 'coffee' && (
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={unlocked || isNext ? 'white' : 'rgba(240,237,229,0.4)'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
-                              <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
-                              <line x1="6" y1="1" x2="6" y2="4" />
-                              <line x1="10" y1="1" x2="10" y2="4" />
-                              <line x1="14" y1="1" x2="14" y2="4" />
-                            </svg>
-                          )}
-                          {reward.icon === 'cookie' && (
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={unlocked || isNext ? 'white' : 'rgba(240,237,229,0.4)'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <circle cx="12" cy="12" r="10" />
-                              <circle cx="8" cy="10" r="1.5" />
-                              <circle cx="16" cy="10" r="1.5" />
-                              <circle cx="9" cy="15" r="1.5" />
-                              <circle cx="15" cy="15" r="1.5" />
-                            </svg>
-                          )}
-                          {reward.icon === 'sandwich' && (
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={unlocked || isNext ? 'white' : 'rgba(240,237,229,0.4)'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M3 11h18" />
-                              <path d="M3 11v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                              <path d="M3 11l2-6h14l2 6" />
-                            </svg>
+                      <div 
+                        key={reward.beans}
+                        className="absolute flex flex-col items-center"
+                        style={{ left: `${reward.percent}%`, top: '50%', transform: 'translate(-50%, -50%)' }}
+                      >
+                        {/* Bean icon */}
+                        <div className="relative mb-3">
+                          <img 
+                            src="/bean.png" 
+                            alt="" 
+                            className="w-12 h-12 object-contain"
+                            style={{ 
+                              opacity: unlocked ? 1 : isNext ? 0.8 : 0.3,
+                              filter: unlocked ? 'none' : 'grayscale(100%)'
+                            }} 
+                          />
+                          {unlocked && (
+                            <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full border-2" style={{ backgroundColor: '#F28A2E', borderColor: '#2B3E52' }} />
                           )}
                         </div>
-
-                        {/* Reward card */}
-                        <div
-                          className="p-4 rounded-[16px]"
-                          style={{ 
-                            backgroundColor: unlocked ? 'rgba(242,138,46,0.1)' : isNext ? 'rgba(242,138,46,0.15)' : 'rgba(240,237,229,0.05)',
-                            border: isNext ? '2px solid #F28A2E' : '1px solid rgba(240,237,229,0.1)'
-                          }}
+                        
+                        {/* Bean count */}
+                        <p 
+                          className="text-[12px] font-bold mb-1"
+                          style={{ color: unlocked ? '#F28A2E' : isNext ? '#F28A2E' : 'rgba(240,237,229,0.4)' }}
                         >
-                          <div className="flex items-start justify-between mb-2">
-                            <div>
-                              <p className="text-[14px] font-bold" style={{ color: unlocked ? '#F0EDE5' : isNext ? '#F0EDE5' : 'rgba(240,237,229,0.4)' }}>
-                                {reward.name}
-                              </p>
-                              <p className="text-[11px]" style={{ color: 'rgba(240,237,229,0.5)' }}>{reward.beans} beans</p>
-                            </div>
-                            {unlocked && (
-                              <span className="text-[9px] font-bold px-2 py-1 rounded-full" style={{ backgroundColor: 'rgba(242,138,46,0.2)', color: '#F28A2E' }}>
-                                Unlocked
-                              </span>
-                            )}
-                            {isNext && (
-                              <span className="text-[9px] font-bold px-2 py-1 rounded-full" style={{ backgroundColor: '#F28A2E', color: 'white' }}>
-                                Next Reward
-                              </span>
-                            )}
-                          </div>
+                          {reward.beans}
+                        </p>
+                        
+                        {/* Reward name */}
+                        <p 
+                          className="text-[10px] font-semibold text-center whitespace-nowrap"
+                          style={{ color: unlocked ? '#F0EDE5' : isNext ? '#F0EDE5' : 'rgba(240,237,229,0.4)' }}
+                        >
+                          {reward.name}
+                        </p>
 
-                          {/* Progress bar for next reward */}
-                          {isNext && (
-                            <div className="mt-3">
-                              <div className="flex items-center justify-between mb-1">
-                                <p className="text-[10px]" style={{ color: 'rgba(240,237,229,0.6)' }}>
-                                  {currentBeans} / {reward.beans} beans
-                                </p>
-                              </div>
-                              <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(240,237,229,0.2)' }}>
-                                <div
-                                  className="h-full rounded-full transition-all duration-300"
-                                  style={{
-                                    width: `${(currentBeans / reward.beans) * 100}%`,
-                                    backgroundColor: '#F28A2E'
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Future reward info */}
-                          {!unlocked && !isNext && (
-                            <p className="text-[10px] mt-2" style={{ color: 'rgba(240,237,229,0.4)' }}>
-                              {reward.beans - currentBeans} beans to go
-                            </p>
-                          )}
-                        </div>
+                        {/* Status badge */}
+                        {unlocked && (
+                          <span className="text-[8px] font-bold px-2 py-0.5 rounded-full mt-1" style={{ backgroundColor: 'rgba(242,138,46,0.2)', color: '#F28A2E' }}>
+                            Unlocked
+                          </span>
+                        )}
+                        {isNext && (
+                          <span className="text-[8px] font-bold px-2 py-0.5 rounded-full mt-1" style={{ backgroundColor: '#F28A2E', color: 'white' }}>
+                            Next
+                          </span>
+                        )}
                       </div>
                     )
                   })}
+                </div>
+              </div>
+
+              {/* Current progress info */}
+              <div className="mt-4 p-4 rounded-[16px]" style={{ backgroundColor: 'rgba(240,237,229,0.05)' }}>
+                <div className="flex items-center justify-between mb-2">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#F0EDE5' }}>
+                      NEXT REWARD
+                    </p>
+                    <p className="text-[14px] font-bold mt-1" style={{ color: '#F28A2E' }}>
+                      {stampBeansNeeded} beans to go
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#F0EDE5' }}>
+                      PROGRESS
+                    </p>
+                    <p className="text-[14px] font-bold mt-1" style={{ color: '#F28A2E' }}>
+                      {currentBeans} / {nextMilestone}
+                    </p>
+                  </div>
+                </div>
+                <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(240,237,229,0.2)' }}>
+                  <div
+                    className="h-full rounded-full transition-all duration-300"
+                    style={{
+                      width: `${Math.min((currentBeans / nextMilestone) * 100, 100)}%`,
+                      backgroundColor: '#F28A2E'
+                    }}
+                  />
                 </div>
               </div>
 
