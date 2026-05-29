@@ -171,7 +171,7 @@ export function BottomNav({ onShowQRCode }: BottomNavProps) {
 
       {/* QR Code Bottom Sheet */}
       <BottomSheet open={showQR} onOpenChange={setShowQR} showCloseButton={false}>
-        <BottomSheetContent className="flex flex-col items-center">
+        <div className="flex flex-col items-center p-5">
           <div className="text-center mb-6">
             <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
               Your QR Code
@@ -204,7 +204,7 @@ export function BottomNav({ onShowQRCode }: BottomNavProps) {
               Swipe down to close
             </p>
           </div>
-        </BottomSheetContent>
+        </div>
       </BottomSheet>
     </nav>
   )

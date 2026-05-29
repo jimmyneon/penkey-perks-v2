@@ -62,7 +62,7 @@ export function BottomSheet({
             onClick={() => onOpenChange(false)}
           />
           
-          {/* Sheet - entire sheet draggable with proper threshold */}
+          {/* Sheet - entire sheet draggable */}
           <motion.div
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
@@ -75,7 +75,7 @@ export function BottomSheet({
             onDragEnd={handleDragEnd}
             style={{ y }}
             className={cn(
-              "fixed bottom-0 left-0 right-0 z-[10000] bg-cream-card rounded-t-3xl shadow-premium-xl max-h-[85vh] overflow-hidden",
+              "fixed bottom-0 left-0 right-0 z-[10000] bg-cream-card rounded-t-3xl shadow-premium-xl max-h-[85vh]",
               className
             )}
           >
@@ -104,10 +104,8 @@ export function BottomSheet({
               </div>
             )}
             
-            {/* Content */}
-            <div className="overflow-y-auto max-h-[calc(85vh-120px)]">
-              {children}
-            </div>
+            {/* Content - no scroll container, let content handle its own scrolling */}
+            {children}
           </motion.div>
         </>
       )}
