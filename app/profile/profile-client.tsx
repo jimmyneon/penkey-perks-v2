@@ -7,6 +7,9 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Sheet } from '@/components/ui/sheet'
+import { FavoriteOrdersSheet } from '@/components/favorite-orders-sheet'
+import { PersonalDetailsSheet } from '@/components/settings/personal-details-sheet'
+import { PreferencesSheet } from '@/components/settings/preferences-sheet'
 import { ArrowLeft, User, Mail, Phone, Calendar, Lock, Trash2, PauseCircle, MapPin, Gift, AlertTriangle, QrCode, ChevronRight, Bell, Shield, X } from 'lucide-react'
 import Link from 'next/link'
 import { useToast } from '@/hooks/use-toast'
@@ -72,7 +75,10 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
   const [showPauseDialog, setShowPauseDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [showSettingsDialog, setShowSettingsDialog] = useState(false)
+  const [showPersonalDetailsSheet, setShowPersonalDetailsSheet] = useState(false)
+  const [showPreferencesSheet, setShowPreferencesSheet] = useState(false)
   const [showAchievementsDialog, setShowAchievementsDialog] = useState(false)
+  const [showFavoriteOrdersSheet, setShowFavoriteOrdersSheet] = useState(false)
   const [confirmText, setConfirmText] = useState('')
 
   // QR Code
@@ -356,7 +362,7 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
       ),
-      label: 'Favourite orders', sub: purchases && purchases.length > 0 ? `${purchases.length} recent order${purchases.length > 1 ? 's' : ''}` : 'Your orders will appear here', onPress: () => router.push('/favorite-orders'),
+      label: 'Favourite orders', sub: purchases && purchases.length > 0 ? `${purchases.length} recent order${purchases.length > 1 ? 's' : ''}` : 'Your orders will appear here', onPress: () => setShowFavoriteOrdersSheet(true),
     },
     {
       icon: (
@@ -624,8 +630,8 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
       </Sheet>
 
       {/* Settings Sheet */}
-      <Sheet isOpen={showSettingsDialog} onClose={() => setShowSettingsDialog(false)} maxHeight="90vh">
-        <div className="px-5 pt-4 pb-6 space-y-4">
+      <Sheet isOpen={showSettingsDialog} onClose={() => setShowSettingsDialog(false)} maxHeight="auto">
+        <div className="px-5 pt-4 pb-6 space-y-3">
           {/* Header */}
           <div className="flex items-center justify-between">
             <h2 className="text-[20px] font-bold" style={{ color: '#24364B' }}>Settings</h2>
@@ -633,100 +639,83 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
               <X className="w-4 h-4" style={{ color: '#24364B' }} />
             </button>
           </div>
-            {/* Personal Details Section */}
-            <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid #EDF1F4' }}>
-              <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#AE9888' }}>Personal Details</p>
-              </div>
-              <div className="p-4 space-y-3">
-                <div>
-                  <Label className="text-[12px] font-semibold mb-1.5 block" style={{ color: '#5A6A7A' }}>Name</Label>
-                  <Input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Your name"
-                    className="text-[14px] rounded-[10px] border-[#EDF1F4] focus:border-[#E07A3A]"
-                    style={{ backgroundColor: '#F9F7F2' }}
-                  />
-                </div>
-                <div>
-                  <Label className="text-[12px] font-semibold mb-1.5 block" style={{ color: '#5A6A7A' }}>Phone</Label>
-                  <Input
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="Your phone number"
-                    className="text-[14px] rounded-[10px] border-[#EDF1F4] focus:border-[#E07A3A]"
-                    style={{ backgroundColor: '#F9F7F2' }}
-                  />
-                </div>
-                <div>
-                  <Label className="text-[12px] font-semibold mb-1.5 block" style={{ color: '#5A6A7A' }}>Date of Birth</Label>
-                  <Input
-                    type="date"
-                    value={dateOfBirth}
-                    onChange={(e) => setDateOfBirth(e.target.value)}
-                    className="text-[14px] rounded-[10px] border-[#EDF1F4] focus:border-[#E07A3A]"
-                    style={{ backgroundColor: '#F9F7F2' }}
-                  />
-                </div>
-              </div>
-            </div>
 
-            {/* Preferences Section */}
-            <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid #EDF1F4' }}>
-              <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#AE9888' }}>Preferences</p>
-              </div>
-              <div className="p-4 space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-[14px] font-medium" style={{ color: '#1C2B3A' }}>GPS Location</p>
-                    <p className="text-[12px]" style={{ color: '#8A96A0' }}>Allow location-based offers</p>
-                  </div>
-                  <Toggle on={gpsConsent} onToggle={() => setGpsConsent(!gpsConsent)} />
-                </div>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-[14px] font-medium" style={{ color: '#1C2B3A' }}>Marketing</p>
-                    <p className="text-[12px]" style={{ color: '#8A96A0' }}>Receive promotional emails</p>
-                  </div>
-                  <Toggle on={marketingConsent} onToggle={() => setMarketingConsent(!marketingConsent)} />
-                </div>
-                <div className="pt-1">
-                  <PushNotificationToggle />
-                </div>
-              </div>
-            </div>
-
-            {/* Security Section */}
-            <div className="rounded-[16px] overflow-hidden" style={{ border: '1px solid #EDF1F4' }}>
-              <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#AE9888' }}>Security</p>
-              </div>
-              <div className="p-4">
-                <button
-                  onClick={() => {
-                    setShowSettingsDialog(false)
-                    setShowPasswordDialog(true)
-                  }}
-                  className="w-full flex items-center justify-between py-2"
-                >
-                  <span className="text-[14px] font-medium" style={{ color: '#1C2B3A' }}>Change Password</span>
-                  <ChevronRight className="w-[15px] h-[15px] text-[#CCBDB4]" strokeWidth={1.8} />
-                </button>
-              </div>
-            </div>
-
-            {/* Save button */}
+          {/* Settings menu */}
+          <div className="space-y-2">
             <button
-              onClick={handleSaveProfile}
-              disabled={isLoading}
-              className="w-full h-[48px] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60"
-              style={{ backgroundColor: '#2C3E50' }}
+              onClick={() => {
+                setShowSettingsDialog(false)
+                setShowPersonalDetailsSheet(true)
+              }}
+              className="w-full px-4 py-3 rounded-[14px] flex items-center justify-between active:scale-[0.98] transition-all"
+              style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8' }}
             >
-              {isLoading ? 'Saving...' : 'Save Changes'}
+              <div className="flex items-center gap-3">
+                <User className="w-5 h-5" style={{ color: '#E07A3A' }} />
+                <span className="text-[14px] font-medium" style={{ color: '#24364B' }}>Personal Details</span>
+              </div>
+              <ChevronRight className="w-5 h-5" style={{ color: '#CCBDB4' }} />
             </button>
+
+            <button
+              onClick={() => {
+                setShowSettingsDialog(false)
+                setShowPreferencesSheet(true)
+              }}
+              className="w-full px-4 py-3 rounded-[14px] flex items-center justify-between active:scale-[0.98] transition-all"
+              style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8' }}
+            >
+              <div className="flex items-center gap-3">
+                <Bell className="w-5 h-5" style={{ color: '#E07A3A' }} />
+                <span className="text-[14px] font-medium" style={{ color: '#24364B' }}>Preferences</span>
+              </div>
+              <ChevronRight className="w-5 h-5" style={{ color: '#CCBDB4' }} />
+            </button>
+
+            <button
+              onClick={() => {
+                setShowSettingsDialog(false)
+                setShowPasswordDialog(true)
+              }}
+              className="w-full px-4 py-3 rounded-[14px] flex items-center justify-between active:scale-[0.98] transition-all"
+              style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8' }}
+            >
+              <div className="flex items-center gap-3">
+                <Lock className="w-5 h-5" style={{ color: '#E07A3A' }} />
+                <span className="text-[14px] font-medium" style={{ color: '#24364B' }}>Change Password</span>
+              </div>
+              <ChevronRight className="w-5 h-5" style={{ color: '#CCBDB4' }} />
+            </button>
+          </div>
         </div>
+      </Sheet>
+
+      {/* Personal Details Sheet */}
+      <Sheet isOpen={showPersonalDetailsSheet} onClose={() => setShowPersonalDetailsSheet(false)} maxHeight="auto">
+        <PersonalDetailsSheet
+          isOpen={showPersonalDetailsSheet}
+          onClose={() => setShowPersonalDetailsSheet(false)}
+          name={name}
+          phone={phone}
+          dateOfBirth={dateOfBirth}
+          onNameChange={setName}
+          onPhoneChange={setPhone}
+          onDateOfBirthChange={setDateOfBirth}
+          onSave={handleSaveProfile}
+          isLoading={isLoading}
+        />
+      </Sheet>
+
+      {/* Preferences Sheet */}
+      <Sheet isOpen={showPreferencesSheet} onClose={() => setShowPreferencesSheet(false)} maxHeight="auto">
+        <PreferencesSheet
+          isOpen={showPreferencesSheet}
+          onClose={() => setShowPreferencesSheet(false)}
+          gpsConsent={gpsConsent}
+          marketingConsent={marketingConsent}
+          onGpsConsentChange={setGpsConsent}
+          onMarketingConsentChange={setMarketingConsent}
+        />
       </Sheet>
 
       {/* Activity Sheet */}
@@ -889,6 +878,11 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
             </div>
           </div>
         </div>
+      </Sheet>
+
+      {/* Favorite Orders Sheet */}
+      <Sheet isOpen={showFavoriteOrdersSheet} onClose={() => setShowFavoriteOrdersSheet(false)} maxHeight="90vh">
+        <FavoriteOrdersSheet isOpen={showFavoriteOrdersSheet} onClose={() => setShowFavoriteOrdersSheet(false)} />
       </Sheet>
 
       <BottomNav />

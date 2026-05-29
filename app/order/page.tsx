@@ -340,7 +340,7 @@ export default function OrderPage() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
-        <div className="px-5 pt-10 pb-28 space-y-5">
+        <div className="px-5 pt-10 pb-36 space-y-5">
 
           {/* ── HEADER ── */}
           <div className="flex items-start justify-between">
@@ -370,11 +370,11 @@ export default function OrderPage() {
             {!searchFocused && displayCategories.length > 0 && (
               <button
                 onClick={() => setShowCategoryModal(true)}
-                className="flex-shrink-0 px-4 py-3 rounded-[16px] flex items-center gap-2 transition-all active:scale-[0.98]"
+                className="flex-1 px-4 py-3 rounded-[16px] flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
                 style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8' }}
               >
                 <div 
-                  className="w-8 h-8 rounded-full flex items-center justify-center"
+                  className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0"
                   style={{ backgroundColor: selectedCategory ? displayCategories.find(c => c.id === selectedCategory)?.color : '#E8E2D8' }}
                 >
                   <span className="text-[13px] font-bold" style={{ color: selectedCategory ? '#FFFFFF' : '#7A8A9A' }}>
@@ -396,7 +396,7 @@ export default function OrderPage() {
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setSearchFocused(false)}
                 placeholder="Search menu..."
-                className="w-full bg-white rounded-[16px] px-4 py-3 pl-10 outline-none text-[14px] placeholder:text-[#C8D4DC] transition-all"
+                className="w-full h-full bg-white rounded-[16px] px-4 py-3 pl-10 outline-none text-[14px] placeholder:text-[#C8D4DC] transition-all"
                 style={{ border: '1px solid #E8E2D8', color: '#24364B' }}
               />
               <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A89080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
