@@ -99,22 +99,19 @@ export function InsightsClient({ user, analyticsData }: InsightsClientProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 pb-20">
-      <div className="max-w-4xl mx-auto p-4 space-y-6">
+    <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
+      <div className="max-w-[430px] mx-auto px-5 space-y-5">
+
         {/* Header */}
-        <div className="flex items-center gap-4 mb-6">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => router.back()}
-            className="rounded-full"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <div className="flex-1">
-            <h1 className="text-2xl sm:text-3xl font-heading font-bold text-penkey-dark">My Rewards & Savings</h1>
-            <p className="text-sm text-green-600 font-semibold">See how much you've saved! 🎉</p>
-          </div>
+        <div className="pt-14 pb-5">
+          <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
+            Your Insights{' '}
+            <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px' }} />
+          </p>
+          <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#1C2B3A' }}>Insights</h1>
+          <p className="text-[13px] font-medium mt-1.5 leading-snug" style={{ color: '#8A96A0' }}>
+            Your activity at a glance
+          </p>
         </div>
 
         {/* Summary Stats Grid - Focus on SAVINGS & BENEFITS */}
@@ -123,7 +120,7 @@ export function InsightsClient({ user, analyticsData }: InsightsClientProps) {
             <CardContent className="p-4 text-center">
               <Sparkles className="w-6 h-6 text-green-600 mx-auto mb-2" />
               <p className="text-2xl sm:text-3xl font-bold text-green-700">{formatCurrency(summary.total_savings)}</p>
-              <p className="text-xs text-green-600 font-semibold">Total Saved! 🎉</p>
+              <p className="text-xs text-green-600 font-semibold">Total Saved!</p>
             </CardContent>
           </Card>
 
@@ -131,7 +128,7 @@ export function InsightsClient({ user, analyticsData }: InsightsClientProps) {
             <CardContent className="p-4 text-center">
               <Coffee className="w-6 h-6 text-amber-600 mx-auto mb-2" />
               <p className="text-2xl sm:text-3xl font-bold text-amber-700">{summary.estimated_free_coffees}</p>
-              <p className="text-xs text-amber-600 font-semibold">Free Coffees ☕</p>
+              <p className="text-xs text-amber-600 font-semibold">Free Coffees</p>
             </CardContent>
           </Card>
 
@@ -139,7 +136,7 @@ export function InsightsClient({ user, analyticsData }: InsightsClientProps) {
             <CardContent className="p-4 text-center">
               <Star className="w-6 h-6 text-purple-600 mx-auto mb-2" />
               <p className="text-2xl sm:text-3xl font-bold text-purple-700">{summary.total_points_earned}</p>
-              <p className="text-xs text-purple-600 font-semibold">Points Earned ⭐</p>
+              <p className="text-xs text-purple-600 font-semibold">Points Earned</p>
             </CardContent>
           </Card>
 
@@ -147,7 +144,7 @@ export function InsightsClient({ user, analyticsData }: InsightsClientProps) {
             <CardContent className="p-4 text-center">
               <TrendingUp className="w-6 h-6 text-penkey-orange mx-auto mb-2" />
               <p className="text-2xl sm:text-3xl font-bold text-penkey-dark">{summary.total_visits}</p>
-              <p className="text-xs text-penkey-gray">Visits 🎯</p>
+              <p className="text-xs text-penkey-gray">Visits</p>
             </CardContent>
           </Card>
         </div>
@@ -387,7 +384,7 @@ export function InsightsClient({ user, analyticsData }: InsightsClientProps) {
             <div className="p-6 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl text-white text-center">
               <p className="text-sm font-semibold mb-2 opacity-90">Total Value Received</p>
               <p className="text-4xl sm:text-5xl font-bold mb-1">{formatCurrency(summary.total_savings)}</p>
-              <p className="text-sm opacity-90">in rewards and discounts! 🎉</p>
+              <p className="text-sm opacity-90">in rewards and discounts!</p>
             </div>
 
             {/* Breakdown */}
@@ -439,7 +436,7 @@ export function InsightsClient({ user, analyticsData }: InsightsClientProps) {
             {/* Encouragement Message */}
             <div className="p-4 bg-white rounded-lg border-2 border-green-300 text-center">
               <p className="text-sm text-penkey-dark">
-                <strong className="text-green-600">Keep it up!</strong> Every visit earns you more rewards and savings! 🌟
+                <strong className="text-green-600">Keep it up!</strong> Every visit earns you more rewards and savings!
               </p>
             </div>
           </CardContent>

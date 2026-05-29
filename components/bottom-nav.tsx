@@ -19,9 +19,12 @@ export function BottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50">
-      <div className="w-full max-w-[430px] mx-auto">
-        <div className="bg-white shadow-[0_-1px_0_rgba(28,43,58,0.08),0_-4px_20px_rgba(28,43,58,0.06)]">
-          <div className="flex items-center h-[64px] pb-safe">
+      <div className="w-full max-w-[430px] mx-auto px-4 pb-4">
+        <div
+          className="backdrop-blur-xl shadow-[0_-1px_0_rgba(36,54,75,0.06),0_-4px_20px rgba(36,54,75,0.04)] rounded-[28px]"
+          style={{ backgroundColor: '#F9F7F2', WebkitBackdropFilter: 'blur(20px)' }}
+        >
+          <div className="flex items-center h-[64px]">
 
             {/* Left two items */}
             {leftItems.map((item) => {
@@ -31,12 +34,12 @@ export function BottomNav() {
                 <span className="flex flex-col items-center justify-center flex-1 h-full gap-[3px] min-h-[44px] w-full">
                   <Icon
                     className="w-[22px] h-[22px] transition-colors"
-                    style={{ color: isActive ? '#E07A3A' : '#9AAAB8' }}
-                    strokeWidth={isActive ? 2.2 : 1.6}
+                    style={{ color: isActive ? '#D87A2E' : '#A8B8C8' }}
+                    strokeWidth={isActive ? 2 : 1.5}
                   />
                   <span
-                    className="text-[10px] font-semibold"
-                    style={{ color: isActive ? '#E07A3A' : '#9AAAB8' }}
+                    className="text-[10px] font-medium"
+                    style={{ color: isActive ? '#D87A2E' : '#A8B8C8' }}
                   >
                     {item.label}
                   </span>
@@ -55,21 +58,21 @@ export function BottomNav() {
               )
             })}
 
-            {/* Centre Scan button — orange, lifted, matches reference */}
+            {/* Centre Scan button — smaller, softer, more subtle */}
             <Link
               href="/scan"
-              className="flex items-center justify-center flex-shrink-0 -mt-7 mx-2"
+              className="flex items-center justify-center flex-shrink-0 -mt-5 mx-2"
             >
               <div
-                className="w-[60px] h-[60px] rounded-full flex flex-col items-center justify-center gap-0.5 active:scale-95 transition-transform duration-150"
+                className="w-[52px] h-[52px] rounded-full flex flex-col items-center justify-center gap-0.5 active:scale-95 transition-transform duration-150"
                 style={{
-                  backgroundColor: '#E07A3A',
-                  boxShadow: '0 4px 18px rgba(224,122,58,0.50)',
+                  background: 'linear-gradient(135deg, #E87A2E 0%, #D66B1F 100%)',
+                  boxShadow: '0 3px 12px rgba(232,122,46,0.25)',
                   border: '3px solid white',
                 }}
               >
-                <ScanLine className="w-[22px] h-[22px] text-white" strokeWidth={1.8} />
-                <span className="text-[8px] font-bold text-white tracking-wide">SCAN</span>
+                <ScanLine className="w-[20px] h-[20px] text-white" strokeWidth={1.8} />
+                <span className="text-[7px] font-semibold text-white tracking-wide">SCAN</span>
               </div>
             </Link>
 
@@ -82,12 +85,12 @@ export function BottomNav() {
                   className="flex flex-col items-center justify-center flex-1 h-full gap-[3px] min-h-[44px]">
                   <Icon
                     className="w-[22px] h-[22px] transition-colors"
-                    style={{ color: isActive ? '#E07A3A' : '#9AAAB8' }}
-                    strokeWidth={isActive ? 2.2 : 1.6}
+                    style={{ color: isActive ? '#D87A2E' : '#A8B8C8' }}
+                    strokeWidth={isActive ? 2 : 1.5}
                   />
                   <span
-                    className="text-[10px] font-semibold"
-                    style={{ color: isActive ? '#E07A3A' : '#9AAAB8' }}
+                    className="text-[10px] font-medium"
+                    style={{ color: isActive ? '#D87A2E' : '#A8B8C8' }}
                   >
                     {item.label}
                   </span>

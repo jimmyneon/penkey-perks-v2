@@ -177,11 +177,11 @@ export function BeanIconCoffee({ className = '', size = 'md' }: BeanIconProps) {
     lg: 'w-6 h-6',
     xl: 'w-8 h-8'
   }
-  
+
   return (
-    <svg 
+    <svg
       className={`${sizeClasses[size]} ${className}`}
-      viewBox="0 0 24 24" 
+      viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
@@ -195,6 +195,37 @@ export function BeanIconCoffee({ className = '', size = 'md' }: BeanIconProps) {
       <line x1="6" y1="2" x2="6" y2="4" />
       <line x1="10" y1="2" x2="10" y2="4" />
       <line x1="14" y1="2" x2="14" y2="4" />
+    </svg>
+  )
+}
+
+// Minimal hand-drawn bean using currentColor for Tailwind compatibility
+export function BeanIconMinimal({ className = '', size = 'md' }: BeanIconProps) {
+  const sizeClasses = {
+    sm: 'w-4 h-4',
+    md: 'w-5 h-5',
+    lg: 'w-6 h-6',
+    xl: 'w-8 h-8'
+  }
+
+  return (
+    <svg
+      className={`${sizeClasses[size]} ${className}`}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* Bean body - slightly imperfect oval */}
+      <path
+        d="M12 3C8.5 3 5 5.5 5 9C5 12.5 6.5 15.5 8.5 17.5C10.5 19.5 13.5 19.5 15.5 17.5C17.5 15.5 19 12.5 19 9C19 5.5 15.5 3 12 3Z"
+        fillRule="evenodd"
+        clipRule="evenodd"
+      />
+      {/* Center crease - hand-drawn S-curve */}
+      <path
+        d="M12 6C11 8 10.5 10 12 12C13.5 10 13 8 12 6Z"
+        fill="rgba(255,255,255,0.3)"
+      />
     </svg>
   )
 }

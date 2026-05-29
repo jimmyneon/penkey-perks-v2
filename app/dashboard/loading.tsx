@@ -8,42 +8,21 @@ export default function DashboardLoading() {
       {/* Floating Duck Loading */}
       <div className="fixed inset-0 flex items-center justify-center z-50 bg-penkey-cream/80 backdrop-blur-sm">
         <div className="text-center">
-          <div className="mb-4" style={{ animation: 'bounce 1.2s ease-in-out infinite' }}>
+          <div className="mb-4">
             <Image 
-              src="/duckie.png" 
+              src="/logo.png" 
               alt="Loading" 
               width={100} 
               height={100}
               className="mx-auto drop-shadow-lg"
-              style={{
-                animation: 'spin 1.5s linear infinite'
-              }}
             />
           </div>
           <p className="text-lg text-penkey-dark font-medium">Loading your dashboard...</p>
-          <p className="text-sm text-penkey-gray mt-2">Gathering your ducks!</p>
+          <p className="text-sm text-penkey-gray mt-2">Just a moment!</p>
         </div>
       </div>
       
-      <style dangerouslySetInnerHTML={{__html: `
-        @keyframes spin {
-          0% {
-            transform: rotateZ(0deg);
-          }
-          100% {
-            transform: rotateZ(360deg);
-          }
-        }
-        
-        @keyframes bounce {
-          0%, 100% {
-            transform: translateY(0px);
-          }
-          50% {
-            transform: translateY(-70px);
-          }
-        }
-      `}} />
+      <style dangerouslySetInnerHTML={{__html: ``}} />
 
       <div className="container mx-auto px-4 py-6 max-w-2xl space-y-6 opacity-50">
         {/* Header Skeleton */}

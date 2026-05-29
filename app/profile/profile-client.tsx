@@ -13,6 +13,13 @@ import { createClient } from '@/lib/supabase/client'
 import QRCodeLib from 'qrcode'
 import { BottomNav } from '@/components/bottom-nav'
 
+function getGreeting() {
+  const h = new Date().getHours()
+  if (h < 12) return 'Good morning'
+  if (h < 17) return 'Good afternoon'
+  return 'Good evening'
+}
+
 interface ProfileClientProps {
   user: {
     id: string
@@ -323,41 +330,18 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
   ]
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
 
       {/* Header — matches dashboard greeting style */}
-      <div className="px-5 pt-14 pb-5">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <p className="text-[18px] font-bold italic leading-tight" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>
-              {name ? `Hi, ` : 'Your profile'}
-              {name && <span style={{ fontStyle: 'normal', fontFamily: 'inherit', fontWeight: 800, color: '#E07A3A' }}>{name.split(' ')[0]}</span>}
-            </p>
-            <p className="text-[13px] font-medium mt-1" style={{ color: '#8A96A0' }}>
-              Here&apos;s your Penkey Perks profile
-              <span className="ml-1" style={{ color: '#E07A3A' }}>&#x2756;</span>
-            </p>
-          </div>
-          <div className="flex flex-col items-end gap-3 ml-3">
-            <div className="text-right leading-none">
-              <span className="block text-[18px] font-extrabold tracking-tight" style={{ color: '#1C2B3A' }}>
-                PEN<span style={{ color: '#E07A3A' }}>KEY</span>
-              </span>
-              <span className="block text-[14px] font-medium italic" style={{ color: '#1C2B3A', fontFamily: 'Georgia, serif' }}>
-                Perks &#x2756;
-              </span>
-            </div>
-            <button
-              onClick={() => router.push('/profile')}
-              className="w-10 h-10 rounded-full border-2 flex items-center justify-center"
-              style={{ borderColor: '#E07A3A', backgroundColor: '#FEF3EA' }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E07A3A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
-              </svg>
-            </button>
-          </div>
+      <div className="px-5 pt-10 pb-5 flex items-start justify-between">
+        <div className="flex-1">
+          <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
+            {name ? `${getGreeting()}, ` : 'Your profile'}
+            {name && <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px', animation: 'heartPulse 1.2s ease-in-out 3' }} />}
+          </p>
+          <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#24364B' }}>
+            {name ? name.split(' ')[0] : 'Profile'}
+          </h1>
         </div>
       </div>
 
@@ -442,32 +426,20 @@ export function ProfileClient({ user: initialUser }: ProfileClientProps) {
           ))}
         </div>
 
-        {/* Community card — matches dashboard bottom card */}
-        <div className="rounded-[18px] overflow-hidden relative flex items-center gap-4 px-4 py-5" style={{ backgroundColor: '#2C3E50', boxShadow: '0 4px 16px rgba(28,43,58,0.18)' }}>
-          {/* Shop SVG illustration left */}
-          <div className="flex-shrink-0 opacity-40">
-            <svg width="72" height="72" viewBox="0 0 90 90" fill="none">
-              <rect x="10" y="40" width="70" height="42" rx="2" fill="white"/>
-              <rect x="18" y="48" width="16" height="18" rx="1" fill="rgba(28,43,58,0.6)"/>
-              <rect x="40" y="50" width="12" height="12" rx="1" fill="rgba(28,43,58,0.6)"/>
-              <rect x="56" y="50" width="12" height="10" rx="1" fill="rgba(28,43,58,0.6)"/>
-              <path d="M5 40 Q45 20 85 40" fill="rgba(28,43,58,0.4)"/>
-              <rect x="30" y="20" width="30" height="6" rx="1" fill="white" opacity="0.7"/>
-              <rect x="0" y="78" width="90" height="12" rx="2" fill="rgba(255,255,255,0.1)"/>
-            </svg>
-          </div>
-          <div className="flex items-start gap-3 flex-1">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5" style={{ backgroundColor: '#E07A3A' }}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-              </svg>
+        {/* Community card */}
+        <div className="rounded-[18px] overflow-hidden" style={{ backgroundColor: '#F0F9FF', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E0F2FE' }}>
+          <div className="flex items-center p-4">
+            <div className="flex items-center gap-3 flex-1">
+              <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                <img src="/heart.png" alt="" className="w-5 h-5 object-contain" />
+              </div>
+              <div className="text-left">
+                <p className="text-base font-bold" style={{ color: '#24364B' }}>Thanks for supporting local</p>
+                <p className="text-xs" style={{ color: '#5A6A7A' }}>Every visit to Penkey helps our community thrive</p>
+              </div>
             </div>
-            <div>
-              <p className="text-[15px] font-extrabold text-white leading-tight">Thanks for supporting local</p>
-              <p className="text-[12px] font-medium mt-1 leading-relaxed" style={{ color: 'rgba(255,255,255,0.55)' }}>
-                Every visit helps keep Penkey independent and our community strong.
-                <span className="ml-1" style={{ color: '#E07A3A' }}>&#x2756;</span>
-              </p>
+            <div className="w-32 h-32 flex-shrink-0">
+              <img src="/local.png" alt="" className="w-full h-full object-contain" />
             </div>
           </div>
         </div>

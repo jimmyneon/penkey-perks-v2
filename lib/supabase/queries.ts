@@ -86,7 +86,7 @@ export async function getBeanBalance(userId: string): Promise<BeanBalance | null
     .from('bean_balances')
     .select('*')
     .eq('user_id', userId)
-    .single()
+    .maybeSingle()
   
   if (error) {
     console.error('Error fetching bean balance:', error)
@@ -107,7 +107,7 @@ export async function createBeanBalance(userId: string): Promise<BeanBalance | n
       visit_count: 0,
     })
     .select()
-    .single()
+    .maybeSingle()
   
   if (error) {
     console.error('Error creating bean balance:', error)

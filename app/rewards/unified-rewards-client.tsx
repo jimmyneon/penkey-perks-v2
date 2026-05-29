@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Gift, CheckCircle2, Clock, Star, QrCode, ShoppingBag, ScanLine, Circle, Unlock, ChevronRight as ChevronRight2 } from 'lucide-react'
+import { Gift, CheckCircle2, Clock, Star, QrCode, ShoppingBag, ScanLine, Circle, Unlock, ChevronRight as ChevronRight2, Sparkles, Coffee } from 'lucide-react'
 import Link from 'next/link'
 import QRCode from 'qrcode'
 import { useToast } from '@/hooks/use-toast'
@@ -186,22 +186,81 @@ export function UnifiedRewardsClient({
 
   // Fixed reward tiers — shown even when no DB rewards configured
   const fixedTiers = [
-    { beans: 2,  emoji: '✨', label: 'Free syrup shot',   sub: 'Add any flavour to your drink',    color: '#E07A3A' },
-    { beans: 8,  emoji: '☕', label: 'Free coffee',        sub: 'Any hot or cold coffee, on us',    color: '#2C3E50' },
-    { beans: 15, emoji: '🥐', label: 'Free snack',         sub: 'Pastry, toastie — your choice',    color: '#3D5A73' },
-    { beans: 25, emoji: '🍽️', label: 'Free meal',          sub: 'A full lunch, completely free',    color: '#1C2B3A' },
+    { beans: 2,  icon: <Sparkles className="w-4 h-4" />, label: 'Free syrup shot',   sub: 'Add any flavour to your drink',    color: '#E07A3A' },
+    { beans: 8,  icon: <Coffee className="w-4 h-4" />, label: 'Free coffee',        sub: 'Any hot or cold coffee, on us',    color: '#2C3E50' },
+    { beans: 15, icon: <ShoppingBag className="w-4 h-4" />, label: 'Free snack',         sub: 'Pastry, toastie — your choice',    color: '#3D5A73' },
+    { beans: 25, icon: <ShoppingBag className="w-4 h-4" />, label: 'Free meal',          sub: 'A full lunch, completely free',    color: '#1C2B3A' },
   ]
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
 
       {/* ── HEADER ── */}
-      <div className="px-5 pt-14 pb-2">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.12em] mb-0.5" style={{ color: '#9AAAB8' }}>Penkey Perks</p>
-        <h1 className="text-[32px] font-extrabold leading-tight tracking-tight" style={{ color: '#1C2B3A' }}>Your Rewards</h1>
+      <div className="px-5 pt-14 pb-5">
+        <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
+          Your Rewards{' '}
+          <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px' }} />
+        </p>
+        <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#1C2B3A' }}>Rewards</h1>
+        <p className="text-[13px] font-medium mt-1.5 leading-snug" style={{ color: '#8A96A0' }}>
+          Collect beans, unlock treats
+        </p>
       </div>
 
-      <main className="px-4 pb-28 pt-4 space-y-5">
+      <main className="px-5 pb-28 pt-4 space-y-5">
+
+        {/* ── HOW IT WORKS ── */}
+        <section>
+          <div className="rounded-[18px] p-5" style={{ backgroundColor: 'white', border: '1px solid #E8E2D8', boxShadow: '0 2px 12px rgba(36,54,75,0.06)' }}>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-[18px] font-extrabold" style={{ color: '#1C2B3A' }}>How it works</h2>
+              <Link href="/campaigns" className="text-[12px] font-bold flex items-center gap-1" style={{ color: '#E07A3A' }}>
+                View Campaigns
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </Link>
+            </div>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(224,122,58,0.12)' }}>
+                  <span className="text-[14px] font-extrabold" style={{ color: '#E07A3A' }}>1</span>
+                </div>
+                <div>
+                  <p className="text-[14px] font-bold leading-tight" style={{ color: '#1C2B3A' }}>Visit & Scan</p>
+                  <p className="text-[12px] mt-0.5 leading-snug" style={{ color: '#8A96A0' }}>Show your QR code at the till every time you visit</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(224,122,58,0.12)' }}>
+                  <span className="text-[14px] font-extrabold" style={{ color: '#E07A3A' }}>2</span>
+                </div>
+                <div>
+                  <p className="text-[14px] font-bold leading-tight" style={{ color: '#1C2B3A' }}>Collect Beans</p>
+                  <p className="text-[12px] mt-0.5 leading-snug" style={{ color: '#8A96A0' }}>Earn beans with every purchase — more you spend, more you get</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(224,122,58,0.12)' }}>
+                  <span className="text-[14px] font-extrabold" style={{ color: '#E07A3A' }}>3</span>
+                </div>
+                <div>
+                  <p className="text-[14px] font-bold leading-tight" style={{ color: '#1C2B3A' }}>Unlock Rewards</p>
+                  <p className="text-[12px] mt-0.5 leading-snug" style={{ color: '#8A96A0' }}>Reach milestones (2, 8, 15, 25 beans) to unlock free treats</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(224,122,58,0.12)' }}>
+                  <span className="text-[14px] font-extrabold" style={{ color: '#E07A3A' }}>4</span>
+                </div>
+                <div>
+                  <p className="text-[14px] font-bold leading-tight" style={{ color: '#1C2B3A' }}>Redeem & Enjoy</p>
+                  <p className="text-[12px] mt-0.5 leading-snug" style={{ color: '#8A96A0' }}>Tap any unlocked reward below and show the QR code to redeem</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* ── BEAN STAMP CARD ── */}
         <section>
@@ -239,14 +298,19 @@ export function UnifiedRewardsClient({
                   return (
                     <div
                       key={i}
-                      className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] transition-all duration-300"
+                      className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300"
                       style={{
-                        backgroundColor: filled ? '#E07A3A' : 'rgba(255,255,255,0.12)',
+                        backgroundColor: filled ? '#F0EDE5' : 'rgba(255,255,255,0.12)',
+                        border: filled ? '2px solid #E0D8CC' : '2px dashed #F0EDE5',
                         boxShadow: filled ? '0 2px 6px rgba(224,122,58,0.40)' : 'none',
                         transform: filled ? 'scale(1.05)' : 'scale(1)',
                       }}
                     >
-                      {filled && <span style={{ color: 'white', fontSize: '10px', fontWeight: 800 }}>✓</span>}
+                      {filled ? (
+                        <img src="/bean.png" alt="" className="w-5 h-5 object-contain" style={{ filter: 'brightness(0) invert(1)' }} />
+                      ) : (
+                        <img src="/bean.png" alt="" className="w-5 h-5 object-contain" style={{ filter: 'brightness(0.4) grayscale(0.5)', opacity: 0.6 }} />
+                      )}
                     </div>
                   )
                 })}
@@ -348,9 +412,9 @@ export function UnifiedRewardsClient({
                       backgroundColor: unlocked ? 'rgba(255,255,255,0.15)' : '#F0F4F7',
                     }}
                   >
-                    <span className="text-[18px] leading-none">{tier.emoji}</span>
+                    <span className="text-[18px] leading-none">{tier.icon}</span>
                     <span className="text-[9px] font-extrabold mt-0.5" style={{ color: unlocked ? 'rgba(255,255,255,0.7)' : '#8A9AAA' }}>
-                      {tier.beans} ☕
+                      {tier.beans}
                     </span>
                   </div>
                   <div className="flex-1 min-w-0">
