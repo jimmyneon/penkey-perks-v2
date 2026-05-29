@@ -70,7 +70,7 @@ export default function OrderPage() {
 
         setUserOrgId(profile.org_id)
 
-        const POS_URL = process.env.NEXT_PUBLIC_POS_URL || 'https://pos.penkey.co.uk'
+        const POS_URL = process.env.NEXT_PUBLIC_POS_URL || 'https://penkey-pos.vercel.app'
         const [itemsRes, catsRes] = await Promise.all([
           fetch(`${POS_URL}/api/public/menu?org_id=${profile.org_id}`),
           fetch(`${POS_URL}/api/public/categories?org_id=${profile.org_id}`)
