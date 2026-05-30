@@ -338,11 +338,11 @@ export default function NewV2Dashboard() {
             <div className="flex-1">
               <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
                 {mounted ? getGreeting() : 'Hello'},{' '}
-                <img 
-                  src="/heart.png" 
-                  alt="" 
-                  className="inline-block w-5 h-5 object-contain align-middle" 
-                  style={{ marginBottom: '2px', animation: 'heartPulse 1.2s ease-in-out 3' }} 
+                <img
+                  src="/heart.png"
+                  alt=""
+                  className="inline-block w-5 h-5 object-contain align-middle"
+                  style={{ marginBottom: '2px', animation: 'heartPulse 1.2s ease-in-out 3' }}
                 />
               </p>
               <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#24364B' }}>
@@ -351,6 +351,14 @@ export default function NewV2Dashboard() {
               <p className="text-[13px] font-medium mt-2 leading-snug" style={{ color: '#8A96A0' }}>
                 Welcome to Penkey Perks
               </p>
+            </div>
+            {/* Right: Cup Illy image */}
+            <div className="flex-shrink-0">
+              <img
+                src="/image-assets/cupilli.png"
+                alt="Cup Illy"
+                className="w-40 h-40 object-contain"
+              />
             </div>
           </div>
 
