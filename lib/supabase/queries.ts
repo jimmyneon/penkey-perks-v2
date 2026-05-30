@@ -124,7 +124,7 @@ export async function getUserVouchers(userId: string, status?: 'active' | 'redee
     .from('user_vouchers')
     .select(`
       *,
-      voucher_template:voucher_templates(name, description, category, bean_threshold)
+      template:voucher_templates(name, description, category, bean_threshold)
     `)
     .eq('user_id', userId)
   
