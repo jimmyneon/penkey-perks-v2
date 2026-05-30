@@ -74,6 +74,13 @@ export async function POST(request: NextRequest) {
         console.error('Error details:', JSON.stringify(awardError))
         return NextResponse.json({ error: 'Failed to award beans', details: awardError.message || String(awardError) }, { status: 500, headers: corsHeaders })
       }
+
+      // Broadcast beans awarded to client
+      await supabase.channel(`user:${userId}`).send({
+        type: 'broadcast',
+        event: 'beans_awarded',
+        payload: { beansAwarded: totalBeans, baseBeans, bonusBeans }
+      })
     }
     
     // Record purchase

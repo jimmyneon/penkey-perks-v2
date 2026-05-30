@@ -60,37 +60,25 @@ export function useBeanBalanceRealtime(userId: string | null) {
         (payload) => {
           console.log('[Realtime] Bean balance change received:', payload)
           if (payload.eventType === 'UPDATE' || payload.eventType === 'INSERT') {
-            const oldBalance = payload.old as BeanBalance | null
             const newBalance = payload.new as BeanBalance
-            
-            console.log('[Realtime] Old balance:', oldBalance)
-            console.log('[Realtime] New balance:', newBalance)
-            console.log('[Realtime] Previous balance state:', previousBalanceRef.current)
-            
-            // Calculate beans awarded BEFORE updating state
-            let beansDiff = 0
-            if (oldBalance && newBalance) {
-              beansDiff = newBalance.current_beans - oldBalance.current_beans
-            } else if (newBalance) {
-              // If oldBalance is null, use our tracked previousBalance
-              beansDiff = newBalance.current_beans - previousBalanceRef.current
-            }
-            
-            console.log('[Realtime] Beans diff calculated:', beansDiff)
-            if (beansDiff > 0) {
-              console.log('[Realtime] Setting beansAwarded to:', beansDiff)
-              setBeansAwarded(beansDiff)
-            }
-            
-            // Update bean balance first
             setBeanBalance(newBalance)
             setJustUpdated(true)
             setTimeout(() => setJustUpdated(false), 1000)
-            
-            // Update previous balance AFTER calculating diff
             if (newBalance) {
               previousBalanceRef.current = newBalance.current_beans
             }
+          }
+        }
+      )
+      .on(
+        'broadcast',
+        { event: 'beans_awarded' },
+        (payload) => {
+          console.log('[Realtime] Beans awarded broadcast received:', payload)
+          const { beansAwarded } = payload.payload
+          if (beansAwarded > 0) {
+            console.log('[Realtime] Setting beansAwarded to:', beansAwarded)
+            setBeansAwarded(beansAwarded)
           }
         }
       )
