@@ -30,6 +30,8 @@ export function BottomNav({ onShowQRCode }: BottomNavProps) {
   const [user, setUser] = useState<any>(null)
   const [mounted, setMounted] = useState(false)
 
+  console.log('[BottomNav] Component mounted')
+
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -42,8 +44,10 @@ export function BottomNav({ onShowQRCode }: BottomNavProps) {
 
   useEffect(() => {
     const loadUser = async () => {
+      console.log('[BottomNav] Loading user...')
       const supabase = createClient()
       const { data: { user: authUser } } = await supabase.auth.getUser()
+      console.log('[BottomNav] User loaded:', authUser?.id)
       setUser(authUser)
     }
     loadUser()
@@ -51,8 +55,12 @@ export function BottomNav({ onShowQRCode }: BottomNavProps) {
 
   // Auto-close QR when beans are awarded
   useEffect(() => {
-    if (!user) return
+    if (!user) {
+      console.log('[BottomNav] No user, skipping subscription')
+      return
+    }
 
+    console.log('[BottomNav] Setting up real-time subscription for user:', user.id)
     const supabase = createClient()
     let channel: RealtimeChannel | null = null
 
@@ -61,20 +69,27 @@ export function BottomNav({ onShowQRCode }: BottomNavProps) {
       .on(
         'postgres_changes',
         {
-          event: 'UPDATE',
+          event: '*',
           schema: 'public',
           table: 'bean_balances',
           filter: `user_id=eq.${user.id}`,
         },
         (payload) => {
-          console.log('[BottomNav] Bean balance updated, closing QR')
+          console.log('[BottomNav] Bean balance change received:', payload)
+          console.log('[BottomNav] Closing QR')
           setShowQR(false)
         }
       )
-      .subscribe()
+      .subscribe((status, err) => {
+        console.log('[BottomNav] Subscription status:', status)
+        if (err) {
+          console.error('[BottomNav] Subscription error:', err)
+        }
+      })
 
     return () => {
       if (channel) {
+        console.log('[BottomNav] Cleaning up subscription')
         supabase.removeChannel(channel)
       }
     }

@@ -52,7 +52,9 @@ export default function NewV2Dashboard() {
 
   // Show modal when beans are awarded
   useEffect(() => {
+    console.log('[Dashboard] beansAwarded changed:', beansAwarded)
     if (beansAwarded > 0) {
+      console.log('[Dashboard] Showing bean modal with', beansAwarded, 'beans')
       setShowBeanModal(true)
     }
   }, [beansAwarded])
