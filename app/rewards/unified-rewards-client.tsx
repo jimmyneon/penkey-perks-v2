@@ -483,7 +483,7 @@ export function UnifiedRewardsClient({
                   ) : isNext ? (
                     <div className="flex-shrink-0 text-right">
                       <span className="text-[10px] font-bold px-2 py-1 rounded-full" style={{ backgroundColor: 'rgba(224,122,58,0.12)', color: '#E07A3A' }}>
-                        {tier.beans - currentPoints} to go
+                        {Math.max(0, tier.beans - currentPoints)} to go
                       </span>
                     </div>
                   ) : (

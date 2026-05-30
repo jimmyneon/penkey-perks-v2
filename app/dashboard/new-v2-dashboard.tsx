@@ -6,6 +6,7 @@ import { getBeanBalance, getActiveVouchers, getUserBadges, getActiveCampaigns, g
 import { useBeanBalanceRealtime } from '@/hooks/use-bean-balance-realtime'
 import { FlipNumber } from '@/components/ui/flip-number'
 import { BeanModal } from '@/components/bean-toast'
+import { MaxBeansModal } from '@/components/max-beans-modal'
 import { Bell, Coffee, Gift, TrendingUp, QrCode, BarChart3, ChevronRight, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -67,8 +68,9 @@ export default function NewV2Dashboard() {
   const [displayedBeanBalance, setDisplayedBeanBalance] = useState<BeanBalance | null>(null)
 
   // Real-time bean balance
-  const { beanBalance, isLoading: balanceLoading, justUpdated, beansAwarded, previousBalance } = useBeanBalanceRealtime(user?.id || null)
+  const { beanBalance, isLoading: balanceLoading, justUpdated, beansAwarded, beanDescription, maxBeansReached, maxBeansMessage, previousBalance } = useBeanBalanceRealtime(user?.id || null)
   const [showBeanModal, setShowBeanModal] = useState(false)
+  const [showMaxBeansModal, setShowMaxBeansModal] = useState(false)
 
   // Update debug info when bean balance changes
   useEffect(() => {
@@ -98,6 +100,14 @@ export default function NewV2Dashboard() {
     }
   }, [beansAwarded])
 
+  // Show modal when max beans reached
+  useEffect(() => {
+    console.log('[Dashboard] maxBeansReached changed:', maxBeansReached)
+    if (maxBeansReached) {
+      setShowMaxBeansModal(true)
+    }
+  }, [maxBeansReached])
+
   // Trigger bean animation after modal is closed
   const handleBeanModalClose = () => {
     setShowBeanModal(false)
@@ -111,6 +121,17 @@ export default function NewV2Dashboard() {
     setTimeout(() => {
       setTriggerAnimation(false)
     }, 1000)
+  }
+
+  // Handle max beans modal close
+  const handleMaxBeansModalClose = () => {
+    setShowMaxBeansModal(false)
+  }
+
+  // Handle convert to vouchers
+  const handleConvertToVouchers = () => {
+    setShowMaxBeansModal(false)
+    setShowVoucherSelection(true)
   }
 
   // Prevent hydration mismatch
@@ -324,7 +345,7 @@ export default function NewV2Dashboard() {
   const nextMilestone = STAMP_MILESTONES.find(m => m > currentBeans) ?? 8
   const prevMilestoneIndex = STAMP_MILESTONES.findIndex(m => m > currentBeans) - 1
   const prevMilestone = prevMilestoneIndex >= 0 ? STAMP_MILESTONES[prevMilestoneIndex] : 0
-  const stampBeansNeeded = nextMilestone - currentBeans
+  const stampBeansNeeded = Math.max(0, nextMilestone - currentBeans)
   
   // Calculate progress percentage between milestones
   const progressRange = nextMilestone - prevMilestone
@@ -1167,6 +1188,7 @@ export default function NewV2Dashboard() {
       <BeanModal
         show={showBeanModal}
         beansAwarded={beansAwarded}
+        description={beanDescription}
         onClose={handleBeanModalClose}
       />
     </div>
