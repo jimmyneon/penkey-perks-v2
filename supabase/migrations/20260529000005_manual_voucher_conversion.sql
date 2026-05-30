@@ -23,8 +23,8 @@ DECLARE
   v_transaction_id UUID;
   v_current_beans INTEGER;
 BEGIN
-  -- Get current balance
-  SELECT current_beans INTO v_current_beans
+  -- Get current balance, default to 0 if not found
+  SELECT COALESCE(current_beans, 0) INTO v_current_beans
   FROM public.bean_balances
   WHERE user_id = p_user_id;
 

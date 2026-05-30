@@ -71,7 +71,8 @@ export async function POST(request: NextRequest) {
       
       if (awardError) {
         console.error('Error awarding beans:', awardError)
-        return NextResponse.json({ error: 'Failed to award beans' }, { status: 500, headers: corsHeaders })
+        console.error('Error details:', JSON.stringify(awardError))
+        return NextResponse.json({ error: 'Failed to award beans', details: awardError.message || String(awardError) }, { status: 500, headers: corsHeaders })
       }
     }
     
