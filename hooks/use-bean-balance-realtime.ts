@@ -108,5 +108,5 @@ export function useBeanBalanceRealtime(userId: string | null) {
     }
   }, [userId, supabase])
 
-  return { beanBalance, isLoading, justUpdated, beansAwarded }
+  return { beanBalance, isLoading, justUpdated, beansAwarded, previousBalance }
 }

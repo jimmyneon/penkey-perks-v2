@@ -53,10 +53,10 @@ export default function NewV2Dashboard() {
   const [showVoucherSelection, setShowVoucherSelection] = useState(false)
   const [availableVouchers, setAvailableVouchers] = useState<any[]>([])
   const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
-  const [debugInfo, setDebugInfo] = useState({ hookCalled: false, beansAwarded: 0, currentBeans: 0, lastUpdate: '' })
+  const [debugInfo, setDebugInfo] = useState({ hookCalled: false, beansAwarded: 0, currentBeans: 0, previousBeans: 0, lastUpdate: '' })
 
   // Real-time bean balance
-  const { beanBalance, isLoading: balanceLoading, justUpdated, beansAwarded } = useBeanBalanceRealtime(user?.id || null)
+  const { beanBalance, isLoading: balanceLoading, justUpdated, beansAwarded, previousBalance } = useBeanBalanceRealtime(user?.id || null)
   const [showBeanModal, setShowBeanModal] = useState(false)
 
   // Update debug info when bean balance changes
@@ -66,10 +66,11 @@ export default function NewV2Dashboard() {
         ...prev, 
         hookCalled: true, 
         currentBeans: beanBalance.current_beans,
+        previousBeans: previousBalance,
         lastUpdate: new Date().toISOString() 
       }))
     }
-  }, [beanBalance])
+  }, [beanBalance, previousBalance])
 
   // Show modal when beans are awarded
   useEffect(() => {
@@ -364,6 +365,7 @@ export default function NewV2Dashboard() {
       {/* Debug Panel */}
       <div className="fixed top-0 left-0 right-0 z-[100] bg-black/80 text-white p-2 text-xs font-mono">
         <div>Hook Called: {debugInfo.hookCalled ? '✅' : '❌'}</div>
+        <div>Previous Beans: {debugInfo.previousBeans}</div>
         <div>Current Beans: {debugInfo.currentBeans || 'N/A'}</div>
         <div>Beans Awarded: {debugInfo.beansAwarded}</div>
         <div>Last Update: {debugInfo.lastUpdate || 'Never'}</div>
