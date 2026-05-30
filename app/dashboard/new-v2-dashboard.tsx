@@ -248,7 +248,13 @@ export default function NewV2Dashboard() {
 
   const currentBeans = beanBalance?.current_beans || 0
 
-  const targetBeans = nextReward?.threshold || 8
+  // Stamp card config — next milestone from current beans
+  const STAMP_MILESTONES = [2, 8, 15, 25]
+  const nextMilestone = STAMP_MILESTONES.find(m => m > currentBeans) ?? 8
+  const stampBeansNeeded = nextMilestone - currentBeans
+
+  // Use stamp milestones for progress calculation
+  const targetBeans = nextMilestone
   const progress = (currentBeans / targetBeans) * 100
   const beansNeeded = targetBeans - currentBeans
   const circumference = 2 * Math.PI * 58
@@ -306,10 +312,6 @@ export default function NewV2Dashboard() {
   const displayVouchers = vouchers.length > 0 ? vouchers : sampleVouchers
   const displayCampaign = campaigns.length > 0 ? campaigns[0] : sampleCampaign
 
-  // Stamp card config — next milestone from current beans
-  const STAMP_MILESTONES = [2, 8, 15, 25]
-  const nextMilestone = STAMP_MILESTONES.find(m => m > currentBeans) ?? 8
-  const stampBeansNeeded = nextMilestone - currentBeans
   // Show stamps for the current milestone cycle
   const stampTotal = nextMilestone
   const fullName = profile?.name || user?.user_metadata?.first_name || user?.user_metadata?.name || 'there'
