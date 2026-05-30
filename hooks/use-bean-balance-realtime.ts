@@ -40,6 +40,7 @@ export function useBeanBalanceRealtime(userId: string | null) {
     fetchBalance()
 
     // Set up real-time subscription
+    console.log('[Realtime] Setting up subscription for user:', userId)
     channel = supabase
       .channel(`bean_balances:${userId}`)
       .on(
@@ -53,6 +54,7 @@ export function useBeanBalanceRealtime(userId: string | null) {
         (payload) => {
           console.log('[Realtime] Bean balance change received:', payload)
           if (payload.eventType === 'UPDATE' || payload.eventType === 'INSERT') {
+            console.log('[Realtime] Updating bean balance from', payload.old, 'to', payload.new)
             setBeanBalance(payload.new as BeanBalance)
             setJustUpdated(true)
             setTimeout(() => setJustUpdated(false), 1000)
