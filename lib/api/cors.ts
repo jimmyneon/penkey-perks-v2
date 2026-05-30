@@ -6,6 +6,7 @@
 const allowedOrigins = [
   process.env.NEXT_PUBLIC_POS_URL,
   'https://pos.penkey.com', // Production POS URL
+  'https://penkey-pos.vercel.app', // Vercel deployment
   'http://localhost:3001', // Local development
 ].filter(Boolean) as string[];
 
