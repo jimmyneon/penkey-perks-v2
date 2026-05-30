@@ -23,6 +23,8 @@ function getGreeting() {
   return 'Good evening'
 }
 
+console.log('[Dashboard] Component loaded')
+
 export default function NewV2Dashboard() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
