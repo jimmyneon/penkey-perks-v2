@@ -10,6 +10,7 @@ import { Sheet } from '@/components/ui/sheet'
 import { FavoriteOrdersSheet } from '@/components/favorite-orders-sheet'
 import { PersonalDetailsSheet } from '@/components/settings/personal-details-sheet'
 import { PreferencesSheet } from '@/components/settings/preferences-sheet'
+import { FlipNumber } from '@/components/ui/flip-number'
 import { ArrowLeft, User, Mail, Phone, Calendar, Lock, Trash2, PauseCircle, MapPin, Gift, AlertTriangle, QrCode, ChevronRight, Bell, Shield, X } from 'lucide-react'
 import Link from 'next/link'
 import { useToast } from '@/hooks/use-toast'
@@ -443,7 +444,7 @@ export function ProfileClient({ user: initialUser, beanBalance: initialBeanBalan
           </div>
           <div className="flex-shrink-0 text-right">
             <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-0.5" style={{ color: '#9AAAB8' }}>LIFETIME BEANS</p>
-            <p className={`text-[32px] font-extrabold leading-none ${justUpdated ? 'animate-bean-pop' : ''}`} style={{ color: '#1C2B3A' }}>{beanBalance?.lifetime_beans || 0}</p>
+            <FlipNumber value={beanBalance?.lifetime_beans || 0} className={`text-[32px] font-extrabold leading-none ${justUpdated ? 'animate-bean-pop' : ''}`} style={{ color: '#1C2B3A' }} />
             <p className="text-[12px] italic mt-0.5" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>{(beanBalance?.lifetime_beans || 0) === 1 ? 'bean' : 'beans'}</p>
             <p className="text-[11px] mt-1" style={{ color: '#8A96A0' }}>Keep it up!</p>
           </div>

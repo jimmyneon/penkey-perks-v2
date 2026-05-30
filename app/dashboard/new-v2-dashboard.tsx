@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { getBeanBalance, getActiveVouchers, getUserBadges, getActiveCampaigns, getNextRewardThreshold, getAllVoucherTemplates } from '@/lib/supabase/queries'
 import { useBeanBalanceRealtime } from '@/hooks/use-bean-balance-realtime'
+import { FlipNumber } from '@/components/ui/flip-number'
+import { BeanToast } from '@/components/bean-toast'
 import { Bell, Coffee, Gift, TrendingUp, QrCode, BarChart3, ChevronRight, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -43,7 +45,15 @@ export default function NewV2Dashboard() {
   const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
 
   // Real-time bean balance
-  const { beanBalance, isLoading: balanceLoading, justUpdated } = useBeanBalanceRealtime(user?.id || null)
+  const { beanBalance, isLoading: balanceLoading, justUpdated, beansAwarded } = useBeanBalanceRealtime(user?.id || null)
+  const [showBeanToast, setShowBeanToast] = useState(false)
+
+  // Show toast when beans are awarded
+  useEffect(() => {
+    if (beansAwarded > 0) {
+      setShowBeanToast(true)
+    }
+  }, [beansAwarded])
 
   // Prevent hydration mismatch
   useEffect(() => {
@@ -369,7 +379,7 @@ export default function NewV2Dashboard() {
                   </p>
                   <div className="mb-2">
                     <div className={`flex items-baseline gap-2 mb-1 ${justUpdated ? 'animate-bean-pop' : ''}`}>
-                      <span className={`text-[56px] font-extrabold leading-none ${justUpdated ? 'animate-bean-glow' : ''}`} style={{ color: '#F0EDE5' }}>{currentBeans}</span>
+                      <FlipNumber value={currentBeans} className={`text-[56px] font-extrabold leading-none ${justUpdated ? 'animate-bean-glow' : ''}`} style={{ color: '#F0EDE5' }} />
                     </div>
                     <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>{currentBeans === 1 ? 'bean' : 'beans'}</p>
                     <img src="/stroke.png" alt="" className="w-24 h-2 object-contain mt-1 opacity-60" style={{ marginLeft: '-12px' }} />
@@ -1086,6 +1096,13 @@ export default function NewV2Dashboard() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Bean award toast */}
+      <BeanToast
+        show={showBeanToast}
+        beansAwarded={beansAwarded}
+        onClose={() => setShowBeanToast(false)}
+      />
     </div>
   )
 }
