@@ -11,7 +11,7 @@ interface BeanModalProps {
 export function BeanModal({ show, beansAwarded, onClose }: BeanModalProps) {
   return (
     <Dialog open={show} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-sm rounded-[28px] shadow-[0_24px_64px_rgba(36,54,75,0.18)] p-0 overflow-hidden border-0">
+      <DialogContent className="sm:max-w-sm rounded-[28px] shadow-[0_24px_64px_rgba(36,54,75,0.18)] p-0 overflow-hidden border-0" onPointerDownOutside={(e) => e.preventDefault()}>
         <DialogTitle className="sr-only">Beans Earned</DialogTitle>
         <DialogDescription className="sr-only">You earned beans from your visit</DialogDescription>
         <div style={{ backgroundColor: '#F4EFE7' }}>
@@ -27,13 +27,13 @@ export function BeanModal({ show, beansAwarded, onClose }: BeanModalProps) {
             {/* Hero text */}
             <div className="pr-4">
               <h2 className="text-[28px] font-extrabold leading-tight" style={{ color: '#24364B' }}>
-                Nice one!
+                Yay!
               </h2>
               <p className="text-[22px] font-bold mt-0.5 leading-tight" style={{ color: '#F28A2E' }}>
                 {beansAwarded === 1 ? '+1 bean' : `+${beansAwarded} beans`}
               </p>
               <p className="text-[13px] mt-2 leading-snug" style={{ color: '#5A6A7A' }}>
-                You've earned beans from your visit. Keep collecting to unlock rewards!{' '}
+                You've earned beans from your visit at Penkey. Keep collecting to unlock rewards!{' '}
                 <img src="/heart.png" alt="" className="inline-block w-4 h-4 object-contain align-middle" style={{ transform: 'rotate(-10deg)' }} />
               </p>
             </div>

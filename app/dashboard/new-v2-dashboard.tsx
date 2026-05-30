@@ -887,35 +887,25 @@ export default function NewV2Dashboard() {
         </BottomSheetContent>
       </BottomSheet>
 
-      {/* Rewards Panel Dialog */}
-      <Dialog open={showRewardsPanel} onOpenChange={setShowRewardsPanel}>
-        <DialogContent className="sm:max-w-[380px] rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 border-0 overflow-hidden">
-          <DialogTitle className="sr-only">Your Journey</DialogTitle>
-          <DialogDescription className="sr-only">View your rewards journey and available vouchers</DialogDescription>
-          <div style={{ background: 'linear-gradient(160deg, #2B3E52 0%, #1e2d3d 100%)' }} className="overflow-y-auto max-h-[90vh]">
-            <div className="p-5">
+      {/* Rewards Panel Bottom Sheet - Full Screen */}
+      <BottomSheet 
+        open={showRewardsPanel} 
+        onOpenChange={setShowRewardsPanel} 
+        showCloseButton={true} 
+        className="max-h-[100vh] rounded-t-0"
+      >
+        <div className="p-5 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 120px)', background: 'linear-gradient(160deg, #2B3E52 0%, #1e2d3d 100%)', minHeight: '100vh' }}>
 
               {/* Header */}
-              <div className="flex items-start justify-between mb-5">
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.15em]" style={{ color: 'rgba(240,237,229,0.7)' }}>YOUR JOURNEY</p>
-                  <div className="flex items-baseline gap-2 mt-1">
-                    <span className="text-[32px] font-extrabold leading-none" style={{ color: '#F28A2E' }}>{currentBeans}</span>
-                    <span className="text-[18px] font-bold" style={{ color: '#F0EDE5' }}>{currentBeans === 1 ? 'bean' : 'beans'}</span>
-                  </div>
-                  <p className="text-[12px] mt-1" style={{ color: 'rgba(240,237,229,0.55)' }}>
-                    {stampBeansNeeded} beans away from your next reward
-                  </p>
+              <div className="mb-5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.15em]" style={{ color: 'rgba(240,237,229,0.7)' }}>YOUR JOURNEY</p>
+                <div className="flex items-baseline gap-2 mt-1">
+                  <span className="text-[32px] font-extrabold leading-none" style={{ color: '#F28A2E' }}>{currentBeans}</span>
+                  <span className="text-[18px] font-bold" style={{ color: '#F0EDE5' }}>{currentBeans === 1 ? 'bean' : 'beans'}</span>
                 </div>
-                <button
-                  onClick={() => setShowRewardsPanel(false)}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors"
-                  style={{ backgroundColor: 'rgba(240,237,229,0.1)', color: '#F0EDE5' }}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M18 6L6 18M6 6l12 12" />
-                  </svg>
-                </button>
+                <p className="text-[12px] mt-1" style={{ color: 'rgba(240,237,229,0.55)' }}>
+                  {stampBeansNeeded} beans away from your next reward
+                </p>
               </div>
 
               {/* Journey list */}
@@ -1172,8 +1162,7 @@ export default function NewV2Dashboard() {
 
             </div>
           </div>
-        </DialogContent>
-      </Dialog>
+      </BottomSheet>
 
       {/* Bean award modal */}
       <BeanModal

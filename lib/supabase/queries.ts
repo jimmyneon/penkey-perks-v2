@@ -122,24 +122,42 @@ export async function getUserVouchers(userId: string, status?: 'active' | 'redee
   const supabase = createClient()
   let query = supabase
     .from('user_vouchers')
-    .select(`
-      *,
-      template:voucher_templates(name, description, category, bean_threshold)
-    `)
+    .select('*')
     .eq('user_id', userId)
   
   if (status) {
     query = query.eq('status', status)
   }
   
-  const { data, error } = await query.order('created_at', { ascending: false })
+  const { data: vouchers, error } = await query.order('created_at', { ascending: false })
   
   if (error) {
     console.error('Error fetching vouchers:', error)
     return []
   }
   
-  return data || []
+  if (!vouchers || vouchers.length === 0) {
+    return []
+  }
+  
+  // Fetch template data separately to avoid RLS issues with nested selects
+  const templateIds = vouchers.map(v => v.voucher_template_id)
+  const { data: templates, error: templateError } = await supabase
+    .from('voucher_templates')
+    .select('id, name, description, category, bean_threshold')
+    .in('id', templateIds)
+  
+  if (templateError) {
+    console.error('Error fetching voucher templates:', templateError)
+    return vouchers
+  }
+  
+  // Map templates to vouchers
+  const templateMap = new Map(templates?.map(t => [t.id, t]) || [])
+  return vouchers.map(voucher => ({
+    ...voucher,
+    template: templateMap.get(voucher.voucher_template_id)
+  }))
 }
 
 export async function getActiveVouchers(userId: string): Promise<Voucher[]> {
