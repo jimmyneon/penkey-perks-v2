@@ -384,7 +384,7 @@ export default function NewV2Dashboard() {
                     <div className="flex items-baseline gap-2 mb-1">
                       <span className="text-[56px] font-extrabold leading-none" style={{ color: '#F0EDE5' }}>{currentBeans}</span>
                     </div>
-                    <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>beans</p>
+                    <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>{currentBeans === 1 ? 'bean' : 'beans'}</p>
                     <img src="/stroke.png" alt="" className="w-24 h-2 object-contain mt-1 opacity-60" style={{ marginLeft: '-12px' }} />
                   </div>
                 </div>
@@ -826,7 +826,7 @@ export default function NewV2Dashboard() {
                   <p className="text-[11px] font-semibold uppercase tracking-[0.15em]" style={{ color: 'rgba(240,237,229,0.7)' }}>YOUR JOURNEY</p>
                   <div className="flex items-baseline gap-2 mt-1">
                     <span className="text-[32px] font-extrabold leading-none" style={{ color: '#F28A2E' }}>{currentBeans}</span>
-                    <span className="text-[18px] font-bold" style={{ color: '#F0EDE5' }}>beans</span>
+                    <span className="text-[18px] font-bold" style={{ color: '#F0EDE5' }}>{currentBeans === 1 ? 'bean' : 'beans'}</span>
                   </div>
                   <p className="text-[12px] mt-1" style={{ color: 'rgba(240,237,229,0.55)' }}>
                     {stampBeansNeeded} beans away from your next reward

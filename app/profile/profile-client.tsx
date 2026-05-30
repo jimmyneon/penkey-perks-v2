@@ -440,7 +440,7 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
           <div className="flex-shrink-0 text-right">
             <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-0.5" style={{ color: '#9AAAB8' }}>LIFETIME BEANS</p>
             <p className="text-[32px] font-extrabold leading-none" style={{ color: '#1C2B3A' }}>{beanBalance?.lifetime_beans || 0}</p>
-            <p className="text-[12px] italic mt-0.5" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>beans</p>
+            <p className="text-[12px] italic mt-0.5" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>{(beanBalance?.lifetime_beans || 0) === 1 ? 'bean' : 'beans'}</p>
             <p className="text-[11px] mt-1" style={{ color: '#8A96A0' }}>Keep it up!</p>
           </div>
         </div>
