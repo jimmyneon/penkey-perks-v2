@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
         p_user_id: userId,
         p_amount: totalBeans,
         p_source: 'purchase',
-        p_reference_id: null,
+        p_source_id: null,
         p_metadata: { beanRules, menuItems, staffId, locationId },
       })
       
