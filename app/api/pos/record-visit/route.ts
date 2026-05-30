@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { getCorsHeaders } from '@/lib/api/cors'
 
@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
   const origin = request.headers.get('origin')
   const corsHeaders = getCorsHeaders(origin)
   try {
-    const supabase = await createClient()
+    const supabase = await createAdminClient()
     const body = await request.json()
     
     const { userId, beanRules, menuItems, staffId, locationId } = body
