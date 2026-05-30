@@ -11,10 +11,18 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import QRCodeLib from 'qrcode'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import { BottomSheet, BottomSheetContent } from '@/components/ui/bottom-sheet'
 import { BottomNav } from '@/components/bottom-nav'
 import { BrushUnderline } from '@/components/ui/brush-underline'
 import { SparkLines } from '@/components/ui/spark-lines'
 import { GiftIcon } from '@/components/ui/gift-icon'
+
+interface BeanBalance {
+  current_beans: number
+  lifetime_beans: number
+  visit_count: number
+  last_visit_at: string | null
+}
 
 // Window-level log to verify JavaScript is executing
 if (typeof window !== 'undefined') {
@@ -56,6 +64,7 @@ export default function NewV2Dashboard() {
   const [debugInfo, setDebugInfo] = useState({ hookCalled: false, beansAwarded: 0, currentBeans: 0, previousBeans: 0, lastUpdate: '' })
   const [modalClosed, setModalClosed] = useState(false)
   const [triggerAnimation, setTriggerAnimation] = useState(false)
+  const [displayedBeanBalance, setDisplayedBeanBalance] = useState<BeanBalance | null>(null)
 
   // Real-time bean balance
   const { beanBalance, isLoading: balanceLoading, justUpdated, beansAwarded, previousBalance } = useBeanBalanceRealtime(user?.id || null)
@@ -71,8 +80,12 @@ export default function NewV2Dashboard() {
         previousBeans: previousBalance,
         lastUpdate: new Date().toISOString() 
       }))
+      // Only update displayed balance if modal is not open
+      if (!showBeanModal) {
+        setDisplayedBeanBalance(beanBalance)
+      }
     }
-  }, [beanBalance, previousBalance])
+  }, [beanBalance, previousBalance, showBeanModal])
 
   // Show modal when beans are awarded
   useEffect(() => {
@@ -90,6 +103,10 @@ export default function NewV2Dashboard() {
     setShowBeanModal(false)
     setModalClosed(true)
     setTriggerAnimation(true)
+    // Update displayed balance to show the new value
+    if (beanBalance) {
+      setDisplayedBeanBalance(beanBalance)
+    }
     // Reset animation flag after animation completes
     setTimeout(() => {
       setTriggerAnimation(false)
@@ -300,7 +317,7 @@ export default function NewV2Dashboard() {
     )
   }
 
-  const currentBeans = beanBalance?.current_beans || 0
+  const currentBeans = displayedBeanBalance?.current_beans || beanBalance?.current_beans || 0
 
   // Stamp card config — next milestone from current beans
   const STAMP_MILESTONES = [2, 8, 15, 25]
@@ -823,47 +840,52 @@ export default function NewV2Dashboard() {
         </DialogContent>
       </Dialog>
 
-      {/* Voucher Selection Dialog */}
-      <Dialog open={showVoucherSelection} onOpenChange={setShowVoucherSelection}>
-        <DialogContent className="sm:max-w-sm rounded-[24px] bg-white border-0 shadow-[0_24px_64px_rgba(28,43,58,0.18)]">
-          <DialogHeader>
-            <DialogTitle className="text-[#1C2B3A] text-lg font-extrabold text-center">Choose Your Voucher</DialogTitle>
-            <DialogDescription className="text-[#8A96A0] text-[13px] text-center">Select a reward to convert your beans</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3 pb-1">
-            {availableVouchers.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-[#8A96A0] text-sm">No vouchers available</p>
-                <p className="text-[#8A96A0] text-xs mt-1">You need at least 2 beans to convert</p>
-              </div>
-            ) : (
-              availableVouchers.map((voucher) => (
+      {/* Voucher Selection Bottom Sheet */}
+      <BottomSheet open={showVoucherSelection} onOpenChange={setShowVoucherSelection} title="Choose Your Voucher" showCloseButton={true}>
+        <BottomSheetContent className="overflow-y-auto max-h-[70vh]">
+          <p className="text-center text-[13px] mb-4" style={{ color: '#8A96A0' }}>Select a reward to convert your beans</p>
+          
+          {availableVouchers.length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-sm" style={{ color: '#8A96A0' }}>No vouchers available</p>
+              <p className="text-xs mt-1" style={{ color: '#8A96A0' }}>You need at least 2 beans to convert</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {availableVouchers.map((voucher) => (
                 <button
                   key={voucher.id}
                   onClick={() => convertToVoucher(voucher.bean_threshold)}
                   disabled={converting}
                   className="w-full rounded-[16px] p-4 text-left active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{
-                    backgroundColor: '#F4F7F9',
-                    border: '1px solid #EDF1F4',
+                    backgroundColor: '#F4EFE7',
+                    border: '1px solid #E8E2D8',
                   }}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <p className="text-[#1C2B3A] text-sm font-bold">{voucher.name}</p>
-                      <p className="text-[#8A96A0] text-xs mt-0.5">{voucher.description}</p>
+                      <p className="text-sm font-bold" style={{ color: '#24364B' }}>{voucher.name}</p>
+                      <p className="text-xs mt-0.5" style={{ color: '#5A6A7A' }}>{voucher.description}</p>
                     </div>
                     <div className="text-right ml-3">
-                      <p className="text-[#E07A3A] text-sm font-bold">{voucher.bean_threshold} beans</p>
+                      <p className="text-sm font-bold" style={{ color: '#F28A2E' }}>{voucher.bean_threshold} beans</p>
                     </div>
                   </div>
                 </button>
-              ))
-            )}
-            <button onClick={() => setShowVoucherSelection(false)} className="w-full py-3.5 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all" style={{ backgroundColor: '#2C3E50' }}>Cancel</button>
-          </div>
-        </DialogContent>
-      </Dialog>
+              ))}
+            </div>
+          )}
+          
+          <button 
+            onClick={() => setShowVoucherSelection(false)} 
+            className="w-full py-3.5 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all mt-4"
+            style={{ backgroundColor: '#F28A2E', boxShadow: '0 4px 16px rgba(242,138,46,0.35)' }}
+          >
+            Cancel
+          </button>
+        </BottomSheetContent>
+      </BottomSheet>
 
       {/* Rewards Panel Dialog */}
       <Dialog open={showRewardsPanel} onOpenChange={setShowRewardsPanel}>
