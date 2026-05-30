@@ -1,7 +1,6 @@
 'use client'
 
 import { Bell } from 'lucide-react'
-import Image from 'next/image'
 
 interface HomeHeaderProps {
   userName: string
@@ -27,14 +26,11 @@ export function HomeHeader({ userName, beanCount }: HomeHeaderProps) {
         <button className="w-10 h-10 rounded-full bg-[#F3DCD4] flex items-center justify-center">
           <Bell className="w-5 h-5 text-[#7B1234]" />
         </button>
-        <div className="w-16 h-16 relative">
-          <Image
-            src="/image-assets/cupilli.png"
-            alt="Cup Illy"
-            fill
-            className="object-contain"
-          />
-        </div>
+        <img
+          src="/image-assets/cupilli.png"
+          alt="Cup Illy"
+          className="w-16 h-16 object-contain"
+        />
       </div>
     </div>
   )
