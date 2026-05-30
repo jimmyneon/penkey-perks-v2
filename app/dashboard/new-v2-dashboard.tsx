@@ -221,7 +221,6 @@ export default function NewV2Dashboard() {
       const { data: templates } = await supabase
         .from('voucher_templates')
         .select('*')
-        .eq('is_active', true)
         .order('bean_threshold', { ascending: true })
 
       if (!templates) return
@@ -431,7 +430,7 @@ export default function NewV2Dashboard() {
                   </div>
                 </div>
                 <p className="text-[10px] font-medium" style={{ color: '#F0EDE5' }}>
-                  0 - 25 beans
+                  {currentBeans} - 25 beans
                 </p>
               </div>
             </div>
@@ -539,6 +538,8 @@ export default function NewV2Dashboard() {
       {/* Voucher / Perk Unlocked Dialog */}
       <Dialog open={!!selectedVoucher} onOpenChange={() => setSelectedVoucher(null)}>
         <DialogContent className="sm:max-w-sm rounded-[28px] shadow-[0_24px_64px_rgba(36,54,75,0.18)] p-0 overflow-hidden border-0">
+          <DialogTitle className="sr-only">Voucher Details</DialogTitle>
+          <DialogDescription className="sr-only">View your voucher details and QR code</DialogDescription>
           <div style={{ backgroundColor: '#F4EFE7' }}>
 
             {/* Top hero area — cream with close button */}
@@ -675,6 +676,8 @@ export default function NewV2Dashboard() {
       {/* Beans Panel Dialog - Stamps Only */}
       <Dialog open={showBeansPanel} onOpenChange={setShowBeansPanel}>
         <DialogContent className="sm:max-w-md rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 overflow-hidden border-0">
+          <DialogTitle className="sr-only">Your Stamp Card</DialogTitle>
+          <DialogDescription className="sr-only">View your bean collection and stamp card progress</DialogDescription>
           <div
             className="rounded-[24px] overflow-hidden"
             style={{ background: 'linear-gradient(135deg, #2B3E52 0%, #24364A 100%)' }}
@@ -822,6 +825,8 @@ export default function NewV2Dashboard() {
       {/* Rewards Panel Dialog */}
       <Dialog open={showRewardsPanel} onOpenChange={setShowRewardsPanel}>
         <DialogContent className="sm:max-w-[380px] rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 border-0 overflow-hidden">
+          <DialogTitle className="sr-only">Your Journey</DialogTitle>
+          <DialogDescription className="sr-only">View your rewards journey and available vouchers</DialogDescription>
           <div style={{ background: 'linear-gradient(160deg, #2B3E52 0%, #1e2d3d 100%)' }} className="overflow-y-auto max-h-[90vh]">
             <div className="p-5">
 
