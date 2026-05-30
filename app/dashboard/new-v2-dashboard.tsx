@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { getBeanBalance, getActiveVouchers, getUserBadges, getActiveCampaigns, getNextRewardThreshold, getAllVoucherTemplates } from '@/lib/supabase/queries'
+import { useBeanBalanceRealtime } from '@/hooks/use-bean-balance-realtime'
 import { Bell, Coffee, Gift, TrendingUp, QrCode, BarChart3, ChevronRight, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -23,7 +24,6 @@ function getGreeting() {
 export default function NewV2Dashboard() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
-  const [beanBalance, setBeanBalance] = useState<any>(null)
   const [vouchers, setVouchers] = useState<any[]>([])
   const [badges, setBadges] = useState<any[]>([])
   const [campaigns, setCampaigns] = useState<any[]>([])
@@ -41,6 +41,9 @@ export default function NewV2Dashboard() {
   const [showVoucherSelection, setShowVoucherSelection] = useState(false)
   const [availableVouchers, setAvailableVouchers] = useState<any[]>([])
   const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
+
+  // Real-time bean balance
+  const { beanBalance, isLoading: balanceLoading, justUpdated } = useBeanBalanceRealtime(user?.id || null)
 
   // Prevent hydration mismatch
   useEffect(() => {
@@ -85,18 +88,6 @@ export default function NewV2Dashboard() {
         setProfile(profileData)
       } catch (error) {
         console.error('Error loading profile:', error)
-      }
-
-      // Load bean balance - use fallback if table doesn't exist
-      try {
-        let balance = await getBeanBalance(authUser.id)
-        if (!balance) {
-          balance = await createBeanBalance(authUser.id)
-        }
-        setBeanBalance(balance)
-      } catch (error) {
-        console.error('Error loading bean balance, using fallback:', error)
-        setBeanBalance({ current_beans: 3, lifetime_beans: 15, visit_count: 5, last_visit_at: new Date().toISOString() })
       }
 
       // Load vouchers - use sample data if table doesn't exist
@@ -193,10 +184,6 @@ export default function NewV2Dashboard() {
       }
 
       if (data.success) {
-        // Refresh bean balance
-        const newBalance = await getBeanBalance(user.id)
-        setBeanBalance(newBalance)
-
         // Refresh vouchers
         const newVouchers = await getActiveVouchers(user.id)
         setVouchers(newVouchers)
@@ -381,8 +368,8 @@ export default function NewV2Dashboard() {
                     YOUR BEAN BALANCE
                   </p>
                   <div className="mb-2">
-                    <div className="flex items-baseline gap-2 mb-1">
-                      <span className="text-[56px] font-extrabold leading-none" style={{ color: '#F0EDE5' }}>{currentBeans}</span>
+                    <div className={`flex items-baseline gap-2 mb-1 ${justUpdated ? 'animate-bean-pop' : ''}`}>
+                      <span className={`text-[56px] font-extrabold leading-none ${justUpdated ? 'animate-bean-glow' : ''}`} style={{ color: '#F0EDE5' }}>{currentBeans}</span>
                     </div>
                     <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>{currentBeans === 1 ? 'bean' : 'beans'}</p>
                     <img src="/stroke.png" alt="" className="w-24 h-2 object-contain mt-1 opacity-60" style={{ marginLeft: '-12px' }} />

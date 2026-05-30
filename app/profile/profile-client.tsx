@@ -14,6 +14,7 @@ import { ArrowLeft, User, Mail, Phone, Calendar, Lock, Trash2, PauseCircle, MapP
 import Link from 'next/link'
 import { useToast } from '@/hooks/use-toast'
 import { createClient } from '@/lib/supabase/client'
+import { useBeanBalanceRealtime } from '@/hooks/use-bean-balance-realtime'
 import QRCodeLib from 'qrcode'
 import { BottomNav } from '@/components/bottom-nav'
 import { PushNotificationToggle } from '@/components/push-notification-toggle'
@@ -42,11 +43,14 @@ interface ProfileClientProps {
   purchases?: any[]
 }
 
-export function ProfileClient({ user: initialUser, beanBalance, userBadges, userVouchers, purchases }: ProfileClientProps) {
+export function ProfileClient({ user: initialUser, beanBalance: initialBeanBalance, userBadges, userVouchers, purchases }: ProfileClientProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [name, setName] = useState(initialUser.name)
   const [phone, setPhone] = useState(initialUser.phone)
   const [dateOfBirth, setDateOfBirth] = useState(initialUser.date_of_birth || '')
+
+  // Real-time bean balance
+  const { beanBalance, justUpdated } = useBeanBalanceRealtime(initialUser.id)
 
   const [gpsConsent, setGpsConsent] = useState(initialUser.gps_consent)
   const [marketingConsent, setMarketingConsent] = useState(initialUser.marketing_consent)
@@ -338,7 +342,7 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
           <path d="M12 2a5 5 0 1 0 0 10A5 5 0 0 0 12 2z"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
         </svg>
       ),
-      label: 'My activity', sub: beanBalance?.visit_count > 0 ? `${beanBalance.visit_count} visits, ${beanBalance.lifetime_beans || 0} beans` : 'Start earning beans on your first visit!', onPress: () => setShowQRDialog(true),
+      label: 'My activity', sub: beanBalance && beanBalance.visit_count > 0 ? `${beanBalance.visit_count} visits, ${beanBalance.lifetime_beans || 0} beans` : 'Start earning beans on your first visit!', onPress: () => setShowQRDialog(true),
     },
     {
       icon: (
@@ -439,7 +443,7 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
           </div>
           <div className="flex-shrink-0 text-right">
             <p className="text-[10px] font-bold uppercase tracking-[0.12em] mb-0.5" style={{ color: '#9AAAB8' }}>LIFETIME BEANS</p>
-            <p className="text-[32px] font-extrabold leading-none" style={{ color: '#1C2B3A' }}>{beanBalance?.lifetime_beans || 0}</p>
+            <p className={`text-[32px] font-extrabold leading-none ${justUpdated ? 'animate-bean-pop' : ''}`} style={{ color: '#1C2B3A' }}>{beanBalance?.lifetime_beans || 0}</p>
             <p className="text-[12px] italic mt-0.5" style={{ color: '#E07A3A', fontFamily: 'Georgia, serif' }}>{(beanBalance?.lifetime_beans || 0) === 1 ? 'bean' : 'beans'}</p>
             <p className="text-[11px] mt-1" style={{ color: '#8A96A0' }}>Keep it up!</p>
           </div>
@@ -753,7 +757,7 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
               <div className="px-4 py-3 border-b" style={{ borderColor: '#EDF1F4', backgroundColor: '#F9F7F2' }}>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: '#AE9888' }}>Recent Activity</p>
               </div>
-              {beanBalance?.visit_count > 0 ? (
+              {beanBalance && beanBalance.visit_count > 0 ? (
                 <div className="p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -777,7 +781,7 @@ export function ProfileClient({ user: initialUser, beanBalance, userBadges, user
                       </div>
                       <div>
                         <p className="text-[13px] font-medium" style={{ color: '#1C2B3A' }}>Lifetime beans</p>
-                        <p className="text-[11px]" style={{ color: '#8A96A0' }}>{beanBalance.lifetime_beans} beans earned</p>
+                        <p className="text-[11px]" style={{ color: '#8A96A0' }}>{beanBalance.lifetime_beans || 0} beans earned</p>
                       </div>
                     </div>
                   </div>

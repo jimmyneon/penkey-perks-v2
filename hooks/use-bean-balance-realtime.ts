@@ -1,0 +1,75 @@
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { RealtimeChannel } from '@supabase/supabase-js'
+
+interface BeanBalance {
+  current_beans: number
+  lifetime_beans: number
+  visit_count: number
+  last_visit_at: string | null
+}
+
+export function useBeanBalanceRealtime(userId: string | null) {
+  const [beanBalance, setBeanBalance] = useState<BeanBalance | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [justUpdated, setJustUpdated] = useState(false)
+  const supabase = createClient()
+
+  useEffect(() => {
+    if (!userId) {
+      setIsLoading(false)
+      return
+    }
+
+    let channel: RealtimeChannel | null = null
+
+    // Initial fetch
+    const fetchBalance = async () => {
+      const { data, error } = await supabase
+        .from('bean_balances')
+        .select('*')
+        .eq('user_id', userId)
+        .single()
+
+      if (data) {
+        setBeanBalance(data)
+      }
+      setIsLoading(false)
+    }
+
+    fetchBalance()
+
+    // Set up real-time subscription
+    channel = supabase
+      .channel(`bean_balances:${userId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'bean_balances',
+          filter: `user_id=eq.${userId}`,
+        },
+        (payload) => {
+          if (payload.eventType === 'UPDATE' || payload.eventType === 'INSERT') {
+            setBeanBalance(payload.new as BeanBalance)
+            setJustUpdated(true)
+            setTimeout(() => setJustUpdated(false), 1000)
+          }
+        }
+      )
+      .subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          console.log('[Realtime] Subscribed to bean balance changes')
+        }
+      })
+
+    return () => {
+      if (channel) {
+        supabase.removeChannel(channel)
+      }
+    }
+  }, [userId, supabase])
+
+  return { beanBalance, isLoading, justUpdated }
+}
