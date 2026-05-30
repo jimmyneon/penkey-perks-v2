@@ -1,7 +1,16 @@
 import { createClient } from '@/lib/supabase/server'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { getCorsHeaders } from '@/lib/api/cors'
 
-export async function POST(request: Request) {
+export async function OPTIONS(request: NextRequest) {
+  const origin = request.headers.get('origin')
+  const corsHeaders = getCorsHeaders(origin)
+  return NextResponse.json({}, { headers: corsHeaders })
+}
+
+export async function POST(request: NextRequest) {
+  const origin = request.headers.get('origin')
+  const corsHeaders = getCorsHeaders(origin)
   try {
     const supabase = await createClient()
     const body = await request.json()
@@ -10,7 +19,7 @@ export async function POST(request: Request) {
     
     // Validate required fields
     if (!userId) {
-      return NextResponse.json({ error: 'User ID is required' }, { status: 400 })
+      return NextResponse.json({ error: 'User ID is required' }, { status: 400, headers: corsHeaders })
     }
     
     // Check if user already visited today
@@ -62,7 +71,7 @@ export async function POST(request: Request) {
       
       if (awardError) {
         console.error('Error awarding beans:', awardError)
-        return NextResponse.json({ error: 'Failed to award beans' }, { status: 500 })
+        return NextResponse.json({ error: 'Failed to award beans' }, { status: 500, headers: corsHeaders })
       }
     }
     
@@ -83,9 +92,9 @@ export async function POST(request: Request) {
       beansAwarded: totalBeans,
       baseBeans,
       bonusBeans,
-    })
+    }, { headers: corsHeaders })
   } catch (error) {
     console.error('Error recording visit:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500, headers: corsHeaders })
   }
 }
