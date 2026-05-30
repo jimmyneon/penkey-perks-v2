@@ -64,6 +64,11 @@ export function useBeanBalanceRealtime(userId: string | null) {
             setBeanBalance(newBalance)
             setJustUpdated(true)
             setTimeout(() => setJustUpdated(false), 1000)
+            
+            // Trigger modal on any bean balance update
+            console.log('[Realtime] Triggering beansAwarded modal')
+            setBeansAwarded(1)
+            
             if (newBalance) {
               previousBalanceRef.current = newBalance.current_beans
             }
