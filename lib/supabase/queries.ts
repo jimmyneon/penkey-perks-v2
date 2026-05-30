@@ -164,6 +164,8 @@ export async function getActiveVouchers(userId: string): Promise<Voucher[]> {
   console.log('[getActiveVouchers] Fetching vouchers for user:', userId)
   const vouchers = await getUserVouchers(userId, 'active')
   console.log('[getActiveVouchers] Result:', vouchers)
+  console.log('[getActiveVouchers] Vouchers count:', vouchers.length)
+  console.log('[getActiveVouchers] First voucher:', vouchers[0])
   return vouchers
 }
 

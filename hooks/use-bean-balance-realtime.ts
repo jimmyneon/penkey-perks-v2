@@ -9,11 +9,14 @@ interface BeanBalance {
   last_visit_at: string | null
 }
 
-export function useBeanBalanceRealtime(userId: string | null) {
+export function useBeanBalanceRealtime(userId: string | null, disabled: boolean = false) {
   const [beanBalance, setBeanBalance] = useState<BeanBalance | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [justUpdated, setJustUpdated] = useState(false)
   const [beansAwarded, setBeansAwarded] = useState(0)
+  const [beanDescription, setBeanDescription] = useState<string>('')
+  const [maxBeansReached, setMaxBeansReached] = useState(false)
+  const [maxBeansMessage, setMaxBeansMessage] = useState<string>('')
   const previousBalanceRef = useRef<number>(0)
   const supabase = createClient()
 
@@ -22,6 +25,12 @@ export function useBeanBalanceRealtime(userId: string | null) {
   useEffect(() => {
     if (!userId) {
       console.log('[Realtime] No userId provided, skipping subscription')
+      setIsLoading(false)
+      return
+    }
+
+    if (disabled) {
+      console.log('[Realtime] Realtime disabled, skipping subscription')
       setIsLoading(false)
       return
     }
@@ -61,13 +70,19 @@ export function useBeanBalanceRealtime(userId: string | null) {
           console.log('[Realtime] Bean balance change received:', payload)
           if (payload.eventType === 'UPDATE' || payload.eventType === 'INSERT') {
             const newBalance = payload.new as BeanBalance
+            const oldBalance = payload.old as BeanBalance | undefined
+            
             setBeanBalance(newBalance)
             setJustUpdated(true)
             setTimeout(() => setJustUpdated(false), 1000)
             
-            // Trigger modal on any bean balance update
-            console.log('[Realtime] Triggering beansAwarded modal')
-            setBeansAwarded(1)
+            // Calculate beans awarded
+            const beansDiff = oldBalance ? newBalance.current_beans - oldBalance.current_beans : newBalance.current_beans
+            
+            if (beansDiff > 0) {
+              console.log('[Realtime] Triggering beansAwarded modal with:', beansDiff)
+              setBeansAwarded(beansDiff)
+            }
             
             if (newBalance) {
               previousBalanceRef.current = newBalance.current_beans
@@ -76,15 +91,47 @@ export function useBeanBalanceRealtime(userId: string | null) {
         }
       )
       .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'bean_transactions',
+          filter: `user_id=eq.${userId}`,
+        },
+        (payload) => {
+          console.log('[Realtime] Bean transaction received:', payload)
+          const transaction = payload.new as any
+          
+          // Only show description for positive transactions (earned beans)
+          if (transaction.amount > 0 && transaction.description) {
+            console.log('[Realtime] Setting beanDescription:', transaction.description)
+            setBeanDescription(transaction.description)
+          }
+        }
+      )
+      .on(
         'broadcast',
         { event: 'beans_awarded' },
         (payload) => {
           console.log('[Realtime] Beans awarded broadcast received:', payload)
-          const { beansAwarded } = payload.payload
+          const { beansAwarded, description } = payload.payload
           if (beansAwarded > 0) {
             console.log('[Realtime] Setting beansAwarded to:', beansAwarded)
             setBeansAwarded(beansAwarded)
+            if (description) {
+              setBeanDescription(description)
+            }
           }
+        }
+      )
+      .on(
+        'broadcast',
+        { event: 'max_beans_reached' },
+        (payload) => {
+          console.log('[Realtime] Max beans reached broadcast received:', payload)
+          const { message, current_beans, action } = payload.payload
+          setMaxBeansReached(true)
+          setMaxBeansMessage(message || 'You have reached the maximum bean cap of 25! Convert your beans to vouchers to earn more.')
         }
       )
       .subscribe((status, err) => {
@@ -101,5 +148,5 @@ export function useBeanBalanceRealtime(userId: string | null) {
     }
   }, [userId, supabase])
 
-  return { beanBalance, isLoading, justUpdated, beansAwarded, previousBalance: previousBalanceRef.current }
+  return { beanBalance, isLoading, justUpdated, beansAwarded, beanDescription, maxBeansReached, maxBeansMessage, previousBalance: previousBalanceRef.current }
 }

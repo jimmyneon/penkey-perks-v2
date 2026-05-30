@@ -77,7 +77,41 @@ export async function POST(request: Request) {
 
     if (totalPointsToday + points > 200) {
       return NextResponse.json(
-        { error: 'You have reached your daily limit of 200 points' },
+        { error: 'You have reached your daily limit of 200 beans' },
+        { status: 400 }
+      )
+    }
+
+    // Check customer's current bean balance
+    const { data: beanBalance } = await supabase
+      .from('bean_balances')
+      .select('current_beans')
+      .eq('user_id', userId)
+      .single()
+
+    const currentBeans = beanBalance?.current_beans || 0
+
+    // Check if awarding would exceed cap
+    if (currentBeans >= 25) {
+      // Broadcast max beans notification to customer
+      await supabase
+        .channel(`user_notifications:${userId}`)
+        .send({
+          type: 'broadcast',
+          event: 'max_beans_reached',
+          payload: {
+            message: 'You have reached the maximum bean cap of 25! Convert your beans to vouchers to earn more.',
+            current_beans: currentBeans,
+            action: 'convert_to_vouchers'
+          }
+        })
+      
+      return NextResponse.json(
+        { 
+          error: 'Customer has reached maximum bean cap of 25. Convert beans to vouchers first.',
+          at_max_beans: true,
+          current_beans: currentBeans
+        },
         { status: 400 }
       )
     }
@@ -104,8 +138,8 @@ export async function POST(request: Request) {
       )
     }
 
-    // Award points immediately (no approval needed)
-    const { error: pointsError } = await supabase.rpc('add_points', {
+    // Award beans immediately (no approval needed)
+    const { error: beansError, data: awardResult } = await supabase.rpc('award_beans', {
       p_user_id: userId,
       p_amount: points,
       p_source: 'manual_award',
@@ -117,16 +151,35 @@ export async function POST(request: Request) {
       }
     })
 
-    if (pointsError) {
-      console.error('Error awarding points:', pointsError)
-      // Rollback the award if points failed
+    if (beansError) {
+      console.error('Error awarding beans:', beansError)
+      
+      // Check if it's a max beans error
+      if (beansError.message?.includes('maximum bean cap')) {
+        // Rollback the award
+        await supabase
+          .from('manual_points_awards')
+          .delete()
+          .eq('id', award.id)
+        
+        return NextResponse.json(
+          { 
+            error: 'Customer has reached maximum bean cap of 25. Convert beans to vouchers first.',
+            at_max_beans: true,
+            current_beans: currentBeans
+          },
+          { status: 400 }
+        )
+      }
+      
+      // Rollback the award if beans failed
       await supabase
         .from('manual_points_awards')
         .delete()
         .eq('id', award.id)
       
       return NextResponse.json(
-        { error: 'Failed to award points: ' + pointsError.message },
+        { error: 'Failed to award beans: ' + beansError.message },
         { status: 500 }
       )
     }

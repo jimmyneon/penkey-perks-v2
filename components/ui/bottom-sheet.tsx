@@ -64,12 +64,17 @@ export function BottomSheet({
             onClick={() => onOpenChange(false)}
           />
           
-          {/* Sheet - only handle draggable */}
+          {/* Sheet - entire sheet draggable */}
           <motion.div
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 35, stiffness: 250 }}
+            drag="y"
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={0.5}
+            dragSnapToOrigin={true}
+            onDragEnd={handleDragEnd}
             style={{ y }}
             className={cn(
               "fixed bottom-0 left-0 right-0 z-[10000] bg-cream-card shadow-premium-xl",
@@ -77,17 +82,10 @@ export function BottomSheet({
               className
             )}
           >
-            {/* Handle - draggable */}
-            <motion.div
-              drag="y"
-              dragConstraints={{ top: 0, bottom: 0 }}
-              dragElastic={0.5}
-              dragSnapToOrigin={true}
-              onDragEnd={handleDragEnd}
-              className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing"
-            >
+            {/* Handle - visual only */}
+            <div className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing">
               <div className="w-12 h-1.5 bg-brown/20 rounded-full" />
-            </motion.div>
+            </div>
             
             {/* Header */}
             {!fullScreen && (title || showCloseButton) && (
@@ -99,6 +97,7 @@ export function BottomSheet({
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
+                      e.preventDefault()
                       onOpenChange(false)
                     }}
                     className="p-2 rounded-full hover:bg-blush transition-colors"
@@ -110,7 +109,9 @@ export function BottomSheet({
             )}
             
             {/* Content - no scroll container, let content handle its own scrolling */}
-            {children}
+            <motion.div dragListener={false}>
+              {children}
+            </motion.div>
           </motion.div>
         </>
       )}

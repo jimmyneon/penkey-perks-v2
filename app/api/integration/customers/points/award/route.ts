@@ -54,101 +54,92 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createAdminClient();
 
-    // Get current customer data
-    const { data: customer, error: customerError } = await supabase
-      .from('users')
-      .select('id, points_balance, membership_tier')
-      .eq('id', customer_id)
+    // Get current customer bean balance
+    const { data: beanBalance, error: beanError } = await supabase
+      .from('bean_balances')
+      .select('current_beans, lifetime_beans')
+      .eq('user_id', customer_id)
       .single();
 
-    if (customerError || !customer) {
+    if (beanError && beanError.code !== 'PGRST116') {
+      // PGRST116 = not found, which is ok for new users
+      console.error('Bean balance check error:', beanError);
       return NextResponse.json({ 
-        error: 'Customer not found' 
-      }, { status: 404, headers: corsHeaders });
-    }
-
-    const currentPoints = customer.points_balance || 0;
-    const newPointsBalance = currentPoints + points;
-
-    // Determine new membership tier based on total points
-    let newTier = customer.membership_tier || 'bronze';
-    if (newPointsBalance >= 1000) {
-      newTier = 'platinum';
-    } else if (newPointsBalance >= 500) {
-      newTier = 'gold';
-    } else if (newPointsBalance >= 200) {
-      newTier = 'silver';
-    } else {
-      newTier = 'bronze';
-    }
-
-    // Update customer points and tier
-    const { error: updateError } = await supabase
-      .from('users')
-      .update({
-        points_balance: newPointsBalance,
-        membership_tier: newTier,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', customer_id);
-
-    if (updateError) {
-      console.error('Customer update error:', updateError);
-      return NextResponse.json({ 
-        error: 'Failed to update customer points' 
+        error: 'Failed to check customer bean balance' 
       }, { status: 500, headers: corsHeaders });
     }
 
-    // ✅ 5. Check for duplicate transaction (idempotency)
-    const { data: existingTransaction } = await supabase
-      .from('customer_points_transactions')
-      .select('id, points')
-      .eq('receipt_id', receipt_id)
-      .eq('customer_id', customer_id)
-      .maybeSingle();
-
-    if (existingTransaction) {
-      console.log(`[Perks] Points already awarded for receipt ${receipt_id}`);
+    const currentBeans = beanBalance?.current_beans || 0;
+    
+    // Check if adding beans would exceed cap
+    if (currentBeans >= 25) {
+      // Broadcast max beans notification to customer
+      await supabase
+        .channel(`user_notifications:${customer_id}`)
+        .send({
+          type: 'broadcast',
+          event: 'max_beans_reached',
+          payload: {
+            message: 'You have reached the maximum bean cap of 25! Convert your beans to vouchers to earn more.',
+            current_beans: currentBeans,
+            action: 'convert_to_vouchers'
+          }
+        })
       
-      // Return success with existing transaction details
       return NextResponse.json({
-        success: true,
-        points_awarded: existingTransaction.points,
-        already_awarded: true,
-        message: 'Points were already awarded for this receipt'
-      }, { headers: corsHeaders });
+        success: false,
+        error: 'Customer has reached maximum bean cap of 25. Convert beans to vouchers first.',
+        at_max_beans: true,
+        current_beans: currentBeans
+      }, { status: 400, headers: corsHeaders });
     }
 
-    // Create points transaction record
-    const { error: transactionError } = await supabase
-      .from('customer_points_transactions')
-      .insert({
-        customer_id,
-        receipt_id,
-        type: 'earned',
-        points,
-        reason: reason || 'Purchase points',
-        created_at: new Date().toISOString()
-      });
+    // Award beans using the award_beans function
+    const { data: awardResult, error: awardError } = await supabase.rpc('award_beans', {
+      p_user_id: customer_id,
+      p_amount: points,
+      p_source: 'pos_purchase',
+      p_description: reason || 'Purchase points',
+      p_metadata: {
+        receipt_id: receipt_id,
+        source: 'pos_integration'
+      }
+    });
 
-    if (transactionError) {
-      console.error('Failed to create points transaction:', transactionError);
-      return NextResponse.json(
-        { error: 'Failed to record points transaction' },
-        { status: 500, headers: corsHeaders }
-      );
+    if (awardError) {
+      console.error('Award beans error:', awardError);
+      
+      // Check if it's a max beans error
+      if (awardError.message?.includes('maximum bean cap')) {
+        return NextResponse.json({
+          success: false,
+          error: 'Customer has reached maximum bean cap of 25. Convert beans to vouchers first.',
+          at_max_beans: true,
+          current_beans: currentBeans
+        }, { status: 400, headers: corsHeaders });
+      }
+      
+      return NextResponse.json({ 
+        error: 'Failed to award beans: ' + awardError.message 
+      }, { status: 500, headers: corsHeaders });
     }
 
-    console.log(`[Perks] Awarded ${points} points to customer ${customer_id}. New balance: ${newPointsBalance}`);
+    // Get updated bean balance
+    const { data: newBeanBalance } = await supabase
+      .from('bean_balances')
+      .select('current_beans, lifetime_beans')
+      .eq('user_id', customer_id)
+      .single();
+
+    console.log(`[Perks] Awarded ${points} beans to customer ${customer_id}. New balance: ${newBeanBalance?.current_beans}`);
 
     return NextResponse.json({
       success: true,
-      points_awarded: points,
-      new_balance: newPointsBalance,
-      previous_balance: currentPoints,
-      new_tier: newTier,
-      tier_changed: newTier !== customer.membership_tier,
-      already_awarded: false
+      beans_awarded: points,
+      new_balance: newBeanBalance?.current_beans || 0,
+      previous_balance: currentBeans,
+      lifetime_beans: newBeanBalance?.lifetime_beans || 0,
+      description: reason || 'Purchase points'
     }, { headers: corsHeaders });
 
   } catch (error) {
