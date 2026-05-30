@@ -53,14 +53,28 @@ export default function NewV2Dashboard() {
   const [showVoucherSelection, setShowVoucherSelection] = useState(false)
   const [availableVouchers, setAvailableVouchers] = useState<any[]>([])
   const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
+  const [debugInfo, setDebugInfo] = useState({ hookCalled: false, beansAwarded: 0, currentBeans: 0, lastUpdate: '' })
 
   // Real-time bean balance
   const { beanBalance, isLoading: balanceLoading, justUpdated, beansAwarded } = useBeanBalanceRealtime(user?.id || null)
   const [showBeanModal, setShowBeanModal] = useState(false)
 
+  // Update debug info when bean balance changes
+  useEffect(() => {
+    if (beanBalance) {
+      setDebugInfo(prev => ({ 
+        ...prev, 
+        hookCalled: true, 
+        currentBeans: beanBalance.current_beans,
+        lastUpdate: new Date().toISOString() 
+      }))
+    }
+  }, [beanBalance])
+
   // Show modal when beans are awarded
   useEffect(() => {
     console.log('[Dashboard] beansAwarded changed:', beansAwarded)
+    setDebugInfo(prev => ({ ...prev, beansAwarded, lastUpdate: new Date().toISOString() }))
     if (beansAwarded > 0) {
       console.log('[Dashboard] Showing bean modal with', beansAwarded, 'beans')
       setShowBeanModal(true)
@@ -347,6 +361,15 @@ export default function NewV2Dashboard() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
+      {/* Debug Panel */}
+      <div className="fixed top-0 left-0 right-0 z-[100] bg-black/80 text-white p-2 text-xs font-mono">
+        <div>Hook Called: {debugInfo.hookCalled ? '✅' : '❌'}</div>
+        <div>Current Beans: {debugInfo.currentBeans || 'N/A'}</div>
+        <div>Beans Awarded: {debugInfo.beansAwarded}</div>
+        <div>Last Update: {debugInfo.lastUpdate || 'Never'}</div>
+        <div>Modal Visible: {showBeanModal ? '✅' : '❌'}</div>
+      </div>
+
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
         <div className="px-5 pt-10 pb-28 space-y-5">
 
