@@ -55,6 +55,7 @@ export default function NewV2Dashboard() {
   const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
   const [debugInfo, setDebugInfo] = useState({ hookCalled: false, beansAwarded: 0, currentBeans: 0, previousBeans: 0, lastUpdate: '' })
   const [modalClosed, setModalClosed] = useState(false)
+  const [triggerAnimation, setTriggerAnimation] = useState(false)
 
   // Real-time bean balance
   const { beanBalance, isLoading: balanceLoading, justUpdated, beansAwarded, previousBalance } = useBeanBalanceRealtime(user?.id || null)
@@ -79,6 +80,7 @@ export default function NewV2Dashboard() {
     setDebugInfo(prev => ({ ...prev, beansAwarded, lastUpdate: new Date().toISOString() }))
     if (beansAwarded > 0) {
       console.log('[Dashboard] Showing bean modal with', beansAwarded, 'beans')
+      setModalClosed(false) // Reset animation state
       setShowBeanModal(true)
     }
   }, [beansAwarded])
@@ -87,6 +89,11 @@ export default function NewV2Dashboard() {
   const handleBeanModalClose = () => {
     setShowBeanModal(false)
     setModalClosed(true)
+    setTriggerAnimation(true)
+    // Reset animation flag after animation completes
+    setTimeout(() => {
+      setTriggerAnimation(false)
+    }, 1000)
   }
 
   // Prevent hydration mismatch
@@ -421,8 +428,8 @@ export default function NewV2Dashboard() {
                     YOUR BEAN BALANCE
                   </p>
                   <div className="mb-2">
-                    <div className={`flex items-baseline gap-2 mb-1 ${justUpdated && modalClosed ? 'animate-bean-pop' : ''}`}>
-                      <FlipNumber value={currentBeans} className={`text-[56px] font-extrabold leading-none ${justUpdated && modalClosed ? 'animate-bean-glow' : ''}`} style={{ color: '#F0EDE5' }} />
+                    <div className={`flex items-baseline gap-2 mb-1 ${triggerAnimation ? 'animate-bean-pop' : ''}`}>
+                      <FlipNumber value={currentBeans} className={`text-[56px] font-extrabold leading-none ${triggerAnimation ? 'animate-bean-glow' : ''}`} style={{ color: '#F0EDE5' }} />
                     </div>
                     <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>{currentBeans === 1 ? 'bean' : 'beans'}</p>
                     <img src="/stroke.png" alt="" className="w-24 h-2 object-contain mt-1 opacity-60" style={{ marginLeft: '-12px' }} />

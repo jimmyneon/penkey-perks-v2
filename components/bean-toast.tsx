@@ -18,17 +18,6 @@ export function BeanModal({ show, beansAwarded, onClose }: BeanModalProps) {
           
           {/* Top hero area */}
           <div className="relative px-5 pt-5 pb-4">
-            {/* Close button */}
-            <button
-              onClick={onClose}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center"
-              style={{ backgroundColor: 'rgba(36,54,75,0.1)', color: '#24364B' }}
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            </button>
-
             {/* Badge */}
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-3" style={{ border: '1.5px solid #F28A2E' }}>
               <svg width="8" height="8" viewBox="0 0 10 10" fill="#F28A2E"><circle cx="5" cy="5" r="4"/></svg>
