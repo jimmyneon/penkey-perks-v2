@@ -16,6 +16,14 @@ import { BrushUnderline } from '@/components/ui/brush-underline'
 import { SparkLines } from '@/components/ui/spark-lines'
 import { GiftIcon } from '@/components/ui/gift-icon'
 
+// Window-level log to verify JavaScript is executing
+if (typeof window !== 'undefined') {
+  console.log('[WINDOW] Dashboard script loaded')
+  window.addEventListener('load', () => {
+    console.log('[WINDOW] Page fully loaded')
+  })
+}
+
 function getGreeting() {
   const h = new Date().getHours()
   if (h < 12) return 'Good morning'
