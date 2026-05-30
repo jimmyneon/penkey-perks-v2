@@ -51,6 +51,7 @@ export function useBeanBalanceRealtime(userId: string | null) {
           filter: `user_id=eq.${userId}`,
         },
         (payload) => {
+          console.log('[Realtime] Bean balance change received:', payload)
           if (payload.eventType === 'UPDATE' || payload.eventType === 'INSERT') {
             setBeanBalance(payload.new as BeanBalance)
             setJustUpdated(true)
@@ -58,9 +59,10 @@ export function useBeanBalanceRealtime(userId: string | null) {
           }
         }
       )
-      .subscribe((status) => {
-        if (status === 'SUBSCRIBED') {
-          console.log('[Realtime] Subscribed to bean balance changes')
+      .subscribe((status, err) => {
+        console.log('[Realtime] Subscription status:', status)
+        if (err) {
+          console.error('[Realtime] Subscription error:', err)
         }
       })
 
