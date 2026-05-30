@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { RealtimeChannel } from '@supabase/supabase-js'
 
@@ -14,7 +14,7 @@ export function useBeanBalanceRealtime(userId: string | null) {
   const [isLoading, setIsLoading] = useState(true)
   const [justUpdated, setJustUpdated] = useState(false)
   const [beansAwarded, setBeansAwarded] = useState(0)
-  const [previousBalance, setPreviousBalance] = useState<number>(0)
+  const previousBalanceRef = useRef<number>(0)
   const supabase = createClient()
 
   console.log('[Realtime] Hook called with userId:', userId)
@@ -38,7 +38,7 @@ export function useBeanBalanceRealtime(userId: string | null) {
 
       if (data) {
         setBeanBalance(data)
-        setPreviousBalance(data.current_beans)
+        previousBalanceRef.current = data.current_beans
       }
       setIsLoading(false)
     }
@@ -65,15 +65,15 @@ export function useBeanBalanceRealtime(userId: string | null) {
             
             console.log('[Realtime] Old balance:', oldBalance)
             console.log('[Realtime] New balance:', newBalance)
-            console.log('[Realtime] Previous balance state:', previousBalance)
+            console.log('[Realtime] Previous balance state:', previousBalanceRef.current)
             
-            // Calculate beans awarded
+            // Calculate beans awarded BEFORE updating state
             let beansDiff = 0
             if (oldBalance && newBalance) {
               beansDiff = newBalance.current_beans - oldBalance.current_beans
             } else if (newBalance) {
               // If oldBalance is null, use our tracked previousBalance
-              beansDiff = newBalance.current_beans - previousBalance
+              beansDiff = newBalance.current_beans - previousBalanceRef.current
             }
             
             console.log('[Realtime] Beans diff calculated:', beansDiff)
@@ -82,15 +82,15 @@ export function useBeanBalanceRealtime(userId: string | null) {
               setBeansAwarded(beansDiff)
             }
             
-            // Update previous balance for next time
-            if (newBalance) {
-              setPreviousBalance(newBalance.current_beans)
-            }
-            
-            console.log('[Realtime] Updating bean balance from', payload.old, 'to', payload.new)
+            // Update bean balance first
             setBeanBalance(newBalance)
             setJustUpdated(true)
             setTimeout(() => setJustUpdated(false), 1000)
+            
+            // Update previous balance AFTER calculating diff
+            if (newBalance) {
+              previousBalanceRef.current = newBalance.current_beans
+            }
           }
         }
       )
@@ -108,5 +108,5 @@ export function useBeanBalanceRealtime(userId: string | null) {
     }
   }, [userId, supabase])
 
-  return { beanBalance, isLoading, justUpdated, beansAwarded, previousBalance }
+  return { beanBalance, isLoading, justUpdated, beansAwarded, previousBalance: previousBalanceRef.current }
 }
