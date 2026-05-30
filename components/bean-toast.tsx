@@ -1,6 +1,6 @@
 'use client'
 
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Coffee } from 'lucide-react'
 
 interface BeanModalProps {
@@ -13,6 +13,8 @@ export function BeanModal({ show, beansAwarded, onClose }: BeanModalProps) {
   return (
     <Dialog open={show} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-sm rounded-[24px] p-0 border-0">
+        <DialogTitle className="sr-only">Beans Awarded</DialogTitle>
+        <DialogDescription className="sr-only">Notification about beans you earned</DialogDescription>
         <div
           className="p-6 text-center"
           style={{

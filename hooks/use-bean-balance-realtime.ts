@@ -16,8 +16,11 @@ export function useBeanBalanceRealtime(userId: string | null) {
   const [beansAwarded, setBeansAwarded] = useState(0)
   const supabase = createClient()
 
+  console.log('[Realtime] Hook called with userId:', userId)
+
   useEffect(() => {
     if (!userId) {
+      console.log('[Realtime] No userId provided, skipping subscription')
       setIsLoading(false)
       return
     }
