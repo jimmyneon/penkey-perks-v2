@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import { BottomSheet, BottomSheetContent } from '@/components/ui/bottom-sheet'
 import { createClient } from '@/lib/supabase/client'
 import QRCodeLib from 'qrcode'
+import { RealtimeChannel } from '@supabase/supabase-js'
 
 const leftItems = [
   { href: '/dashboard', icon: Home, label: 'Home' },
@@ -47,6 +48,37 @@ export function BottomNav({ onShowQRCode }: BottomNavProps) {
     }
     loadUser()
   }, [])
+
+  // Auto-close QR when beans are awarded
+  useEffect(() => {
+    if (!user) return
+
+    const supabase = createClient()
+    let channel: RealtimeChannel | null = null
+
+    channel = supabase
+      .channel(`bean_balances:${user.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'bean_balances',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          console.log('[BottomNav] Bean balance updated, closing QR')
+          setShowQR(false)
+        }
+      )
+      .subscribe()
+
+    return () => {
+      if (channel) {
+        supabase.removeChannel(channel)
+      }
+    }
+  }, [user])
 
   const generateQRCode = async () => {
     if (!user) return
