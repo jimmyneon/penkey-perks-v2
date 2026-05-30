@@ -362,7 +362,7 @@ export function UnifiedRewardsClient({
                       }}
                     >
                       {filled ? (
-                        <img src="/bean.png" alt="" className="w-5 h-5 object-contain" style={{ filter: 'brightness(0) invert(1)' }} />
+                        <img src="/bean.png" alt="" className="w-5 h-5 object-contain" />
                       ) : (
                         <img src="/bean.png" alt="" className="w-5 h-5 object-contain" style={{ filter: 'brightness(0.4) grayscale(0.5)', opacity: 0.6 }} />
                       )}
@@ -374,7 +374,7 @@ export function UnifiedRewardsClient({
 
             <p className="text-[13px] font-medium leading-snug" style={{ color: 'rgba(255,255,255,0.6)' }}>
               {nextReward
-                ? <><span className="font-bold" style={{ color: '#E07A3A' }}>{nextReward.points_required - currentPoints} more</span> until your next reward</>
+                ? <><span className="font-bold" style={{ color: '#E07A3A' }}>{Math.max(0, nextReward.points_required - currentPoints)} more</span> until your next reward</>
                 : <span className="font-semibold text-white">All rewards unlocked — go redeem!</span>
               }
             </p>

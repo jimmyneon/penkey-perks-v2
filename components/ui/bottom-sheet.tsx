@@ -12,6 +12,7 @@ interface BottomSheetProps {
   title?: string
   showCloseButton?: boolean
   className?: string
+  fullScreen?: boolean
 }
 
 export function BottomSheet({
@@ -21,6 +22,7 @@ export function BottomSheet({
   title,
   showCloseButton = true,
   className,
+  fullScreen = false,
 }: BottomSheetProps) {
   const y = useMotionValue(0)
 
@@ -70,7 +72,8 @@ export function BottomSheet({
             transition={{ type: "spring", damping: 35, stiffness: 250 }}
             style={{ y }}
             className={cn(
-              "fixed bottom-0 left-0 right-0 z-[10000] bg-cream-card rounded-t-3xl shadow-premium-xl max-h-[85vh]",
+              "fixed bottom-0 left-0 right-0 z-[10000] bg-cream-card shadow-premium-xl",
+              fullScreen ? "h-screen rounded-t-0" : "rounded-t-3xl max-h-[85vh]",
               className
             )}
           >
@@ -87,7 +90,7 @@ export function BottomSheet({
             </motion.div>
             
             {/* Header */}
-            {(title || showCloseButton) && (
+            {!fullScreen && (title || showCloseButton) && (
               <div className="flex items-center justify-between px-5 pb-4 border-b border-[#F0EBE5]">
                 {title && (
                   <h2 className="text-xl font-bold text-brown">{title}</h2>

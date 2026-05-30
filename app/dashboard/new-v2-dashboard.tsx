@@ -892,9 +892,9 @@ export default function NewV2Dashboard() {
         open={showRewardsPanel} 
         onOpenChange={setShowRewardsPanel} 
         showCloseButton={true} 
-        className="max-h-[100vh] rounded-t-0"
+        fullScreen={true}
       >
-        <div className="p-5 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 120px)', background: 'linear-gradient(160deg, #2B3E52 0%, #1e2d3d 100%)', minHeight: '100vh' }}>
+        <div className="p-5 overflow-y-auto h-full" style={{ background: 'linear-gradient(160deg, #2B3E52 0%, #1e2d3d 100%)' }}>
 
               {/* Header */}
               <div className="mb-5">
@@ -1160,8 +1160,7 @@ export default function NewV2Dashboard() {
                 </p>
               </div>
 
-            </div>
-          </div>
+        </div>
       </BottomSheet>
 
       {/* Bean award modal */}
