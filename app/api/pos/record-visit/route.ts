@@ -76,11 +76,14 @@ export async function POST(request: NextRequest) {
       }
 
       // Broadcast beans awarded to client
-      await supabase.channel(`user:${userId}`).send({
+      console.log('[POS API] Broadcasting beans awarded:', totalBeans, 'to user:', userId)
+      const broadcastChannel = supabase.channel(`bean_balances:${userId}`)
+      await broadcastChannel.send({
         type: 'broadcast',
         event: 'beans_awarded',
         payload: { beansAwarded: totalBeans, baseBeans, bonusBeans }
       })
+      console.log('[POS API] Broadcast sent')
     }
     
     // Record purchase
