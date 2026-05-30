@@ -54,6 +54,7 @@ export default function NewV2Dashboard() {
   const [availableVouchers, setAvailableVouchers] = useState<any[]>([])
   const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
   const [debugInfo, setDebugInfo] = useState({ hookCalled: false, beansAwarded: 0, currentBeans: 0, previousBeans: 0, lastUpdate: '' })
+  const [modalClosed, setModalClosed] = useState(false)
 
   // Real-time bean balance
   const { beanBalance, isLoading: balanceLoading, justUpdated, beansAwarded, previousBalance } = useBeanBalanceRealtime(user?.id || null)
@@ -81,6 +82,12 @@ export default function NewV2Dashboard() {
       setShowBeanModal(true)
     }
   }, [beansAwarded])
+
+  // Trigger bean animation after modal is closed
+  const handleBeanModalClose = () => {
+    setShowBeanModal(false)
+    setModalClosed(true)
+  }
 
   // Prevent hydration mismatch
   useEffect(() => {
@@ -362,16 +369,6 @@ export default function NewV2Dashboard() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
-      {/* Debug Panel */}
-      <div className="fixed top-0 left-0 right-0 z-[100] bg-black/80 text-white p-2 text-xs font-mono">
-        <div>Hook Called: {debugInfo.hookCalled ? '✅' : '❌'}</div>
-        <div>Previous Beans: {debugInfo.previousBeans}</div>
-        <div>Current Beans: {debugInfo.currentBeans || 'N/A'}</div>
-        <div>Beans Awarded: {debugInfo.beansAwarded}</div>
-        <div>Last Update: {debugInfo.lastUpdate || 'Never'}</div>
-        <div>Modal Visible: {showBeanModal ? '✅' : '❌'}</div>
-      </div>
-
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
         <div className="px-5 pt-10 pb-28 space-y-5">
 
@@ -424,8 +421,8 @@ export default function NewV2Dashboard() {
                     YOUR BEAN BALANCE
                   </p>
                   <div className="mb-2">
-                    <div className={`flex items-baseline gap-2 mb-1 ${justUpdated ? 'animate-bean-pop' : ''}`}>
-                      <FlipNumber value={currentBeans} className={`text-[56px] font-extrabold leading-none ${justUpdated ? 'animate-bean-glow' : ''}`} style={{ color: '#F0EDE5' }} />
+                    <div className={`flex items-baseline gap-2 mb-1 ${justUpdated && modalClosed ? 'animate-bean-pop' : ''}`}>
+                      <FlipNumber value={currentBeans} className={`text-[56px] font-extrabold leading-none ${justUpdated && modalClosed ? 'animate-bean-glow' : ''}`} style={{ color: '#F0EDE5' }} />
                     </div>
                     <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>{currentBeans === 1 ? 'bean' : 'beans'}</p>
                     <img src="/stroke.png" alt="" className="w-24 h-2 object-contain mt-1 opacity-60" style={{ marginLeft: '-12px' }} />
@@ -1153,7 +1150,7 @@ export default function NewV2Dashboard() {
       <BeanModal
         show={showBeanModal}
         beansAwarded={beansAwarded}
-        onClose={() => setShowBeanModal(false)}
+        onClose={handleBeanModalClose}
       />
     </div>
   )
