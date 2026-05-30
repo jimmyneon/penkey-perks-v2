@@ -196,13 +196,16 @@ export default function NewV2Dashboard() {
       }
 
       if (data.success) {
+        console.log('[Voucher Conversion] Success, refreshing vouchers...')
         // Refresh vouchers
         const newVouchers = await getActiveVouchers(user.id)
+        console.log('[Voucher Conversion] New vouchers:', newVouchers)
         setVouchers(newVouchers)
 
         setShowRewardsPanel(false)
         alert('Voucher created successfully!')
       } else {
+        console.error('[Voucher Conversion] Failed:', data.error)
         alert(data.error || 'Failed to convert beans to voucher')
       }
     } catch (error) {
@@ -261,18 +264,15 @@ export default function NewV2Dashboard() {
   // Stamp card config — next milestone from current beans
   const STAMP_MILESTONES = [2, 8, 15, 25]
   const nextMilestone = STAMP_MILESTONES.find(m => m > currentBeans) ?? 8
-  const stampBeansNeeded = nextMilestone - currentBeans
-
-  // Find previous milestone for progress calculation
   const prevMilestoneIndex = STAMP_MILESTONES.findIndex(m => m > currentBeans) - 1
   const prevMilestone = prevMilestoneIndex >= 0 ? STAMP_MILESTONES[prevMilestoneIndex] : 0
-
-  // Use stamp milestones for progress calculation with baseline
-  const targetBeans = nextMilestone
+  const stampBeansNeeded = nextMilestone - currentBeans
+  
+  // Calculate progress percentage between milestones
   const progressRange = nextMilestone - prevMilestone
   const progressInRange = currentBeans - prevMilestone
   const progress = progressRange > 0 ? (progressInRange / progressRange) * 100 : 0
-  const beansNeeded = targetBeans - currentBeans
+  const beansNeeded = nextMilestone - currentBeans
   const circumference = 2 * Math.PI * 58
   const strokeDashoffset = circumference - (progress / 100) * circumference
 
@@ -425,7 +425,7 @@ export default function NewV2Dashboard() {
                     <div
                       className="h-full rounded-full transition-all duration-300"
                       style={{
-                        width: `${Math.min((currentBeans / nextMilestone) * 100, 100)}%`,
+                        width: `${Math.min(progress, 100)}%`,
                         backgroundColor: '#F28A2E'
                       }}
                     />
