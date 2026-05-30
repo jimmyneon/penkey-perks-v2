@@ -29,7 +29,7 @@ export function HomeHeader({ userName, beanCount }: HomeHeaderProps) {
         <img
           src="/image-assets/cupilli.png"
           alt="Cup Illy"
-          className="w-16 h-16 object-contain"
+          className="w-32 h-32 object-contain"
         />
       </div>
     </div>
