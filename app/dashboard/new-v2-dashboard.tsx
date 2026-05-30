@@ -262,9 +262,15 @@ export default function NewV2Dashboard() {
   const nextMilestone = STAMP_MILESTONES.find(m => m > currentBeans) ?? 8
   const stampBeansNeeded = nextMilestone - currentBeans
 
-  // Use stamp milestones for progress calculation
+  // Find previous milestone for progress calculation
+  const prevMilestoneIndex = STAMP_MILESTONES.findIndex(m => m > currentBeans) - 1
+  const prevMilestone = prevMilestoneIndex >= 0 ? STAMP_MILESTONES[prevMilestoneIndex] : 0
+
+  // Use stamp milestones for progress calculation with baseline
   const targetBeans = nextMilestone
-  const progress = (currentBeans / targetBeans) * 100
+  const progressRange = nextMilestone - prevMilestone
+  const progressInRange = currentBeans - prevMilestone
+  const progress = progressRange > 0 ? (progressInRange / progressRange) * 100 : 0
   const beansNeeded = targetBeans - currentBeans
   const circumference = 2 * Math.PI * 58
   const strokeDashoffset = circumference - (progress / 100) * circumference

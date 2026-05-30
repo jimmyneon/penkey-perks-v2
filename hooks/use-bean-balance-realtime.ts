@@ -58,12 +58,19 @@ export function useBeanBalanceRealtime(userId: string | null) {
             const oldBalance = payload.old as BeanBalance | null
             const newBalance = payload.new as BeanBalance
             
+            console.log('[Realtime] Old balance:', oldBalance)
+            console.log('[Realtime] New balance:', newBalance)
+            
             // Calculate beans awarded
             if (oldBalance && newBalance) {
               const beansDiff = newBalance.current_beans - oldBalance.current_beans
+              console.log('[Realtime] Beans diff:', beansDiff)
               if (beansDiff > 0) {
+                console.log('[Realtime] Setting beansAwarded to:', beansDiff)
                 setBeansAwarded(beansDiff)
               }
+            } else {
+              console.log('[Realtime] Cannot calculate beans diff - oldBalance or newBalance is null')
             }
             
             console.log('[Realtime] Updating bean balance from', payload.old, 'to', payload.new)

@@ -16,13 +16,13 @@ export function FlipNumber({ value, className = '', style }: FlipNumberProps) {
     if (value !== displayValue) {
       setIsAnimating(true)
       setDisplayValue(value)
-      setTimeout(() => setIsAnimating(false), 600)
+      setTimeout(() => setIsAnimating(false), 500)
     }
   }, [value, displayValue])
 
   return (
     <span
-      className={`inline-block ${isAnimating ? 'animate-bounce' : ''} ${className}`}
+      className={`inline-block transition-colors duration-300 ${isAnimating ? 'text-[#F28A2E]' : ''} ${className}`}
       style={style}
     >
       {displayValue}

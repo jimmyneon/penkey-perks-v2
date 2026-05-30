@@ -27,12 +27,14 @@ BEGIN
   v_current_beans := LEAST(v_current_beans + p_amount, 25);
 
   -- Update bean balance
-  INSERT INTO public.bean_balances (user_id, current_beans, lifetime_beans, updated_at)
-  VALUES (p_user_id, v_current_beans, COALESCE((SELECT lifetime_beans FROM public.bean_balances WHERE user_id = p_user_id), 0) + p_amount, NOW())
+  INSERT INTO public.bean_balances (user_id, current_beans, lifetime_beans, visit_count, last_visit_at, updated_at)
+  VALUES (p_user_id, v_current_beans, COALESCE((SELECT lifetime_beans FROM public.bean_balances WHERE user_id = p_user_id), 0) + p_amount, 1, NOW(), NOW())
   ON CONFLICT (user_id)
   DO UPDATE SET
     current_beans = LEAST(bean_balances.current_beans + p_amount, 25),
     lifetime_beans = bean_balances.lifetime_beans + p_amount,
+    visit_count = bean_balances.visit_count + 1,
+    last_visit_at = NOW(),
     updated_at = NOW();
 
   -- Record transaction
