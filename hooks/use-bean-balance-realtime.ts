@@ -13,6 +13,7 @@ export function useBeanBalanceRealtime(userId: string | null) {
   const [beanBalance, setBeanBalance] = useState<BeanBalance | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [justUpdated, setJustUpdated] = useState(false)
+  const [beansAwarded, setBeansAwarded] = useState(0)
   const supabase = createClient()
 
   useEffect(() => {
@@ -54,8 +55,19 @@ export function useBeanBalanceRealtime(userId: string | null) {
         (payload) => {
           console.log('[Realtime] Bean balance change received:', payload)
           if (payload.eventType === 'UPDATE' || payload.eventType === 'INSERT') {
+            const oldBalance = payload.old as BeanBalance | null
+            const newBalance = payload.new as BeanBalance
+            
+            // Calculate beans awarded
+            if (oldBalance && newBalance) {
+              const beansDiff = newBalance.current_beans - oldBalance.current_beans
+              if (beansDiff > 0) {
+                setBeansAwarded(beansDiff)
+              }
+            }
+            
             console.log('[Realtime] Updating bean balance from', payload.old, 'to', payload.new)
-            setBeanBalance(payload.new as BeanBalance)
+            setBeanBalance(newBalance)
             setJustUpdated(true)
             setTimeout(() => setJustUpdated(false), 1000)
           }
@@ -75,5 +87,5 @@ export function useBeanBalanceRealtime(userId: string | null) {
     }
   }, [userId, supabase])
 
-  return { beanBalance, isLoading, justUpdated }
+  return { beanBalance, isLoading, justUpdated, beansAwarded }
 }

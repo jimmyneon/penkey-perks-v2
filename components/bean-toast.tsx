@@ -1,52 +1,39 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { Coffee } from 'lucide-react'
 
-interface BeanToastProps {
+interface BeanModalProps {
   show: boolean
   beansAwarded: number
   onClose: () => void
 }
 
-export function BeanToast({ show, beansAwarded, onClose }: BeanToastProps) {
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    if (show) {
-      setVisible(true)
-      const timer = setTimeout(() => {
-        setVisible(false)
-        setTimeout(onClose, 300)
-      }, 2500)
-      return () => clearTimeout(timer)
-    }
-  }, [show, onClose])
-
-  if (!show && !visible) return null
-
+export function BeanModal({ show, beansAwarded, onClose }: BeanModalProps) {
   return (
-    <div
-      className={`fixed top-20 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${
-        visible ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'
-      }`}
-    >
-      <div
-        className="flex items-center gap-3 px-5 py-3 rounded-full shadow-lg"
-        style={{
-          background: 'linear-gradient(135deg, #E07A3A 0%, #D05A18 100%)',
-        }}
-      >
-        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
-          <Coffee className="w-5 h-5 text-white" />
-        </div>
-        <div className="text-white">
-          <p className="text-sm font-semibold">
+    <Dialog open={show} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-sm rounded-[24px] p-0 border-0">
+        <div
+          className="p-6 text-center"
+          style={{
+            background: 'linear-gradient(135deg, #E07A3A 0%, #D05A18 100%)',
+          }}
+        >
+          <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-4">
+            <Coffee className="w-8 h-8 text-white" />
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-2">
             {beansAwarded === 1 ? 'You earned a bean!' : `You earned ${beansAwarded} beans!`}
-          </p>
-          <p className="text-xs opacity-90">Keep it up!</p>
+          </h2>
+          <p className="text-white/90 mb-4">Keep it up!</p>
+          <button
+            onClick={onClose}
+            className="px-6 py-2 rounded-full bg-white text-[#D05A18] font-semibold hover:bg-white/90 transition-colors"
+          >
+            Awesome
+          </button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   )
 }

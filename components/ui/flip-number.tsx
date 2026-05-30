@@ -10,19 +10,19 @@ interface FlipNumberProps {
 
 export function FlipNumber({ value, className = '', style }: FlipNumberProps) {
   const [displayValue, setDisplayValue] = useState(value)
-  const [isPulsing, setIsPulsing] = useState(false)
+  const [isAnimating, setIsAnimating] = useState(false)
 
   useEffect(() => {
     if (value !== displayValue) {
-      setIsPulsing(true)
+      setIsAnimating(true)
       setDisplayValue(value)
-      setTimeout(() => setIsPulsing(false), 300)
+      setTimeout(() => setIsAnimating(false), 600)
     }
   }, [value, displayValue])
 
   return (
     <span
-      className={`inline-block transition-transform duration-300 ${isPulsing ? 'scale-125' : 'scale-100'} ${className}`}
+      className={`inline-block ${isAnimating ? 'animate-bounce' : ''} ${className}`}
       style={style}
     >
       {displayValue}
