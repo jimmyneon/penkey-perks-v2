@@ -5,7 +5,6 @@ import { createClient } from '@/lib/supabase/client'
 import { getBeanBalance, getActiveVouchers, getUserBadges, getActiveCampaigns, getNextRewardThreshold, getAllVoucherTemplates } from '@/lib/supabase/queries'
 import { useBeanBalanceRealtime } from '@/hooks/use-bean-balance-realtime'
 import { FlipNumber } from '@/components/ui/flip-number'
-import { BeanToast } from '@/components/bean-toast'
 import { Bell, Coffee, Gift, TrendingUp, QrCode, BarChart3, ChevronRight, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -45,15 +44,7 @@ export default function NewV2Dashboard() {
   const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
 
   // Real-time bean balance
-  const { beanBalance, isLoading: balanceLoading, justUpdated, beansAwarded } = useBeanBalanceRealtime(user?.id || null)
-  const [showBeanToast, setShowBeanToast] = useState(false)
-
-  // Show toast when beans are awarded
-  useEffect(() => {
-    if (beansAwarded > 0) {
-      setShowBeanToast(true)
-    }
-  }, [beansAwarded])
+  const { beanBalance, isLoading: balanceLoading, justUpdated } = useBeanBalanceRealtime(user?.id || null)
 
   // Prevent hydration mismatch
   useEffect(() => {
@@ -1096,13 +1087,6 @@ export default function NewV2Dashboard() {
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Bean award toast */}
-      <BeanToast
-        show={showBeanToast}
-        beansAwarded={beansAwarded}
-        onClose={() => setShowBeanToast(false)}
-      />
     </div>
   )
 }

@@ -10,32 +10,22 @@ interface FlipNumberProps {
 
 export function FlipNumber({ value, className = '', style }: FlipNumberProps) {
   const [displayValue, setDisplayValue] = useState(value)
-  const [isFlipping, setIsFlipping] = useState(false)
+  const [isPulsing, setIsPulsing] = useState(false)
 
   useEffect(() => {
     if (value !== displayValue) {
-      setIsFlipping(true)
-      setTimeout(() => {
-        setDisplayValue(value)
-        setIsFlipping(false)
-      }, 150)
+      setIsPulsing(true)
+      setDisplayValue(value)
+      setTimeout(() => setIsPulsing(false), 300)
     }
   }, [value, displayValue])
 
   return (
-    <div className={`relative inline-block ${className}`} style={style}>
-      <div
-        className={`transition-all duration-150 ${isFlipping ? 'translate-y-[-50%] opacity-0' : 'translate-y-0 opacity-100'}`}
-      >
-        {displayValue}
-      </div>
-      {isFlipping && (
-        <div
-          className="absolute top-0 left-0 w-full transition-all duration-150 translate-y-[50%] opacity-0"
-        >
-          {value}
-        </div>
-      )}
-    </div>
+    <span
+      className={`inline-block transition-transform duration-300 ${isPulsing ? 'scale-125' : 'scale-100'} ${className}`}
+      style={style}
+    >
+      {displayValue}
+    </span>
   )
 }
