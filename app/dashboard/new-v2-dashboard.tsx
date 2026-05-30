@@ -104,7 +104,9 @@ export default function NewV2Dashboard() {
 
       // Load vouchers - use sample data if table doesn't exist
       try {
+        console.log('[Dashboard] Loading vouchers for user:', authUser.id)
         const userVouchers = await getActiveVouchers(authUser.id)
+        console.log('[Dashboard] Loaded vouchers:', userVouchers)
         setVouchers(userVouchers)
       } catch (error) {
         console.error('Error loading vouchers, using sample data:', error)

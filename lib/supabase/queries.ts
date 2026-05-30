@@ -143,7 +143,10 @@ export async function getUserVouchers(userId: string, status?: 'active' | 'redee
 }
 
 export async function getActiveVouchers(userId: string): Promise<Voucher[]> {
-  return getUserVouchers(userId, 'active')
+  console.log('[getActiveVouchers] Fetching vouchers for user:', userId)
+  const vouchers = await getUserVouchers(userId, 'active')
+  console.log('[getActiveVouchers] Result:', vouchers)
+  return vouchers
 }
 
 // Badge queries
