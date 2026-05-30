@@ -1,6 +1,6 @@
 import { Gift, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { useState, useEffect } from 'react'
 import QRCodeLib from 'qrcode'
 
@@ -76,6 +76,7 @@ export function VoucherCard({ id, name, description, category, qrCode, expiresAt
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{name}</DialogTitle>
+            <DialogDescription className="sr-only">QR code for voucher redemption</DialogDescription>
           </DialogHeader>
           <div className="flex flex-col items-center py-6">
             {qrUrl && (

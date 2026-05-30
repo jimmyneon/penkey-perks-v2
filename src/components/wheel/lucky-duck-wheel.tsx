@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Sparkles, X } from 'lucide-react'
 
 interface WheelPrize {
@@ -188,6 +188,7 @@ export function LuckyDuckWheel({ prizes, onSpin, isAvailable, campaignName }: Lu
                 <X className="h-4 w-4" />
               </Button>
             </DialogTitle>
+            <DialogDescription className="sr-only">Your prize from the lucky duck wheel</DialogDescription>
           </DialogHeader>
           <div className="flex flex-col items-center py-6">
             <div 
