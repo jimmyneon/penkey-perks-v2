@@ -682,8 +682,8 @@ export default function NewV2Dashboard() {
                       key={i}
                       className="w-14 h-14 rounded-full flex items-center justify-center"
                       style={{
-                        backgroundColor: filled ? '#F0EDE5' : 'transparent',
-                        border: filled ? '2px solid #E0D8CC' : '2px dashed #F0EDE5',
+                        backgroundColor: filled ? '#E07A3A' : 'transparent',
+                        border: filled ? '2px solid #E07A3A' : '2px dashed #F0EDE5',
                       }}
                     >
                       <img
@@ -691,7 +691,7 @@ export default function NewV2Dashboard() {
                         alt=""
                         className="w-10 h-10 object-contain"
                         style={{
-                          filter: filled ? 'brightness(0) invert(1)' : 'brightness(0.4) grayscale(0.5)',
+                          filter: filled ? 'none' : 'brightness(0.4) grayscale(0.5)',
                           opacity: filled ? 1 : 0.6
                         }}
                       />
