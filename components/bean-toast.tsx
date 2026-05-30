@@ -11,7 +11,12 @@ interface BeanModalProps {
 export function BeanModal({ show, beansAwarded, onClose }: BeanModalProps) {
   return (
     <Dialog open={show} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-sm rounded-[28px] shadow-[0_24px_64px_rgba(36,54,75,0.18)] p-0 overflow-hidden border-0" onPointerDownOutside={(e) => e.preventDefault()}>
+      <DialogContent 
+        className="sm:max-w-sm rounded-[28px] shadow-[0_24px_64px_rgba(36,54,75,0.18)] p-0 overflow-hidden border-0" 
+        showCloseButton={false}
+        onInteractOutside={(e) => e.preventDefault()}
+        onEscapeKeyDown={(e) => e.preventDefault()}
+      >
         <DialogTitle className="sr-only">Beans Earned</DialogTitle>
         <DialogDescription className="sr-only">You earned beans from your visit</DialogDescription>
         <div style={{ backgroundColor: '#F4EFE7' }}>

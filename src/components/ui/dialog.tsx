@@ -4,14 +4,15 @@ export interface DialogProps {
   open?: boolean
   onOpenChange?: (open: boolean) => void
   children: React.ReactNode
+  closeOnBackdropClick?: boolean
 }
 
-const Dialog = ({ open, onOpenChange, children }: DialogProps) => {
+const Dialog = ({ open, onOpenChange, children, closeOnBackdropClick = true }: DialogProps) => {
   if (!open) return null
   
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black/50" onClick={() => onOpenChange?.(false)} />
+      <div className="fixed inset-0 bg-black/50" onClick={() => closeOnBackdropClick && onOpenChange?.(false)} />
       {children}
     </div>
   )
