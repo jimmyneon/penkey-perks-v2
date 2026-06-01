@@ -106,8 +106,7 @@ export default function NewV2Dashboard() {
 
   // Update debug info when vouchers change
   useEffect(() => {
-    const displayVouchers = vouchers.length > 0 ? vouchers : sampleVouchers
-    setVoucherDebugInfo(`User ID: ${user?.id || 'N/A'}\nVouchers state length: ${vouchers.length}\nDisplay vouchers length: ${displayVouchers.length}\nUsing sample data: ${vouchers.length === 0}\n\nVouchers data:\n${JSON.stringify(vouchers, null, 2)}`)
+    setVoucherDebugInfo(`User ID: ${user?.id || 'N/A'}\nVouchers state length: ${vouchers.length}\nUsing sample data: ${vouchers.length === 0}\n\nVouchers data:\n${JSON.stringify(vouchers, null, 2)}`)
   }, [user?.id, vouchers.length, vouchers])
 
   // Show modal when max beans reached
