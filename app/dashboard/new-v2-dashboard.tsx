@@ -104,6 +104,11 @@ export default function NewV2Dashboard() {
     }
   }, [beansAwarded])
 
+  // Update debug info when vouchers change
+  useEffect(() => {
+    setVoucherDebugInfo(`User ID: ${user?.id || 'N/A'}\nVouchers state length: ${vouchers.length}\nDisplay vouchers length: ${displayVouchers.length}\nUsing sample data: ${vouchers.length === 0}\n\nVouchers data:\n${JSON.stringify(vouchers, null, 2)}`)
+  }, [user?.id, vouchers.length, displayVouchers.length, vouchers])
+
   // Show modal when max beans reached
   useEffect(() => {
     console.log('[Dashboard] maxBeansReached changed:', maxBeansReached)
@@ -436,9 +441,6 @@ export default function NewV2Dashboard() {
   console.log('[Dashboard RENDER] displayVouchers.length:', displayVouchers.length)
   console.log('[Dashboard RENDER] Using sample data?', vouchers.length === 0)
   console.log('[Dashboard RENDER] === END VOUCHER DISPLAY STATE ===')
-
-  // Update debug info on render
-  setVoucherDebugInfo(`User ID: ${user?.id || 'N/A'}\nVouchers state length: ${vouchers.length}\nDisplay vouchers length: ${displayVouchers.length}\nUsing sample data: ${vouchers.length === 0}\n\nVouchers data:\n${JSON.stringify(vouchers, null, 2)}`)
 
   // Show stamps for the current milestone cycle
   const stampTotal = nextMilestone
