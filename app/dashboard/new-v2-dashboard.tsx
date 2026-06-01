@@ -184,13 +184,23 @@ export default function NewV2Dashboard() {
 
       // Load vouchers - use sample data if table doesn't exist
       try {
-        console.log('[Dashboard] Loading vouchers for user:', authUser.id)
+        console.log('[Dashboard] === LOADING VOUCHERS ===')
+        console.log('[Dashboard] Auth user:', authUser)
+        console.log('[Dashboard] Auth user ID:', authUser.id)
+        console.log('[Dashboard] Auth user ID type:', typeof authUser.id)
+        console.log('[Dashboard] Calling getActiveVouchers...')
         const userVouchers = await getActiveVouchers(authUser.id)
         console.log('[Dashboard] Loaded vouchers:', userVouchers)
         console.log('[Dashboard] Vouchers count:', userVouchers.length)
+        console.log('[Dashboard] Vouchers array:', JSON.stringify(userVouchers, null, 2))
+        console.log('[Dashboard] Setting vouchers state...')
         setVouchers(userVouchers)
+        console.log('[Dashboard] === VOUCHERS LOADED ===')
       } catch (error) {
-        console.error('Error loading vouchers, using sample data:', error)
+        console.error('[Dashboard] ERROR loading vouchers:', error)
+        console.error('[Dashboard] Error details:', error instanceof Error ? error.message : 'Unknown error')
+        console.error('[Dashboard] Error stack:', error instanceof Error ? error.stack : 'No stack')
+        console.log('[Dashboard] Using empty vouchers array')
         setVouchers([])
       }
 
@@ -416,6 +426,15 @@ export default function NewV2Dashboard() {
 
   const displayVouchers = vouchers.length > 0 ? vouchers : sampleVouchers
   const displayCampaign = campaigns.length > 0 ? campaigns[0] : sampleCampaign
+
+  // Debug logging for voucher display
+  console.log('[Dashboard RENDER] === VOUCHER DISPLAY STATE ===')
+  console.log('[Dashboard RENDER] vouchers state:', vouchers)
+  console.log('[Dashboard RENDER] vouchers.length:', vouchers.length)
+  console.log('[Dashboard RENDER] displayVouchers:', displayVouchers)
+  console.log('[Dashboard RENDER] displayVouchers.length:', displayVouchers.length)
+  console.log('[Dashboard RENDER] Using sample data?', vouchers.length === 0)
+  console.log('[Dashboard RENDER] === END VOUCHER DISPLAY STATE ===')
 
   // Show stamps for the current milestone cycle
   const stampTotal = nextMilestone
