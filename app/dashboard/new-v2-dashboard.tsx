@@ -26,22 +26,12 @@ interface BeanBalance {
   last_visit_at: string | null
 }
 
-// Window-level log to verify JavaScript is executing
-if (typeof window !== 'undefined') {
-  console.log('[WINDOW] Dashboard script loaded')
-  window.addEventListener('load', () => {
-    console.log('[WINDOW] Page fully loaded')
-  })
-}
-
 function getGreeting() {
   const h = new Date().getHours()
   if (h < 12) return 'Good morning'
   if (h < 17) return 'Good afternoon'
   return 'Good evening'
 }
-
-console.log('[Dashboard] Component loaded')
 
 export default function NewV2Dashboard() {
   const router = useRouter()
@@ -52,6 +42,8 @@ export default function NewV2Dashboard() {
   const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<any>(null)
   const [selectedVoucher, setSelectedVoucher] = useState<any>(null)
+  const [showVoucherSheet, setShowVoucherSheet] = useState(false)
+  const [showVoucherQR, setShowVoucherQR] = useState(false)
   const [selectedFeatured, setSelectedFeatured] = useState<any>(null)
   const [showNotifications, setShowNotifications] = useState(false)
   const [showBeansPanel, setShowBeansPanel] = useState(false)
@@ -68,12 +60,11 @@ export default function NewV2Dashboard() {
   const [displayedBeanBalance, setDisplayedBeanBalance] = useState<BeanBalance | null>(null)
   const [showBeanModal, setShowBeanModal] = useState(false)
   const [showMaxBeansModal, setShowMaxBeansModal] = useState(false)
-  const [showingQRCode, setShowingQRCode] = useState(false)
   const [conversionMessage, setConversionMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
 
 
   // Real-time bean balance (disabled when showing QR code to avoid animation conflicts)
-  const { beanBalance, isLoading: balanceLoading, justUpdated, beansAwarded, beanDescription, maxBeansReached, maxBeansMessage, previousBalance } = useBeanBalanceRealtime(user?.id || null, showingQRCode)
+  const { beanBalance, isLoading: balanceLoading, justUpdated, beansAwarded, beanDescription, maxBeansReached, maxBeansMessage, previousBalance } = useBeanBalanceRealtime(user?.id || null, showVoucherQR)
 
   // Only update displayed balance if modal is not open
   useEffect(() => {
@@ -219,8 +210,8 @@ export default function NewV2Dashboard() {
         width: 300,
         margin: 2,
         color: {
-          dark: '#7B1234',
-          light: '#FFFDFC',
+          dark: '#2C3E50',
+          light: '#FFFEF7',
         },
       })
       setVoucherQrCode(url)
@@ -514,11 +505,7 @@ export default function NewV2Dashboard() {
             <div
               className="rounded-[18px] overflow-hidden relative cursor-pointer active:scale-[0.985] transition-all duration-200"
               style={{ backgroundColor: '#F4EFE7', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}
-              onClick={() => {
-                setSelectedVoucher(vouchers[0])
-                setShowingQRCode(true)
-                generateVoucherQRCode(vouchers[0])
-              }}
+              onClick={() => setShowVoucherSheet(true)}
             >
               <div className="p-5 pr-[120px]">
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style={{ border: '1.5px solid #F28A2E' }}>
@@ -610,107 +597,123 @@ export default function NewV2Dashboard() {
         <BottomNav />
       </div>
 
-      {/* Voucher / Perk Unlocked Dialog */}
-      <Dialog open={!!selectedVoucher} onOpenChange={(open) => {
-        if (!open) {
-          setSelectedVoucher(null)
-          setShowingQRCode(false)
-        }
-      }}>
-        <DialogContent className="sm:max-w-sm rounded-[28px] shadow-[0_24px_64px_rgba(36,54,75,0.18)] p-0 overflow-hidden border-0">
-          <DialogTitle className="sr-only">Voucher Details</DialogTitle>
-          <DialogDescription className="sr-only">View your voucher details and QR code</DialogDescription>
-          <div style={{ backgroundColor: '#F4EFE7' }}>
-
-            {/* Top hero area — cream with close button */}
-            <div className="relative px-5 pt-5 pb-4">
-              {/* Single close button */}
+      {/* ── VOUCHER PICKER BOTTOM SHEET ── */}
+      <BottomSheet
+        open={showVoucherSheet}
+        onOpenChange={(open) => {
+          setShowVoucherSheet(open)
+          if (!open) setSelectedVoucher(null)
+        }}
+        showCloseButton={false}
+      >
+        <div className="px-5 pb-8">
+          <p className="text-[24px] font-bold leading-tight mb-1" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
+            Your Vouchers
+          </p>
+          <p className="text-[13px] mb-5" style={{ color: '#8A96A0' }}>
+            Tap a voucher to show your QR code
+          </p>
+          <div className="flex flex-col gap-3">
+            {vouchers.map((voucher) => (
               <button
+                key={voucher.id}
+                className="w-full text-left rounded-[16px] p-4 active:scale-[0.98] transition-all flex items-center gap-4"
+                style={{ backgroundColor: '#F4EFE7', border: '1px solid #E8E2D8', boxShadow: '0 2px 8px rgba(36,54,75,0.06)' }}
                 onClick={() => {
-                  setSelectedVoucher(null)
-                  setShowingQRCode(false)
+                  setSelectedVoucher(voucher)
+                  setVoucherQrCode('')
+                  setShowVoucherSheet(false)
+                  setShowVoucherQR(true)
+                  generateVoucherQRCode(voucher)
                 }}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: 'rgba(36,54,75,0.1)', color: '#24364B' }}
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <path d="M18 6L6 18M6 6l12 12" />
+                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#FFF0E4' }}>
+                  <img src="/coffeecup.png" alt="" className="w-7 h-7 object-contain" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[15px] font-bold leading-tight truncate" style={{ color: '#24364B' }}>
+                    {voucher.template?.name || 'Reward'}
+                  </p>
+                  <p className="text-[12px] mt-0.5 leading-snug" style={{ color: '#5A6A7A' }}>
+                    {voucher.template?.description || ''}
+                  </p>
+                  {voucher.expires_at && (
+                    <p className="text-[11px] mt-1" style={{ color: '#A89080' }}>
+                      Expires {new Date(voucher.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
+                    </p>
+                  )}
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C4AFA8" strokeWidth="2.5">
+                  <path d="M9 18l6-6-6-6"/>
                 </svg>
               </button>
-
-              {/* Perk unlocked badge */}
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-3" style={{ border: '1.5px solid #F28A2E' }}>
-                <svg width="8" height="8" viewBox="0 0 10 10" fill="#F28A2E"><circle cx="5" cy="5" r="4"/></svg>
-                <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: '#F28A2E' }}>Perk unlocked</span>
-              </div>
-
-              {/* Hero row: text left, coffee cup right */}
-              <div className="flex items-center justify-between pr-4">
-                <div className="flex-1 pr-2">
-                  <h2 className="text-[28px] font-extrabold leading-tight" style={{ color: '#24364B' }}>
-                    Nice one!
-                  </h2>
-                  <p className="text-[22px] font-bold mt-0.5 leading-tight" style={{ color: '#F28A2E' }}>
-                    {selectedVoucher?.template?.name || 'Your reward'}
-                  </p>
-                  <p className="text-[13px] mt-2 leading-snug" style={{ color: '#5A6A7A' }}>
-                    {selectedVoucher?.template?.description || "You've earned this — show it to our staff and enjoy it on us."}{' '}
-                    <img src="/heart.png" alt="" className="inline-block w-4 h-4 object-contain align-middle" style={{ transform: 'rotate(-10deg)' }} />
-                  </p>
-                </div>
-                <img src="/coffeecup.png" alt="" className="w-24 h-24 object-contain flex-shrink-0" />
-              </div>
-            </div>
-
-            {/* Divider */}
-            <div className="mx-5" style={{ height: '1px', backgroundColor: 'rgba(36,54,75,0.1)' }} />
-
-            {/* QR code section */}
-            <div className="px-5 py-4">
-              <p className="text-[12px] font-semibold mb-3 text-center" style={{ color: '#7A6A5A' }}>
-                Show this QR code to a member of staff to redeem
-              </p>
-
-              {voucherQrCode ? (
-                <div className="flex flex-col items-center gap-2">
-                  <div
-                    className="rounded-[20px] p-4"
-                    style={{ backgroundColor: '#ffffff', boxShadow: '0 3px 16px rgba(36,54,75,0.1)', border: '1px solid rgba(36,54,75,0.07)' }}
-                  >
-                    <img src={voucherQrCode} alt="Voucher QR Code" className="w-52 h-52" />
-                  </div>
-                </div>
-              ) : (
-                <div className="h-52 flex items-center justify-center rounded-[20px]" style={{ backgroundColor: 'rgba(36,54,75,0.05)' }}>
-                  <p className="text-[13px]" style={{ color: '#A89080' }}>Generating…</p>
-                </div>
-              )}
-
-              {/* Expiry note */}
-              {selectedVoucher?.expires_at && (
-                <p className="text-[11px] text-center mt-2" style={{ color: '#A89080' }}>
-                  Expires {new Date(selectedVoucher.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
-                </p>
-              )}
-            </div>
-
-            {/* Done button */}
-            <div className="px-5 pb-6">
-              <button
-                onClick={() => {
-                  setSelectedVoucher(null)
-                  setShowingQRCode(false)
-                }}
-                className="w-full h-[52px] text-white font-bold rounded-[16px] text-[15px] active:scale-[0.98] transition-all"
-                style={{ backgroundColor: '#F28A2E', boxShadow: '0 4px 16px rgba(242,138,46,0.35)' }}
-              >
-                Done, thanks!
-              </button>
-            </div>
-
+            ))}
           </div>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </BottomSheet>
+
+      {/* ── VOUCHER QR CODE BOTTOM SHEET ── */}
+      <BottomSheet
+        open={showVoucherQR}
+        onOpenChange={(open) => {
+          setShowVoucherQR(open)
+          if (!open) {
+            setSelectedVoucher(null)
+            setVoucherQrCode('')
+          }
+        }}
+        showCloseButton={false}
+      >
+        <div className="flex flex-col items-center px-5 pb-8">
+          <div className="text-center mb-5">
+            <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
+              {selectedVoucher?.template?.name || 'Your Voucher'}
+            </p>
+            <p className="text-[13px] mt-1" style={{ color: '#8A96A0' }}>
+              Show this to staff to redeem
+            </p>
+          </div>
+
+          <div
+            className="rounded-[24px] p-6 flex items-center justify-center mb-4"
+            style={{ backgroundColor: '#ffffff', boxShadow: '0 4px 20px rgba(36,54,75,0.12)', border: '1px solid #E8E2D8' }}
+          >
+            {voucherQrCode ? (
+              <img src={voucherQrCode} alt="Voucher QR Code" className="w-56 h-56" />
+            ) : (
+              <div className="w-56 h-56 rounded-[20px] flex items-center justify-center" style={{ backgroundColor: '#F4EFE7' }}>
+                <QrCode className="w-16 h-16" style={{ color: '#C4AFA8' }} />
+              </div>
+            )}
+          </div>
+
+          {selectedVoucher?.expires_at && (
+            <p className="text-[12px] mb-4" style={{ color: '#A89080' }}>
+              Expires {new Date(selectedVoucher.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+            </p>
+          )}
+
+          {vouchers.length > 1 && (
+            <button
+              onClick={() => {
+                setShowVoucherQR(false)
+                setSelectedVoucher(null)
+                setVoucherQrCode('')
+                setTimeout(() => setShowVoucherSheet(true), 200)
+              }}
+              className="text-[13px] font-semibold mb-3"
+              style={{ color: '#F28A2E' }}
+            >
+              ← View other vouchers
+            </button>
+          )}
+
+          <div className="flex items-center gap-2">
+            <img src="/heart.png" alt="" className="w-4 h-4 object-contain" />
+            <p className="text-[12px]" style={{ color: '#8A96A0' }}>Swipe down to close</p>
+          </div>
+        </div>
+      </BottomSheet>
 
       {/* Featured Item Detail Dialog */}
       <Dialog open={!!selectedFeatured} onOpenChange={() => setSelectedFeatured(null)}>
