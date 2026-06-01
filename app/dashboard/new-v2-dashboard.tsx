@@ -63,7 +63,7 @@ export default function NewV2Dashboard() {
   const [showVoucherSelection, setShowVoucherSelection] = useState(false)
   const [availableVouchers, setAvailableVouchers] = useState<any[]>([])
   const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
-  const [debugInfo, setDebugInfo] = useState({ hookCalled: false, beansAwarded: 0, currentBeans: 0, previousBeans: 0, lastUpdate: '' })
+  const [beanDebugInfo, setBeanDebugInfo] = useState({ hookCalled: false, beansAwarded: 0, currentBeans: 0, previousBeans: 0, lastUpdate: '' })
   const [modalClosed, setModalClosed] = useState(false)
   const [triggerAnimation, setTriggerAnimation] = useState(false)
   const [displayedBeanBalance, setDisplayedBeanBalance] = useState<BeanBalance | null>(null)
@@ -71,6 +71,7 @@ export default function NewV2Dashboard() {
   const [showMaxBeansModal, setShowMaxBeansModal] = useState(false)
   const [showingQRCode, setShowingQRCode] = useState(false)
   const [conversionMessage, setConversionMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
+  const [voucherDebugInfo, setVoucherDebugInfo] = useState<string>('')
 
   // Real-time bean balance (disabled when showing QR code to avoid animation conflicts)
   const { beanBalance, isLoading: balanceLoading, justUpdated, beansAwarded, beanDescription, maxBeansReached, maxBeansMessage, previousBalance } = useBeanBalanceRealtime(user?.id || null, showingQRCode)
@@ -78,12 +79,12 @@ export default function NewV2Dashboard() {
   // Update debug info when bean balance changes
   useEffect(() => {
     if (beanBalance) {
-      setDebugInfo(prev => ({ 
-        ...prev, 
-        hookCalled: true, 
+      setBeanDebugInfo(prev => ({
+        ...prev,
+        hookCalled: true,
         currentBeans: beanBalance.current_beans,
         previousBeans: previousBalance,
-        lastUpdate: new Date().toISOString() 
+        lastUpdate: new Date().toISOString()
       }))
       // Only update displayed balance if modal is not open
       if (!showBeanModal) {
@@ -95,7 +96,7 @@ export default function NewV2Dashboard() {
   // Show modal when beans are awarded
   useEffect(() => {
     console.log('[Dashboard] beansAwarded changed:', beansAwarded)
-    setDebugInfo(prev => ({ ...prev, beansAwarded, lastUpdate: new Date().toISOString() }))
+    setBeanDebugInfo(prev => ({ ...prev, beansAwarded, lastUpdate: new Date().toISOString() }))
     if (beansAwarded > 0) {
       console.log('[Dashboard] Showing bean modal with', beansAwarded, 'beans')
       setModalClosed(false) // Reset animation state
@@ -436,6 +437,9 @@ export default function NewV2Dashboard() {
   console.log('[Dashboard RENDER] Using sample data?', vouchers.length === 0)
   console.log('[Dashboard RENDER] === END VOUCHER DISPLAY STATE ===')
 
+  // Update debug info on render
+  setVoucherDebugInfo(`User ID: ${user?.id || 'N/A'}\nVouchers state length: ${vouchers.length}\nDisplay vouchers length: ${displayVouchers.length}\nUsing sample data: ${vouchers.length === 0}\n\nVouchers data:\n${JSON.stringify(vouchers, null, 2)}`)
+
   // Show stamps for the current milestone cycle
   const stampTotal = nextMilestone
   const fullName = profile?.name || user?.user_metadata?.first_name || user?.user_metadata?.name || 'there'
@@ -641,6 +645,15 @@ export default function NewV2Dashboard() {
             </div>
           </div>
 
+        </div>
+
+        {/* DEBUG PANEL - Remove in production */}
+        <div
+          className="fixed bottom-20 left-2 right-2 bg-black text-white p-4 rounded-lg text-xs font-mono max-h-64 overflow-auto z-50"
+          style={{ fontSize: '10px', lineHeight: '1.2' }}
+        >
+          <div className="font-bold mb-2 text-yellow-400">VOUCHER DEBUG INFO:</div>
+          <pre className="whitespace-pre-wrap">{voucherDebugInfo || 'Loading...'}</pre>
         </div>
 
         <BottomNav />
@@ -1282,6 +1295,6 @@ async function createBeanBalance(userId: string) {
     console.error('Error creating bean balance:', error)
     return null
   }
-  
+
   return data
 }
