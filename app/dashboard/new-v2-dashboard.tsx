@@ -63,7 +63,6 @@ export default function NewV2Dashboard() {
   const [showVoucherSelection, setShowVoucherSelection] = useState(false)
   const [availableVouchers, setAvailableVouchers] = useState<any[]>([])
   const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
-  const [beanDebugInfo, setBeanDebugInfo] = useState({ hookCalled: false, beansAwarded: 0, currentBeans: 0, previousBeans: 0, lastUpdate: '' })
   const [modalClosed, setModalClosed] = useState(false)
   const [triggerAnimation, setTriggerAnimation] = useState(false)
   const [displayedBeanBalance, setDisplayedBeanBalance] = useState<BeanBalance | null>(null)
@@ -71,47 +70,28 @@ export default function NewV2Dashboard() {
   const [showMaxBeansModal, setShowMaxBeansModal] = useState(false)
   const [showingQRCode, setShowingQRCode] = useState(false)
   const [conversionMessage, setConversionMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
-  const [voucherDebugInfo, setVoucherDebugInfo] = useState<string>('')
+
 
   // Real-time bean balance (disabled when showing QR code to avoid animation conflicts)
   const { beanBalance, isLoading: balanceLoading, justUpdated, beansAwarded, beanDescription, maxBeansReached, maxBeansMessage, previousBalance } = useBeanBalanceRealtime(user?.id || null, showingQRCode)
 
-  // Update debug info when bean balance changes
+  // Only update displayed balance if modal is not open
   useEffect(() => {
-    if (beanBalance) {
-      setBeanDebugInfo(prev => ({
-        ...prev,
-        hookCalled: true,
-        currentBeans: beanBalance.current_beans,
-        previousBeans: previousBalance,
-        lastUpdate: new Date().toISOString()
-      }))
-      // Only update displayed balance if modal is not open
-      if (!showBeanModal) {
-        setDisplayedBeanBalance(beanBalance)
-      }
+    if (beanBalance && !showBeanModal) {
+      setDisplayedBeanBalance(beanBalance)
     }
-  }, [beanBalance, previousBalance, showBeanModal])
+  }, [beanBalance, showBeanModal])
 
   // Show modal when beans are awarded
   useEffect(() => {
-    console.log('[Dashboard] beansAwarded changed:', beansAwarded)
-    setBeanDebugInfo(prev => ({ ...prev, beansAwarded, lastUpdate: new Date().toISOString() }))
     if (beansAwarded > 0) {
-      console.log('[Dashboard] Showing bean modal with', beansAwarded, 'beans')
       setModalClosed(false) // Reset animation state
       setShowBeanModal(true)
     }
   }, [beansAwarded])
 
-  // Update debug info when vouchers change
-  useEffect(() => {
-    setVoucherDebugInfo(`User ID: ${user?.id || 'N/A'}\nVouchers state length: ${vouchers.length}\nUsing sample data: ${vouchers.length === 0}\n\nVouchers data:\n${JSON.stringify(vouchers, null, 2)}`)
-  }, [user?.id, vouchers.length, vouchers])
-
   // Show modal when max beans reached
   useEffect(() => {
-    console.log('[Dashboard] maxBeansReached changed:', maxBeansReached)
     if (maxBeansReached) {
       setShowMaxBeansModal(true)
     }
@@ -190,23 +170,9 @@ export default function NewV2Dashboard() {
 
       // Load vouchers - use sample data if table doesn't exist
       try {
-        console.log('[Dashboard] === LOADING VOUCHERS ===')
-        console.log('[Dashboard] Auth user:', authUser)
-        console.log('[Dashboard] Auth user ID:', authUser.id)
-        console.log('[Dashboard] Auth user ID type:', typeof authUser.id)
-        console.log('[Dashboard] Calling getActiveVouchers...')
         const userVouchers = await getActiveVouchers(authUser.id)
-        console.log('[Dashboard] Loaded vouchers:', userVouchers)
-        console.log('[Dashboard] Vouchers count:', userVouchers.length)
-        console.log('[Dashboard] Vouchers array:', JSON.stringify(userVouchers, null, 2))
-        console.log('[Dashboard] Setting vouchers state...')
         setVouchers(userVouchers)
-        console.log('[Dashboard] === VOUCHERS LOADED ===')
       } catch (error) {
-        console.error('[Dashboard] ERROR loading vouchers:', error)
-        console.error('[Dashboard] Error details:', error instanceof Error ? error.message : 'Unknown error')
-        console.error('[Dashboard] Error stack:', error instanceof Error ? error.stack : 'No stack')
-        console.log('[Dashboard] Using empty vouchers array')
         setVouchers([])
       }
 
@@ -433,15 +399,6 @@ export default function NewV2Dashboard() {
   const displayVouchers = vouchers.length > 0 ? vouchers : sampleVouchers
   const displayCampaign = campaigns.length > 0 ? campaigns[0] : sampleCampaign
 
-  // Debug logging for voucher display
-  console.log('[Dashboard RENDER] === VOUCHER DISPLAY STATE ===')
-  console.log('[Dashboard RENDER] vouchers state:', vouchers)
-  console.log('[Dashboard RENDER] vouchers.length:', vouchers.length)
-  console.log('[Dashboard RENDER] displayVouchers:', displayVouchers)
-  console.log('[Dashboard RENDER] displayVouchers.length:', displayVouchers.length)
-  console.log('[Dashboard RENDER] Using sample data?', vouchers.length === 0)
-  console.log('[Dashboard RENDER] === END VOUCHER DISPLAY STATE ===')
-
   // Show stamps for the current milestone cycle
   const stampTotal = nextMilestone
   const fullName = profile?.name || user?.user_metadata?.first_name || user?.user_metadata?.name || 'there'
@@ -552,15 +509,15 @@ export default function NewV2Dashboard() {
             </div>
           </div>
 
-          {/* ── PERK UNLOCKED — only shows when vouchers exist ── */}
-          {displayVouchers.length > 0 && (
+          {/* ── PERK UNLOCKED — only shows when real vouchers exist ── */}
+          {vouchers.length > 0 && (
             <div
               className="rounded-[18px] overflow-hidden relative cursor-pointer active:scale-[0.985] transition-all duration-200"
               style={{ backgroundColor: '#F4EFE7', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}
               onClick={() => {
-                setSelectedVoucher(displayVouchers[0])
+                setSelectedVoucher(vouchers[0])
                 setShowingQRCode(true)
-                generateVoucherQRCode(displayVouchers[0])
+                generateVoucherQRCode(vouchers[0])
               }}
             >
               <div className="p-5 pr-[120px]">
@@ -568,21 +525,22 @@ export default function NewV2Dashboard() {
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="#F28A2E">
                     <circle cx="5" cy="5" r="4"/>
                   </svg>
-                  <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: '#F28A2E' }}>Perk unlocked</span>
+                  <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: '#F28A2E' }}>
+                    {vouchers.length === 1 ? '1 voucher ready' : `${vouchers.length} vouchers ready`}
+                  </span>
                 </div>
-                <h3 className="text-[26px] font-bold leading-tight" style={{ color: '#24364B' }}>
-                  Nice one!
+                <h3 className="text-[22px] font-bold leading-tight" style={{ color: '#24364B' }}>
+                  {vouchers[0].template?.name || 'Your Reward'}
                 </h3>
                 <p className="text-[13px] font-medium mt-1 leading-snug" style={{ color: '#5A6A7A' }}>
-                  You've collected {currentBeans} beans.<br />
-                  Keep going!{' '}
-                  <img 
-                    src="/heart.png" 
-                    alt="" 
-                    className="inline-block w-5 h-5 object-contain align-middle" 
-                    style={{ marginBottom: '2px', transform: 'rotate(-15deg)' }} 
-                  />
+                  {vouchers[0].template?.description || 'Tap to view your voucher'}
                 </p>
+                <div className="inline-flex items-center gap-1 mt-3 text-[12px] font-semibold" style={{ color: '#F28A2E' }}>
+                  Tap to redeem
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path d="M9 18l6-6-6-6"/>
+                  </svg>
+                </div>
               </div>
               {/* Coffee cup illustration */}
               <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center"
@@ -647,15 +605,6 @@ export default function NewV2Dashboard() {
             </div>
           </div>
 
-        </div>
-
-        {/* DEBUG PANEL - Remove in production */}
-        <div
-          className="fixed bottom-20 left-2 right-2 bg-black text-white p-4 rounded-lg text-xs font-mono max-h-64 overflow-auto z-50"
-          style={{ fontSize: '10px', lineHeight: '1.2' }}
-        >
-          <div className="font-bold mb-2 text-yellow-400">VOUCHER DEBUG INFO:</div>
-          <pre className="whitespace-pre-wrap">{voucherDebugInfo || 'Loading...'}</pre>
         </div>
 
         <BottomNav />

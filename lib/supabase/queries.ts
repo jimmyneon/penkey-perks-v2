@@ -119,63 +119,36 @@ export async function createBeanBalance(userId: string): Promise<BeanBalance | n
 
 // Voucher queries
 export async function getUserVouchers(userId: string, status?: 'active' | 'redeemed' | 'expired'): Promise<Voucher[]> {
-  console.log('[getUserVouchers] === START ===')
-  console.log('[getUserVouchers] userId:', userId)
-  console.log('[getUserVouchers] status filter:', status)
-
   const supabase = createClient()
-  console.log('[getUserVouchers] Supabase client created')
 
   let query = supabase
     .from('user_vouchers')
     .select('*')
     .eq('user_id', userId)
 
-  console.log('[getUserVouchers] Query built with user_id filter')
-
   if (status) {
     query = query.eq('status', status)
-    console.log('[getUserVouchers] Added status filter:', status)
   }
 
-  console.log('[getUserVouchers] Executing query...')
   const { data: vouchers, error } = await query.order('created_at', { ascending: false })
 
-  console.log('[getUserVouchers] Query executed')
-  console.log('[getUserVouchers] Error:', error)
-  console.log('[getUserVouchers] Data:', vouchers)
-  console.log('[getUserVouchers] Vouchers count:', vouchers?.length || 0)
-
   if (error) {
-    console.error('[getUserVouchers] ERROR fetching vouchers:', error)
-    console.error('[getUserVouchers] Error code:', error.code)
-    console.error('[getUserVouchers] Error message:', error.message)
-    console.error('[getUserVouchers] Error details:', error.details)
-    console.error('[getUserVouchers] Error hint:', error.hint)
     return []
   }
 
   if (!vouchers || vouchers.length === 0) {
-    console.log('[getUserVouchers] No vouchers found or empty array')
     return []
   }
 
-  console.log('[getUserVouchers] Vouchers found, fetching templates...')
   // Fetch template data separately to avoid RLS issues with nested selects
   const templateIds = vouchers.map(v => v.voucher_template_id)
-  console.log('[getUserVouchers] Template IDs to fetch:', templateIds)
 
   const { data: templates, error: templateError } = await supabase
     .from('voucher_templates')
     .select('id, name, description, category, bean_threshold')
     .in('id', templateIds)
 
-  console.log('[getUserVouchers] Templates query result:', templates)
-  console.log('[getUserVouchers] Templates error:', templateError)
-
   if (templateError) {
-    console.error('[getUserVouchers] ERROR fetching voucher templates:', templateError)
-    console.log('[getUserVouchers] Returning vouchers without templates')
     return vouchers
   }
 
@@ -186,38 +159,13 @@ export async function getUserVouchers(userId: string, status?: 'active' | 'redee
     template: templateMap.get(voucher.voucher_template_id)
   }))
 
-  console.log('[getUserVouchers] Final result with templates:', result)
-  console.log('[getUserVouchers] === END ===')
   return result
 }
 
 export async function getActiveVouchers(userId: string): Promise<Voucher[]> {
-  console.log('[getActiveVouchers] === START ===')
-  console.log('[getActiveVouchers] Fetching vouchers for user:', userId)
-  console.log('[getActiveVouchers] User ID type:', typeof userId)
-  console.log('[getActiveVouchers] User ID length:', userId?.length)
-
   try {
-    const supabase = createClient()
-    console.log('[getActiveVouchers] Supabase client created')
-
-    // Check auth session
-    const { data: { session } } = await supabase.auth.getSession()
-    console.log('[getActiveVouchers] Auth session exists:', !!session)
-    console.log('[getActiveVouchers] Session user ID:', session?.user?.id)
-    console.log('[getActiveVouchers] Session user ID matches requested ID:', session?.user?.id === userId)
-
-    const vouchers = await getUserVouchers(userId, 'active')
-    console.log('[getActiveVouchers] Result:', vouchers)
-    console.log('[getActiveVouchers] Vouchers count:', vouchers.length)
-    console.log('[getActiveVouchers] First voucher:', vouchers[0])
-    console.log('[getActiveVouchers] === END ===')
-    return vouchers
+    return await getUserVouchers(userId, 'active')
   } catch (error) {
-    console.error('[getActiveVouchers] ERROR:', error)
-    console.error('[getActiveVouchers] Error message:', error instanceof Error ? error.message : 'Unknown error')
-    console.error('[getActiveVouchers] Error stack:', error instanceof Error ? error.stack : 'No stack')
-    console.log('[getActiveVouchers] === END WITH ERROR ===')
     return []
   }
 }
