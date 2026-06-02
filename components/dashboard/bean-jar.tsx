@@ -170,7 +170,7 @@ export function BeanJar({ beans, nextReward }: BeanJarProps) {
 
     {/* Bean Jar Info Modal */}
     <Dialog open={showModal} onOpenChange={setShowModal}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md sm:max-w-md w-full h-full sm:h-auto sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg rounded-none sm:max-h-[90vh] max-h-[100dvh] bg-[#FAF6F1]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Sparkles className="w-6 h-6 text-[#8B4513]" />
@@ -180,7 +180,7 @@ export function BeanJar({ beans, nextReward }: BeanJarProps) {
             Track your beans and see what you can earn
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-4">
+        <div className="space-y-4 flex-1 overflow-y-auto">
           {/* Current Beans Display */}
           <div className="text-center p-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg border-2 border-[#8B4513]/20">
             <p className="text-5xl font-bold text-[#8B4513] mb-2">

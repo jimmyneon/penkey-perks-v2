@@ -160,7 +160,7 @@ export function PointsCard({ currentPoints, nextReward }: PointsCardProps) {
 
     {/* Available Beans Modal */}
     <Dialog open={showAvailableModal} onOpenChange={setShowAvailableModal}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md sm:max-w-md w-full h-full sm:h-auto sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg rounded-none sm:max-h-[90vh] max-h-[100dvh] bg-[#FAF6F1]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
             <BeanIcon size="lg" className="text-penkey-brown" />
@@ -170,7 +170,7 @@ export function PointsCard({ currentPoints, nextReward }: PointsCardProps) {
             Beans you can use right now to redeem rewards
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-4">
+        <div className="space-y-4 flex-1 overflow-y-auto">
           <div className="text-center p-4 sm:p-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg border-2 border-penkey-brown/20">
             <p className="text-3xl sm:text-5xl font-bold text-penkey-dark mb-2">{currentPoints.toLocaleString()}</p>
             <p className="text-sm text-penkey-gray">Ready to Use</p>
@@ -208,7 +208,7 @@ export function PointsCard({ currentPoints, nextReward }: PointsCardProps) {
 
     {/* Pending Beans Modal */}
     <Dialog open={showPendingModal} onOpenChange={setShowPendingModal}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md sm:max-w-md w-full h-full sm:h-auto sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg rounded-none sm:max-h-[90vh] max-h-[100dvh] bg-[#FAF6F1]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
             <HourglassIcon className="w-5 h-5 sm:w-6 sm:h-6 text-penkey-orange" />
@@ -218,7 +218,7 @@ export function PointsCard({ currentPoints, nextReward }: PointsCardProps) {
             Beans waiting to be claimed at Penkey
           </DialogDescription>
         </DialogHeader>
-        <div className="space-y-4">
+        <div className="space-y-4 flex-1 overflow-y-auto">
           <div className="text-center p-4 sm:p-6 bg-gradient-to-br from-orange-50 to-yellow-50 rounded-lg border-2 border-penkey-orange/20">
             <p className="text-3xl sm:text-5xl font-bold text-penkey-orange mb-2">{pendingPoints.toLocaleString()}</p>
             <p className="text-sm text-penkey-gray">Waiting for You</p>
