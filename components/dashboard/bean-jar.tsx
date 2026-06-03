@@ -170,47 +170,47 @@ export function BeanJar({ beans, nextReward }: BeanJarProps) {
 
     {/* Bean Jar Info Modal */}
     <Dialog open={showModal} onOpenChange={setShowModal}>
-      <DialogContent className="max-w-md sm:max-w-md w-full h-full sm:h-auto sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg rounded-none sm:max-h-[90vh] max-h-[100dvh] bg-[#FAF6F1] data-[state=open]:!animate-in data-[state=open]:!fade-in-0 data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95">
+      <DialogContent className="max-w-md sm:max-w-md w-full h-full sm:h-auto sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg rounded-none sm:max-h-[90vh] max-h-[100dvh] bg-[#1e3a8a] data-[state=open]:!animate-in data-[state=open]:!fade-in-0 data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95" showCloseButton={true}>
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-[#8B4513]" />
+          <DialogTitle className="flex items-center gap-2 text-white">
+            <Sparkles className="w-6 h-6 text-white" />
             Your Bean Collection
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-gray-300">
             Track your beans and see what you can earn
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 flex-1 overflow-y-auto">
           {/* Current Beans Display */}
-          <div className="text-center p-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg border-2 border-[#8B4513]/20">
-            <p className="text-5xl font-bold text-[#8B4513] mb-2">
+          <div className="text-center p-6 bg-gradient-to-br from-blue-900 to-blue-800 rounded-lg border-2 border-blue-600/30">
+            <p className="text-5xl font-bold text-white mb-2">
               {beans.toLocaleString()}
             </p>
-            <p className="text-sm text-gray-600">Beans in Your Jar</p>
+            <p className="text-sm text-gray-300">Beans in Your Jar</p>
           </div>
 
           {/* Next Reward Progress */}
           {nextReward && (
-            <div className="space-y-3 p-4 bg-white rounded-lg border border-[#8B4513]/20">
+            <div className="space-y-3 p-4 bg-blue-900/50 rounded-lg border border-blue-600/30">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-gray-700">Next Reward:</span>
-                <span className="text-sm font-bold text-[#8B4513]">{nextReward.name}</span>
+                <span className="text-sm font-semibold text-gray-200">Next Reward:</span>
+                <span className="text-sm font-bold text-white">{nextReward.name}</span>
               </div>
               
               <div className="space-y-2">
-                <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
+                <div className="h-4 bg-blue-950 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-[#8B4513] to-[#D2691E] transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-500"
                     style={{ width: `${Math.min(fillPercentage, 100)}%` }}
                   />
                 </div>
-                <div className="flex justify-between text-xs text-gray-600">
+                <div className="flex justify-between text-xs text-gray-300">
                   <span>{beans} beans</span>
                   <span>{nextReward.beansRequired} beans</span>
                 </div>
               </div>
               
-              <p className="text-sm text-center text-gray-600">
+              <p className="text-sm text-center text-gray-300">
                 {(nextReward.beansRequired - beans).toLocaleString()} more beans needed
               </p>
             </div>
@@ -218,25 +218,25 @@ export function BeanJar({ beans, nextReward }: BeanJarProps) {
 
           {/* How to Earn Beans */}
           <div className="space-y-2">
-            <h4 className="font-semibold text-gray-800 flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[#8B4513]" />
+            <h4 className="font-semibold text-white flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-blue-400" />
               How to Earn More Beans
             </h4>
-            <ul className="text-sm text-gray-600 space-y-1.5">
+            <ul className="text-sm text-gray-300 space-y-1.5">
               <li className="flex items-start gap-2">
-                <span className="text-[#8B4513] font-bold">•</span>
+                <span className="text-blue-400 font-bold">•</span>
                 <span>Play daily games (up to 50 beans per game!)</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-[#8B4513] font-bold">•</span>
+                <span className="text-blue-400 font-bold">•</span>
                 <span>Check in at Penkey to claim pending beans</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-[#8B4513] font-bold">•</span>
+                <span className="text-blue-400 font-bold">•</span>
                 <span>Refer friends (10 beans per referral)</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="text-[#8B4513] font-bold">•</span>
+                <span className="text-blue-400 font-bold">•</span>
                 <span>Celebrate your birthday (special bonus!)</span>
               </li>
             </ul>
@@ -245,12 +245,12 @@ export function BeanJar({ beans, nextReward }: BeanJarProps) {
           {/* Action Buttons */}
           <div className="grid grid-cols-2 gap-2">
             <Link href="/games">
-              <Button variant="outline" className="w-full border-[#8B4513] text-[#8B4513] hover:bg-[#8B4513]/10">
+              <Button variant="outline" className="w-full border-blue-400 text-blue-400 hover:bg-blue-400/10">
                 Play Games
               </Button>
             </Link>
             <Link href="/rewards">
-              <Button className="w-full bg-[#8B4513] hover:bg-[#8B4513]/90 text-white">
+              <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white">
                 <Gift className="w-4 h-4 mr-2" />
                 View Rewards
               </Button>
