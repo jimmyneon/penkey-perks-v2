@@ -89,7 +89,7 @@ export function BottomSheet({
             
             {/* Header */}
             {(title || showCloseButton) && (
-              <div className="flex items-center justify-between px-5 pb-4 border-b border-[#F0EBE5]">
+              <div className="flex items-center justify-between px-5 pb-4">
                 {title && (
                   <h2 className="text-xl font-bold text-brown">{title}</h2>
                 )}

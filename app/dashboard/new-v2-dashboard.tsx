@@ -620,14 +620,10 @@ export default function NewV2Dashboard() {
         </DialogContent>
       </Dialog>
 
-      {/* Rewards Panel Bottom Sheet - Full Screen */}
-      <BottomSheet 
-        open={showRewardsPanel} 
-        onOpenChange={setShowRewardsPanel} 
-        showCloseButton={true} 
-        fullScreen={true}
-      >
-        <div className="p-5 overflow-y-auto h-full" style={{ background: 'linear-gradient(160deg, #2B3E52 0%, #1e2d3d 100%)' }}>
+      {/* Rewards Panel Dialog - Full Screen */}
+      <Dialog open={showRewardsPanel} onOpenChange={setShowRewardsPanel}>
+        <DialogContent className="max-w-md sm:max-w-md w-full h-full sm:h-auto sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg rounded-none sm:max-h-[90vh] max-h-[100dvh] data-[state=open]:!animate-in data-[state=open]:!fade-in-0 data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95 p-0 overflow-hidden border-0" showCloseButton={true}>
+          <div className="p-5 overflow-y-auto h-full" style={{ background: 'linear-gradient(160deg, #2B3E52 0%, #1e2d3d 100%)' }}>
 
               {/* Header */}
               <div className="mb-5">
@@ -870,7 +866,8 @@ export default function NewV2Dashboard() {
               </div>
 
         </div>
-      </BottomSheet>
+      </DialogContent>
+    </Dialog>
 
       {/* Bean award modal */}
       <BeanModal
