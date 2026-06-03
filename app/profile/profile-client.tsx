@@ -462,7 +462,7 @@ export function ProfileClient({ user: initialUser, beanBalance: initialBeanBalan
               <img
                 src="/vouchers/voucher.png"
                 alt="Vouchers"
-                className="w-16 h-16 rounded-[14px] object-cover"
+                className="w-24 h-24 rounded-[14px] object-cover"
               />
               <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-extrabold text-white" style={{ backgroundColor: '#E07A3A' }}>{userVouchers.length}</div>
             </div>

@@ -304,10 +304,10 @@ export default function NewV2Dashboard() {
                       <img
                         src={nextReward.image_url}
                         alt={nextReward.reward}
-                        className="w-44 h-44 object-contain"
+                        className="w-56 h-56 object-contain"
                       />
                     ) : (
-                      <img src="/coffeecup.png" alt="" className="w-44 h-44 object-contain" />
+                      <img src="/coffeecup.png" alt="" className="w-56 h-56 object-contain" />
                     )}
                   </div>
                 </div>
@@ -339,7 +339,7 @@ export default function NewV2Dashboard() {
               style={{ backgroundColor: '#F4EFE7', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}
               onClick={() => setShowVoucherSheet(true)}
             >
-              <div className="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
+              <div className="w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
                 <img
                   src="/vouchers/voucher.png"
                   alt="Vouchers"
@@ -447,7 +447,7 @@ export default function NewV2Dashboard() {
                   generateVoucherQRCode(voucher)
                 }}
               >
-                <div className="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
+                <div className="w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
                   {voucher.template?.image_url ? (
                     <img
                       src={voucher.template.image_url}
@@ -455,7 +455,7 @@ export default function NewV2Dashboard() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <img src="/coffeecup.png" alt="" className="w-10 h-10 object-contain" />
+                    <img src="/coffeecup.png" alt="" className="w-14 h-14 object-contain" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -738,7 +738,7 @@ export default function NewV2Dashboard() {
                         {/* Circle icon */}
                         <div className="relative flex-shrink-0 z-10">
                           <div
-                            className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden"
+                            className="w-24 h-24 rounded-full flex items-center justify-center overflow-hidden"
                             style={{
                               backgroundColor: '#1a2b3c',
                               border: isNext
