@@ -291,10 +291,10 @@ export default function NewV2Dashboard() {
                       <img
                         src={nextReward.image_url}
                         alt={nextReward.reward}
-                        className="w-36 h-36 object-contain"
+                        className="w-44 h-44 object-contain"
                       />
                     ) : (
-                      <img src="/coffeecup.png" alt="" className="w-36 h-36 object-contain" />
+                      <img src="/coffeecup.png" alt="" className="w-44 h-44 object-contain" />
                     )}
                   </div>
                 </div>
@@ -326,19 +326,12 @@ export default function NewV2Dashboard() {
               style={{ backgroundColor: '#F4EFE7', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}
               onClick={() => setShowVoucherSheet(true)}
             >
-              <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
-                {vouchers[0]?.template?.image_url ? (
-                  <img
-                    src={vouchers[0].template.image_url}
-                    alt={vouchers[0].template.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F28A2E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
-                    <line x1="1" y1="10" x2="23" y2="10" />
-                  </svg>
-                )}
+              <div className="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
+                <img
+                  src="/vouchers/voucher.png"
+                  alt="Vouchers"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-[15px] font-bold leading-tight" style={{ color: '#24364B' }}>
@@ -441,7 +434,7 @@ export default function NewV2Dashboard() {
                   generateVoucherQRCode(voucher)
                 }}
               >
-                <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
+                <div className="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
                   {voucher.template?.image_url ? (
                     <img
                       src={voucher.template.image_url}
@@ -449,7 +442,7 @@ export default function NewV2Dashboard() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <img src="/coffeecup.png" alt="" className="w-7 h-7 object-contain" />
+                    <img src="/coffeecup.png" alt="" className="w-10 h-10 object-contain" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">

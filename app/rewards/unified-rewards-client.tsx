@@ -395,7 +395,7 @@ export function UnifiedRewardsClient({
                   <Link href={`/rewards/${userReward.id}`} key={userReward.id}>
                     <div className="bg-white rounded-[16px] px-4 py-3.5 flex items-center gap-3 active:scale-[0.98] transition-all shadow-[0_2px_10px_rgba(61,26,14,0.07)]"
                       style={{ border: expiringSoon ? '1.5px solid #FCA5A5' : '1.5px solid transparent' }}>
-                      <div className="w-10 h-10 rounded-[12px] flex items-center justify-center flex-shrink-0 overflow-hidden"
+                      <div className="w-14 h-14 rounded-[12px] flex items-center justify-center flex-shrink-0 overflow-hidden"
                         style={{ backgroundColor: expiringSoon ? '#FEF2F2' : '#FDF0E6' }}>
                         {reward.image_url ? (
                           <img
@@ -404,7 +404,7 @@ export function UnifiedRewardsClient({
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <Gift className="w-5 h-5" style={{ color: expiringSoon ? '#EF4444' : '#E07A3A' }} />
+                          <Gift className="w-7 h-7" style={{ color: expiringSoon ? '#EF4444' : '#E07A3A' }} />
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -445,7 +445,7 @@ export function UnifiedRewardsClient({
                 >
                   {/* Bean count bubble */}
                   <div
-                    className="w-12 h-12 rounded-[14px] flex items-center justify-center flex-shrink-0 overflow-hidden"
+                    className="w-16 h-16 rounded-[14px] flex items-center justify-center flex-shrink-0 overflow-hidden"
                     style={{
                       backgroundColor: unlocked ? 'rgba(255,255,255,0.15)' : '#F0F4F7',
                     }}
