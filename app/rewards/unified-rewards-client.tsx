@@ -248,16 +248,16 @@ export function UnifiedRewardsClient({
   }))
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
+    <div className="min-h-screen bg-[#F9F7F2]">
 
       {/* ── HEADER ── */}
       <div className="px-5 pt-14 pb-5">
-        <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
+        <p className="text-[24px] font-bold leading-tight text-[#E07A3A] font-cursive">
           Your Rewards{' '}
-          <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px' }} />
+          <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle mb-0.5" />
         </p>
-        <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#1C2B3A' }}>Rewards</h1>
-        <p className="text-[13px] font-medium mt-1.5 leading-snug" style={{ color: '#8A96A0' }}>
+        <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5 text-[#1C2B3A]">Rewards</h1>
+        <p className="text-[13px] font-medium mt-1.5 leading-snug text-[#8A96A0]">
           Collect beans, unlock treats
         </p>
       </div>
@@ -266,10 +266,10 @@ export function UnifiedRewardsClient({
 
         {/* ── HOW IT WORKS ── */}
         <section>
-          <div className="rounded-[18px] p-5" style={{ backgroundColor: 'white', border: '1px solid #E8E2D8', boxShadow: '0 2px 12px rgba(36,54,75,0.06)' }}>
+          <div className="rounded-[18px] p-5 bg-white border border-[#E8E2D8] shadow-[0_2px_12px_rgba(36,54,75,0.06)]">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-[18px] font-extrabold" style={{ color: '#1C2B3A' }}>How it works</h2>
-              <Link href="/campaigns" className="text-[12px] font-bold flex items-center gap-1" style={{ color: '#E07A3A' }}>
+              <h2 className="text-[18px] font-extrabold text-[#1C2B3A]">How it works</h2>
+              <Link href="/campaigns" className="text-[12px] font-bold flex items-center gap-1 text-[#E07A3A]">
                 View Campaigns
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -278,39 +278,39 @@ export function UnifiedRewardsClient({
             </div>
             <div className="space-y-3">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(224,122,58,0.12)' }}>
-                  <span className="text-[14px] font-extrabold" style={{ color: '#E07A3A' }}>1</span>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[rgba(224,122,58,0.12)]">
+                  <span className="text-[14px] font-extrabold text-[#E07A3A]">1</span>
                 </div>
                 <div>
-                  <p className="text-[14px] font-bold leading-tight" style={{ color: '#1C2B3A' }}>Visit & Scan</p>
-                  <p className="text-[12px] mt-0.5 leading-snug" style={{ color: '#8A96A0' }}>Show your QR code at the till every time you visit</p>
+                  <p className="text-[14px] font-bold leading-tight text-[#1C2B3A]">Visit & Scan</p>
+                  <p className="text-[12px] mt-0.5 leading-snug text-[#8A96A0]">Show your QR code at the till every time you visit</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(224,122,58,0.12)' }}>
-                  <span className="text-[14px] font-extrabold" style={{ color: '#E07A3A' }}>2</span>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[rgba(224,122,58,0.12)]">
+                  <span className="text-[14px] font-extrabold text-[#E07A3A]">2</span>
                 </div>
                 <div>
-                  <p className="text-[14px] font-bold leading-tight" style={{ color: '#1C2B3A' }}>Collect Beans</p>
-                  <p className="text-[12px] mt-0.5 leading-snug" style={{ color: '#8A96A0' }}>Earn beans with every purchase — more you spend, more you get</p>
+                  <p className="text-[14px] font-bold leading-tight text-[#1C2B3A]">Collect Beans</p>
+                  <p className="text-[12px] mt-0.5 leading-snug text-[#8A96A0]">Earn beans with every purchase — more you spend, more you get</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(224,122,58,0.12)' }}>
-                  <span className="text-[14px] font-extrabold" style={{ color: '#E07A3A' }}>3</span>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[rgba(224,122,58,0.12)]">
+                  <span className="text-[14px] font-extrabold text-[#E07A3A]">3</span>
                 </div>
                 <div>
-                  <p className="text-[14px] font-bold leading-tight" style={{ color: '#1C2B3A' }}>Unlock Rewards</p>
-                  <p className="text-[12px] mt-0.5 leading-snug" style={{ color: '#8A96A0' }}>Reach milestones (2, 8, 15, 25 beans) to unlock free treats</p>
+                  <p className="text-[14px] font-bold leading-tight text-[#1C2B3A]">Unlock Rewards</p>
+                  <p className="text-[12px] mt-0.5 leading-snug text-[#8A96A0]">Reach milestones (2, 8, 15, 25 beans) to unlock free treats</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(224,122,58,0.12)' }}>
-                  <span className="text-[14px] font-extrabold" style={{ color: '#E07A3A' }}>4</span>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[rgba(224,122,58,0.12)]">
+                  <span className="text-[14px] font-extrabold text-[#E07A3A]">4</span>
                 </div>
                 <div>
-                  <p className="text-[14px] font-bold leading-tight" style={{ color: '#1C2B3A' }}>Redeem & Enjoy</p>
-                  <p className="text-[12px] mt-0.5 leading-snug" style={{ color: '#8A96A0' }}>Tap any unlocked reward below and show the QR code to redeem</p>
+                  <p className="text-[14px] font-bold leading-tight text-[#1C2B3A]">Redeem & Enjoy</p>
+                  <p className="text-[12px] mt-0.5 leading-snug text-[#8A96A0]">Tap any unlocked reward below and show the QR code to redeem</p>
                 </div>
               </div>
             </div>
@@ -319,13 +319,13 @@ export function UnifiedRewardsClient({
 
         {/* ── BEAN STAMP CARD ── */}
         <section>
-          <div className="rounded-[22px] p-5" style={{ backgroundColor: '#2C3E50', boxShadow: '0 4px 20px rgba(28,43,58,0.22)' }}>
+          <div className="rounded-[22px] p-5 bg-[#2C3E50] shadow-[0_4px_20px_rgba(28,43,58,0.22)]">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.12em] mb-1" style={{ color: 'rgba(255,255,255,0.5)' }}>YOUR BEANS</p>
+                <p className="text-[11px] font-bold uppercase tracking-[0.12em] mb-1 text-white/50">YOUR BEANS</p>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-[48px] font-extrabold leading-none" style={{ color: 'white' }}>{currentPoints}</span>
-                  <span className="text-[14px] font-semibold" style={{ color: 'rgba(255,255,255,0.5)' }}>collected</span>
+                  <span className="text-[48px] font-extrabold leading-none text-white">{currentPoints}</span>
+                  <span className="text-[14px] font-semibold text-white/50">collected</span>
                 </div>
               </div>
               <div className="relative">
@@ -339,7 +339,7 @@ export function UnifiedRewardsClient({
                   />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-[13px] font-extrabold leading-none" style={{ color: 'white' }}>{Math.round(nextProgress)}%</span>
+                  <span className="text-[13px] font-extrabold leading-none text-white">{Math.round(nextProgress)}%</span>
                 </div>
               </div>
             </div>
@@ -364,7 +364,7 @@ export function UnifiedRewardsClient({
                       {filled ? (
                         <img src="/bean.png" alt="" className="w-5 h-5 object-contain" />
                       ) : (
-                        <img src="/bean.png" alt="" className="w-5 h-5 object-contain" style={{ filter: 'brightness(0.4) grayscale(0.5)', opacity: 0.6 }} />
+                        <img src="/bean.png" alt="" className="w-5 h-5 object-contain brightness-[0.4] grayscale-[0.5] opacity-60" />
                       )}
                     </div>
                   )
@@ -372,9 +372,9 @@ export function UnifiedRewardsClient({
               </div>
             </div>
 
-            <p className="text-[13px] font-medium leading-snug" style={{ color: 'rgba(255,255,255,0.6)' }}>
+            <p className="text-[13px] font-medium leading-snug text-white/60">
               {nextReward
-                ? <><span className="font-bold" style={{ color: '#E07A3A' }}>{Math.max(0, nextReward.points_required - currentPoints)} more</span> until your next reward</>
+                ? <><span className="font-bold text-[#E07A3A]">{Math.max(0, nextReward.points_required - currentPoints)} more</span> until your next reward</>
                 : <span className="font-semibold text-white">All rewards unlocked — go redeem!</span>
               }
             </p>
@@ -384,23 +384,22 @@ export function UnifiedRewardsClient({
         {/* ── READY TO USE ── */}
         {unlockedRewards.length > 0 && (
           <section>
-            <p className="text-[13px] font-bold mb-2.5 px-1" style={{ color: '#1C2B3A' }}>Ready to use</p>
+            <p className="text-[13px] font-bold mb-2.5 px-1 text-[#1C2B3A]">Ready to use</p>
             <div className="space-y-2">
               {unlockedRewards.map(reward => (
                 <button
                   key={reward.id}
                   onClick={() => setSelectedReward(reward)}
-                  className="w-full rounded-[18px] px-4 py-4 flex items-center gap-3.5 active:scale-[0.98] transition-all text-left"
-                  style={{ backgroundColor: '#2C3E50', boxShadow: '0 4px 20px rgba(28,43,58,0.25)' }}
+                  className="w-full rounded-[18px] px-4 py-4 flex items-center gap-3.5 active:scale-[0.98] transition-all text-left bg-[#2C3E50] shadow-[0_4px_20px_rgba(28,43,58,0.25)]"
                 >
-                  <div className="w-10 h-10 rounded-[12px] flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(255,255,255,0.12)' }}>
+                  <div className="w-10 h-10 rounded-[12px] flex items-center justify-center flex-shrink-0 bg-white/12">
                     <Gift className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1">
                     <p className="text-[15px] font-extrabold text-white leading-tight">{reward.name}</p>
-                    <p className="text-[12px] mt-0.5" style={{ color: 'rgba(255,255,255,0.55)' }}>{reward.points_required} beans</p>
+                    <p className="text-[12px] mt-0.5 text-white/55">{reward.points_required} beans</p>
                   </div>
-                  <span className="text-[11px] font-bold text-white px-3 py-1.5 rounded-full" style={{ backgroundColor: '#E07A3A' }}>Use now</span>
+                  <span className="text-[11px] font-bold text-white px-3 py-1.5 rounded-full bg-[#E07A3A]">Use now</span>
                 </button>
               ))}
             </div>
@@ -410,7 +409,7 @@ export function UnifiedRewardsClient({
         {/* ── ACTIVE VOUCHERS ── */}
         {activeRewards.length > 0 && (
           <section>
-            <p className="text-[13px] font-bold mb-2.5 px-1" style={{ color: '#1C2B3A' }}>In your wallet</p>
+            <p className="text-[13px] font-bold mb-2.5 px-1 text-[#1C2B3A]">In your wallet</p>
             <div className="space-y-2">
               {activeRewards.map(userReward => {
                 const reward = userReward.rewards
@@ -425,10 +424,10 @@ export function UnifiedRewardsClient({
                         <Gift className="w-5 h-5" style={{ color: expiringSoon ? '#EF4444' : '#E07A3A' }} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[14px] font-bold leading-tight truncate" style={{ color: '#1C2B3A' }}>{reward.name}</p>
+                        <p className="text-[14px] font-bold leading-tight truncate text-[#1C2B3A]">{reward.name}</p>
                         <p className="text-[11px] mt-0.5 font-medium" style={{ color: expiringSoon ? '#EF4444' : '#B08070' }}>{getExpiryText(userReward.expires_at)}</p>
                       </div>
-                      <div className="flex items-center gap-1 text-[11px] font-bold" style={{ color: '#E07A3A' }}>
+                      <div className="flex items-center gap-1 text-[11px] font-bold text-[#E07A3A]">
                         <QrCode className="w-3.5 h-3.5" />
                         Show
                       </div>
@@ -442,7 +441,7 @@ export function UnifiedRewardsClient({
 
         {/* ── REWARD TIERS ── the full journey ── */}
         <section>
-          <p className="text-[13px] font-bold mb-2.5 px-1" style={{ color: '#1C2B3A' }}>What you can earn</p>
+          <p className="text-[13px] font-bold mb-2.5 px-1 text-[#1C2B3A]">What you can earn</p>
           <div className="space-y-2.5">
             {rewardTiers.map((tier) => {
               const unlocked = currentPoints >= tier.beans
@@ -487,7 +486,7 @@ export function UnifiedRewardsClient({
                       </span>
                     </div>
                   ) : (
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full border-2 border-dashed" style={{ borderColor: '#E0D0C4' }} />
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full border-2 border-dashed border-[#E0D0C4]" />
                   )}
                 </div>
               )
@@ -497,7 +496,7 @@ export function UnifiedRewardsClient({
 
         {/* ── HOW IT WORKS ── minimal, human ── */}
         <section>
-          <p className="text-[13px] font-bold mb-2.5 px-1" style={{ color: '#1C2B3A' }}>How it works</p>
+          <p className="text-[13px] font-bold mb-2.5 px-1 text-[#1C2B3A]">How it works</p>
           <div className="bg-white rounded-[18px] overflow-hidden shadow-[0_2px_10px_rgba(61,26,14,0.07)]">
             {[
               { n: '1', text: 'Buy anything at Penkey', sub: 'Coffee, food, gifts — it all counts' },
@@ -506,10 +505,10 @@ export function UnifiedRewardsClient({
               { n: '4', text: 'Spend them on free stuff', sub: 'Syrup, coffee, snacks, full meals' },
             ].map(({ n, text, sub }, i, arr) => (
               <div key={n} className={`flex items-center gap-4 px-4 py-3.5 ${i < arr.length - 1 ? 'border-b' : ''}`} style={{ borderColor: '#F5EDE5' }}>
-                <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-[12px] font-extrabold text-white" style={{ backgroundColor: '#E07A3A' }}>{n}</div>
+                <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-[12px] font-extrabold text-white bg-[#E07A3A]">{n}</div>
                 <div>
-                  <p className="text-[13px] font-semibold leading-tight" style={{ color: '#1C2B3A' }}>{text}</p>
-                  <p className="text-[11px] mt-0.5" style={{ color: '#8A9AAA' }}>{sub}</p>
+                  <p className="text-[13px] font-semibold leading-tight text-[#1C2B3A]">{text}</p>
+                  <p className="text-[11px] mt-0.5 text-[#8A9AAA]">{sub}</p>
                 </div>
               </div>
             ))}
@@ -519,7 +518,7 @@ export function UnifiedRewardsClient({
         {/* ── PAST REWARDS ── */}
         {historyRewards.length > 0 && (
           <section>
-            <p className="text-[13px] font-bold mb-2.5 px-1" style={{ color: '#1C2B3A' }}>Previously used</p>
+            <p className="text-[13px] font-bold mb-2.5 px-1 text-[#1C2B3A]">Previously used</p>
             <div className="space-y-1.5">
               {historyRewards.slice(0, 5).map(userReward => {
                 const reward = userReward.rewards
@@ -531,11 +530,17 @@ export function UnifiedRewardsClient({
                 return (
                   <Link href={`/rewards/${userReward.id}`} key={userReward.id}>
                     <div className={`bg-white rounded-[12px] px-4 py-3 flex items-center gap-3 active:scale-[0.98] transition-all shadow-[0_1px_4px_rgba(61,26,14,0.06)] ${!isRedeemed ? 'opacity-40' : ''}`}>
-                      <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: isRedeemed ? '#F0FAF4' : '#F2EDE8' }}>
-                        {isRedeemed ? <CheckCircle2 className="w-3.5 h-3.5" style={{ color: '#2A7A4A' }} /> : <Clock className="w-3.5 h-3.5" style={{ color: '#B08070' }} />}
-                      </div>
-                      <span className="flex-1 text-[12px] font-semibold truncate" style={{ color: '#2C3E50' }}>{reward.name}</span>
-                      <span className="text-[11px]" style={{ color: '#B08070' }}>{displayDate}</span>
+                      {isRedeemed ? (
+                        <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 bg-[#F0FAF4]">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#2A7A4A]" />
+                        </div>
+                      ) : (
+                        <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 bg-[#F2EDE8]">
+                          <Clock className="w-3.5 h-3.5 text-[#B08070]" />
+                        </div>
+                      )}
+                      <span className="flex-1 text-[12px] font-semibold truncate text-[#2C3E50]">{reward.name}</span>
+                      <span className="text-[11px] text-[#B08070]">{displayDate}</span>
                     </div>
                   </Link>
                 )
