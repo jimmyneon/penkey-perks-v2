@@ -515,7 +515,7 @@ export default function NewV2Dashboard() {
 
       {/* Beans Panel Dialog - Stamps Only */}
       <Dialog open={showBeansPanel} onOpenChange={setShowBeansPanel}>
-        <DialogContent className="max-w-md sm:max-w-md w-full h-full sm:h-auto sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg rounded-none sm:max-h-[90vh] max-h-[100dvh] bg-[#1e3a8a] data-[state=open]:!animate-in data-[state=open]:!fade-in-0 data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95 p-0 overflow-hidden border-0" showCloseButton={true}>
+        <DialogContent className="sm:max-w-md rounded-[24px] shadow-[0_24px_64px_rgba(0,0,0,0.18)] p-0 overflow-hidden border-0">
           <DialogTitle className="sr-only">Your Stamp Card</DialogTitle>
           <DialogDescription className="sr-only">View your bean collection and stamp card progress</DialogDescription>
           <div
