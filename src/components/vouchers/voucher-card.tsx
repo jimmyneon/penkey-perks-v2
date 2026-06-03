@@ -12,9 +12,10 @@ interface VoucherCardProps {
   qrCode: string
   expiresAt: string
   status: 'active' | 'redeemed' | 'expired'
+  imageUrl?: string
 }
 
-export function VoucherCard({ id, name, description, category, qrCode, expiresAt, status }: VoucherCardProps) {
+export function VoucherCard({ id, name, description, category, qrCode, expiresAt, status, imageUrl }: VoucherCardProps) {
   const [showQR, setShowQR] = useState(false)
   const [qrUrl, setQrUrl] = useState('')
   const [mounted, setMounted] = useState(false)
@@ -39,6 +40,15 @@ export function VoucherCard({ id, name, description, category, qrCode, expiresAt
   return (
     <>
       <div className="bg-[#f5f3ed] rounded-lg p-4 border border-[#e7e5e4]">
+        {imageUrl && (
+          <div className="mb-3">
+            <img
+              src={imageUrl}
+              alt={name}
+              className="w-full h-32 object-cover rounded-lg"
+            />
+          </div>
+        )}
         <div className="flex justify-between items-start mb-3">
           <div className="flex items-center gap-2">
             <Gift className="h-5 w-5 text-[#f97316]" />

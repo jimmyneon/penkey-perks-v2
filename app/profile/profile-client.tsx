@@ -457,13 +457,21 @@ export function ProfileClient({ user: initialUser, beanBalance: initialBeanBalan
             style={{ backgroundColor: '#2C3E50', boxShadow: '0 4px 20px rgba(28,43,58,0.22)' }}
             onClick={() => router.push('/rewards')}
           >
-            {/* ticket icon with badge */}
+            {/* voucher image or fallback icon */}
             <div className="relative flex-shrink-0">
-              <div className="w-14 h-14 rounded-[14px] flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.10)' }}>
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
-                </svg>
-              </div>
+              {userVouchers[0]?.voucher_templates?.image_url ? (
+                <img
+                  src={userVouchers[0].voucher_templates.image_url}
+                  alt={userVouchers[0].voucher_templates.name}
+                  className="w-14 h-14 rounded-[14px] object-cover"
+                />
+              ) : (
+                <div className="w-14 h-14 rounded-[14px] flex items-center justify-center" style={{ backgroundColor: 'rgba(255,255,255,0.10)' }}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                  </svg>
+                </div>
+              )}
               <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-extrabold text-white" style={{ backgroundColor: '#E07A3A' }}>{userVouchers.length}</div>
             </div>
             <div className="flex-1 min-w-0">

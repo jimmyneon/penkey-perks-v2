@@ -85,6 +85,7 @@ CREATE TABLE public.voucher_templates (
   category TEXT NOT NULL, -- 'enhancer', 'coffee', 'major', 'wheel_spin'
   bean_threshold INTEGER NOT NULL,
   expiry_days INTEGER DEFAULT 30,
+  image_url TEXT,
   metadata JSONB DEFAULT '{}',
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()

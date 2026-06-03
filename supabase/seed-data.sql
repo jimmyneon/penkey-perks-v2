@@ -2,12 +2,12 @@
 -- This creates sample data to demonstrate the app
 
 -- Insert standard voucher templates
-INSERT INTO voucher_templates (name, description, category, bean_threshold, expiry_days) VALUES
-('Free Syrup', 'Add any vanilla or flavoured syrup to your coffee or tea for free', 'enhancer', 2, 30),
-('Free Biscuit', 'Get a free biscuit with any drink', 'enhancer', 5, 30),
-('Free Coffee or Tea', 'Any standard coffee or tea: latte, cappuccino, flat white, americano, tea', 'coffee', 8, 30),
-('Milkshake Voucher', 'Free milkshake of your choice', 'major', 15, 30),
-('Premium Hot Bun', 'Free premium hot bun: sausage roll, pasty, or hot sandwich', 'major', 25, 30);
+INSERT INTO voucher_templates (name, description, category, bean_threshold, expiry_days, image_url) VALUES
+('Free Syrup', 'Add any vanilla or flavoured syrup to your coffee or tea for free', 'enhancer', 2, 30, '/vouchers/syrup.png'),
+('Free Biscuit', 'Get a free biscuit with any drink', 'enhancer', 5, 30, '/vouchers/buscuit.png'),
+('Free Coffee or Tea', 'Any standard coffee or tea: latte, cappuccino, flat white, americano, tea', 'coffee', 8, 30, '/vouchers/coffeetea.png'),
+('Milkshake Voucher', 'Free milkshake of your choice', 'major', 15, 30, '/vouchers/milkshake.png'),
+('Premium Hot Bun', 'Free premium hot bun: sausage roll, pasty, or hot sandwich', 'major', 25, 30, '/vouchers/hotbap.png');
 
 -- Insert sample badges
 INSERT INTO badges (name, description, tier, requirement_type, requirement_value, icon_url) VALUES
