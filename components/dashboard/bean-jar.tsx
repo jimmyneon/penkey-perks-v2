@@ -170,7 +170,7 @@ export function BeanJar({ beans, nextReward }: BeanJarProps) {
 
     {/* Bean Jar Info Modal */}
     <Dialog open={showModal} onOpenChange={setShowModal}>
-      <DialogContent className="max-w-md sm:max-w-md w-full h-full sm:h-auto sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg rounded-none sm:max-h-[90vh] max-h-[100dvh] bg-[#FAF6F1]">
+      <DialogContent className="max-w-md sm:max-w-md w-full h-full sm:h-auto sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg rounded-none sm:max-h-[90vh] max-h-[100dvh] bg-[#FAF6F1] data-[state=open]:!animate-in data-[state=open]:!fade-in-0 data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Sparkles className="w-6 h-6 text-[#8B4513]" />
