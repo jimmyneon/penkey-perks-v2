@@ -50,6 +50,7 @@ export default function NewV2Dashboard() {
   const [displayedBeanBalance, setDisplayedBeanBalance] = useState<BeanBalance | null>(null)
   const [showBeanModal, setShowBeanModal] = useState(false)
   const [showMaxBeansModal, setShowMaxBeansModal] = useState(false)
+  const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
 
 
   // Real-time bean balance (disabled when showing QR code to avoid animation conflicts)
@@ -143,6 +144,18 @@ export default function NewV2Dashboard() {
         setVouchers(userVouchers)
       } catch (error) {
         setVouchers([])
+      }
+
+      // Load voucher templates for journey display
+      try {
+        const { data: templates } = await supabase
+          .from('voucher_templates')
+          .select('*')
+          .order('bean_threshold', { ascending: true })
+        setVoucherTemplates(templates || [])
+      } catch (error) {
+        console.error('Error loading voucher templates:', error)
+        setVoucherTemplates([])
       }
 
     } catch (error) {
@@ -663,14 +676,15 @@ export default function NewV2Dashboard() {
 
               {/* Journey list */}
               {(() => {
-                const milestones = [
-                  { beans: 2, name: 'Free Syrup Shot', category: 'enhancer', description: '' },
-                  { beans: 8, name: 'Any Coffee', category: 'coffee', description: '' },
-                  { beans: 15, name: 'Free Snack', category: 'major', description: '' },
-                  { beans: 25, name: 'Lunch Deal', category: 'major', description: '' },
-                ]
-                
-                // Map category to icon
+                const milestones = voucherTemplates.map(t => ({
+                  beans: t.bean_threshold,
+                  name: t.name,
+                  category: t.category,
+                  description: t.description,
+                  image_url: t.image_url,
+                }))
+
+                // Map category to icon (fallback)
                 const getIconForCategory = (category: string) => {
                   switch(category) {
                     case 'enhancer': return 'syrup'
@@ -724,7 +738,7 @@ export default function NewV2Dashboard() {
                         {/* Circle icon */}
                         <div className="relative flex-shrink-0 z-10">
                           <div
-                            className="w-14 h-14 rounded-full flex items-center justify-center"
+                            className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden"
                             style={{
                               backgroundColor: '#1a2b3c',
                               border: isNext
@@ -736,40 +750,50 @@ export default function NewV2Dashboard() {
                               opacity: (!unlocked && !isNext) ? 0.5 : 1,
                             }}
                           >
-                            {icon === 'syrup' && (
-                              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={unlocked ? '#F28A2E' : 'rgba(240,237,229,0.6)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M8 3h8v2a4 4 0 0 1-4 4 4 4 0 0 1-4-4V3z" />
-                                <path d="M12 9v3" />
-                                <path d="M9 12h6" />
-                                <rect x="7" y="12" width="10" height="9" rx="2" />
-                              </svg>
-                            )}
-                            {icon === 'coffee' && (
-                              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={isNext ? '#F28A2E' : unlocked ? '#F28A2E' : 'rgba(240,237,229,0.6)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M17 8h1a4 4 0 0 1 0 8h-1" />
-                                <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z" />
-                                <line x1="6" y1="2" x2="6" y2="5" />
-                                <line x1="10" y1="2" x2="10" y2="5" />
-                                <line x1="14" y1="2" x2="14" y2="5" />
-                              </svg>
-                            )}
-                            {icon === 'cookie' && (
-                              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(240,237,229,0.6)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                <circle cx="12" cy="12" r="9" />
-                                <circle cx="8" cy="9" r="1.5" fill="rgba(240,237,229,0.6)" stroke="none" />
-                                <circle cx="15" cy="9" r="1.5" fill="rgba(240,237,229,0.6)" stroke="none" />
-                                <circle cx="9" cy="14.5" r="1.5" fill="rgba(240,237,229,0.6)" stroke="none" />
-                                <circle cx="14.5" cy="14" r="1.5" fill="rgba(240,237,229,0.6)" stroke="none" />
-                              </svg>
-                            )}
-                            {icon === 'gift' && (
-                              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(240,237,229,0.6)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                <rect x="3" y="8" width="18" height="12" rx="2" />
-                                <path d="M12 8V3" />
-                                <path d="M12 3H8" />
-                                <path d="M12 3H16" />
-                                <path d="M12 8v12" />
-                              </svg>
+                            {reward.image_url ? (
+                              <img
+                                src={reward.image_url}
+                                alt={reward.name}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <>
+                                {icon === 'syrup' && (
+                                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={unlocked ? '#F28A2E' : 'rgba(240,237,229,0.6)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M8 3h8v2a4 4 0 0 1-4 4 4 4 0 0 1-4-4V3z" />
+                                    <path d="M12 9v3" />
+                                    <path d="M9 12h6" />
+                                    <rect x="7" y="12" width="10" height="9" rx="2" />
+                                  </svg>
+                                )}
+                                {icon === 'coffee' && (
+                                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={isNext ? '#F28A2E' : unlocked ? '#F28A2E' : 'rgba(240,237,229,0.6)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M17 8h1a4 4 0 0 1 0 8h-1" />
+                                    <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z" />
+                                    <line x1="6" y1="2" x2="6" y2="5" />
+                                    <line x1="10" y1="2" x2="10" y2="5" />
+                                    <line x1="14" y1="2" x2="14" y2="5" />
+                                  </svg>
+                                )}
+                                {icon === 'cookie' && (
+                                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(240,237,229,0.6)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <circle cx="12" cy="12" r="9" />
+                                    <circle cx="8" cy="9" r="1.5" fill="rgba(240,237,229,0.6)" stroke="none" />
+                                    <circle cx="15" cy="9" r="1.5" fill="rgba(240,237,229,0.6)" stroke="none" />
+                                    <circle cx="9" cy="14.5" r="1.5" fill="rgba(240,237,229,0.6)" stroke="none" />
+                                    <circle cx="14.5" cy="14" r="1.5" fill="rgba(240,237,229,0.6)" stroke="none" />
+                                  </svg>
+                                )}
+                                {icon === 'gift' && (
+                                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="rgba(240,237,229,0.6)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <rect x="3" y="8" width="18" height="12" rx="2" />
+                                    <path d="M12 8V3" />
+                                    <path d="M12 3H8" />
+                                    <path d="M12 3H16" />
+                                    <path d="M12 8v12" />
+                                  </svg>
+                                )}
+                              </>
                             )}
                           </div>
 
