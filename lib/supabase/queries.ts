@@ -25,6 +25,7 @@ export interface Voucher {
     description: string
     category: string
     bean_threshold: number
+    image_url?: string
   }
 }
 
@@ -145,7 +146,7 @@ export async function getUserVouchers(userId: string, status?: 'active' | 'redee
 
   const { data: templates, error: templateError } = await supabase
     .from('voucher_templates')
-    .select('id, name, description, category, bean_threshold')
+    .select('id, name, description, category, bean_threshold, image_url')
     .in('id', templateIds)
 
   if (templateError) {
@@ -259,11 +260,11 @@ export async function getRecentBeanTransactions(userId: string, limit = 10): Pro
 }
 
 // Helper function to get next reward threshold from database
-export async function getNextRewardThreshold(currentBeans: number): Promise<{ threshold: number; beansNeeded: number; reward: string; description: string }> {
+export async function getNextRewardThreshold(currentBeans: number): Promise<{ threshold: number; beansNeeded: number; reward: string; description: string; image_url?: string }> {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('voucher_templates')
-    .select('name, description, bean_threshold')
+    .select('name, description, bean_threshold, image_url')
     .order('bean_threshold', { ascending: true })
 
   if (error || !data) {
@@ -278,6 +279,7 @@ export async function getNextRewardThreshold(currentBeans: number): Promise<{ th
         beansNeeded: template.bean_threshold - currentBeans,
         reward: template.name,
         description: template.description || '',
+        image_url: template.image_url,
       }
     }
   }
@@ -292,11 +294,11 @@ export async function getNextRewardThreshold(currentBeans: number): Promise<{ th
 }
 
 // Fetch all voucher templates for rewards display
-export async function getAllVoucherTemplates(): Promise<Array<{ id: string; name: string; description: string; category: string; bean_threshold: number }>> {
+export async function getAllVoucherTemplates(): Promise<Array<{ id: string; name: string; description: string; category: string; bean_threshold: number; image_url?: string }>> {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('voucher_templates')
-    .select('id, name, description, category, bean_threshold')
+    .select('id, name, description, category, bean_threshold, image_url')
     .order('bean_threshold', { ascending: true })
 
   if (error || !data) {
