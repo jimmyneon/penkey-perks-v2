@@ -627,7 +627,7 @@ export default function NewV2Dashboard() {
         showCloseButton={true} 
         fullScreen={true}
       >
-        <div className="p-5 overflow-y-auto h-full bg-[#1e3a8a]">
+        <div className="p-5 overflow-y-auto h-full" style={{ background: 'linear-gradient(160deg, #2B3E52 0%, #1e2d3d 100%)' }}>
 
               {/* Header */}
               <div className="mb-5">

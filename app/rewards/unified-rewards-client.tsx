@@ -264,59 +264,6 @@ export function UnifiedRewardsClient({
 
       <main className="px-5 pb-28 pt-4 space-y-5">
 
-        {/* ── HOW IT WORKS ── */}
-        <section>
-          <div className="rounded-[18px] p-5 bg-white border border-[#E8E2D8] shadow-[0_2px_12px_rgba(36,54,75,0.06)]">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-[18px] font-extrabold text-[#1C2B3A]">How it works</h2>
-              <Link href="/campaigns" className="text-[12px] font-bold flex items-center gap-1 text-[#E07A3A]">
-                View Campaigns
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </Link>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[rgba(224,122,58,0.12)]">
-                  <span className="text-[14px] font-extrabold text-[#E07A3A]">1</span>
-                </div>
-                <div>
-                  <p className="text-[14px] font-bold leading-tight text-[#1C2B3A]">Visit & Scan</p>
-                  <p className="text-[12px] mt-0.5 leading-snug text-[#8A96A0]">Show your QR code at the till every time you visit</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[rgba(224,122,58,0.12)]">
-                  <span className="text-[14px] font-extrabold text-[#E07A3A]">2</span>
-                </div>
-                <div>
-                  <p className="text-[14px] font-bold leading-tight text-[#1C2B3A]">Collect Beans</p>
-                  <p className="text-[12px] mt-0.5 leading-snug text-[#8A96A0]">Earn beans with every purchase — more you spend, more you get</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[rgba(224,122,58,0.12)]">
-                  <span className="text-[14px] font-extrabold text-[#E07A3A]">3</span>
-                </div>
-                <div>
-                  <p className="text-[14px] font-bold leading-tight text-[#1C2B3A]">Unlock Rewards</p>
-                  <p className="text-[12px] mt-0.5 leading-snug text-[#8A96A0]">Reach milestones (2, 8, 15, 25 beans) to unlock free treats</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[rgba(224,122,58,0.12)]">
-                  <span className="text-[14px] font-extrabold text-[#E07A3A]">4</span>
-                </div>
-                <div>
-                  <p className="text-[14px] font-bold leading-tight text-[#1C2B3A]">Redeem & Enjoy</p>
-                  <p className="text-[12px] mt-0.5 leading-snug text-[#8A96A0]">Tap any unlocked reward below and show the QR code to redeem</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* ── BEAN STAMP CARD ── */}
         <section>
           <div className="rounded-[22px] p-5 bg-[#2C3E50] shadow-[0_4px_20px_rgba(28,43,58,0.22)]">
@@ -494,24 +441,31 @@ export function UnifiedRewardsClient({
           </div>
         </section>
 
-        {/* ── HOW IT WORKS ── minimal, human ── */}
+        {/* ── HOW IT WORKS ── */}
         <section>
-          <p className="text-[13px] font-bold mb-2.5 px-1 text-[#1C2B3A]">How it works</p>
-          <div className="bg-white rounded-[18px] overflow-hidden shadow-[0_2px_10px_rgba(61,26,14,0.07)]">
-            {[
-              { n: '1', text: 'Buy anything at Penkey', sub: 'Coffee, food, gifts — it all counts' },
-              { n: '2', text: 'Show your QR at the till', sub: "Staff scan it — takes two seconds" },
-              { n: '3', text: 'Beans land in your balance', sub: 'Watch them stack up over time' },
-              { n: '4', text: 'Spend them on free stuff', sub: 'Syrup, coffee, snacks, full meals' },
-            ].map(({ n, text, sub }, i, arr) => (
-              <div key={n} className={`flex items-center gap-4 px-4 py-3.5 ${i < arr.length - 1 ? 'border-b' : ''}`} style={{ borderColor: '#F5EDE5' }}>
-                <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-[12px] font-extrabold text-white bg-[#E07A3A]">{n}</div>
-                <div>
-                  <p className="text-[13px] font-semibold leading-tight text-[#1C2B3A]">{text}</p>
-                  <p className="text-[11px] mt-0.5 text-[#8A9AAA]">{sub}</p>
+          <div className="rounded-[18px] p-5" style={{ backgroundColor: '#F8F5EF', boxShadow: '0 2px 14px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}>
+            <h3 className="text-[16px] font-extrabold mb-4" style={{ color: '#24364B' }}>How it works</h3>
+            <div className="grid grid-cols-4 gap-3 mb-4">
+              {[
+                { img: '/howworks/1.png', label: 'Visit Penkey', num: 1 },
+                { img: '/howworks/2.png', label: 'Show QR code', num: 2 },
+                { img: '/howworks/3.png', label: 'Earn beans', num: 3 },
+                { img: '/howworks/4.png', label: 'Enjoy rewards', num: 4 },
+              ].map((step) => (
+                <div key={step.img} className="text-center">
+                  <div className="w-20 h-20 rounded-full mx-auto mb-2 flex items-center justify-center relative" style={{ backgroundColor: '#FFF0E4' }}>
+                    <img src={step.img} alt={step.label} className="w-32 h-32 object-contain" />
+                    <div className="absolute top-0 right-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white" style={{ backgroundColor: '#F28A2E' }}>
+                      {step.num}
+                    </div>
+                  </div>
+                  <p className="text-[11px] font-semibold leading-tight" style={{ color: '#24364B' }}>{step.label}</p>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <p className="text-[12px] leading-relaxed mb-3" style={{ color: '#5A6A7A' }}>
+              The more you visit, the more rewards you unlock
+            </p>
           </div>
         </section>
 
@@ -553,30 +507,30 @@ export function UnifiedRewardsClient({
 
       {/* Redeem Confirmation Dialog */}
       <Dialog open={!!selectedReward} onOpenChange={() => setSelectedReward(null)}>
-        <DialogContent className="max-w-md sm:max-w-md w-full h-full sm:h-auto sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg rounded-none sm:max-h-[90vh] max-h-[100dvh] bg-[#1e3a8a] data-[state=open]:!animate-in data-[state=open]:!fade-in-0 data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95" showCloseButton={true}>
+        <DialogContent className="max-w-md sm:max-w-md w-full h-full sm:h-auto sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg rounded-none sm:max-h-[90vh] max-h-[100dvh] bg-[#FAF8F5] data-[state=open]:!animate-in data-[state=open]:!fade-in-0 data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95" showCloseButton={true}>
           <DialogHeader>
-            <DialogTitle className="text-white text-lg font-extrabold">Redeem Reward?</DialogTitle>
-            <DialogDescription className="text-gray-300 text-[13px]">{selectedReward?.name}</DialogDescription>
+            <DialogTitle className="text-[#2C1810] text-lg font-extrabold">Redeem Reward?</DialogTitle>
+            <DialogDescription className="text-[#9A7A6A] text-[13px]">{selectedReward?.name}</DialogDescription>
           </DialogHeader>
           <div className="space-y-3 pb-1 flex-1 overflow-y-auto">
-            <div className="bg-blue-900/50 rounded-[14px] p-4 text-center border border-blue-600/30">
-              <p className="text-[11px] font-bold text-gray-300 uppercase tracking-widest mb-2">This will cost</p>
+            <div className="bg-white rounded-[14px] p-4 shadow-[0_1px_4px_rgba(44,24,16,0.07)] text-center">
+              <p className="text-[11px] font-bold text-[#9A7A6A] uppercase tracking-widest mb-2">This will cost</p>
               <div className="flex items-center justify-center gap-1.5">
-                <BeanIcon size="lg" className="text-blue-400" />
-                <span className="text-[2rem] font-extrabold text-white leading-none">{selectedReward?.points_required.toLocaleString()}</span>
-                <span className="text-[13px] text-gray-300">beans</span>
+                <BeanIcon size="lg" className="text-[#C49A6C]" />
+                <span className="text-[2rem] font-extrabold text-[#2C1810] leading-none">{selectedReward?.points_required.toLocaleString()}</span>
+                <span className="text-[13px] text-[#9A7A6A]">beans</span>
               </div>
-              <p className="text-[12px] text-gray-300 mt-2">{(currentPoints - (selectedReward?.points_required || 0)).toLocaleString()} beans remaining after</p>
+              <p className="text-[12px] text-[#9A7A6A] mt-2">{(currentPoints - (selectedReward?.points_required || 0)).toLocaleString()} beans remaining after</p>
             </div>
-            <div className="bg-blue-900/50 rounded-[14px] p-3.5 flex items-center gap-3 border border-blue-600/30">
-              <div className="w-8 h-8 rounded-[10px] bg-blue-800 flex items-center justify-center flex-shrink-0">
-                <QrCode className="w-4 h-4 text-blue-400" />
+            <div className="bg-white rounded-[14px] p-3.5 shadow-[0_1px_4px_rgba(44,24,16,0.07)] flex items-center gap-3">
+              <div className="w-8 h-8 rounded-[10px] bg-[#FFF5EB] flex items-center justify-center flex-shrink-0">
+                <QrCode className="w-4 h-4 text-[#E48A3A]" />
               </div>
-              <p className="text-[12px] text-gray-300">A QR code will appear in <strong className="text-white">My Rewards</strong> for staff to scan</p>
+              <p className="text-[12px] text-[#6B4C3B]">A QR code will appear in <strong>My Rewards</strong> for staff to scan</p>
             </div>
             <div className="flex gap-2">
-              <button onClick={() => setSelectedReward(null)} disabled={isRedeeming} className="flex-1 py-3 bg-blue-800 text-gray-300 text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60">Cancel</button>
-              <button onClick={handleRedeem} disabled={isRedeeming} className="flex-1 py-3 bg-blue-500 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60">{isRedeeming ? 'Redeeming…' : 'Redeem'}</button>
+              <button onClick={() => setSelectedReward(null)} disabled={isRedeeming} className="flex-1 py-3 bg-[#F2EDE8] text-[#4A3728] text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60">Cancel</button>
+              <button onClick={handleRedeem} disabled={isRedeeming} className="flex-1 py-3 bg-[#C8602A] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all disabled:opacity-60">{isRedeeming ? 'Redeeming…' : 'Redeem'}</button>
             </div>
           </div>
         </DialogContent>
@@ -584,25 +538,25 @@ export function UnifiedRewardsClient({
 
       {/* QR Code Dialog for Earned Rewards */}
       <Dialog open={!!selectedEarnedReward} onOpenChange={() => setSelectedEarnedReward(null)}>
-        <DialogContent className="max-w-md sm:max-w-md w-full h-full sm:h-auto sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg rounded-none sm:max-h-[90vh] max-h-[100dvh] bg-[#1e3a8a] data-[state=open]:!animate-in data-[state=open]:!fade-in-0 data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95" showCloseButton={true}>
+        <DialogContent className="max-w-md sm:max-w-md w-full h-full sm:h-auto sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg rounded-none sm:max-h-[90vh] max-h-[100dvh] bg-[#FAF8F5] data-[state=open]:!animate-in data-[state=open]:!fade-in-0 data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95" showCloseButton={true}>
           <DialogHeader>
-            <DialogTitle className="text-white text-lg font-extrabold text-center">{selectedEarnedReward?.rewards?.name}</DialogTitle>
-            <DialogDescription className="text-gray-300 text-[13px] text-center">Show to staff to redeem</DialogDescription>
+            <DialogTitle className="text-[#2C1810] text-lg font-extrabold text-center">{selectedEarnedReward?.rewards?.name}</DialogTitle>
+            <DialogDescription className="text-[#9A7A6A] text-[13px] text-center">Show to staff to redeem</DialogDescription>
           </DialogHeader>
           {selectedEarnedReward?.status === 'active' && (
             <div className="space-y-3 pb-1 flex-1 overflow-y-auto">
-              <div className="bg-blue-900/50 rounded-[16px] p-4 flex items-center justify-center border border-blue-600/30">
+              <div className="bg-white rounded-[16px] p-4 flex items-center justify-center shadow-[0_1px_4px_rgba(44,24,16,0.07)]">
                 {qrCodeUrl ? (
                   <img src={qrCodeUrl} alt="QR Code" className="w-48 h-48 animate-qr-pop" />
                 ) : (
-                  <div className="w-48 h-48 bg-blue-950 rounded-[12px] flex items-center justify-center">
-                    <QrCode className="w-10 h-10 text-blue-400" />
+                  <div className="w-48 h-48 bg-[#F5EFE9] rounded-[12px] flex items-center justify-center">
+                    <QrCode className="w-10 h-10 text-[#C4AFA8]" />
                   </div>
                 )}
               </div>
-              <div className="bg-blue-900/50 rounded-[14px] px-3 py-2.5 text-center border border-blue-600/30">
-                <p className="text-[11px] font-mono text-gray-300 break-all">{selectedEarnedReward.qr_code}</p>
-                <p className="text-[11px] text-gray-400 mt-0.5">{getExpiryText(selectedEarnedReward.expires_at)}</p>
+              <div className="bg-white rounded-[14px] px-3 py-2.5 shadow-[0_1px_4px_rgba(44,24,16,0.07)] text-center">
+                <p className="text-[11px] font-mono text-[#9A7A6A] break-all">{selectedEarnedReward.qr_code}</p>
+                <p className="text-[11px] text-[#C4AFA8] mt-0.5">{getExpiryText(selectedEarnedReward.expires_at)}</p>
               </div>
             </div>
           )}
@@ -611,33 +565,33 @@ export function UnifiedRewardsClient({
 
       {/* Success Modal */}
       <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
-        <DialogContent className="max-w-md sm:max-w-md w-full h-full sm:h-auto sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg rounded-none sm:max-h-[90vh] max-h-[100dvh] bg-[#1e3a8a] data-[state=open]:!animate-in data-[state=open]:!fade-in-0 data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95" showCloseButton={true}>
+        <DialogContent className="max-w-md sm:max-w-md w-full h-full sm:h-auto sm:top-[50%] sm:left-[50%] sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg rounded-none sm:max-h-[90vh] max-h-[100dvh] bg-[#FAF8F5] data-[state=open]:!animate-in data-[state=open]:!fade-in-0 data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95" showCloseButton={true}>
           <div className="text-center space-y-4 py-2 flex-1 overflow-y-auto">
-            <div className="w-16 h-16 rounded-full bg-blue-800 flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-9 h-9 text-green-400" />
+            <div className="w-16 h-16 rounded-full bg-[#F0FAF4] flex items-center justify-center mx-auto">
+              <CheckCircle2 className="w-9 h-9 text-[#2A7A4A]" />
             </div>
             <div>
-              <h2 className="text-[22px] font-extrabold text-white">Reward Redeemed!</h2>
-              <p className="text-[13px] text-gray-300 mt-1">Your reward is now active</p>
+              <h2 className="text-[22px] font-extrabold text-[#2C1810]">Reward Redeemed!</h2>
+              <p className="text-[13px] text-[#9A7A6A] mt-1">Your reward is now active</p>
             </div>
             {redeemedRewardData && (
-              <div className="bg-blue-900/50 rounded-[16px] p-4 flex items-center gap-3 text-left border border-blue-600/30">
-                <div className="w-10 h-10 rounded-[12px] bg-blue-800 flex items-center justify-center flex-shrink-0">
-                  <Gift className="w-5 h-5 text-blue-400" />
+              <div className="bg-white rounded-[16px] p-4 shadow-[0_1px_4px_rgba(44,24,16,0.07)] flex items-center gap-3 text-left">
+                <div className="w-10 h-10 rounded-[12px] bg-[#FFF5EB] flex items-center justify-center flex-shrink-0">
+                  <Gift className="w-5 h-5 text-[#E48A3A]" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[14px] font-bold text-white">{redeemedRewardData.name}</p>
-                  {redeemedRewardData.description && <p className="text-[12px] text-gray-300">{redeemedRewardData.description}</p>}
+                  <p className="text-[14px] font-bold text-[#2C1810]">{redeemedRewardData.name}</p>
+                  {redeemedRewardData.description && <p className="text-[12px] text-[#9A7A6A]">{redeemedRewardData.description}</p>}
                 </div>
               </div>
             )}
-            <div className="bg-blue-900/50 rounded-[14px] px-4 py-3 text-left border border-blue-600/30">
-              <p className="text-[12px] font-bold text-white mb-0.5">While you're here…</p>
-              <p className="text-[12px] text-gray-300 leading-relaxed">Try our <strong className="text-blue-400">chocolate brownies</strong> or <strong className="text-blue-400">famous crumble slices</strong> — they pair perfectly with your coffee.</p>
+            <div className="bg-[#FFF5EB] rounded-[14px] px-4 py-3 text-left">
+              <p className="text-[12px] font-bold text-[#2C1810] mb-0.5">While you're here…</p>
+              <p className="text-[12px] text-[#6B4C3B] leading-relaxed">Try our <strong>chocolate brownies</strong> or <strong>famous crumble slices</strong> — they pair perfectly with your coffee.</p>
             </div>
             <button
               onClick={() => { setShowSuccessModal(false); setRedeemedRewardData(null) }}
-              className="w-full py-3.5 bg-blue-500 text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all"
+              className="w-full py-3.5 bg-[#1A1208] text-white text-[14px] font-bold rounded-[14px] active:scale-[0.98] transition-all"
             >
               Done
             </button>
