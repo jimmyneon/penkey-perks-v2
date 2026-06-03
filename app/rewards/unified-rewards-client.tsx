@@ -264,6 +264,34 @@ export function UnifiedRewardsClient({
 
       <main className="px-5 pb-28 pt-4 space-y-5">
 
+        {/* ── HOW IT WORKS ── */}
+        <section>
+          <div className="rounded-[18px] p-5" style={{ backgroundColor: '#F8F5EF', boxShadow: '0 2px 14px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}>
+            <h3 className="text-[16px] font-extrabold mb-4" style={{ color: '#24364B' }}>How it works</h3>
+            <div className="grid grid-cols-4 gap-3 mb-4">
+              {[
+                { img: '/howworks/1.png', label: 'Visit Penkey', num: 1 },
+                { img: '/howworks/2.png', label: 'Show QR code', num: 2 },
+                { img: '/howworks/3.png', label: 'Earn beans', num: 3 },
+                { img: '/howworks/4.png', label: 'Enjoy rewards', num: 4 },
+              ].map((step) => (
+                <div key={step.img} className="text-center">
+                  <div className="w-20 h-20 rounded-full mx-auto mb-2 flex items-center justify-center relative" style={{ backgroundColor: '#FFF0E4' }}>
+                    <img src={step.img} alt={step.label} className="w-32 h-32 object-contain" />
+                    <div className="absolute top-0 right-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white" style={{ backgroundColor: '#F28A2E' }}>
+                      {step.num}
+                    </div>
+                  </div>
+                  <p className="text-[11px] font-semibold leading-tight" style={{ color: '#24364B' }}>{step.label}</p>
+                </div>
+              ))}
+            </div>
+            <p className="text-[12px] leading-relaxed mb-3" style={{ color: '#5A6A7A' }}>
+              The more you visit, the more rewards you unlock
+            </p>
+          </div>
+        </section>
+
         {/* ── BEAN STAMP CARD ── */}
         <section>
           <div className="rounded-[22px] p-5 bg-[#2C3E50] shadow-[0_4px_20px_rgba(28,43,58,0.22)]">
@@ -438,34 +466,6 @@ export function UnifiedRewardsClient({
                 </div>
               )
             })}
-          </div>
-        </section>
-
-        {/* ── HOW IT WORKS ── */}
-        <section>
-          <div className="rounded-[18px] p-5" style={{ backgroundColor: '#F8F5EF', boxShadow: '0 2px 14px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}>
-            <h3 className="text-[16px] font-extrabold mb-4" style={{ color: '#24364B' }}>How it works</h3>
-            <div className="grid grid-cols-4 gap-3 mb-4">
-              {[
-                { img: '/howworks/1.png', label: 'Visit Penkey', num: 1 },
-                { img: '/howworks/2.png', label: 'Show QR code', num: 2 },
-                { img: '/howworks/3.png', label: 'Earn beans', num: 3 },
-                { img: '/howworks/4.png', label: 'Enjoy rewards', num: 4 },
-              ].map((step) => (
-                <div key={step.img} className="text-center">
-                  <div className="w-20 h-20 rounded-full mx-auto mb-2 flex items-center justify-center relative" style={{ backgroundColor: '#FFF0E4' }}>
-                    <img src={step.img} alt={step.label} className="w-32 h-32 object-contain" />
-                    <div className="absolute top-0 right-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white" style={{ backgroundColor: '#F28A2E' }}>
-                      {step.num}
-                    </div>
-                  </div>
-                  <p className="text-[11px] font-semibold leading-tight" style={{ color: '#24364B' }}>{step.label}</p>
-                </div>
-              ))}
-            </div>
-            <p className="text-[12px] leading-relaxed mb-3" style={{ color: '#5A6A7A' }}>
-              The more you visit, the more rewards you unlock
-            </p>
           </div>
         </section>
 

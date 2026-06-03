@@ -77,8 +77,8 @@ export function BottomSheet({
             onDragEnd={handleDragEnd}
             style={{ y }}
             className={cn(
-              "fixed bottom-0 left-0 right-0 z-[10000] bg-cream-card shadow-premium-xl",
-              fullScreen ? "h-screen rounded-t-0" : "rounded-t-3xl max-h-[85vh]",
+              "fixed bottom-0 left-0 right-0 z-[10000] shadow-premium-xl",
+              fullScreen ? "h-screen rounded-t-0" : "bg-cream-card rounded-t-3xl max-h-[85vh]",
               className
             )}
           >
@@ -93,6 +93,7 @@ export function BottomSheet({
                 {title && (
                   <h2 className="text-xl font-bold text-brown">{title}</h2>
                 )}
+                {!title && <div />}
                 {showCloseButton && (
                   <button
                     onClick={(e) => {
