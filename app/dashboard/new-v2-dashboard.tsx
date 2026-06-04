@@ -88,22 +88,22 @@ export default function NewV2Dashboard() {
 
   // Trigger stamp animation when panel opens with new beans
   useEffect(() => {
-    console.log('Animation trigger check:', { showBeansPanel, beanBalance, lastBeanCountOnClose })
+    console.log('Animation trigger check:', { showBeansPanel, beanBalance, lastBeanCountOnClose, displayedBeanCount })
     if (showBeansPanel) {
       const currentBeans = displayedBeanBalance?.current_beans || beanBalance?.current_beans || 0
-      const hasNewBeans = currentBeans > lastBeanCountOnClose
+      console.log('Current beans:', currentBeans, 'Last bean count:', lastBeanCountOnClose)
 
-      if (hasNewBeans) {
+      if (currentBeans > 0) {
         console.log('Triggering stamp animation with delay')
         // Start with one less bean displayed
-        setDisplayedBeanCount(lastBeanCountOnClose)
+        setDisplayedBeanCount(currentBeans - 1)
 
         const timer = setTimeout(() => {
-          setNewlyStampedIndex(lastBeanCountOnClose)
+          setNewlyStampedIndex(currentBeans - 1)
 
           // Calculate target position for the stamp slot
           const stampSlots = document.querySelectorAll('[data-stamp-slot]')
-          const targetSlot = stampSlots[lastBeanCountOnClose] as HTMLElement
+          const targetSlot = stampSlots[currentBeans - 1] as HTMLElement
           if (targetSlot) {
             const rect = targetSlot.getBoundingClientRect()
             setTargetPosition({
@@ -113,6 +113,7 @@ export default function NewV2Dashboard() {
           }
 
           setShowStampAnimation(true)
+          console.log('Animation triggered')
 
           // Trigger card shake at impact (500ms after start)
           setTimeout(() => {
@@ -125,11 +126,11 @@ export default function NewV2Dashboard() {
         }, 500)
         return () => clearTimeout(timer)
       } else {
-        // No new beans, just show current count
-        setDisplayedBeanCount(currentBeans)
+        // No beans, show 0
+        setDisplayedBeanCount(0)
       }
     }
-  }, [showBeansPanel, displayedBeanBalance, beanBalance, lastBeanCountOnClose])
+  }, [showBeansPanel, displayedBeanBalance, beanBalance, lastBeanCountOnClose, displayedBeanCount])
 
   // Update displayed bean count after animation completes
   useEffect(() => {
@@ -300,7 +301,7 @@ export default function NewV2Dashboard() {
               <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
                 {mounted ? getGreeting() : 'Hello'},{' '}
                 <img
-                  src="/heart.png"
+                  src="/image-assets/stamps/heart.svg"
                   alt=""
                   className="inline-block w-5 h-5 object-contain align-middle"
                   style={{ marginBottom: '2px', animation: 'heartPulse 1.2s ease-in-out 3' }}
@@ -655,7 +656,7 @@ export default function NewV2Dashboard() {
                     >
                       {filled ? (
                         <img
-                          src="/image-assets/stamps/stamp.png"
+                          src="/image-assets/stamps/stamp.svg"
                           alt="Stamp"
                           className="w-[140%] h-[140%] object-cover -m-3"
                           style={{

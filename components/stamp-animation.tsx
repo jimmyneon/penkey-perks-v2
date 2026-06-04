@@ -143,7 +143,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                 }}
               >
                 <img
-                  src="/image-assets/stamps/beansplatter.png"
+                  src="/image-assets/stamps/beansplatter.svg"
                   alt="Splash"
                   className="w-64 h-64 object-contain"
                 />
@@ -165,7 +165,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                 }}
               >
                 <img
-                  src="/image-assets/stamps/stamp.png"
+                  src="/image-assets/stamps/stamp.svg"
                   alt="Stamp"
                   className="w-24 h-24 object-contain"
                 />
