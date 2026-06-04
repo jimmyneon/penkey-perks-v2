@@ -59,6 +59,7 @@ export default function NewV2Dashboard() {
   const [newlyStampedIndex, setNewlyStampedIndex] = useState<number | null>(null)
   const [targetPosition, setTargetPosition] = useState<{ x: number; y: number } | null>(null)
   const [cardShake, setCardShake] = useState(false)
+  const [lastBeanCountOnClose, setLastBeanCountOnClose] = useState(0)
 
 
   // Real-time bean balance (disabled when showing QR code to avoid animation conflicts)
@@ -79,37 +80,44 @@ export default function NewV2Dashboard() {
     }
   }, [beansAwarded])
 
-  // Trigger stamp animation when panel opens
+  // Trigger stamp animation when panel opens with new beans
   useEffect(() => {
-    console.log('Animation trigger check:', { showBeansPanel, beanBalance })
+    console.log('Animation trigger check:', { showBeansPanel, beanBalance, lastBeanCountOnClose })
     if (showBeansPanel) {
-      console.log('Triggering stamp animation with delay')
-      const timer = setTimeout(() => {
-        const beans = displayedBeanBalance?.current_beans || beanBalance?.current_beans || 0
-        setNewlyStampedIndex(beans - 1)
+      const currentBeans = displayedBeanBalance?.current_beans || beanBalance?.current_beans || 0
+      const hasNewBeans = currentBeans > lastBeanCountOnClose
 
-        // Calculate target position for the stamp slot
-        const stampSlots = document.querySelectorAll('[data-stamp-slot]')
-        const targetSlot = stampSlots[beans - 1] as HTMLElement
-        if (targetSlot) {
-          const rect = targetSlot.getBoundingClientRect()
-          setTargetPosition({
-            x: rect.left + rect.width / 2 - 50,
-            y: rect.top + rect.height / 2 - 50,
-          })
-        }
+      if (hasNewBeans) {
+        console.log('Triggering stamp animation with delay')
+        const timer = setTimeout(() => {
+          setNewlyStampedIndex(currentBeans - 1)
 
-        setShowStampAnimation(true)
+          // Calculate target position for the stamp slot
+          const stampSlots = document.querySelectorAll('[data-stamp-slot]')
+          const targetSlot = stampSlots[currentBeans - 1] as HTMLElement
+          if (targetSlot) {
+            const rect = targetSlot.getBoundingClientRect()
+            setTargetPosition({
+              x: rect.left + rect.width / 2 - 50,
+              y: rect.top + rect.height / 2 - 50,
+            })
+          }
 
-        // Trigger card shake at impact (250ms after start)
-        setTimeout(() => {
-          setCardShake(true)
-          setTimeout(() => setCardShake(false), 100)
-        }, 250)
-      }, 500)
-      return () => clearTimeout(timer)
+          setShowStampAnimation(true)
+
+          // Trigger card shake at impact (250ms after start)
+          setTimeout(() => {
+            setCardShake(true)
+            setTimeout(() => setCardShake(false), 100)
+          }, 250)
+
+          // Update last bean count
+          setLastBeanCountOnClose(currentBeans)
+        }, 500)
+        return () => clearTimeout(timer)
+      }
     }
-  }, [showBeansPanel, displayedBeanBalance, beanBalance])
+  }, [showBeansPanel, displayedBeanBalance, beanBalance, lastBeanCountOnClose])
 
   // Show modal when max beans reached
   useEffect(() => {
