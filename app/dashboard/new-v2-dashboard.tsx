@@ -75,6 +75,8 @@ export default function NewV2Dashboard() {
         setDisplayedBeanCount(beanBalance.current_beans)
         setLastBeanCountOnClose(beanBalance.current_beans)
       }
+      // Mark as loaded when bean balance is available
+      setLoading(false)
     }
   }, [beanBalance, showBeanModal, displayedBeanCount])
 
