@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from "react"
-import { motion, AnimatePresence, useMotionValue, useTransform, PanInfo } from "framer-motion"
+import { motion, AnimatePresence, useMotionValue, useDragControls, PanInfo } from "framer-motion"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -25,28 +25,49 @@ export function BottomSheet({
   fullScreen = false,
 }: BottomSheetProps) {
   const y = useMotionValue(0)
+  const dragControls = useDragControls()
 
   const handleDragEnd = (_: any, info: PanInfo) => {
-    if (info.offset.y > 50) {
+    const shouldClose =
+      info.offset.y > 120 || info.velocity.y > 700
+
+    if (shouldClose) {
       onOpenChange(false)
+    } else {
+      y.set(0)
     }
   }
+
+  // Reset Y when opening
+  React.useEffect(() => {
+    if (open) {
+      y.set(0)
+    }
+  }, [open, y])
 
   // Lock body scroll when sheet is open
   React.useEffect(() => {
     if (open) {
+      const scrollY = window.scrollY
       document.body.style.overflow = 'hidden'
       document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
       document.body.style.width = '100%'
     } else {
+      const y = document.body.style.top
       document.body.style.overflow = ''
       document.body.style.position = ''
+      document.body.style.top = ''
       document.body.style.width = ''
+      window.scrollTo(0, parseInt(y || '0') * -1)
     }
     return () => {
+      const y = document.body.style.top
       document.body.style.overflow = ''
       document.body.style.position = ''
+      document.body.style.top = ''
       document.body.style.width = ''
+      window.scrollTo(0, parseInt(y || '0') * -1)
     }
   }, [open])
 
@@ -69,10 +90,16 @@ export function BottomSheet({
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
-            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            transition={{
+              type: "tween",
+              duration: 0.28,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             drag="y"
+            dragControls={dragControls}
+            dragListener={false}
             dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={0.2}
+            dragElastic={0.05}
             onDragEnd={handleDragEnd}
             style={{ y }}
             className={cn(
@@ -81,8 +108,11 @@ export function BottomSheet({
               className
             )}
           >
-            {/* Handle - visual only */}
-            <div className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing">
+            {/* Handle - drag area */}
+            <div
+              onPointerDown={(e) => dragControls.start(e)}
+              className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing"
+            >
               <div className="w-12 h-1.5 bg-brown/20 rounded-full" />
             </div>
             
