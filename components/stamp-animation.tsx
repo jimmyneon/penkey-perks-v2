@@ -95,7 +95,7 @@ export function StampAnimation({ onComplete, show = false }: StampAnimationProps
         {phase === 'complete' && (
           <div className="absolute top-16 left-1/2 -translate-x-1/2 z-20">
             <img
-              src="/image-assets/stamps/stamper.png"
+              src="/image-assets/stamps/stamp.png"
               alt="Stamp"
               className="w-20 h-20 object-contain"
               style={{

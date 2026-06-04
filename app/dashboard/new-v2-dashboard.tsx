@@ -593,7 +593,7 @@ export default function NewV2Dashboard() {
                     >
                       {filled ? (
                         <img
-                          src="/image-assets/stamps/stamper.png"
+                          src="/image-assets/stamps/stamp.png"
                           alt="Stamp"
                           className="w-full h-full object-cover"
                         />
