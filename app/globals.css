@@ -12,7 +12,7 @@
 }
 
 .animate-sheet-up {
-  animation: sheet-up 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  animation: sheet-up 1.2s cubic-bezier(0.2, 1, 0.2, 1);
 }
 
 @keyframes bean-pop {
