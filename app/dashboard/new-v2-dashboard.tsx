@@ -133,32 +133,31 @@ export default function NewV2Dashboard() {
     animationTriggeredRef.current = true
     setDisplayedBeanCount(currentBeans - 1)
 
-    console.log('[Animation Trigger] creating timer')
-    const timer = setTimeout(() => {
-      console.log('[Animation Trigger] timer fired')
+    const rect = stampGridRef.current?.getBoundingClientRect()
+    console.log('[Animation Trigger] stampGridRef.current:', stampGridRef.current, 'rect:', rect)
+    if (rect) {
+      setTargetPosition({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
+      console.log('[Animation Trigger] Target position set:', { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
+    } else {
+      console.log('[Animation Trigger] NO RECT - using fallback')
+    }
+
+    console.log('[Animation Trigger] === SETTING showStampAnimation TO TRUE ===')
+    setShowStampAnimation(true)
+
+    // Set bean fill during impact phase (0.45s after animation starts, when stamper covers the bean)
+    setTimeout(() => {
+      console.log('[Animation Trigger] Setting newlyStampedIndex during impact')
       setNewlyStampedIndex(currentBeans - 1)
+    }, 450)
 
-      const rect = stampGridRef.current?.getBoundingClientRect()
-      console.log('[Animation Trigger] stampGridRef.current:', stampGridRef.current, 'rect:', rect)
-      if (rect) {
-        setTargetPosition({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
-        console.log('[Animation Trigger] Target position set:', { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
-      } else {
-        console.log('[Animation Trigger] NO RECT - using fallback')
-      }
-
-      console.log('[Animation Trigger] === SETTING showStampAnimation TO TRUE ===')
-      setShowStampAnimation(true)
-
-      setTimeout(() => {
-        console.log('[Animation Trigger] Card shake')
-        setCardShake(true)
-        setTimeout(() => setCardShake(false), 100)
-      }, 400)
-    }, 500)
+    setTimeout(() => {
+      console.log('[Animation Trigger] Card shake')
+      setCardShake(true)
+      setTimeout(() => setCardShake(false), 100)
+    }, 450)
     return () => {
-      console.log('[Animation Trigger] Cleanup timer')
-      clearTimeout(timer)
+      console.log('[Animation Trigger] Cleanup')
     }
   }, [showBeansPanel, beanBalance])
 

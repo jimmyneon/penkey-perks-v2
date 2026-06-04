@@ -41,12 +41,12 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
           opacity: [0, 1],
           filter: ['blur(14px)', 'blur(0px)'],
           y: [-180, 0],
-          transition: { duration: 0.38, ease: 'easeOut' },
+          transition: { duration: 0.45, ease: 'easeOut' },
         }),
         shadowCtrl.start({
           scale: [0.4, 1.6],
           opacity: [0, 0.35],
-          transition: { duration: 0.38, ease: 'easeOut' },
+          transition: { duration: 0.45, ease: 'easeOut' },
         }),
       ])
 
@@ -58,7 +58,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
       splashCtrl.start({
         scale: [0.2, 1.8],
         opacity: [1, 0],
-        transition: { duration: 0.28, ease: 'easeOut' },
+        transition: { duration: 0.35, ease: 'easeOut' },
       })
 
       stampCtrl.start({
@@ -67,19 +67,19 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
         rotate: rotation,
         x: offsetX,
         y: offsetY,
-        transition: { duration: 0.22, ease: 'easeOut' },
+        transition: { duration: 0.25, ease: 'easeOut' },
       })
 
       await Promise.all([
         stamperCtrl.start({
           scale: [1.25, 0.92, 1.05],
           rotate: [5, 2, 8, 5],
-          transition: { duration: 0.18, ease: 'easeInOut' },
+          transition: { duration: 0.22, ease: 'easeInOut' },
         }),
         shadowCtrl.start({
           scale: 0.8,
           opacity: 0,
-          transition: { duration: 0.12 },
+          transition: { duration: 0.15 },
         }),
       ])
 
@@ -89,7 +89,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
         opacity: 0,
         filter: 'blur(10px)',
         y: -80,
-        transition: { duration: 0.32, ease: 'easeIn' },
+        transition: { duration: 0.38, ease: 'easeIn' },
       })
 
       runningRef.current = false
@@ -170,7 +170,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
           <img
             src="/image-assets/stamps/beansplatter.png"
             alt="Splash"
-            style={{ width: 280, height: 280, objectFit: 'contain', display: 'block' }}
+            style={{ width: 400, height: 400, objectFit: 'contain', display: 'block' }}
           />
         </motion.div>
       </div>
