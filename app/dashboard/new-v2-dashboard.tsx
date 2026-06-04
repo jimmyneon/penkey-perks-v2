@@ -75,7 +75,9 @@ export default function NewV2Dashboard() {
 
   // Trigger stamp animation when panel opens
   useEffect(() => {
+    console.log('Animation trigger check:', { showBeansPanel, beanBalance })
     if (showBeansPanel && beanBalance && beanBalance.current_beans > 0) {
+      console.log('Triggering stamp animation')
       setShowStampAnimation(true)
     }
   }, [showBeansPanel, beanBalance])
