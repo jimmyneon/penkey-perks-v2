@@ -441,7 +441,7 @@ export default function NewV2Dashboard() {
                 <img
                   src="/vouchers/voucher.png"
                   alt="Vouchers"
-                  className="w-[85%] h-[85%] object-contain scale-[250%]"
+                  className="w-[85%] h-[85%] object-contain scale-[150%]"
                 />
               </div>
               <div className="flex-1 min-w-0">
@@ -469,7 +469,7 @@ export default function NewV2Dashboard() {
                 ].map((step) => (
                   <div key={step.img} className="text-center">
                     <div className="w-28 h-28 rounded-full mx-auto mb-2 flex items-center justify-center relative" style={{ backgroundColor: '#FFF0E4' }}>
-                      <img src={step.img} alt={step.label} className="w-32 h-32 object-contain" />
+                      <img src={step.img} alt={step.label} className="w-24 h-24 object-contain" />
                       <div className="absolute top-0 right-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white" style={{ backgroundColor: '#F28A2E' }}>
                         {step.num}
                       </div>
@@ -550,10 +550,10 @@ export default function NewV2Dashboard() {
                     <img
                       src={voucher.template?.icon_url || voucher.template?.image_url}
                       alt={voucher.template.name}
-                      className="w-full h-full object-contain p-2 scale-[250%]"
+                      className="w-full h-full object-contain p-2 scale-[150%]"
                     />
                   ) : (
-                    <img src="/coffeecup.webp" alt="" className="w-14 h-14 object-contain scale-[250%]" />
+                    <img src="/coffeecup.webp" alt="" className="w-14 h-14 object-contain scale-[150%]" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
