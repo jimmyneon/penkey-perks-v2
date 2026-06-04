@@ -15,6 +15,13 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
   const stampCtrl = useAnimation()
   const runningRef = useRef(false)
 
+  // Constants for size and position
+  const STAMPER_OFFSET_Y = -180
+  const STAMP_RESULT_OFFSET_Y = -80
+  const STAMPER_WIDTH = 'clamp(900px, 220vw, 1300px)'
+  const SPLASH_SIZE = 520
+  const RESULT_STAMP_SIZE = 140
+
   const tx = targetPosition?.x ?? (typeof window !== 'undefined' ? window.innerWidth / 2 : 200)
   const ty = targetPosition?.y ?? (typeof window !== 'undefined' ? window.innerHeight / 2 : 400)
 
@@ -39,7 +46,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
     const run = async () => {
       // ─── Step 1: Big stamper enters ───────────────────────────────
       await stamperCtrl.start({
-        scale: [1.8, 1.15],
+        scale: [1.1, 1],
         opacity: [0, 1],
         filter: ['blur(12px)', 'blur(0px)'],
         y: [-120, 0],
@@ -58,14 +65,14 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
       })
 
       await stamperCtrl.start({
-        scale: [1.15, 0.92, 1.04],
+        scale: [1, 0.92, 1.03],
         rotate: [5, 3, 7, 5],
         transition: { duration: 0.18, ease: 'easeInOut' },
       })
 
       // ─── Step 3: Stamper retracts / fades ─────────────────────────
       await stamperCtrl.start({
-        scale: 1.35,
+        scale: 1.15,
         opacity: 0,
         filter: 'blur(8px)',
         y: -60,
@@ -100,7 +107,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
         style={{
           position: 'fixed',
           left: tx,
-          top: ty - 80,
+          top: ty + STAMP_RESULT_OFFSET_Y,
           transform: 'translate(-50%, -50%)',
         }}
       >
@@ -111,7 +118,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
           <img
             src="/image-assets/stamps/stamp.png"
             alt="Stamp"
-            style={{ width: 96, height: 96, objectFit: 'contain', display: 'block' }}
+            style={{ width: RESULT_STAMP_SIZE, height: RESULT_STAMP_SIZE, objectFit: 'contain', display: 'block' }}
           />
         </motion.div>
       </div>
@@ -132,7 +139,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
           <img
             src="/image-assets/stamps/beansplatter.png"
             alt="Splash"
-            style={{ width: 400, height: 400, objectFit: 'contain', display: 'block' }}
+            style={{ width: SPLASH_SIZE, height: SPLASH_SIZE, objectFit: 'contain', display: 'block' }}
           />
         </motion.div>
       </div>
@@ -142,7 +149,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
         style={{
           position: 'fixed',
           left: tx,
-          top: ty - 120,
+          top: ty + STAMPER_OFFSET_Y,
           transform: 'translate(-50%, -50%)',
         }}
       >
@@ -154,7 +161,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
             src="/image-assets/stamps/stamper.png"
             alt="Stamper"
             style={{
-              width: 'clamp(700px, 170vw, 1000px)',
+              width: STAMPER_WIDTH,
               height: 'auto',
               objectFit: 'contain',
               transform: 'rotate(5deg)',
