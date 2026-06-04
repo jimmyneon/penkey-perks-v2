@@ -70,8 +70,13 @@ export default function NewV2Dashboard() {
   useEffect(() => {
     if (beanBalance && !showBeanModal) {
       setDisplayedBeanBalance(beanBalance)
+      // Initialize displayed bean count if it's 0
+      if (displayedBeanCount === 0) {
+        setDisplayedBeanCount(beanBalance.current_beans)
+        setLastBeanCountOnClose(beanBalance.current_beans)
+      }
     }
-  }, [beanBalance, showBeanModal])
+  }, [beanBalance, showBeanModal, displayedBeanCount])
 
   // Show modal when beans are awarded
   useEffect(() => {
