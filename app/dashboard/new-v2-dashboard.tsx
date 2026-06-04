@@ -77,7 +77,7 @@ export default function NewV2Dashboard() {
   const [targetPosition, setTargetPosition] = useState<{ x: number; y: number } | null>(null)
   const [cardShake, setCardShake] = useState(false)
   const [displayedBeanCount, setDisplayedBeanCount] = useState(0)
-  const [animationTriggered, setAnimationTriggered] = useState(false)
+  const animationTriggeredRef = useRef(false)
   const lastClosedBeansRef = useRef(-1) // -1 = not yet initialized
   const stampGridRef = useRef<HTMLDivElement>(null)
 
@@ -92,15 +92,15 @@ export default function NewV2Dashboard() {
     if (lastClosedBeansRef.current === -1) {
       lastClosedBeansRef.current = beanBalance.current_beans
     }
-    if (!showBeanModal && !animationTriggered) {
+    if (!showBeanModal && !animationTriggeredRef.current) {
       setDisplayedBeanBalance(beanBalance)
       setDisplayedBeanCount(beanBalance.current_beans)
       setLoading(false)
-    } else if (!showBeanModal && animationTriggered) {
+    } else if (!showBeanModal && animationTriggeredRef.current) {
       setDisplayedBeanBalance(beanBalance)
       setLoading(false)
     }
-  }, [beanBalance, showBeanModal, animationTriggered])
+  }, [beanBalance, showBeanModal])
 
   // Show modal when beans are awarded
   useEffect(() => {
@@ -112,15 +112,16 @@ export default function NewV2Dashboard() {
 
   // Trigger stamp animation when panel opens
   useEffect(() => {
-    console.log('[Animation Trigger] START - showBeansPanel:', showBeansPanel, 'animationTriggered:', animationTriggered, 'beanBalance:', beanBalance)
+    console.log('[Animation Trigger] START - showBeansPanel:', showBeansPanel, 'animationTriggeredRef.current:', animationTriggeredRef.current, 'beanBalance:', beanBalance)
 
     if (!showBeansPanel) {
       console.log('[Animation Trigger] Panel closed, resetting')
-      setAnimationTriggered(false)
+      animationTriggeredRef.current = false
+      setShowStampAnimation(false)
       return
     }
 
-    if (animationTriggered) {
+    if (animationTriggeredRef.current) {
       console.log('[Animation Trigger] Already triggered, skipping')
       return
     }
@@ -129,11 +130,12 @@ export default function NewV2Dashboard() {
     console.log('[Animation Trigger] currentBeans:', currentBeans)
 
     console.log('[Animation Trigger] === TRIGGERING ANIMATION ===')
-    setAnimationTriggered(true)
+    animationTriggeredRef.current = true
     setDisplayedBeanCount(currentBeans - 1)
 
+    console.log('[Animation Trigger] creating timer')
     const timer = setTimeout(() => {
-      console.log('[Animation Trigger] Timer fired - setting newlyStampedIndex')
+      console.log('[Animation Trigger] timer fired')
       setNewlyStampedIndex(currentBeans - 1)
 
       const rect = stampGridRef.current?.getBoundingClientRect()
@@ -158,7 +160,7 @@ export default function NewV2Dashboard() {
       console.log('[Animation Trigger] Cleanup timer')
       clearTimeout(timer)
     }
-  }, [showBeansPanel, beanBalance, animationTriggered])
+  }, [showBeansPanel, beanBalance])
 
   // Update displayed bean count after animation completes
   useEffect(() => {

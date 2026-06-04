@@ -91,6 +91,8 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
     run()
   }, [show]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  console.log('[StampAnimation] render', { show, targetPosition })
+
   if (!show) return null
 
   return (
