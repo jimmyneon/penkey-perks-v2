@@ -399,15 +399,15 @@ export default function NewV2Dashboard() {
                   <p className="text-[18px] font-bold leading-tight" style={{ color: '#F28A2E' }}>
                     {nextReward?.reward || 'Loading...'}
                   </p>
-                  <div className="flex items-center justify-center">
+                  <div className="flex items-center justify-center overflow-hidden">
                     {nextReward?.icon_url || nextReward?.image_url ? (
                       <img
                         src={nextReward?.icon_url || nextReward?.image_url}
                         alt={nextReward.reward}
-                        className="w-56 h-56 object-contain"
+                        className="w-56 h-56 object-contain scale-150"
                       />
                     ) : (
-                      <img src="/coffeecup.webp" alt="" className="w-56 h-56 object-contain" />
+                      <img src="/coffeecup.webp" alt="" className="w-56 h-56 object-contain scale-150" />
                     )}
                   </div>
                 </div>
@@ -443,7 +443,7 @@ export default function NewV2Dashboard() {
                 <img
                   src="/vouchers/voucher.png"
                   alt="Vouchers"
-                  className="w-[85%] h-[85%] object-contain"
+                  className="w-[85%] h-[85%] object-contain scale-[250%]"
                 />
               </div>
               <div className="flex-1 min-w-0">
@@ -552,10 +552,10 @@ export default function NewV2Dashboard() {
                     <img
                       src={voucher.template?.icon_url || voucher.template?.image_url}
                       alt={voucher.template.name}
-                      className="w-full h-full object-contain p-2"
+                      className="w-full h-full object-contain p-2 scale-[250%]"
                     />
                   ) : (
-                    <img src="/coffeecup.webp" alt="" className="w-14 h-14 object-contain" />
+                    <img src="/coffeecup.webp" alt="" className="w-14 h-14 object-contain scale-[250%]" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
