@@ -585,17 +585,17 @@ export default function NewV2Dashboard() {
                   return (
                     <div
                       key={i}
-                      className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden"
+                      className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden relative"
                       style={{
                         backgroundColor: 'transparent',
-                        border: filled ? '2px solid #E07A3A' : '2px dashed #F0EDE5',
+                        border: filled ? 'none' : '2px dashed #F0EDE5',
                       }}
                     >
                       {filled ? (
                         <img
                           src="/image-assets/stamps/stamp.png"
                           alt="Stamp"
-                          className="w-full h-full object-cover"
+                          className="w-[120%] h-[120%] object-cover -m-2"
                         />
                       ) : (
                         <span className="text-[10px] font-semibold" style={{ color: '#F0EDE5', opacity: 0.5 }}>
