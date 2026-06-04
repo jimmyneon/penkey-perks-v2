@@ -60,6 +60,7 @@ export default function NewV2Dashboard() {
   const [targetPosition, setTargetPosition] = useState<{ x: number; y: number } | null>(null)
   const [cardShake, setCardShake] = useState(false)
   const [lastBeanCountOnClose, setLastBeanCountOnClose] = useState(0)
+  const [displayedBeanCount, setDisplayedBeanCount] = useState(0)
 
 
   // Real-time bean balance (disabled when showing QR code to avoid animation conflicts)
@@ -89,12 +90,15 @@ export default function NewV2Dashboard() {
 
       if (hasNewBeans) {
         console.log('Triggering stamp animation with delay')
+        // Start with one less bean displayed
+        setDisplayedBeanCount(lastBeanCountOnClose)
+
         const timer = setTimeout(() => {
-          setNewlyStampedIndex(currentBeans - 1)
+          setNewlyStampedIndex(lastBeanCountOnClose)
 
           // Calculate target position for the stamp slot
           const stampSlots = document.querySelectorAll('[data-stamp-slot]')
-          const targetSlot = stampSlots[currentBeans - 1] as HTMLElement
+          const targetSlot = stampSlots[lastBeanCountOnClose] as HTMLElement
           if (targetSlot) {
             const rect = targetSlot.getBoundingClientRect()
             setTargetPosition({
@@ -115,9 +119,21 @@ export default function NewV2Dashboard() {
           setLastBeanCountOnClose(currentBeans)
         }, 500)
         return () => clearTimeout(timer)
+      } else {
+        // No new beans, just show current count
+        setDisplayedBeanCount(currentBeans)
       }
     }
   }, [showBeansPanel, displayedBeanBalance, beanBalance, lastBeanCountOnClose])
+
+  // Update displayed bean count after animation completes
+  useEffect(() => {
+    if (!showStampAnimation && newlyStampedIndex !== null) {
+      const currentBeans = displayedBeanBalance?.current_beans || beanBalance?.current_beans || 0
+      setDisplayedBeanCount(currentBeans)
+      setNewlyStampedIndex(null)
+    }
+  }, [showStampAnimation, newlyStampedIndex, displayedBeanBalance, beanBalance])
 
   // Show modal when max beans reached
   useEffect(() => {
@@ -619,7 +635,7 @@ export default function NewV2Dashboard() {
                 transition={{ duration: 0.1 }}
               >
                 {Array.from({ length: 25 }).map((_, i) => {
-                  const filled = i < currentBeans
+                  const filled = i < displayedBeanCount
                   // Use consistent random rotation based on index for all stamps
                   const stampRotation = randomRotations[i % randomRotations.length]
                   return (
