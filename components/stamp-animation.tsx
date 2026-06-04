@@ -123,8 +123,8 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
           src="/image-assets/stamps/stamper.png"
           alt="Stamper"
           style={{
-            width: 220,
-            height: 220,
+            width: 1000,
+            height: 1000,
             objectFit: 'contain',
             transform: 'rotate(5deg)',
             display: 'block',
