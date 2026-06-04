@@ -92,7 +92,7 @@ export function BottomSheet({
             exit={{ y: "100%" }}
             transition={{
               type: "tween",
-              duration: 0.85,
+              duration: 1.2,
               ease: [0.2, 1, 0.2, 1],
             }}
             drag="y"
