@@ -667,7 +667,7 @@ export default function NewV2Dashboard() {
                     >
                       {filled ? (
                         <img
-                          src="/image-assets/stamps/stamp.svg"
+                          src="/image-assets/stamps/stamp.webp"
                           alt="Stamp"
                           className="w-[140%] h-[140%] object-cover -m-3"
                           style={{

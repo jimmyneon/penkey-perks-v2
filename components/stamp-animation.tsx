@@ -118,7 +118,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                   style={{ border: 'none', outline: 'none' }}
                 >
                   <img
-                    src="/image-assets/stamps/stamper.png"
+                    src="/image-assets/stamps/stamper.webp"
                     alt="Stamper"
                     className="w-[30rem] h-[30rem] object-contain"
                     style={{ transform: 'rotate(5deg)', border: 'none', outline: 'none' }}
@@ -143,7 +143,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                 }}
               >
                 <img
-                  src="/image-assets/stamps/beansplatter.svg"
+                  src="/image-assets/stamps/beansplatter.webp"
                   alt="Splash"
                   className="w-64 h-64 object-contain"
                 />
@@ -165,7 +165,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                 }}
               >
                 <img
-                  src="/image-assets/stamps/stamp.svg"
+                  src="/image-assets/stamps/stamp.webp"
                   alt="Stamp"
                   className="w-24 h-24 object-contain"
                 />
