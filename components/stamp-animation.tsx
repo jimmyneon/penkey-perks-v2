@@ -66,26 +66,26 @@ export function StampAnimation({ onComplete, show = false }: StampAnimationProps
         <div
           className="relative z-10 transition-transform duration-300 ease-out"
           style={{
-            transform: phase === 'stamping' ? 'translateY(100px)' : 'translateY(-100px)',
+            transform: phase === 'stamping' ? 'translateY(200px)' : 'translateY(-200px)',
           }}
         >
           <img
             src="/image-assets/stamps/stamper.png"
             alt="Stamper"
-            className="w-64 h-64 object-contain"
+            className="w-96 h-96 object-contain"
           />
         </div>
 
         {/* Splatter effect */}
         {phase === 'splatter' && (
-          <div className="absolute top-32 left-1/2 -translate-x-1/2 z-0">
+          <div className="absolute top-48 left-1/2 -translate-x-1/2 z-0">
             <div className="relative">
               {/* Main splatter */}
               <div
                 className="absolute inset-0 rounded-full"
                 style={{
-                  width: '160px',
-                  height: '160px',
+                  width: '320px',
+                  height: '320px',
                   background: 'radial-gradient(circle, #E07A3A 0%, transparent 70%)',
                   animation: 'splatterPulse 0.5s ease-out forwards',
                 }}
@@ -94,12 +94,12 @@ export function StampAnimation({ onComplete, show = false }: StampAnimationProps
               {[...Array(8)].map((_, i) => (
                 <div
                   key={i}
-                  className="absolute w-4 h-4 rounded-full"
+                  className="absolute w-8 h-8 rounded-full"
                   style={{
                     backgroundColor: '#E07A3A',
                     left: '50%',
                     top: '50%',
-                    transform: `rotate(${i * 45}deg) translateX(80px)`,
+                    transform: `rotate(${i * 45}deg) translateX(160px)`,
                     animation: `particleBurst 0.4s ease-out ${i * 0.05}s forwards`,
                   }}
                 />
@@ -110,11 +110,11 @@ export function StampAnimation({ onComplete, show = false }: StampAnimationProps
 
         {/* Stamp result */}
         {phase === 'complete' && (
-          <div className="absolute top-32 left-1/2 -translate-x-1/2 z-20">
+          <div className="absolute top-48 left-1/2 -translate-x-1/2 z-20">
             <img
               src="/image-assets/stamps/stamp.png"
               alt="Stamp"
-              className="w-40 h-40 object-contain"
+              className="w-64 h-64 object-contain"
               style={{
                 animation: 'stampAppear 0.3s ease-out',
               }}

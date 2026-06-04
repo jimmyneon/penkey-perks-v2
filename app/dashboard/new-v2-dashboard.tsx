@@ -77,8 +77,11 @@ export default function NewV2Dashboard() {
   useEffect(() => {
     console.log('Animation trigger check:', { showBeansPanel, beanBalance })
     if (showBeansPanel) {
-      console.log('Triggering stamp animation')
-      setShowStampAnimation(true)
+      console.log('Triggering stamp animation with delay')
+      const timer = setTimeout(() => {
+        setShowStampAnimation(true)
+      }, 500)
+      return () => clearTimeout(timer)
     }
   }, [showBeansPanel])
 
