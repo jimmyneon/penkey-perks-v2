@@ -77,8 +77,8 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                   scale: 0.2,
                   opacity: 0,
                   filter: 'blur(12px)',
-                  x: (targetPosition?.x || window.innerWidth / 2) + 400,
-                  y: (targetPosition?.y || window.innerHeight / 2) - 500,
+                  x: (targetPosition?.x || window.innerWidth / 2) + 100,
+                  y: (targetPosition?.y || window.innerHeight / 2) - 150,
                 }}
                 animate={
                   phase === 'approach'
