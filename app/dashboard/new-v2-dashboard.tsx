@@ -19,7 +19,7 @@ import { GiftIcon } from '@/components/ui/gift-icon'
 import { StampAnimation } from '@/components/stamp-animation'
 import { motion } from 'framer-motion'
 
-const randomRotations = [-5, 3, 7, -2, 4, -3, 6, -4]
+const randomRotations = [-15, 12, 18, -8, 10, -12, 14, -6]
 
 interface BeanBalance {
   current_beans: number
@@ -613,6 +613,10 @@ export default function NewV2Dashboard() {
                 {Array.from({ length: 25 }).map((_, i) => {
                   const filled = i < currentBeans
                   const isNewlyStamped = i === newlyStampedIndex
+                  // Hide newly stamped stamp until animation completes
+                  const showStamp = isNewlyStamped ? !showStampAnimation : true
+                  // Use consistent random rotation based on index for all stamps
+                  const stampRotation = randomRotations[i % randomRotations.length]
                   return (
                     <div
                       key={i}
@@ -623,13 +627,13 @@ export default function NewV2Dashboard() {
                         border: filled ? 'none' : '2px dashed #F0EDE5',
                       }}
                     >
-                      {filled ? (
+                      {filled && showStamp ? (
                         <img
                           src="/image-assets/stamps/stamp.png"
                           alt="Stamp"
                           className="w-[140%] h-[140%] object-cover -m-3"
                           style={{
-                            transform: isNewlyStamped ? `rotate(${randomRotations[Math.floor(Math.random() * randomRotations.length)]}deg)` : 'rotate(0deg)',
+                            transform: `rotate(${stampRotation}deg)`,
                           }}
                         />
                       ) : (

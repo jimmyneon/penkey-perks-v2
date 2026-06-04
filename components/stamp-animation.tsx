@@ -9,7 +9,7 @@ interface StampAnimationProps {
   targetPosition?: { x: number; y: number }
 }
 
-const randomRotations = [-5, 3, 7, -2, 4, -3, 6, -4]
+const randomRotations = [-15, 12, 18, -8, 10, -12, 14, -6]
 
 export function StampAnimation({ onComplete, show = false, targetPosition }: StampAnimationProps) {
   const [phase, setPhase] = useState<'idle' | 'approach' | 'impact' | 'splash' | 'stamp' | 'exit'>('idle')
@@ -118,7 +118,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                   <img
                     src="/image-assets/stamps/stamper.png"
                     alt="Stamper"
-                    className="w-64 h-64 object-contain"
+                    className="w-80 h-80 object-contain"
                     style={{ transform: 'rotate(5deg)' }}
                   />
                 </motion.div>
@@ -132,9 +132,9 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
               <motion.div
                 className="absolute"
                 initial={{ scale: 0.3, opacity: 1 }}
-                animate={{ scale: 1.2, opacity: 0 }}
+                animate={{ scale: 2, opacity: 0 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.3 }}
                 style={{
                   x: targetPosition?.x || window.innerWidth / 2 - 50,
                   y: targetPosition?.y || window.innerHeight / 2 - 50,
@@ -143,7 +143,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                 <img
                   src="/image-assets/stamps/beansplatter.png"
                   alt="Splash"
-                  className="w-32 h-32 object-contain"
+                  className="w-48 h-48 object-contain"
                 />
               </motion.div>
             )}
