@@ -61,6 +61,7 @@ export default function NewV2Dashboard() {
   const [cardShake, setCardShake] = useState(false)
   const [lastBeanCountOnClose, setLastBeanCountOnClose] = useState(0)
   const [displayedBeanCount, setDisplayedBeanCount] = useState(0)
+  const [animationTriggered, setAnimationTriggered] = useState(false)
 
 
   // Real-time bean balance (disabled when showing QR code to avoid animation conflicts)
@@ -90,13 +91,14 @@ export default function NewV2Dashboard() {
 
   // Trigger stamp animation when panel opens with new beans
   useEffect(() => {
-    console.log('Animation trigger check:', { showBeansPanel, beanBalance, lastBeanCountOnClose, displayedBeanCount })
-    if (showBeansPanel) {
+    console.log('Animation trigger check:', { showBeansPanel, beanBalance, lastBeanCountOnClose, displayedBeanCount, animationTriggered })
+    if (showBeansPanel && !animationTriggered) {
       const currentBeans = displayedBeanBalance?.current_beans || beanBalance?.current_beans || 0
       console.log('Current beans:', currentBeans, 'Last bean count:', lastBeanCountOnClose)
 
       if (currentBeans > 0) {
         console.log('Triggering stamp animation with delay')
+        setAnimationTriggered(true)
         // Start with one less bean displayed
         setDisplayedBeanCount(currentBeans - 1)
 
@@ -132,7 +134,14 @@ export default function NewV2Dashboard() {
         setDisplayedBeanCount(0)
       }
     }
-  }, [showBeansPanel, displayedBeanBalance, beanBalance, lastBeanCountOnClose, displayedBeanCount])
+  }, [showBeansPanel, displayedBeanBalance, beanBalance, lastBeanCountOnClose, displayedBeanCount, animationTriggered])
+
+  // Reset animation flag when panel closes
+  useEffect(() => {
+    if (!showBeansPanel) {
+      setAnimationTriggered(false)
+    }
+  }, [showBeansPanel])
 
   // Update displayed bean count after animation completes
   useEffect(() => {
