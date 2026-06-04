@@ -52,7 +52,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
       if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(30)
       await Promise.all([
         stamperCtrl.start({ scale: 0.9, transition: { duration: 0.07 } }),
-        shadowCtrl.start({ scale: 0.7, opacity: 0, transition: { duration: 0.07 } }),
+        shadowCtrl.start({ scale: 0.8, opacity: 0, transition: { duration: 0.07 } }),
       ])
 
       // ─── Wobble ──────────────────────────────────────────────────
@@ -121,8 +121,8 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
           src="/image-assets/stamps/stamper.png"
           alt="Stamper"
           style={{
-            width: 200,
-            height: 200,
+            width: 220,
+            height: 220,
             objectFit: 'contain',
             transform: 'rotate(5deg)',
             display: 'block',

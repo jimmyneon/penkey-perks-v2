@@ -79,6 +79,7 @@ export default function NewV2Dashboard() {
   const [displayedBeanCount, setDisplayedBeanCount] = useState(0)
   const [animationTriggered, setAnimationTriggered] = useState(false)
   const lastClosedBeansRef = useRef(-1) // -1 = not yet initialized
+  const stampGridRef = useRef<HTMLDivElement>(null)
 
 
   // Real-time bean balance (disabled when showing QR code to avoid animation conflicts)
@@ -130,9 +131,8 @@ export default function NewV2Dashboard() {
     const timer = setTimeout(() => {
       setNewlyStampedIndex(currentBeans - 1)
 
-      const stampGrid = document.querySelector('.grid-cols-5') as HTMLElement
-      if (stampGrid) {
-        const rect = stampGrid.getBoundingClientRect()
+      const rect = stampGridRef.current?.getBoundingClientRect()
+      if (rect) {
         setTargetPosition({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
         console.log('[Animation Trigger] Target position:', { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
       }
@@ -652,6 +652,7 @@ export default function NewV2Dashboard() {
 
               {/* Large stamps grid - 25 stamps */}
               <motion.div
+                ref={stampGridRef}
                 className="grid grid-cols-5 gap-3 mb-6"
                 animate={cardShake ? { x: [-2, 2, -2, 2, 0], y: [-1, 1, -1, 1, 0] } : {}}
                 transition={{ duration: 0.1 }}
