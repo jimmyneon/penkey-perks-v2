@@ -17,6 +17,9 @@ import { BottomNav } from '@/components/bottom-nav'
 import { BrushUnderline } from '@/components/ui/brush-underline'
 import { GiftIcon } from '@/components/ui/gift-icon'
 import { StampAnimation } from '@/components/stamp-animation'
+import { motion } from 'framer-motion'
+
+const randomRotations = [-5, 3, 7, -2, 4, -3, 6, -4]
 
 interface BeanBalance {
   current_beans: number
@@ -54,6 +57,8 @@ export default function NewV2Dashboard() {
   const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
   const [showStampAnimation, setShowStampAnimation] = useState(false)
   const [newlyStampedIndex, setNewlyStampedIndex] = useState<number | null>(null)
+  const [targetPosition, setTargetPosition] = useState<{ x: number; y: number } | null>(null)
+  const [cardShake, setCardShake] = useState(false)
 
 
   // Real-time bean balance (disabled when showing QR code to avoid animation conflicts)
@@ -82,7 +87,25 @@ export default function NewV2Dashboard() {
       const timer = setTimeout(() => {
         const beans = displayedBeanBalance?.current_beans || beanBalance?.current_beans || 0
         setNewlyStampedIndex(beans - 1)
+
+        // Calculate target position for the stamp slot
+        const stampSlots = document.querySelectorAll('[data-stamp-slot]')
+        const targetSlot = stampSlots[beans - 1] as HTMLElement
+        if (targetSlot) {
+          const rect = targetSlot.getBoundingClientRect()
+          setTargetPosition({
+            x: rect.left + rect.width / 2 - 50,
+            y: rect.top + rect.height / 2 - 50,
+          })
+        }
+
         setShowStampAnimation(true)
+
+        // Trigger card shake at impact (250ms after start)
+        setTimeout(() => {
+          setCardShake(true)
+          setTimeout(() => setCardShake(false), 100)
+        }, 250)
       }, 500)
       return () => clearTimeout(timer)
     }
@@ -582,23 +605,18 @@ export default function NewV2Dashboard() {
               </div>
 
               {/* Large stamps grid - 25 stamps */}
-              <div className="grid grid-cols-5 gap-3 mb-6">
-                <style>{`
-                  @keyframes splatterPulse {
-                    0% { transform: scale(0); opacity: 1; }
-                    100% { transform: scale(2); opacity: 0; }
-                  }
-                  @keyframes particleBurst {
-                    0% { transform: rotate(var(--rotation)) translateX(0); opacity: 1; }
-                    100% { transform: rotate(var(--rotation)) translateX(60px); opacity: 0; }
-                  }
-                `}</style>
+              <motion.div
+                className="grid grid-cols-5 gap-3 mb-6"
+                animate={cardShake ? { x: [-2, 2, -2, 2, 0], y: [-1, 1, -1, 1, 0] } : {}}
+                transition={{ duration: 0.1 }}
+              >
                 {Array.from({ length: 25 }).map((_, i) => {
                   const filled = i < currentBeans
                   const isNewlyStamped = i === newlyStampedIndex
                   return (
                     <div
                       key={i}
+                      data-stamp-slot
                       className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden relative"
                       style={{
                         backgroundColor: 'transparent',
@@ -606,42 +624,14 @@ export default function NewV2Dashboard() {
                       }}
                     >
                       {filled ? (
-                        <>
-                          <img
-                            src="/image-assets/stamps/stamp.png"
-                            alt="Stamp"
-                            className="w-[140%] h-[140%] object-cover -m-3"
-                          />
-                          {/* Splatter effect on newly stamped bean */}
-                          {isNewlyStamped && (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="relative">
-                                <div
-                                  className="absolute rounded-full"
-                                  style={{
-                                    width: '60px',
-                                    height: '60px',
-                                    background: 'radial-gradient(circle, #E07A3A 0%, transparent 70%)',
-                                    animation: 'splatterPulse 0.5s ease-out forwards',
-                                  }}
-                                />
-                                {[...Array(6)].map((_, j) => (
-                                  <div
-                                    key={j}
-                                    className="absolute w-2 h-2 rounded-full"
-                                    style={{
-                                      backgroundColor: '#E07A3A',
-                                      left: '50%',
-                                      top: '50%',
-                                      transform: `rotate(${j * 60}deg) translateX(30px)`,
-                                      animation: `particleBurst 0.4s ease-out ${j * 0.05}s forwards`,
-                                    }}
-                                  />
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                        </>
+                        <img
+                          src="/image-assets/stamps/stamp.png"
+                          alt="Stamp"
+                          className="w-[140%] h-[140%] object-cover -m-3"
+                          style={{
+                            transform: isNewlyStamped ? `rotate(${randomRotations[Math.floor(Math.random() * randomRotations.length)]}deg)` : 'rotate(0deg)',
+                          }}
+                        />
                       ) : (
                         <span className="text-[10px] font-semibold" style={{ color: '#F0EDE5', opacity: 0.5 }}>
                           stamp
@@ -650,7 +640,7 @@ export default function NewV2Dashboard() {
                     </div>
                   )
                 })}
-              </div>
+              </motion.div>
 
               <div className="flex items-center justify-between mb-4">
                 <div>
@@ -997,6 +987,7 @@ export default function NewV2Dashboard() {
       {/* Stamp animation */}
       <StampAnimation
         show={showStampAnimation}
+        targetPosition={targetPosition || undefined}
         onComplete={() => setShowStampAnimation(false)}
       />
     </div>

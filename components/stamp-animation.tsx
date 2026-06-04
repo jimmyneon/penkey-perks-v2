@@ -1,87 +1,177 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface StampAnimationProps {
   onComplete?: () => void
   show?: boolean
+  targetPosition?: { x: number; y: number }
 }
 
-export function StampAnimation({ onComplete, show = false }: StampAnimationProps) {
-  const [phase, setPhase] = useState<'idle' | 'stamping' | 'splatter' | 'complete'>('idle')
+const randomRotations = [-5, 3, 7, -2, 4, -3, 6, -4]
+
+export function StampAnimation({ onComplete, show = false, targetPosition }: StampAnimationProps) {
+  const [phase, setPhase] = useState<'idle' | 'approach' | 'impact' | 'splash' | 'stamp' | 'exit'>('idle')
+  const [stampRotation, setStampRotation] = useState(0)
 
   useEffect(() => {
-    console.log('StampAnimation show prop:', show)
     if (!show) {
       setPhase('idle')
       return
     }
 
-    // Start stamping animation
-    console.log('Starting stamp animation')
-    setPhase('stamping')
+    // Set random rotation for this stamp
+    setStampRotation(randomRotations[Math.floor(Math.random() * randomRotations.length)])
 
-    // Timeline:
-    // 0ms: stamper starts moving down
-    // 300ms: stamper hits (splatter starts)
-    // 600ms: stamper moves up
-    // 900ms: animation complete
+    // Timeline (total ~600ms):
+    // 0ms: stamper appears (approach)
+    // 250ms: impact
+    // 300ms: splash
+    // 450ms: stamp appears
+    // 600ms: stamper exits
 
-    const splatterTimer = setTimeout(() => {
-      setPhase('splatter')
+    setPhase('approach')
+
+    const impactTimer = setTimeout(() => {
+      setPhase('impact')
+      // Mobile vibration
+      if (navigator.vibrate) {
+        navigator.vibrate(50)
+      }
+    }, 250)
+
+    const splashTimer = setTimeout(() => {
+      setPhase('splash')
     }, 300)
 
-    const completeTimer = setTimeout(() => {
-      setPhase('complete')
+    const stampTimer = setTimeout(() => {
+      setPhase('stamp')
+    }, 450)
+
+    const exitTimer = setTimeout(() => {
+      setPhase('exit')
       onComplete?.()
-    }, 900)
+    }, 600)
 
     return () => {
-      clearTimeout(splatterTimer)
-      clearTimeout(completeTimer)
+      clearTimeout(impactTimer)
+      clearTimeout(splashTimer)
+      clearTimeout(stampTimer)
+      clearTimeout(exitTimer)
     }
   }, [show, onComplete])
 
   if (!show || phase === 'idle') return null
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-[9999]" style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}>
-      <style>{`
-        @keyframes stamper3D {
-          0% { transform: scale(3) translateY(-300px); opacity: 0; }
-          30% { transform: scale(1.5) translateY(-100px); opacity: 1; }
-          60% { transform: scale(1) translateY(100px); opacity: 1; }
-          100% { transform: scale(0.8) translateY(200px); opacity: 0; }
-        }
-        @keyframes splatterPulse {
-          0% { transform: scale(0); opacity: 1; }
-          100% { transform: scale(2); opacity: 0; }
-        }
-        @keyframes particleBurst {
-          0% { transform: rotate(var(--rotation)) translateX(0); opacity: 1; }
-          100% { transform: rotate(var(--rotation)) translateX(60px); opacity: 0; }
-        }
-        @keyframes stampAppear {
-          0% { transform: scale(0) rotate(-10deg); opacity: 0; }
-          50% { transform: scale(1.2) rotate(5deg); }
-          100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-      `}</style>
-      <div className="relative">
-        {/* Stamper */}
-        <div
-          className="relative z-10"
-          style={{
-            animation: phase === 'stamping' ? 'stamper3D 0.9s ease-in-out forwards' : 'none',
-          }}
-        >
-          <img
-            src="/image-assets/stamps/stamper.png"
-            alt="Stamper"
-            className="w-96 h-96 object-contain"
-          />
+    <AnimatePresence>
+      {show && (
+        <div className="fixed inset-0 pointer-events-none z-[9999]">
+          {/* Stamper */}
+          <AnimatePresence>
+            {phase !== 'exit' && (
+              <motion.div
+                className="absolute"
+                initial={{
+                  scale: 0.2,
+                  opacity: 0,
+                  filter: 'blur(12px)',
+                  x: targetPosition?.x || window.innerWidth / 2 - 100,
+                  y: targetPosition?.y || window.innerHeight / 2 - 200,
+                }}
+                animate={
+                  phase === 'approach'
+                    ? {
+                        scale: 1.15,
+                        opacity: 1,
+                        filter: 'blur(0px)',
+                        x: targetPosition?.x || window.innerWidth / 2 - 100,
+                        y: targetPosition?.y || window.innerHeight / 2 - 100,
+                      }
+                    : phase === 'impact'
+                    ? {
+                        scale: 0.92,
+                        rotate: [0, -2, 2, 0],
+                      }
+                    : {}
+                }
+                exit={{
+                  scale: 1.3,
+                  opacity: 0,
+                  filter: 'blur(8px)',
+                }}
+                transition={{
+                  duration: phase === 'approach' ? 0.25 : phase === 'impact' ? 0.05 : 0.15,
+                  ease: phase === 'approach' ? 'easeOut' : 'easeInOut',
+                }}
+              >
+                <motion.div
+                  animate={
+                    phase === 'approach'
+                      ? {
+                          boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                        }
+                      : {}
+                  }
+                >
+                  <img
+                    src="/image-assets/stamps/stamper.png"
+                    alt="Stamper"
+                    className="w-64 h-64 object-contain"
+                    style={{ transform: 'rotate(5deg)' }}
+                  />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Splash */}
+          <AnimatePresence>
+            {phase === 'splash' && (
+              <motion.div
+                className="absolute"
+                initial={{ scale: 0.3, opacity: 1 }}
+                animate={{ scale: 1.2, opacity: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                style={{
+                  x: targetPosition?.x || window.innerWidth / 2 - 50,
+                  y: targetPosition?.y || window.innerHeight / 2 - 50,
+                }}
+              >
+                <img
+                  src="/image-assets/stamps/beansplatter.png"
+                  alt="Splash"
+                  className="w-32 h-32 object-contain"
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Stamp result */}
+          <AnimatePresence>
+            {(phase === 'stamp' || phase === 'exit') && (
+              <motion.div
+                className="absolute"
+                initial={{ scale: 1.4, opacity: 0, rotate: stampRotation }}
+                animate={{ scale: 1, opacity: 1, rotate: stampRotation }}
+                transition={{ duration: 0.15, ease: 'easeOut' }}
+                style={{
+                  x: targetPosition?.x || window.innerWidth / 2 - 50,
+                  y: targetPosition?.y || window.innerHeight / 2 - 50,
+                }}
+              >
+                <img
+                  src="/image-assets/stamps/stamp.png"
+                  alt="Stamp"
+                  className="w-24 h-24 object-contain"
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-      </div>
-    </div>
+      )}
+    </AnimatePresence>
   )
 }
