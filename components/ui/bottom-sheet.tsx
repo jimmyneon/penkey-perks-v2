@@ -71,8 +71,8 @@ export function BottomSheet({
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 35, stiffness: 250 }}
             drag="y"
-            dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={0.5}
+            dragConstraints={{ top: 0, bottom: 1000 }}
+            dragElastic={false}
             dragSnapToOrigin={true}
             onDragEnd={handleDragEnd}
             style={{ y }}

@@ -546,11 +546,11 @@ export default function NewV2Dashboard() {
                 }}
               >
                 <div className="w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
-                  {voucher.template?.image_url ? (
+                  {voucher.template?.icon_url || voucher.template?.image_url ? (
                     <img
-                      src={voucher.template.image_url}
+                      src={voucher.template?.icon_url || voucher.template?.image_url}
                       alt={voucher.template.name}
-                      className="w-[85%] h-[85%] object-contain"
+                      className="w-full h-full object-contain p-2"
                     />
                   ) : (
                     <img src="/coffeecup.webp" alt="" className="w-14 h-14 object-contain" />

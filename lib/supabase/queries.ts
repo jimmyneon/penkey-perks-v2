@@ -146,7 +146,7 @@ export async function getUserVouchers(userId: string, status?: 'active' | 'redee
 
   const { data: templates, error: templateError } = await supabase
     .from('voucher_templates')
-    .select('id, name, description, category, bean_threshold, image_url')
+    .select('id, name, description, category, bean_threshold, image_url, icon_url')
     .in('id', templateIds)
 
   if (templateError) {

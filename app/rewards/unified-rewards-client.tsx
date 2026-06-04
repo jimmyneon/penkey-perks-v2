@@ -246,6 +246,7 @@ export function UnifiedRewardsClient({
     sub: template.description,
     color: getColorForCategory(template.category),
     image_url: template.image_url,
+    icon_url: template.icon_url,
   }))
 
   return (
@@ -397,11 +398,11 @@ export function UnifiedRewardsClient({
                       style={{ border: expiringSoon ? '1.5px solid #FCA5A5' : '1.5px solid transparent' }}>
                       <div className="w-20 h-20 rounded-[12px] flex items-center justify-center flex-shrink-0 overflow-hidden"
                         style={{ backgroundColor: expiringSoon ? '#FEF2F2' : '#FDF0E6' }}>
-                        {reward.image_url ? (
+                        {reward.icon_url || reward.image_url ? (
                           <img
-                            src={reward.image_url}
+                            src={reward.icon_url || reward.image_url}
                             alt={reward.name}
-                            className="w-[85%] h-[85%] object-contain"
+                            className="w-full h-full object-contain p-2"
                           />
                         ) : (
                           <Gift className="w-10 h-10" style={{ color: expiringSoon ? '#EF4444' : '#E07A3A' }} />
@@ -454,7 +455,7 @@ export function UnifiedRewardsClient({
                       <img
                         src={tier.image_url}
                         alt={tier.label}
-                        className="w-[85%] h-[85%] object-contain"
+                        className="w-full h-full object-contain p-2"
                       />
                     ) : (
                       <span className="text-[18px] leading-none">{tier.icon}</span>
