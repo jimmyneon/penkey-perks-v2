@@ -85,17 +85,20 @@ export default function NewV2Dashboard() {
   // Real-time bean balance (disabled when showing QR code to avoid animation conflicts)
   const { beanBalance, beansAwarded, beanDescription, maxBeansReached, maxBeansMessage } = useBeanBalanceRealtime(user?.id || null, showVoucherQR)
 
-  // Only update displayed balance if modal is not open
+  // Only update displayed balance if modal is not open and animation is not running
   useEffect(() => {
-    if (beanBalance && !showBeanModal) {
+    if (beanBalance && !showBeanModal && !animationTriggered) {
       setDisplayedBeanBalance(beanBalance)
-      // Initialize displayed bean count and last bean count
       setDisplayedBeanCount(beanBalance.current_beans)
       setLastBeanCountOnClose(beanBalance.current_beans)
-      // Mark as loaded when bean balance is available
       setLoading(false)
     }
-  }, [beanBalance, showBeanModal])
+    if (beanBalance && !showBeanModal && animationTriggered) {
+      // Still update the balance reference but don't touch displayedBeanCount
+      setDisplayedBeanBalance(beanBalance)
+      setLoading(false)
+    }
+  }, [beanBalance, showBeanModal, animationTriggered])
 
   // Show modal when beans are awarded
   useEffect(() => {
