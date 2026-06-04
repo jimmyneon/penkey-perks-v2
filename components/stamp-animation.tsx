@@ -77,8 +77,8 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                   scale: 0.2,
                   opacity: 0,
                   filter: 'blur(12px)',
-                  x: targetPosition?.x || window.innerWidth / 2 - 100,
-                  y: targetPosition?.y || window.innerHeight / 2 - 200,
+                  x: (targetPosition?.x || window.innerWidth / 2) + 150,
+                  y: (targetPosition?.y || window.innerHeight / 2) - 250,
                 }}
                 animate={
                   phase === 'approach'
@@ -86,8 +86,8 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                         scale: 1.15,
                         opacity: 1,
                         filter: 'blur(0px)',
-                        x: targetPosition?.x || window.innerWidth / 2 - 100,
-                        y: targetPosition?.y || window.innerHeight / 2 - 100,
+                        x: targetPosition?.x || window.innerWidth / 2,
+                        y: targetPosition?.y || window.innerHeight / 2,
                       }
                     : phase === 'impact'
                     ? {
@@ -105,6 +105,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                   duration: phase === 'approach' ? 0.25 : phase === 'impact' ? 0.05 : 0.15,
                   ease: phase === 'approach' ? 'easeOut' : 'easeInOut',
                 }}
+                style={{ border: 'none', outline: 'none' }}
               >
                 <motion.div
                   animate={
@@ -114,12 +115,13 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                         }
                       : {}
                   }
+                  style={{ border: 'none', outline: 'none' }}
                 >
                   <img
                     src="/image-assets/stamps/stamper.png"
                     alt="Stamper"
                     className="w-80 h-80 object-contain"
-                    style={{ transform: 'rotate(5deg)' }}
+                    style={{ transform: 'rotate(5deg)', border: 'none', outline: 'none' }}
                   />
                 </motion.div>
               </motion.div>
@@ -131,19 +133,19 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
             {phase === 'splash' && (
               <motion.div
                 className="absolute"
-                initial={{ scale: 0.3, opacity: 1 }}
-                animate={{ scale: 2, opacity: 0 }}
+                initial={{ scale: 0.5, opacity: 1 }}
+                animate={{ scale: 3, opacity: 0 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.4 }}
                 style={{
-                  x: targetPosition?.x || window.innerWidth / 2 - 50,
-                  y: targetPosition?.y || window.innerHeight / 2 - 50,
+                  x: targetPosition?.x || window.innerWidth / 2 - 75,
+                  y: targetPosition?.y || window.innerHeight / 2 - 75,
                 }}
               >
                 <img
                   src="/image-assets/stamps/beansplatter.png"
                   alt="Splash"
-                  className="w-48 h-48 object-contain"
+                  className="w-64 h-64 object-contain"
                 />
               </motion.div>
             )}
