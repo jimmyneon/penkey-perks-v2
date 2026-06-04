@@ -16,6 +16,7 @@ import { BottomSheet } from '@/components/ui/bottom-sheet'
 import { BottomNav } from '@/components/bottom-nav'
 import { BrushUnderline } from '@/components/ui/brush-underline'
 import { GiftIcon } from '@/components/ui/gift-icon'
+import { StampAnimation } from '@/components/stamp-animation'
 
 interface BeanBalance {
   current_beans: number
@@ -51,6 +52,7 @@ export default function NewV2Dashboard() {
   const [showBeanModal, setShowBeanModal] = useState(false)
   const [showMaxBeansModal, setShowMaxBeansModal] = useState(false)
   const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
+  const [showStampAnimation, setShowStampAnimation] = useState(false)
 
 
   // Real-time bean balance (disabled when showing QR code to avoid animation conflicts)
@@ -68,6 +70,8 @@ export default function NewV2Dashboard() {
     if (beansAwarded > 0) {
       setModalClosed(false) // Reset animation state
       setShowBeanModal(true)
+      // Trigger stamp animation
+      setShowStampAnimation(true)
     }
   }, [beansAwarded])
 
@@ -571,21 +575,23 @@ export default function NewV2Dashboard() {
                   return (
                     <div
                       key={i}
-                      className="w-14 h-14 rounded-full flex items-center justify-center"
+                      className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden"
                       style={{
                         backgroundColor: filled ? '#E07A3A' : 'transparent',
                         border: filled ? '2px solid #E07A3A' : '2px dashed #F0EDE5',
                       }}
                     >
-                      <img
-                        src="/bean.png"
-                        alt=""
-                        className="w-10 h-10 object-contain"
-                        style={{
-                          filter: filled ? 'none' : 'brightness(0.4) grayscale(0.5)',
-                          opacity: filled ? 1 : 0.6
-                        }}
-                      />
+                      {filled ? (
+                        <img
+                          src="/image-assets/stamps/beansplatter.png"
+                          alt="Stamp"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-[10px] font-semibold" style={{ color: '#F0EDE5', opacity: 0.5 }}>
+                          stamp
+                        </span>
+                      )}
                     </div>
                   )
                 })}
@@ -931,6 +937,12 @@ export default function NewV2Dashboard() {
         message={maxBeansMessage}
         onClose={handleMaxBeansModalClose}
         onConvertToVouchers={() => setShowMaxBeansModal(false)}
+      />
+
+      {/* Stamp animation */}
+      <StampAnimation
+        show={showStampAnimation}
+        onComplete={() => setShowStampAnimation(false)}
       />
     </div>
   )
