@@ -123,8 +123,6 @@ export default function NewV2Dashboard() {
     const currentBeans = beanBalance?.current_beans ?? displayedBeanBalance?.current_beans ?? 0
     console.log('[Animation Trigger] currentBeans:', currentBeans)
 
-    if (currentBeans === 0) return
-
     console.log('[Animation Trigger] Triggering animation')
     setAnimationTriggered(true)
     setDisplayedBeanCount(currentBeans - 1)
@@ -679,8 +677,9 @@ export default function NewV2Dashboard() {
                         <img
                           src="/image-assets/stamps/stamp.png"
                           alt="Stamp"
-                          className="w-[140%] h-[140%] object-cover -m-3"
+                          className="w-full h-full object-contain"
                           style={{
+                            imageRendering: 'crisp-edges',
                             transform: `rotate(${variations.rotation}deg) translate(${variations.offsetX}px, ${variations.offsetY}px) scale(${variations.scale})`,
                           }}
                         />
