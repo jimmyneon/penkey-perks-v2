@@ -1043,8 +1043,9 @@ export default function NewV2Dashboard() {
         onConvertToVouchers={() => setShowMaxBeansModal(false)}
       />
 
-      {/* Stamp animation */}
+      {/* Stamp animation - key forces clean remount each time */}
       <StampAnimation
+        key={newlyStampedIndex ?? 'stamp'}
         show={showStampAnimation}
         targetPosition={targetPosition || undefined}
         onComplete={() => setShowStampAnimation(false)}

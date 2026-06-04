@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useAnimate, motion } from 'framer-motion'
+import { motion, useAnimation } from 'framer-motion'
 
 interface StampAnimationProps {
   onComplete?: () => void
@@ -10,17 +10,23 @@ interface StampAnimationProps {
 }
 
 export function StampAnimation({ onComplete, show = false, targetPosition }: StampAnimationProps) {
-  const [stamperScope, animateStamper] = useAnimate()
-  const [shadowScope, animateShadow] = useAnimate()
-  const [splashScope, animateSplash] = useAnimate()
-  const [stampScope, animateStamp] = useAnimate()
+  const stamperCtrl = useAnimation()
+  const shadowCtrl = useAnimation()
+  const splashCtrl = useAnimation()
+  const stampCtrl = useAnimation()
   const runningRef = useRef(false)
 
   const tx = targetPosition?.x ?? (typeof window !== 'undefined' ? window.innerWidth / 2 : 200)
   const ty = targetPosition?.y ?? (typeof window !== 'undefined' ? window.innerHeight / 2 : 400)
+  const startX = tx + 150
+  const startY = ty - 200
 
   useEffect(() => {
-    if (!show || runningRef.current) return
+    if (!show) {
+      runningRef.current = false
+      return
+    }
+    if (runningRef.current) return
     runningRef.current = true
 
     const rotation = (Math.random() - 0.5) * 24
@@ -28,47 +34,52 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
     const offsetY = (Math.random() - 0.5) * 8
 
     const run = async () => {
-      // ─── Approach ───────────────────────────────────────────────
+      // ─── Approach: stamper flies in from top-right ───────────────
       await Promise.all([
-        animateStamper(stamperScope.current, {
-          x: tx, y: ty,
-          scale: 1.15, opacity: 1, filter: 'blur(0px)',
-        }, { duration: 0.4, ease: 'easeOut' }),
-        animateShadow(shadowScope.current, {
-          x: tx, y: ty + 110,
-          scale: 1.4, opacity: 0.35,
-        }, { duration: 0.4, ease: 'easeOut' }),
+        stamperCtrl.start({
+          x: tx, y: ty, scale: 1.15, opacity: 1, filter: 'blur(0px)',
+          transition: { duration: 0.45, ease: 'easeOut' },
+        }),
+        shadowCtrl.start({
+          x: tx, y: ty + 110, scale: 1.4, opacity: 0.35,
+          transition: { duration: 0.45, ease: 'easeOut' },
+        }),
       ])
 
-      // ─── Impact ─────────────────────────────────────────────────
-      if (navigator.vibrate) navigator.vibrate(30)
+      // ─── Impact ──────────────────────────────────────────────────
+      if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(30)
       await Promise.all([
-        animateStamper(stamperScope.current, { scale: 0.92 }, { duration: 0.07, ease: 'easeIn' }),
-        animateShadow(shadowScope.current, { scale: 0.8, opacity: 0 }, { duration: 0.07 }),
+        stamperCtrl.start({ scale: 0.9, transition: { duration: 0.07 } }),
+        shadowCtrl.start({ scale: 0.7, opacity: 0, transition: { duration: 0.07 } }),
       ])
-      await animateStamper(stamperScope.current,
-        { rotate: [0, -3, 3, -2, 2, 0] },
-        { duration: 0.15, ease: 'easeInOut' }
-      )
+
+      // ─── Wobble ──────────────────────────────────────────────────
+      await stamperCtrl.start({
+        rotate: [0, -4, 4, -2, 2, 0],
+        transition: { duration: 0.2, ease: 'easeInOut' },
+      })
 
       // ─── Splash ──────────────────────────────────────────────────
-      animateSplash(splashScope.current,
-        { opacity: [1, 0], scale: [0.3, 1.3] },
-        { duration: 0.25, ease: 'easeOut' }
-      )
+      splashCtrl.start({
+        scale: [0.3, 1.4], opacity: [1, 0],
+        transition: { duration: 0.3, ease: 'easeOut' },
+      })
 
-      // ─── Stamp appears ───────────────────────────────────────────
-      await new Promise(r => setTimeout(r, 150))
-      await animateStamp(stampScope.current, {
-        opacity: 1, scale: 1, rotate: rotation, x: tx - 48 + offsetX, y: ty - 48 + offsetY,
-      }, { duration: 0.25, ease: 'easeOut' })
+      // ─── New stamp appears ────────────────────────────────────────
+      await new Promise(r => setTimeout(r, 100))
+      await stampCtrl.start({
+        scale: 1, opacity: 1, rotate: rotation,
+        x: tx - 48 + offsetX, y: ty - 48 + offsetY,
+        transition: { duration: 0.25, ease: 'easeOut' },
+      })
 
-      // ─── Exit ────────────────────────────────────────────────────
+      // ─── Exit: stamper lifts away ─────────────────────────────────
       await Promise.all([
-        animateStamper(stamperScope.current, {
-          scale: 1.3, opacity: 0, filter: 'blur(8px)',
-        }, { duration: 0.25, ease: 'easeIn' }),
-        animateStamp(stampScope.current, { opacity: 0 }, { duration: 0.2 }),
+        stamperCtrl.start({
+          y: ty - 300, scale: 0.5, opacity: 0, filter: 'blur(10px)',
+          transition: { duration: 0.35, ease: 'easeIn' },
+        }),
+        stampCtrl.start({ opacity: 0, transition: { duration: 0.2 } }),
       ])
 
       runningRef.current = false
@@ -78,35 +89,14 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
     run()
   }, [show]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Reset when hidden
-  useEffect(() => {
-    if (!show) {
-      runningRef.current = false
-      if (stamperScope.current) {
-        animateStamper(stamperScope.current, { opacity: 0, scale: 0.2 }, { duration: 0 })
-      }
-      if (shadowScope.current) {
-        animateShadow(shadowScope.current, { opacity: 0 }, { duration: 0 })
-      }
-      if (splashScope.current) {
-        animateSplash(splashScope.current, { opacity: 0 }, { duration: 0 })
-      }
-      if (stampScope.current) {
-        animateStamp(stampScope.current, { opacity: 0 }, { duration: 0 })
-      }
-    }
-  }, [show]) // eslint-disable-line react-hooks/exhaustive-deps
-
   if (!show) return null
-
-  const startX = tx + 150
-  const startY = ty - 200
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999]">
       {/* Shadow */}
       <motion.div
-        ref={shadowScope}
+        animate={shadowCtrl}
+        initial={{ x: startX, y: startY + 110, scale: 0.3, opacity: 0 }}
         style={{
           position: 'absolute',
           top: 0,
@@ -116,54 +106,33 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
           borderRadius: 999,
           background: 'rgba(0,0,0,0.25)',
           filter: 'blur(14px)',
-          x: startX,
-          y: startY + 110,
-          scale: 0.4,
-          opacity: 0,
         }}
       />
 
       {/* Stamper */}
       <motion.div
-        ref={stamperScope}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          x: startX,
-          y: startY,
-          scale: 0.2,
-          opacity: 0,
-          filter: 'blur(12px)',
-        }}
+        animate={stamperCtrl}
+        initial={{ x: startX, y: startY, scale: 0.2, opacity: 0, filter: 'blur(12px)' }}
+        style={{ position: 'absolute', top: 0, left: 0 }}
       >
         <img
           src="/image-assets/stamps/stamper.webp"
           alt="Stamper"
           style={{
-            width: 192,
-            height: 192,
+            width: 200,
+            height: 200,
             objectFit: 'contain',
             transform: 'rotate(5deg)',
             display: 'block',
-            border: 'none',
-            outline: 'none',
           }}
         />
       </motion.div>
 
       {/* Splash */}
       <motion.div
-        ref={splashScope}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          x: tx - 64,
-          y: ty - 64,
-          scale: 0.3,
-          opacity: 0,
-        }}
+        animate={splashCtrl}
+        initial={{ x: tx - 64, y: ty - 64, scale: 0.3, opacity: 0 }}
+        style={{ position: 'absolute', top: 0, left: 0 }}
       >
         <img
           src="/image-assets/stamps/beansplatter.webp"
@@ -172,18 +141,11 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
         />
       </motion.div>
 
-      {/* Stamp result */}
+      {/* Stamp result overlay */}
       <motion.div
-        ref={stampScope}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          x: tx - 48,
-          y: ty - 48,
-          scale: 1.4,
-          opacity: 0,
-        }}
+        animate={stampCtrl}
+        initial={{ x: tx - 48, y: ty - 48, scale: 1.4, opacity: 0 }}
+        style={{ position: 'absolute', top: 0, left: 0 }}
       >
         <img
           src="/image-assets/stamps/stamp.webp"
