@@ -174,7 +174,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
         style={{
           position: 'fixed',
           left: tx,
-          top: ty,
+          top: ty - 30,
           transform: 'translate(-50%, -50%)',
         }}
       >
