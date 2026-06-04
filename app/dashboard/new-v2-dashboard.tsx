@@ -53,6 +53,7 @@ export default function NewV2Dashboard() {
   const [showMaxBeansModal, setShowMaxBeansModal] = useState(false)
   const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
   const [showStampAnimation, setShowStampAnimation] = useState(false)
+  const [lastAnimatedBeanCount, setLastAnimatedBeanCount] = useState(0)
 
 
   // Real-time bean balance (disabled when showing QR code to avoid animation conflicts)
@@ -70,10 +71,19 @@ export default function NewV2Dashboard() {
     if (beansAwarded > 0) {
       setModalClosed(false) // Reset animation state
       setShowBeanModal(true)
-      // Trigger stamp animation
-      setShowStampAnimation(true)
     }
   }, [beansAwarded])
+
+  // Trigger stamp animation when panel opens with new beans
+  useEffect(() => {
+    if (showBeansPanel && beanBalance) {
+      const currentBeanCount = beanBalance.current_beans
+      if (currentBeanCount > lastAnimatedBeanCount) {
+        setShowStampAnimation(true)
+        setLastAnimatedBeanCount(currentBeanCount)
+      }
+    }
+  }, [showBeansPanel, beanBalance, lastAnimatedBeanCount])
 
   // Show modal when max beans reached
   useEffect(() => {
@@ -577,7 +587,7 @@ export default function NewV2Dashboard() {
                       key={i}
                       className="w-14 h-14 rounded-full flex items-center justify-center overflow-hidden"
                       style={{
-                        backgroundColor: filled ? '#E07A3A' : 'transparent',
+                        backgroundColor: 'transparent',
                         border: filled ? '2px solid #E07A3A' : '2px dashed #F0EDE5',
                       }}
                     >
