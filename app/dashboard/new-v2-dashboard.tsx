@@ -112,40 +112,52 @@ export default function NewV2Dashboard() {
 
   // Trigger stamp animation when panel opens
   useEffect(() => {
-    console.log('[Animation Trigger] showBeansPanel:', showBeansPanel, 'animationTriggered:', animationTriggered, 'beanBalance:', beanBalance)
+    console.log('[Animation Trigger] START - showBeansPanel:', showBeansPanel, 'animationTriggered:', animationTriggered, 'beanBalance:', beanBalance)
 
     if (!showBeansPanel) {
+      console.log('[Animation Trigger] Panel closed, resetting')
       setAnimationTriggered(false)
       return
     }
 
-    if (animationTriggered) return
+    if (animationTriggered) {
+      console.log('[Animation Trigger] Already triggered, skipping')
+      return
+    }
 
     const currentBeans = beanBalance?.current_beans ?? displayedBeanBalance?.current_beans ?? 0
     console.log('[Animation Trigger] currentBeans:', currentBeans)
 
-    console.log('[Animation Trigger] Triggering animation')
+    console.log('[Animation Trigger] === TRIGGERING ANIMATION ===')
     setAnimationTriggered(true)
     setDisplayedBeanCount(currentBeans - 1)
 
     const timer = setTimeout(() => {
+      console.log('[Animation Trigger] Timer fired - setting newlyStampedIndex')
       setNewlyStampedIndex(currentBeans - 1)
 
       const rect = stampGridRef.current?.getBoundingClientRect()
+      console.log('[Animation Trigger] stampGridRef.current:', stampGridRef.current, 'rect:', rect)
       if (rect) {
         setTargetPosition({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
-        console.log('[Animation Trigger] Target position:', { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
+        console.log('[Animation Trigger] Target position set:', { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
+      } else {
+        console.log('[Animation Trigger] NO RECT - using fallback')
       }
 
-      console.log('[Animation Trigger] Setting showStampAnimation to true')
+      console.log('[Animation Trigger] === SETTING showStampAnimation TO TRUE ===')
       setShowStampAnimation(true)
 
       setTimeout(() => {
+        console.log('[Animation Trigger] Card shake')
         setCardShake(true)
         setTimeout(() => setCardShake(false), 100)
       }, 400)
     }, 500)
-    return () => clearTimeout(timer)
+    return () => {
+      console.log('[Animation Trigger] Cleanup timer')
+      clearTimeout(timer)
+    }
   }, [showBeansPanel, beanBalance, animationTriggered])
 
   // Update displayed bean count after animation completes
@@ -678,9 +690,8 @@ export default function NewV2Dashboard() {
                         <img
                           src="/image-assets/stamps/stamp.png"
                           alt="Stamp"
-                          className="w-full h-full object-contain"
+                          className="w-[140%] h-[140%] object-cover -m-3"
                           style={{
-                            imageRendering: 'crisp-edges',
                             transform: `rotate(${variations.rotation}deg) translate(${variations.offsetX}px, ${variations.offsetY}px) scale(${variations.scale})`,
                           }}
                         />
