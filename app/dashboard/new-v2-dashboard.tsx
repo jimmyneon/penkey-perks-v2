@@ -109,11 +109,11 @@ export default function NewV2Dashboard() {
 
           setShowStampAnimation(true)
 
-          // Trigger card shake at impact (250ms after start)
+          // Trigger card shake at impact (500ms after start)
           setTimeout(() => {
             setCardShake(true)
             setTimeout(() => setCardShake(false), 100)
-          }, 250)
+          }, 500)
 
           // Update last bean count
           setLastBeanCountOnClose(currentBeans)

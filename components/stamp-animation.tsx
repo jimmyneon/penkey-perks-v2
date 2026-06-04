@@ -24,12 +24,12 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
     // Set random rotation for this stamp
     setStampRotation(randomRotations[Math.floor(Math.random() * randomRotations.length)])
 
-    // Timeline (total ~600ms):
+    // Timeline (total ~1200ms):
     // 0ms: stamper appears (approach)
-    // 250ms: impact
-    // 300ms: splash
-    // 450ms: stamp appears
-    // 600ms: stamper exits
+    // 500ms: impact
+    // 600ms: splash
+    // 900ms: stamp appears
+    // 1200ms: stamper exits
 
     setPhase('approach')
 
@@ -39,20 +39,20 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
       if (navigator.vibrate) {
         navigator.vibrate(50)
       }
-    }, 250)
+    }, 500)
 
     const splashTimer = setTimeout(() => {
       setPhase('splash')
-    }, 300)
+    }, 600)
 
     const stampTimer = setTimeout(() => {
       setPhase('stamp')
-    }, 450)
+    }, 900)
 
     const exitTimer = setTimeout(() => {
       setPhase('exit')
       onComplete?.()
-    }, 600)
+    }, 1200)
 
     return () => {
       clearTimeout(impactTimer)
@@ -102,7 +102,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                   filter: 'blur(8px)',
                 }}
                 transition={{
-                  duration: phase === 'approach' ? 0.25 : phase === 'impact' ? 0.05 : 0.15,
+                  duration: phase === 'approach' ? 0.5 : phase === 'impact' ? 0.1 : 0.3,
                   ease: phase === 'approach' ? 'easeOut' : 'easeInOut',
                 }}
                 style={{ border: 'none', outline: 'none' }}
@@ -120,7 +120,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                   <img
                     src="/image-assets/stamps/stamper.png"
                     alt="Stamper"
-                    className="w-96 h-96 object-contain"
+                    className="w-[30rem] h-[30rem] object-contain"
                     style={{ transform: 'rotate(5deg)', border: 'none', outline: 'none' }}
                   />
                 </motion.div>
