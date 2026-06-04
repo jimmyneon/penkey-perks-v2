@@ -1,7 +1,7 @@
 -- Add image_url column to voucher_templates
 ALTER TABLE public.voucher_templates ADD COLUMN IF NOT EXISTS image_url TEXT;
 
--- Update existing voucher templates with image URLs (using full-size PNGs)
+-- Update existing voucher templates with image URLs (using 500px icon versions)
 UPDATE public.voucher_templates 
 SET image_url = '/vouchers/syrup.png'
 WHERE name = 'Free Syrup';

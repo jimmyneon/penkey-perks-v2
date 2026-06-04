@@ -18,8 +18,8 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
 
   const tx = targetPosition?.x ?? (typeof window !== 'undefined' ? window.innerWidth / 2 : 200)
   const ty = targetPosition?.y ?? (typeof window !== 'undefined' ? window.innerHeight / 2 : 400)
-  const startX = tx + 100
-  const startY = ty - 150
+  const startX = tx
+  const startY = ty - 200
 
   useEffect(() => {
     console.log('[StampAnimation] show:', show, 'runningRef:', runningRef.current, 'targetPosition:', targetPosition)
