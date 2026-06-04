@@ -18,8 +18,8 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
 
   const tx = targetPosition?.x ?? (typeof window !== 'undefined' ? window.innerWidth / 2 : 200)
   const ty = targetPosition?.y ?? (typeof window !== 'undefined' ? window.innerHeight / 2 : 400)
-  const startX = tx - 200
-  const startY = ty - 300
+  const startX = tx + 100
+  const startY = ty - 150
 
   useEffect(() => {
     console.log('[StampAnimation] show:', show, 'runningRef:', runningRef.current, 'targetPosition:', targetPosition)
@@ -116,7 +116,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
       {/* Stamper */}
       <motion.div
         animate={stamperCtrl}
-        initial={{ x: startX, y: startY, scale: 0.2, opacity: 0, filter: 'blur(12px)' }}
+        initial={{ x: startX, y: startY, scale: 1.0, opacity: 0, filter: 'blur(12px)' }}
         style={{ position: 'absolute', top: 0, left: 0 }}
       >
         <img
