@@ -127,7 +127,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
         />
       </div>
 
-      {/* Stamper */}
+      {/* Stamp result overlay - underneath stamper */}
       <div
         style={{
           position: 'fixed',
@@ -137,19 +137,13 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
         }}
       >
         <motion.div
-          animate={stamperCtrl}
-          initial={{ scale: 1.0, opacity: 0, filter: 'blur(12px)' }}
+          animate={stampCtrl}
+          initial={{ scale: 1.4, opacity: 0 }}
         >
           <img
-            src="/image-assets/stamps/stamper.png"
-            alt="Stamper"
-            style={{
-              width: 'clamp(700px, 180vw, 1000px)',
-              height: 'auto',
-              objectFit: 'contain',
-              transform: 'rotate(5deg)',
-              display: 'block',
-            }}
+            src="/image-assets/stamps/stamp.png"
+            alt="Stamp"
+            style={{ width: 96, height: 96, objectFit: 'contain', display: 'block' }}
           />
         </motion.div>
       </div>
@@ -175,7 +169,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
         </motion.div>
       </div>
 
-      {/* Stamp result overlay */}
+      {/* Stamper - on top */}
       <div
         style={{
           position: 'fixed',
@@ -185,13 +179,19 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
         }}
       >
         <motion.div
-          animate={stampCtrl}
-          initial={{ scale: 1.4, opacity: 0 }}
+          animate={stamperCtrl}
+          initial={{ scale: 1.0, opacity: 0, filter: 'blur(12px)' }}
         >
           <img
-            src="/image-assets/stamps/stamp.png"
-            alt="Stamp"
-            style={{ width: 96, height: 96, objectFit: 'contain', display: 'block' }}
+            src="/image-assets/stamps/stamper.png"
+            alt="Stamper"
+            style={{
+              width: 'clamp(700px, 180vw, 1000px)',
+              height: 'auto',
+              objectFit: 'contain',
+              transform: 'rotate(5deg)',
+              display: 'block',
+            }}
           />
         </motion.div>
       </div>
