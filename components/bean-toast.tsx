@@ -42,7 +42,7 @@ export function BeanModal({ show, beansAwarded, onClose, description }: BeanModa
               </p>
               <p className="text-[13px] mt-2 leading-snug" style={{ color: '#5A6A7A' }}>
                 {friendlyMessage}{' '}
-                <img src="/heart.png" alt="" className="inline-block w-4 h-4 object-contain align-middle" style={{ transform: 'rotate(-10deg)' }} />
+                <img src="/heart.webp" alt="" className="inline-block w-4 h-4 object-contain align-middle" style={{ transform: 'rotate(-10deg)' }} />
               </p>
             </div>
           </div>

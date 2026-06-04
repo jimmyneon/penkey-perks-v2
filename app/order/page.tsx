@@ -352,7 +352,7 @@ export default function OrderPage() {
               <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
                 {mounted ? getGreeting() : 'Hello'},{' '}
                 <img
-                  src="/heart.png"
+                  src="/heart.webp"
                   alt=""
                   className="inline-block w-5 h-5 object-contain align-middle"
                   style={{ marginBottom: '2px', animation: 'heartPulse 1.2s ease-in-out 3' }}

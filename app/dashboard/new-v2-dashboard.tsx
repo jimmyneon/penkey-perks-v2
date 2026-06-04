@@ -292,7 +292,7 @@ export default function NewV2Dashboard() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F4F1EA' }}>
-        <img src="/logo.png" alt="Penkey Perks" className="w-32 h-32 object-contain opacity-80" />
+        <img src="/logo.webp" alt="Penkey Perks" className="w-32 h-32 object-contain opacity-80" />
       </div>
     )
   }
@@ -342,7 +342,7 @@ export default function NewV2Dashboard() {
             {/* Right: Cup Illy image */}
             <div className="flex-shrink-0">
               <img
-                src="/image-assets/cupilli.png"
+                src="/cupilli.webp"
                 alt="Cup Illy"
                 className="w-40 h-40 object-contain"
               />
@@ -361,7 +361,7 @@ export default function NewV2Dashboard() {
                 onClick={() => setShowBeansPanel(true)}
               >
                 {/* Bean pile background */}
-                <img src="/beanpile.png" alt="" className="absolute inset-0 w-full h-full object-cover opacity-15" style={{ transform: 'scale(0.8)' }} />
+                <img src="/beanpile.webp" alt="" className="absolute inset-0 w-full h-full object-cover opacity-15" style={{ transform: 'scale(0.8)' }} />
                 
                 <div className="relative z-10">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#F0EDE5' }}>
@@ -372,7 +372,7 @@ export default function NewV2Dashboard() {
                       <FlipNumber value={currentBeans} className={`text-[56px] font-extrabold leading-none ${triggerAnimation ? 'animate-bean-glow' : ''}`} style={{ color: '#F0EDE5' }} />
                     </div>
                     <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>{currentBeans === 1 ? 'bean' : 'beans'}</p>
-                    <img src="/stroke.png" alt="" className="w-24 h-2 object-contain mt-1 opacity-60" style={{ marginLeft: '-12px' }} />
+                    <img src="/stroke.webp" alt="" className="w-24 h-2 object-contain mt-1 opacity-60" style={{ marginLeft: '-12px' }} />
                   </div>
                 </div>
                 <Link href="/rewards" className="inline-flex items-center gap-1 text-[11px] font-semibold relative z-10" style={{ color: '#F28A2E' }} onClick={(e) => e.stopPropagation()}>
@@ -402,7 +402,7 @@ export default function NewV2Dashboard() {
                         className="w-56 h-56 object-contain"
                       />
                     ) : (
-                      <img src="/coffeecup.png" alt="" className="w-56 h-56 object-contain" />
+                      <img src="/coffeecup.webp" alt="" className="w-56 h-56 object-contain" />
                     )}
                   </div>
                 </div>
@@ -436,9 +436,9 @@ export default function NewV2Dashboard() {
             >
               <div className="w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
                 <img
-                  src="/vouchers/voucher.png"
+                  src="/vouchers/voucher.webp"
                   alt="Vouchers"
-                  className="w-full h-full object-cover"
+                  className="w-[85%] h-[85%] object-contain"
                 />
               </div>
               <div className="flex-1 min-w-0">
@@ -459,10 +459,10 @@ export default function NewV2Dashboard() {
               <h3 className="text-[16px] font-extrabold mb-4" style={{ color: '#24364B' }}>How it works</h3>
               <div className="grid grid-cols-4 gap-3 mb-4">
                 {[
-                  { img: '/howworks/1.png', label: 'Visit Penkey', num: 1 },
-                  { img: '/howworks/2.png', label: 'Show QR code', num: 2 },
-                  { img: '/howworks/3.png', label: 'Earn beans', num: 3 },
-                  { img: '/howworks/4.png', label: 'Enjoy rewards', num: 4 },
+                  { img: '/howworks/1.webp', label: 'Visit Penkey', num: 1 },
+                  { img: '/howworks/2.webp', label: 'Show QR code', num: 2 },
+                  { img: '/howworks/3.webp', label: 'Earn beans', num: 3 },
+                  { img: '/howworks/4.webp', label: 'Enjoy rewards', num: 4 },
                 ].map((step) => (
                   <div key={step.img} className="text-center">
                     <div className="w-20 h-20 rounded-full mx-auto mb-2 flex items-center justify-center relative" style={{ backgroundColor: '#FFF0E4' }}>
@@ -483,7 +483,7 @@ export default function NewV2Dashboard() {
                 className="inline-flex items-center gap-2 text-[12px] font-semibold"
                 style={{ color: '#E07A3A' }}
               >
-                <img src="/heart.png" alt="" className="w-4 h-4 object-contain" />
+                <img src="/heart.webp" alt="" className="w-4 h-4 object-contain" />
                 View all rewards
               </Link>
             </div>
@@ -494,7 +494,7 @@ export default function NewV2Dashboard() {
             <div className="flex items-center p-4">
               <div className="flex items-center gap-3 flex-1">
                 <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                  <img src="/heart.png" alt="" className="w-5 h-5 object-contain" />
+                  <img src="/heart.webp" alt="" className="w-5 h-5 object-contain" />
                 </div>
                 <div className="text-left">
                   <p className="text-base font-bold" style={{ color: '#24364B' }}>Thanks for supporting local</p>
@@ -502,7 +502,7 @@ export default function NewV2Dashboard() {
                 </div>
               </div>
               <div className="w-32 h-32 flex-shrink-0">
-                <img src="/local.png" alt="" className="w-full h-full object-contain" />
+                <img src="/local.webp" alt="" className="w-full h-full object-contain" />
               </div>
             </div>
           </div>
@@ -550,7 +550,7 @@ export default function NewV2Dashboard() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <img src="/coffeecup.png" alt="" className="w-14 h-14 object-contain" />
+                    <img src="/coffeecup.webp" alt="" className="w-14 h-14 object-contain" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -632,7 +632,7 @@ export default function NewV2Dashboard() {
           )}
 
           <div className="flex items-center gap-2">
-            <img src="/heart.png" alt="" className="w-4 h-4 object-contain" />
+            <img src="/heart.webp" alt="" className="w-4 h-4 object-contain" />
             <p className="text-[12px]" style={{ color: '#8A96A0' }}>Swipe down to close</p>
           </div>
         </div>

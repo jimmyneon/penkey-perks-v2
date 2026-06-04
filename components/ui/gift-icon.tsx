@@ -7,7 +7,7 @@ interface GiftIconProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 export function GiftIcon({ className = '', ...props }: GiftIconProps) {
   return (
     <img
-      src="/gift.png"
+      src="/gift.webp"
       alt=""
       className={className}
       {...props}

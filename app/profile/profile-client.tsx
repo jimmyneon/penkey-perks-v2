@@ -387,7 +387,7 @@ export function ProfileClient({ user: initialUser, beanBalance: initialBeanBalan
         <div className="flex-1">
           <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
             {name ? `${mounted ? getGreeting() : 'Hello'}, ` : 'Your profile'}
-            {name && <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px', animation: 'heartPulse 1.2s ease-in-out 3' }} />}
+            {name && <img src="/heart.webp" alt="" className="inline-block w-5 h-5 object-contain align-middle" style={{ marginBottom: '2px', animation: 'heartPulse 1.2s ease-in-out 3' }} />}
           </p>
           <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#24364B' }}>
             {name ? name.split(' ')[0] : 'Profile'}
@@ -460,9 +460,9 @@ export function ProfileClient({ user: initialUser, beanBalance: initialBeanBalan
             {/* voucher image or fallback icon */}
             <div className="relative flex-shrink-0">
               <img
-                src="/vouchers/voucher.png"
+                src="/vouchers/voucher.webp"
                 alt="Vouchers"
-                className="w-24 h-24 rounded-[14px] object-cover"
+                className="w-24 h-24 rounded-[14px] object-contain"
               />
               <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-extrabold text-white" style={{ backgroundColor: '#E07A3A' }}>{userVouchers.length}</div>
             </div>
@@ -514,7 +514,7 @@ export function ProfileClient({ user: initialUser, beanBalance: initialBeanBalan
           <div className="flex items-center p-4">
             <div className="flex items-center gap-3 flex-1">
               <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                <img src="/heart.png" alt="" className="w-5 h-5 object-contain" />
+                <img src="/heart.webp" alt="" className="w-5 h-5 object-contain" />
               </div>
               <div className="text-left">
                 <p className="text-base font-bold" style={{ color: '#24364B' }}>Thanks for supporting local</p>
@@ -522,7 +522,7 @@ export function ProfileClient({ user: initialUser, beanBalance: initialBeanBalan
               </div>
             </div>
             <div className="w-32 h-32 flex-shrink-0">
-              <img src="/local.png" alt="" className="w-full h-full object-contain" />
+              <img src="/local.webp" alt="" className="w-full h-full object-contain" />
             </div>
           </div>
         </div>

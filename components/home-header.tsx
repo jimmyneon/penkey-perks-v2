@@ -27,7 +27,7 @@ export function HomeHeader({ userName, beanCount }: HomeHeaderProps) {
           <Bell className="w-5 h-5 text-[#7B1234]" />
         </button>
         <img
-          src="/image-assets/cupilli.png"
+          src="/image-assets/cupilli.webp"
           alt="Cup Illy"
           className="w-32 h-32 object-contain"
         />

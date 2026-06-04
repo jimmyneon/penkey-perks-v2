@@ -228,7 +228,7 @@ export function BottomNav({ onShowQRCode }: BottomNavProps) {
           </div>
           
           <div className="flex items-center gap-2">
-            <img src="/heart.png" alt="" className="w-4 h-4 object-contain" />
+            <img src="/heart.webp" alt="" className="w-4 h-4 object-contain" />
             <p className="text-[12px]" style={{ color: '#8A96A0' }}>
               Swipe down to close
             </p>

@@ -7,7 +7,7 @@ interface SparkLinesProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 export function SparkLines({ className = '', ...props }: SparkLinesProps) {
   return (
     <img
-      src="/sparks.png"
+      src="/sparks.webp"
       alt=""
       className={className}
       {...props}

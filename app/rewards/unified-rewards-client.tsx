@@ -255,7 +255,7 @@ export function UnifiedRewardsClient({
       <div className="px-5 pt-14 pb-5">
         <p className="text-[24px] font-bold leading-tight text-[#E07A3A] font-cursive">
           Your Rewards{' '}
-          <img src="/heart.png" alt="" className="inline-block w-5 h-5 object-contain align-middle mb-0.5" />
+          <img src="/heart.webp" alt="" className="inline-block w-5 h-5 object-contain align-middle mb-0.5" />
         </p>
         <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5 text-[#1C2B3A]">Rewards</h1>
         <p className="text-[13px] font-medium mt-1.5 leading-snug text-[#8A96A0]">
@@ -271,10 +271,10 @@ export function UnifiedRewardsClient({
             <h3 className="text-[16px] font-extrabold mb-4" style={{ color: '#24364B' }}>How it works</h3>
             <div className="grid grid-cols-4 gap-3 mb-4">
               {[
-                { img: '/howworks/1.png', label: 'Visit Penkey', num: 1 },
-                { img: '/howworks/2.png', label: 'Show QR code', num: 2 },
-                { img: '/howworks/3.png', label: 'Earn beans', num: 3 },
-                { img: '/howworks/4.png', label: 'Enjoy rewards', num: 4 },
+                { img: '/howworks/1.webp', label: 'Visit Penkey', num: 1 },
+                { img: '/howworks/2.webp', label: 'Show QR code', num: 2 },
+                { img: '/howworks/3.webp', label: 'Earn beans', num: 3 },
+                { img: '/howworks/4.webp', label: 'Enjoy rewards', num: 4 },
               ].map((step) => (
                 <div key={step.img} className="text-center">
                   <div className="w-20 h-20 rounded-full mx-auto mb-2 flex items-center justify-center relative" style={{ backgroundColor: '#FFF0E4' }}>
@@ -338,9 +338,9 @@ export function UnifiedRewardsClient({
                       }}
                     >
                       {filled ? (
-                        <img src="/bean.png" alt="" className="w-5 h-5 object-contain" />
+                        <img src="/bean.webp" alt="" className="w-5 h-5 object-contain" />
                       ) : (
-                        <img src="/bean.png" alt="" className="w-5 h-5 object-contain brightness-[0.4] grayscale-[0.5] opacity-60" />
+                        <img src="/bean.webp" alt="" className="w-5 h-5 object-contain brightness-[0.4] grayscale-[0.5] opacity-60" />
                       )}
                     </div>
                   )

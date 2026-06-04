@@ -7,7 +7,7 @@ interface BrushUnderlineProps extends React.ImgHTMLAttributes<HTMLImageElement> 
 export function BrushUnderline({ className = '', ...props }: BrushUnderlineProps) {
   return (
     <img
-      src="/stroke.png"
+      src="/stroke.webp"
       alt=""
       className={className}
       {...props}
