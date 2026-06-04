@@ -672,7 +672,7 @@ export default function NewV2Dashboard() {
                         <img
                           src="/image-assets/stamps/stamp.webp"
                           alt="Stamp"
-                          className="w-[140%] h-[140%] object-cover -m-3"
+                          className="w-full h-full object-contain"
                           style={{
                             transform: `rotate(${variations.rotation}deg) translate(${variations.offsetX}px, ${variations.offsetY}px) scale(${variations.scale})`,
                           }}
@@ -745,6 +745,14 @@ export default function NewV2Dashboard() {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Stamp animation - outside Dialog to avoid clipping */}
+      <StampAnimation
+        key={newlyStampedIndex ?? 'stamp'}
+        show={showStampAnimation}
+        targetPosition={targetPosition || undefined}
+        onComplete={() => setShowStampAnimation(false)}
+      />
 
       {/* Rewards Panel Dialog - Full Screen */}
       <Dialog open={showRewardsPanel} onOpenChange={setShowRewardsPanel}>
@@ -1027,14 +1035,6 @@ export default function NewV2Dashboard() {
         message={maxBeansMessage}
         onClose={handleMaxBeansModalClose}
         onConvertToVouchers={() => setShowMaxBeansModal(false)}
-      />
-
-      {/* Stamp animation - key forces clean remount each time */}
-      <StampAnimation
-        key={newlyStampedIndex ?? 'stamp'}
-        show={showStampAnimation}
-        targetPosition={targetPosition || undefined}
-        onComplete={() => setShowStampAnimation(false)}
       />
     </div>
   )
