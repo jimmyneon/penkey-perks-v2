@@ -53,7 +53,6 @@ export default function NewV2Dashboard() {
   const [showMaxBeansModal, setShowMaxBeansModal] = useState(false)
   const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
   const [showStampAnimation, setShowStampAnimation] = useState(false)
-  const [lastAnimatedBeanCount, setLastAnimatedBeanCount] = useState(0)
 
 
   // Real-time bean balance (disabled when showing QR code to avoid animation conflicts)
@@ -74,16 +73,12 @@ export default function NewV2Dashboard() {
     }
   }, [beansAwarded])
 
-  // Trigger stamp animation when panel opens with new beans
+  // Trigger stamp animation when panel opens
   useEffect(() => {
-    if (showBeansPanel && beanBalance) {
-      const currentBeanCount = beanBalance.current_beans
-      if (currentBeanCount > lastAnimatedBeanCount) {
-        setShowStampAnimation(true)
-        setLastAnimatedBeanCount(currentBeanCount)
-      }
+    if (showBeansPanel && beanBalance && beanBalance.current_beans > 0) {
+      setShowStampAnimation(true)
     }
-  }, [showBeansPanel, beanBalance, lastAnimatedBeanCount])
+  }, [showBeansPanel, beanBalance])
 
   // Show modal when max beans reached
   useEffect(() => {
@@ -595,7 +590,7 @@ export default function NewV2Dashboard() {
                         <img
                           src="/image-assets/stamps/stamp.png"
                           alt="Stamp"
-                          className="w-[120%] h-[120%] object-cover -m-2"
+                          className="w-[140%] h-[140%] object-cover -m-3"
                         />
                       ) : (
                         <span className="text-[10px] font-semibold" style={{ color: '#F0EDE5', opacity: 0.5 }}>
