@@ -95,63 +95,57 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999]">
-      {/* Debug marker */}
-      <div style={{
-        position: 'fixed',
-        left: tx,
-        top: ty,
-        width: 10,
-        height: 10,
-        background: 'red',
-        zIndex: 999999,
-        transform: 'translate(-50%, -50%)'
-      }} />
-
       {/* Shadow */}
-      <motion.div
-        animate={shadowCtrl}
-        initial={{ scale: 0.3, opacity: 0 }}
+      <div
         style={{
           position: 'fixed',
           left: tx,
           top: ty + 50,
-          width: 90,
-          height: 28,
-          borderRadius: 999,
-          background: 'rgba(0,0,0,0.25)',
-          filter: 'blur(14px)',
-          transform: 'translate(-50%, -50%)',
-        }}
-      />
-
-      {/* Stamper */}
-      <motion.div
-        animate={stamperCtrl}
-        initial={{ scale: 1.0, opacity: 0, filter: 'blur(12px)' }}
-        style={{
-          position: 'fixed',
-          left: tx,
-          top: ty,
           transform: 'translate(-50%, -50%)',
         }}
       >
-        <img
-          src="/image-assets/stamps/stamper.png"
-          alt="Stamper"
+        <motion.div
+          animate={shadowCtrl}
+          initial={{ scale: 0.3, opacity: 0 }}
           style={{
-            width: 2000,
-            height: 2000,
-            objectFit: 'contain',
-            transform: 'rotate(5deg)',
-            display: 'block',
+            width: 90,
+            height: 28,
+            borderRadius: 999,
+            background: 'rgba(0,0,0,0.25)',
+            filter: 'blur(14px)',
           }}
         />
-      </motion.div>
+      </div>
+
+      {/* Stamper */}
+      <div
+        style={{
+          position: 'fixed',
+          left: tx,
+          top: ty,
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        <motion.div
+          animate={stamperCtrl}
+          initial={{ scale: 1.0, opacity: 0, filter: 'blur(12px)' }}
+        >
+          <img
+            src="/image-assets/stamps/stamper.png"
+            alt="Stamper"
+            style={{
+              width: 'min(360px, 460px)',
+              height: 'min(360px, 460px)',
+              objectFit: 'contain',
+              transform: 'rotate(5deg)',
+              display: 'block',
+            }}
+          />
+        </motion.div>
+      </div>
 
       {/* Splash */}
-      <motion.div
-        animate={splashCtrl}
-        initial={{ scale: 0.3, opacity: 0 }}
+      <div
         style={{
           position: 'fixed',
           left: tx,
@@ -159,17 +153,20 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
           transform: 'translate(-50%, -50%)',
         }}
       >
-        <img
-          src="/image-assets/stamps/beansplatter.png"
-          alt="Splash"
-          style={{ width: 128, height: 128, objectFit: 'contain', display: 'block' }}
-        />
-      </motion.div>
+        <motion.div
+          animate={splashCtrl}
+          initial={{ scale: 0.3, opacity: 0 }}
+        >
+          <img
+            src="/image-assets/stamps/beansplatter.png"
+            alt="Splash"
+            style={{ width: 220, height: 220, objectFit: 'contain', display: 'block' }}
+          />
+        </motion.div>
+      </div>
 
       {/* Stamp result overlay */}
-      <motion.div
-        animate={stampCtrl}
-        initial={{ scale: 1.4, opacity: 0 }}
+      <div
         style={{
           position: 'fixed',
           left: tx,
@@ -177,12 +174,17 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
           transform: 'translate(-50%, -50%)',
         }}
       >
-        <img
-          src="/image-assets/stamps/stamp.png"
-          alt="Stamp"
-          style={{ width: 96, height: 96, objectFit: 'contain', display: 'block' }}
-        />
-      </motion.div>
+        <motion.div
+          animate={stampCtrl}
+          initial={{ scale: 1.4, opacity: 0 }}
+        >
+          <img
+            src="/image-assets/stamps/stamp.png"
+            alt="Stamp"
+            style={{ width: 96, height: 96, objectFit: 'contain', display: 'block' }}
+          />
+        </motion.div>
+      </div>
     </div>
   )
 }
