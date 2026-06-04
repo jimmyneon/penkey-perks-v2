@@ -22,6 +22,8 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
   const startY = ty - 200
 
   useEffect(() => {
+    console.log('[StampAnimation] show:', show, 'runningRef:', runningRef.current, 'targetPosition:', targetPosition)
+
     if (!show) {
       runningRef.current = false
       return
@@ -116,7 +118,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
         style={{ position: 'absolute', top: 0, left: 0 }}
       >
         <img
-          src="/image-assets/stamps/stamper.webp"
+          src="/image-assets/stamps/stamper.png"
           alt="Stamper"
           style={{
             width: 200,
@@ -135,7 +137,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
         style={{ position: 'absolute', top: 0, left: 0 }}
       >
         <img
-          src="/image-assets/stamps/beansplatter.webp"
+          src="/image-assets/stamps/beansplatter.png"
           alt="Splash"
           style={{ width: 128, height: 128, objectFit: 'contain', display: 'block' }}
         />
@@ -148,7 +150,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
         style={{ position: 'absolute', top: 0, left: 0 }}
       >
         <img
-          src="/image-assets/stamps/stamp.webp"
+          src="/image-assets/stamps/stamp.png"
           alt="Stamp"
           style={{ width: 96, height: 96, objectFit: 'contain', display: 'block' }}
         />

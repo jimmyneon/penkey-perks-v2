@@ -111,6 +111,8 @@ export default function NewV2Dashboard() {
 
   // Trigger stamp animation when panel opens
   useEffect(() => {
+    console.log('[Animation Trigger] showBeansPanel:', showBeansPanel, 'animationTriggered:', animationTriggered, 'beanBalance:', beanBalance)
+
     if (!showBeansPanel) {
       setAnimationTriggered(false)
       return
@@ -119,8 +121,11 @@ export default function NewV2Dashboard() {
     if (animationTriggered) return
 
     const currentBeans = beanBalance?.current_beans ?? displayedBeanBalance?.current_beans ?? 0
+    console.log('[Animation Trigger] currentBeans:', currentBeans)
+
     if (currentBeans === 0) return
 
+    console.log('[Animation Trigger] Triggering animation')
     setAnimationTriggered(true)
     setDisplayedBeanCount(currentBeans - 1)
 
@@ -131,8 +136,10 @@ export default function NewV2Dashboard() {
       if (stampGrid) {
         const rect = stampGrid.getBoundingClientRect()
         setTargetPosition({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
+        console.log('[Animation Trigger] Target position:', { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
       }
 
+      console.log('[Animation Trigger] Setting showStampAnimation to true')
       setShowStampAnimation(true)
 
       setTimeout(() => {
@@ -670,9 +677,9 @@ export default function NewV2Dashboard() {
                     >
                       {filled ? (
                         <img
-                          src="/image-assets/stamps/stamp.webp"
+                          src="/image-assets/stamps/stamp.png"
                           alt="Stamp"
-                          className="w-full h-full object-contain"
+                          className="w-[140%] h-[140%] object-cover -m-3"
                           style={{
                             transform: `rotate(${variations.rotation}deg) translate(${variations.offsetX}px, ${variations.offsetY}px) scale(${variations.scale})`,
                           }}
