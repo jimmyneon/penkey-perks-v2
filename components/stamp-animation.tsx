@@ -138,7 +138,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
         style={{
           position: 'fixed',
           left: tx,
-          top: ty,
+          top: ty - 120,
           transform: 'translate(-50%, -50%)',
         }}
       >
@@ -150,7 +150,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
             src="/image-assets/stamps/stamper.png"
             alt="Stamper"
             style={{
-              width: 'clamp(600px, 150vw, 900px)',
+              width: 'clamp(700px, 170vw, 1000px)',
               height: 'auto',
               objectFit: 'contain',
               transform: 'rotate(5deg)',
