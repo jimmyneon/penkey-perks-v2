@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { getActiveVouchers, getNextRewardThreshold } from '@/lib/supabase/queries'
 import { useBeanBalanceRealtime } from '@/hooks/use-bean-balance-realtime'
@@ -76,25 +76,26 @@ export default function NewV2Dashboard() {
   const [newlyStampedIndex, setNewlyStampedIndex] = useState<number | null>(null)
   const [targetPosition, setTargetPosition] = useState<{ x: number; y: number } | null>(null)
   const [cardShake, setCardShake] = useState(false)
-  const [lastBeanCountOnClose, setLastBeanCountOnClose] = useState(0)
   const [displayedBeanCount, setDisplayedBeanCount] = useState(0)
   const [animationTriggered, setAnimationTriggered] = useState(false)
-  const [beansAwardedSinceClose, setBeansAwardedSinceClose] = useState(false)
+  const lastClosedBeansRef = useRef(-1) // -1 = not yet initialized
 
 
   // Real-time bean balance (disabled when showing QR code to avoid animation conflicts)
   const { beanBalance, beansAwarded, beanDescription, maxBeansReached, maxBeansMessage } = useBeanBalanceRealtime(user?.id || null, showVoucherQR)
 
-  // Only update displayed balance if modal is not open and animation is not running
+  // Initialize + keep displayed balance in sync when modal/animation not active
   useEffect(() => {
-    if (beanBalance && !showBeanModal && !animationTriggered) {
+    if (!beanBalance) return
+    // Initialize the ref on first load
+    if (lastClosedBeansRef.current === -1) {
+      lastClosedBeansRef.current = beanBalance.current_beans
+    }
+    if (!showBeanModal && !animationTriggered) {
       setDisplayedBeanBalance(beanBalance)
       setDisplayedBeanCount(beanBalance.current_beans)
-      setLastBeanCountOnClose(beanBalance.current_beans)
       setLoading(false)
-    }
-    if (beanBalance && !showBeanModal && animationTriggered) {
-      // Still update the balance reference but don't touch displayedBeanCount
+    } else if (!showBeanModal && animationTriggered) {
       setDisplayedBeanBalance(beanBalance)
       setLoading(false)
     }
@@ -103,59 +104,53 @@ export default function NewV2Dashboard() {
   // Show modal when beans are awarded
   useEffect(() => {
     if (beansAwarded > 0) {
-      setModalClosed(false) // Reset animation state
+      setModalClosed(false)
       setShowBeanModal(true)
-      setBeansAwardedSinceClose(true)
     }
   }, [beansAwarded])
 
-  // Trigger stamp animation when panel opens with new beans
+  // Trigger stamp animation when panel opens and there are new beans
   useEffect(() => {
-    console.log('Animation trigger check:', { showBeansPanel, beansAwardedSinceClose, animationTriggered })
-    if (showBeansPanel && !animationTriggered && beansAwardedSinceClose) {
-      const currentBeans = displayedBeanBalance?.current_beans || beanBalance?.current_beans || 0
-      console.log('Triggering stamp animation with delay, current beans:', currentBeans)
+    if (!showBeansPanel) {
+      // Panel closed — record current beans so we can detect new ones next open
+      const current = beanBalance?.current_beans ?? 0
+      if (lastClosedBeansRef.current !== -1) {
+        lastClosedBeansRef.current = current
+      }
+      setAnimationTriggered(false)
+      return
+    }
+
+    if (animationTriggered) return
+
+    const currentBeans = beanBalance?.current_beans ?? 0
+    const hasNewBeans = currentBeans > lastClosedBeansRef.current && lastClosedBeansRef.current !== -1
+
+    if (hasNewBeans) {
       setAnimationTriggered(true)
-      setBeansAwardedSinceClose(false)
-      // Start with one less bean displayed
       setDisplayedBeanCount(currentBeans - 1)
 
       const timer = setTimeout(() => {
         setNewlyStampedIndex(currentBeans - 1)
 
-        // Calculate target position for the general stamp grid area
         const stampGrid = document.querySelector('.grid-cols-5') as HTMLElement
         if (stampGrid) {
           const rect = stampGrid.getBoundingClientRect()
-          setTargetPosition({
-            x: rect.left + rect.width / 2,
-            y: rect.top + rect.height / 2,
-          })
+          setTargetPosition({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
         }
 
         setShowStampAnimation(true)
-        console.log('Animation triggered')
 
-        // Trigger card shake at impact (400ms after start)
         setTimeout(() => {
           setCardShake(true)
           setTimeout(() => setCardShake(false), 100)
         }, 400)
       }, 500)
       return () => clearTimeout(timer)
-    } else if (showBeansPanel && !animationTriggered) {
-      // No new beans, show current count
-      const currentBeans = displayedBeanBalance?.current_beans || beanBalance?.current_beans || 0
+    } else {
       setDisplayedBeanCount(currentBeans)
     }
-  }, [showBeansPanel, beansAwardedSinceClose, displayedBeanBalance, beanBalance, animationTriggered])
-
-  // Reset animation flag when panel closes
-  useEffect(() => {
-    if (!showBeansPanel) {
-      setAnimationTriggered(false)
-    }
-  }, [showBeansPanel])
+  }, [showBeansPanel, beanBalance, animationTriggered])
 
   // Update displayed bean count after animation completes
   useEffect(() => {
