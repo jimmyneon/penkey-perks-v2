@@ -29,7 +29,7 @@ export function BottomSheet({
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     const shouldClose =
-      info.offset.y > 120 || info.velocity.y > 700
+      info.offset.y > 80 || info.velocity.y > 450
 
     if (shouldClose) {
       onOpenChange(false)
@@ -99,7 +99,7 @@ export function BottomSheet({
             dragControls={dragControls}
             dragListener={false}
             dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={0.05}
+            dragElastic={0.12}
             onDragEnd={handleDragEnd}
             style={{ y }}
             className={cn(
@@ -108,35 +108,36 @@ export function BottomSheet({
               className
             )}
           >
-            {/* Handle - drag area */}
+            {/* Drag header - larger drag area */}
             <div
               onPointerDown={(e) => dragControls.start(e)}
-              className="flex justify-center pt-3 pb-2 cursor-grab active:cursor-grabbing"
+              className="cursor-grab active:cursor-grabbing touch-none"
             >
-              <div className="w-12 h-1.5 bg-brown/20 rounded-full" />
-            </div>
-            
-            {/* Header */}
-            {(title || showCloseButton) && (
-              <div className="flex items-center justify-between px-5 pb-4">
-                {title && (
-                  <h2 className="text-xl font-bold text-brown">{title}</h2>
-                )}
-                {!title && <div />}
-                {showCloseButton && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      e.preventDefault()
-                      onOpenChange(false)
-                    }}
-                    className="p-2 rounded-full hover:bg-blush transition-colors"
-                  >
-                    <X className="w-5 h-5 text-brown" />
-                  </button>
-                )}
+              <div className="flex justify-center pt-4 pb-3">
+                <div className="w-12 h-1.5 bg-brown/20 rounded-full" />
               </div>
-            )}
+
+              {(title || showCloseButton) && (
+                <div className="flex items-center justify-between px-5 pb-4">
+                  {title && (
+                    <h2 className="text-xl font-bold text-brown">{title}</h2>
+                  )}
+                  {!title && <div />}
+                  {showCloseButton && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        e.preventDefault()
+                        onOpenChange(false)
+                      }}
+                      className="p-2 rounded-full hover:bg-blush transition-colors"
+                    >
+                      <X className="w-5 h-5 text-brown" />
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
             
             {/* Content - no scroll container, let content handle its own scrolling */}
             <motion.div dragListener={false}>
