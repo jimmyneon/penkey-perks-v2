@@ -406,9 +406,7 @@ export default function NewV2Dashboard() {
                         alt={nextReward.reward}
                         className="w-56 h-56 object-contain scale-150"
                       />
-                    ) : (
-                      <img src="/coffeecup.webp" alt="" className="w-56 h-56 object-contain scale-150" />
-                    )}
+                    ) : null}
                   </div>
                 </div>
                 <p className="text-[10px] font-medium mb-1.5" style={{ color: '#F0EDE5' }}>
@@ -439,7 +437,7 @@ export default function NewV2Dashboard() {
               style={{ backgroundColor: '#F4EFE7', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}
               onClick={() => setShowVoucherSheet(true)}
             >
-              <div className="w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
+              <div className="w-28 h-28 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
                 <img
                   src="/vouchers/voucher.png"
                   alt="Vouchers"
@@ -470,7 +468,7 @@ export default function NewV2Dashboard() {
                   { img: '/howworks/4.webp', label: 'Enjoy rewards', num: 4 },
                 ].map((step) => (
                   <div key={step.img} className="text-center">
-                    <div className="w-20 h-20 rounded-full mx-auto mb-2 flex items-center justify-center relative" style={{ backgroundColor: '#FFF0E4' }}>
+                    <div className="w-28 h-28 rounded-full mx-auto mb-2 flex items-center justify-center relative" style={{ backgroundColor: '#FFF0E4' }}>
                       <img src={step.img} alt={step.label} className="w-32 h-32 object-contain" />
                       <div className="absolute top-0 right-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white" style={{ backgroundColor: '#F28A2E' }}>
                         {step.num}
@@ -547,7 +545,7 @@ export default function NewV2Dashboard() {
                   generateVoucherQRCode(voucher)
                 }}
               >
-                <div className="w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
+                <div className="w-28 h-28 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
                   {voucher.template?.icon_url || voucher.template?.image_url ? (
                     <img
                       src={voucher.template?.icon_url || voucher.template?.image_url}
@@ -726,7 +724,7 @@ export default function NewV2Dashboard() {
                   style={{ borderLeft: '1px solid rgba(240,237,229,0.12)' }}
                 >
                   <div
-                    className="w-20 h-20 rounded-full flex items-center justify-center overflow-hidden"
+                    className="w-28 h-28 rounded-full flex items-center justify-center overflow-hidden"
                     style={{ backgroundColor: '#F8F5EF', border: '1.5px solid #E8E2D8' }}
                   >
                     <GiftIcon className="w-20 h-20 object-contain" style={{ transform: 'scale(1.5)' }} />
