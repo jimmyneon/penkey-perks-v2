@@ -19,7 +19,24 @@ import { GiftIcon } from '@/components/ui/gift-icon'
 import { StampAnimation } from '@/components/stamp-animation'
 import { motion } from 'framer-motion'
 
-const randomRotations = [-15, 12, 18, -8, 10, -12, 14, -6]
+// Generate consistent random values for each stamp index
+const getStampVariations = (index: number) => {
+  const seed = index * 12345
+  const random = (min: number, max: number) => {
+    const x = Math.sin(seed) * 10000
+    const r = x - Math.floor(x)
+    return min + r * (max - min)
+  }
+  return {
+    rotation: random(-12, 12),
+    offsetX: random(-4, 4),
+    offsetY: random(-4, 4),
+    scale: random(0.95, 1.05),
+  }
+}
+
+// Cache variations for each stamp index
+const stampVariationsCache: Record<number, ReturnType<typeof getStampVariations>> = {}
 
 interface BeanBalance {
   current_beans: number
@@ -105,25 +122,24 @@ export default function NewV2Dashboard() {
         const timer = setTimeout(() => {
           setNewlyStampedIndex(currentBeans - 1)
 
-          // Calculate target position for the stamp slot
-          const stampSlots = document.querySelectorAll('[data-stamp-slot]')
-          const targetSlot = stampSlots[currentBeans - 1] as HTMLElement
-          if (targetSlot) {
-            const rect = targetSlot.getBoundingClientRect()
+          // Calculate target position for the general stamp grid area
+          const stampGrid = document.querySelector('.grid-cols-5') as HTMLElement
+          if (stampGrid) {
+            const rect = stampGrid.getBoundingClientRect()
             setTargetPosition({
-              x: rect.left + rect.width / 2 - 50,
-              y: rect.top + rect.height / 2 - 50,
+              x: rect.left + rect.width / 2,
+              y: rect.top + rect.height / 2,
             })
           }
 
           setShowStampAnimation(true)
           console.log('Animation triggered')
 
-          // Trigger card shake at impact (500ms after start)
+          // Trigger card shake at impact (400ms after start)
           setTimeout(() => {
             setCardShake(true)
             setTimeout(() => setCardShake(false), 100)
-          }, 500)
+          }, 400)
 
           // Update last bean count
           setLastBeanCountOnClose(currentBeans)
@@ -653,8 +669,11 @@ export default function NewV2Dashboard() {
               >
                 {Array.from({ length: 25 }).map((_, i) => {
                   const filled = i < displayedBeanCount
-                  // Use consistent random rotation based on index for all stamps
-                  const stampRotation = randomRotations[i % randomRotations.length]
+                  // Get consistent variations for this stamp index
+                  if (!stampVariationsCache[i]) {
+                    stampVariationsCache[i] = getStampVariations(i)
+                  }
+                  const variations = stampVariationsCache[i]
                   return (
                     <div
                       key={i}
@@ -671,7 +690,7 @@ export default function NewV2Dashboard() {
                           alt="Stamp"
                           className="w-[140%] h-[140%] object-cover -m-3"
                           style={{
-                            transform: `rotate(${stampRotation}deg)`,
+                            transform: `rotate(${variations.rotation}deg) translate(${variations.offsetX}px, ${variations.offsetY}px) scale(${variations.scale})`,
                           }}
                         />
                       ) : (
