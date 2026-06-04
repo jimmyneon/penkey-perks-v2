@@ -45,7 +45,7 @@ export function StampAnimation({ onComplete, show = false }: StampAnimationProps
   if (!show || phase === 'idle') return null
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
+    <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-[9999]" style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}>
       <style>{`
         @keyframes splatterPulse {
           0% { transform: scale(0); opacity: 1; }
