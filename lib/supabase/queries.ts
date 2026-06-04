@@ -260,11 +260,11 @@ export async function getRecentBeanTransactions(userId: string, limit = 10): Pro
 }
 
 // Helper function to get next reward threshold from database
-export async function getNextRewardThreshold(currentBeans: number): Promise<{ threshold: number; beansNeeded: number; reward: string; description: string; image_url?: string }> {
+export async function getNextRewardThreshold(currentBeans: number): Promise<{ threshold: number; beansNeeded: number; reward: string; description: string; image_url?: string; icon_url?: string }> {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('voucher_templates')
-    .select('name, description, bean_threshold, image_url')
+    .select('name, description, bean_threshold, image_url, icon_url')
     .order('bean_threshold', { ascending: true })
 
   if (error || !data) {
@@ -280,6 +280,7 @@ export async function getNextRewardThreshold(currentBeans: number): Promise<{ th
         reward: template.name,
         description: template.description || '',
         image_url: template.image_url,
+        icon_url: template.icon_url,
       }
     }
   }
@@ -294,11 +295,11 @@ export async function getNextRewardThreshold(currentBeans: number): Promise<{ th
 }
 
 // Fetch all voucher templates for rewards display
-export async function getAllVoucherTemplates(): Promise<Array<{ id: string; name: string; description: string; category: string; bean_threshold: number; image_url?: string }>> {
+export async function getAllVoucherTemplates(): Promise<Array<{ id: string; name: string; description: string; category: string; bean_threshold: number; image_url?: string; icon_url?: string }>> {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('voucher_templates')
-    .select('id, name, description, category, bean_threshold, image_url')
+    .select('id, name, description, category, bean_threshold, image_url, icon_url')
     .order('bean_threshold', { ascending: true })
 
   if (error || !data) {
