@@ -23,6 +23,10 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
 
     if (!show) {
       runningRef.current = false
+      // Reset animation controls for next run
+      stamperCtrl.set({ scale: 1.0, opacity: 0, filter: 'blur(12px)' })
+      splashCtrl.set({ scale: 0.3, opacity: 0 })
+      stampCtrl.set({ scale: 1.4, opacity: 0 })
       return
     }
     if (runningRef.current) return

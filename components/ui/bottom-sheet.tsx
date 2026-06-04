@@ -52,8 +52,8 @@ export function BottomSheet({
         y: 0,
         transition: {
           type: "tween",
-          duration: 2,
-          ease: [0.15, 1, 0.15, 1],
+          duration: 0.8,
+          ease: [0.16, 1, 0.3, 1],
         },
       })
     } else {
@@ -61,7 +61,7 @@ export function BottomSheet({
         y: "100%",
         transition: {
           type: "tween",
-          duration: 0.3,
+          duration: 0.25,
           ease: [0.16, 1, 0.3, 1],
         },
       })
@@ -130,12 +130,12 @@ export function BottomSheet({
               onPointerDown={(e) => dragControls.start(e)}
               className="cursor-grab active:cursor-grabbing touch-none pb-2"
             >
-              <div className="flex justify-center pt-6 pb-4">
+              <div className="flex justify-center pt-8 pb-6">
                 <div className="w-12 h-1.5 bg-brown/20 rounded-full" />
               </div>
 
               {(title || showCloseButton) && (
-                <div className="flex items-center justify-between px-5 pb-6">
+                <div className="flex items-center justify-between px-5 pb-8">
                   {title && (
                     <h2 className="text-xl font-bold text-brown">{title}</h2>
                   )}
