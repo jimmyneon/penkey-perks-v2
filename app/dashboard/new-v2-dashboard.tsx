@@ -76,11 +76,11 @@ export default function NewV2Dashboard() {
   // Trigger stamp animation when panel opens
   useEffect(() => {
     console.log('Animation trigger check:', { showBeansPanel, beanBalance })
-    if (showBeansPanel && beanBalance && beanBalance.current_beans > 0) {
+    if (showBeansPanel) {
       console.log('Triggering stamp animation')
       setShowStampAnimation(true)
     }
-  }, [showBeansPanel, beanBalance])
+  }, [showBeansPanel])
 
   // Show modal when max beans reached
   useEffect(() => {
