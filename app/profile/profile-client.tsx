@@ -460,7 +460,7 @@ export function ProfileClient({ user: initialUser, beanBalance: initialBeanBalan
             {/* voucher image or fallback icon */}
             <div className="relative flex-shrink-0">
               <img
-                src="/vouchers/voucher.png"
+                src="/vouchers/voucher-icon.png"
                 alt="Vouchers"
                 className="w-24 h-24 rounded-[14px] object-contain"
               />
