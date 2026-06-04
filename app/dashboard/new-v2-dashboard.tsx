@@ -620,9 +620,6 @@ export default function NewV2Dashboard() {
               >
                 {Array.from({ length: 25 }).map((_, i) => {
                   const filled = i < currentBeans
-                  const isNewlyStamped = i === newlyStampedIndex
-                  // Hide newly stamped stamp until animation completes
-                  const showStamp = isNewlyStamped ? !showStampAnimation : true
                   // Use consistent random rotation based on index for all stamps
                   const stampRotation = randomRotations[i % randomRotations.length]
                   return (
@@ -635,7 +632,7 @@ export default function NewV2Dashboard() {
                         border: filled ? 'none' : '2px dashed #F0EDE5',
                       }}
                     >
-                      {filled && showStamp ? (
+                      {filled ? (
                         <img
                           src="/image-assets/stamps/stamp.png"
                           alt="Stamp"

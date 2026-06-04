@@ -77,7 +77,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                   scale: 0.2,
                   opacity: 0,
                   filter: 'blur(12px)',
-                  x: (targetPosition?.x || window.innerWidth / 2) + 100,
+                  x: (targetPosition?.x || window.innerWidth / 2) - 200,
                   y: (targetPosition?.y || window.innerHeight / 2) - 150,
                 }}
                 animate={
@@ -120,7 +120,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
                   <img
                     src="/image-assets/stamps/stamper.png"
                     alt="Stamper"
-                    className="w-80 h-80 object-contain"
+                    className="w-96 h-96 object-contain"
                     style={{ transform: 'rotate(5deg)', border: 'none', outline: 'none' }}
                   />
                 </motion.div>
