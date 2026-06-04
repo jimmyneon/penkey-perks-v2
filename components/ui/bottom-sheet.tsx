@@ -29,7 +29,7 @@ export function BottomSheet({
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     const shouldClose =
-      info.offset.y > 35 || info.velocity.y > 250
+      info.offset.y > 20 || info.velocity.y > 150
 
     if (shouldClose) {
       onOpenChange(false)
@@ -92,8 +92,8 @@ export function BottomSheet({
             exit={{ y: "100%" }}
             transition={{
               type: "tween",
-              duration: 1.2,
-              ease: [0.2, 1, 0.2, 1],
+              duration: 2,
+              ease: [0.15, 1, 0.15, 1],
             }}
             drag="y"
             dragControls={dragControls}
@@ -108,17 +108,17 @@ export function BottomSheet({
               className
             )}
           >
-            {/* Drag header - larger drag area */}
+            {/* Drag header - larger drag area including top padding */}
             <div
               onPointerDown={(e) => dragControls.start(e)}
-              className="cursor-grab active:cursor-grabbing touch-none"
+              className="cursor-grab active:cursor-grabbing touch-none pb-2"
             >
-              <div className="flex justify-center pt-4 pb-3">
+              <div className="flex justify-center pt-6 pb-4">
                 <div className="w-12 h-1.5 bg-brown/20 rounded-full" />
               </div>
 
               {(title || showCloseButton) && (
-                <div className="flex items-center justify-between px-5 pb-4">
+                <div className="flex items-center justify-between px-5 pb-6">
                   {title && (
                     <h2 className="text-xl font-bold text-brown">{title}</h2>
                   )}
