@@ -401,7 +401,7 @@ export function UnifiedRewardsClient({
                           <img
                             src={reward.image_url}
                             alt={reward.name}
-                            className="w-full h-full object-cover"
+                            className="w-[85%] h-[85%] object-contain"
                           />
                         ) : (
                           <Gift className="w-10 h-10" style={{ color: expiringSoon ? '#EF4444' : '#E07A3A' }} />
@@ -454,7 +454,7 @@ export function UnifiedRewardsClient({
                       <img
                         src={tier.image_url}
                         alt={tier.label}
-                        className="w-full h-full object-cover"
+                        className="w-[85%] h-[85%] object-contain"
                       />
                     ) : (
                       <span className="text-[18px] leading-none">{tier.icon}</span>

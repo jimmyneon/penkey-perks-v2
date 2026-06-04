@@ -109,47 +109,38 @@ export default function NewV2Dashboard() {
     }
   }, [beansAwarded])
 
-  // Trigger stamp animation when panel opens and there are new beans
+  // Trigger stamp animation when panel opens
   useEffect(() => {
     if (!showBeansPanel) {
-      // Panel closed — record current beans so we can detect new ones next open
-      const current = beanBalance?.current_beans ?? 0
-      if (lastClosedBeansRef.current !== -1) {
-        lastClosedBeansRef.current = current
-      }
       setAnimationTriggered(false)
       return
     }
 
     if (animationTriggered) return
 
-    const currentBeans = beanBalance?.current_beans ?? 0
-    const hasNewBeans = currentBeans > lastClosedBeansRef.current && lastClosedBeansRef.current !== -1
+    const currentBeans = beanBalance?.current_beans ?? displayedBeanBalance?.current_beans ?? 0
+    if (currentBeans === 0) return
 
-    if (hasNewBeans) {
-      setAnimationTriggered(true)
-      setDisplayedBeanCount(currentBeans - 1)
+    setAnimationTriggered(true)
+    setDisplayedBeanCount(currentBeans - 1)
 
-      const timer = setTimeout(() => {
-        setNewlyStampedIndex(currentBeans - 1)
+    const timer = setTimeout(() => {
+      setNewlyStampedIndex(currentBeans - 1)
 
-        const stampGrid = document.querySelector('.grid-cols-5') as HTMLElement
-        if (stampGrid) {
-          const rect = stampGrid.getBoundingClientRect()
-          setTargetPosition({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
-        }
+      const stampGrid = document.querySelector('.grid-cols-5') as HTMLElement
+      if (stampGrid) {
+        const rect = stampGrid.getBoundingClientRect()
+        setTargetPosition({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 })
+      }
 
-        setShowStampAnimation(true)
+      setShowStampAnimation(true)
 
-        setTimeout(() => {
-          setCardShake(true)
-          setTimeout(() => setCardShake(false), 100)
-        }, 400)
-      }, 500)
-      return () => clearTimeout(timer)
-    } else {
-      setDisplayedBeanCount(currentBeans)
-    }
+      setTimeout(() => {
+        setCardShake(true)
+        setTimeout(() => setCardShake(false), 100)
+      }, 400)
+    }, 500)
+    return () => clearTimeout(timer)
   }, [showBeansPanel, beanBalance, animationTriggered])
 
   // Update displayed bean count after animation completes
