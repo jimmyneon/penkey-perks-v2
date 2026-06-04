@@ -144,9 +144,8 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
             src="/image-assets/stamps/stamper.png"
             alt="Stamper"
             style={{
-              width: 700,
-              height: 700,
-              border: '3px solid red',
+              width: 'clamp(520px, 140vw, 760px)',
+              height: 'auto',
               objectFit: 'contain',
               transform: 'rotate(5deg)',
               display: 'block',
