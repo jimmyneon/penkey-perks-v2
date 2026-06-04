@@ -29,7 +29,7 @@ export function BottomSheet({
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     const shouldClose =
-      info.offset.y > 60 || info.velocity.y > 400
+      info.offset.y > 35 || info.velocity.y > 250
 
     if (shouldClose) {
       onOpenChange(false)
@@ -92,8 +92,8 @@ export function BottomSheet({
             exit={{ y: "100%" }}
             transition={{
               type: "tween",
-              duration: 0.48,
-              ease: [0.19, 1, 0.22, 1],
+              duration: 0.65,
+              ease: [0.2, 1, 0.2, 1],
             }}
             drag="y"
             dragControls={dragControls}
