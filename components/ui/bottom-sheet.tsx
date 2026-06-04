@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from "react"
-import { motion, AnimatePresence, useMotionValue, useDragControls, PanInfo } from "framer-motion"
+import { motion, AnimatePresence, useAnimation, useDragControls, PanInfo } from "framer-motion"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -24,7 +24,7 @@ export function BottomSheet({
   className,
   fullScreen = false,
 }: BottomSheetProps) {
-  const y = useMotionValue(0)
+  const controls = useAnimation()
   const dragControls = useDragControls()
 
   const handleDragEnd = (_: any, info: PanInfo) => {
@@ -34,16 +34,39 @@ export function BottomSheet({
     if (shouldClose) {
       onOpenChange(false)
     } else {
-      y.set(0)
+      controls.start({
+        y: 0,
+        transition: {
+          type: "tween",
+          duration: 0.22,
+          ease: [0.16, 1, 0.3, 1],
+        },
+      })
     }
   }
 
-  // Reset Y when opening
+  // Animate open/close
   React.useEffect(() => {
     if (open) {
-      y.set(0)
+      controls.start({
+        y: 0,
+        transition: {
+          type: "tween",
+          duration: 2,
+          ease: [0.15, 1, 0.15, 1],
+        },
+      })
+    } else {
+      controls.start({
+        y: "100%",
+        transition: {
+          type: "tween",
+          duration: 0.3,
+          ease: [0.16, 1, 0.3, 1],
+        },
+      })
     }
-  }, [open, y])
+  }, [open, controls])
 
   // Lock body scroll when sheet is open
   React.useEffect(() => {
@@ -88,20 +111,14 @@ export function BottomSheet({
           {/* Sheet - entire sheet draggable */}
           <motion.div
             initial={{ y: "100%" }}
-            animate={{ y: 0 }}
+            animate={controls}
             exit={{ y: "100%" }}
-            transition={{
-              type: "tween",
-              duration: 2,
-              ease: [0.15, 1, 0.15, 1],
-            }}
             drag="y"
             dragControls={dragControls}
             dragListener={false}
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={0.12}
             onDragEnd={handleDragEnd}
-            style={{ y }}
             className={cn(
               "fixed bottom-0 left-0 right-0 z-[10000] shadow-premium-xl",
               fullScreen ? "h-screen rounded-t-0" : "bg-cream-card rounded-t-3xl max-h-[85vh]",
