@@ -400,9 +400,9 @@ export default function NewV2Dashboard() {
                     {nextReward?.reward || 'Loading...'}
                   </p>
                   <div className="flex items-center justify-center">
-                    {nextReward?.image_url ? (
+                    {nextReward?.icon_url || nextReward?.image_url ? (
                       <img
-                        src={nextReward.image_url}
+                        src={nextReward?.icon_url || nextReward?.image_url}
                         alt={nextReward.reward}
                         className="w-56 h-56 object-contain"
                       />
