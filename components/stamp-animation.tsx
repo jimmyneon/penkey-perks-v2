@@ -144,8 +144,8 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
             src="/image-assets/stamps/stamper.png"
             alt="Stamper"
             style={{
-              width: 'clamp(420px, 110vw, 620px)',
-              height: 'clamp(420px, 110vw, 620px)',
+              width: 'clamp(520px, 140vw, 760px)',
+              height: 'clamp(520px, 140vw, 760px)',
               objectFit: 'contain',
               transform: 'rotate(5deg)',
               display: 'block',
@@ -170,7 +170,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
           <img
             src="/image-assets/stamps/beansplatter.png"
             alt="Splash"
-            style={{ width: 260, height: 260, objectFit: 'contain', display: 'block' }}
+            style={{ width: 280, height: 280, objectFit: 'contain', display: 'block' }}
           />
         </motion.div>
       </div>
