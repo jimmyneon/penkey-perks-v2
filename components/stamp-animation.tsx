@@ -47,6 +47,12 @@ export function StampAnimation({ onComplete, show = false }: StampAnimationProps
   return (
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-[9999]" style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}>
       <style>{`
+        @keyframes stamper3D {
+          0% { transform: scale(3) translateY(-300px); opacity: 0; }
+          30% { transform: scale(1.5) translateY(-100px); opacity: 1; }
+          60% { transform: scale(1) translateY(100px); opacity: 1; }
+          100% { transform: scale(0.8) translateY(200px); opacity: 0; }
+        }
         @keyframes splatterPulse {
           0% { transform: scale(0); opacity: 1; }
           100% { transform: scale(2); opacity: 0; }
@@ -64,9 +70,9 @@ export function StampAnimation({ onComplete, show = false }: StampAnimationProps
       <div className="relative">
         {/* Stamper */}
         <div
-          className="relative z-10 transition-transform duration-300 ease-out"
+          className="relative z-10"
           style={{
-            transform: phase === 'stamping' ? 'translateY(200px)' : 'translateY(-200px)',
+            animation: phase === 'stamping' ? 'stamper3D 0.9s ease-in-out forwards' : 'none',
           }}
         >
           <img
@@ -75,52 +81,6 @@ export function StampAnimation({ onComplete, show = false }: StampAnimationProps
             className="w-96 h-96 object-contain"
           />
         </div>
-
-        {/* Splatter effect */}
-        {phase === 'splatter' && (
-          <div className="absolute top-48 left-1/2 -translate-x-1/2 z-0">
-            <div className="relative">
-              {/* Main splatter */}
-              <div
-                className="absolute inset-0 rounded-full"
-                style={{
-                  width: '320px',
-                  height: '320px',
-                  background: 'radial-gradient(circle, #E07A3A 0%, transparent 70%)',
-                  animation: 'splatterPulse 0.5s ease-out forwards',
-                }}
-              />
-              {/* Particles */}
-              {[...Array(8)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute w-8 h-8 rounded-full"
-                  style={{
-                    backgroundColor: '#E07A3A',
-                    left: '50%',
-                    top: '50%',
-                    transform: `rotate(${i * 45}deg) translateX(160px)`,
-                    animation: `particleBurst 0.4s ease-out ${i * 0.05}s forwards`,
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Stamp result */}
-        {phase === 'complete' && (
-          <div className="absolute top-48 left-1/2 -translate-x-1/2 z-20">
-            <img
-              src="/image-assets/stamps/stamp.png"
-              alt="Stamp"
-              className="w-64 h-64 object-contain"
-              style={{
-                animation: 'stampAppear 0.3s ease-out',
-              }}
-            />
-          </div>
-        )}
       </div>
     </div>
   )

@@ -53,6 +53,7 @@ export default function NewV2Dashboard() {
   const [showMaxBeansModal, setShowMaxBeansModal] = useState(false)
   const [voucherTemplates, setVoucherTemplates] = useState<any[]>([])
   const [showStampAnimation, setShowStampAnimation] = useState(false)
+  const [newlyStampedIndex, setNewlyStampedIndex] = useState<number | null>(null)
 
 
   // Real-time bean balance (disabled when showing QR code to avoid animation conflicts)
@@ -79,11 +80,13 @@ export default function NewV2Dashboard() {
     if (showBeansPanel) {
       console.log('Triggering stamp animation with delay')
       const timer = setTimeout(() => {
+        const beans = displayedBeanBalance?.current_beans || beanBalance?.current_beans || 0
+        setNewlyStampedIndex(beans - 1)
         setShowStampAnimation(true)
       }, 500)
       return () => clearTimeout(timer)
     }
-  }, [showBeansPanel])
+  }, [showBeansPanel, displayedBeanBalance, beanBalance])
 
   // Show modal when max beans reached
   useEffect(() => {
@@ -580,8 +583,19 @@ export default function NewV2Dashboard() {
 
               {/* Large stamps grid - 25 stamps */}
               <div className="grid grid-cols-5 gap-3 mb-6">
+                <style>{`
+                  @keyframes splatterPulse {
+                    0% { transform: scale(0); opacity: 1; }
+                    100% { transform: scale(2); opacity: 0; }
+                  }
+                  @keyframes particleBurst {
+                    0% { transform: rotate(var(--rotation)) translateX(0); opacity: 1; }
+                    100% { transform: rotate(var(--rotation)) translateX(60px); opacity: 0; }
+                  }
+                `}</style>
                 {Array.from({ length: 25 }).map((_, i) => {
                   const filled = i < currentBeans
+                  const isNewlyStamped = i === newlyStampedIndex
                   return (
                     <div
                       key={i}
@@ -592,11 +606,42 @@ export default function NewV2Dashboard() {
                       }}
                     >
                       {filled ? (
-                        <img
-                          src="/image-assets/stamps/stamp.png"
-                          alt="Stamp"
-                          className="w-[140%] h-[140%] object-cover -m-3"
-                        />
+                        <>
+                          <img
+                            src="/image-assets/stamps/stamp.png"
+                            alt="Stamp"
+                            className="w-[140%] h-[140%] object-cover -m-3"
+                          />
+                          {/* Splatter effect on newly stamped bean */}
+                          {isNewlyStamped && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="relative">
+                                <div
+                                  className="absolute rounded-full"
+                                  style={{
+                                    width: '60px',
+                                    height: '60px',
+                                    background: 'radial-gradient(circle, #E07A3A 0%, transparent 70%)',
+                                    animation: 'splatterPulse 0.5s ease-out forwards',
+                                  }}
+                                />
+                                {[...Array(6)].map((_, j) => (
+                                  <div
+                                    key={j}
+                                    className="absolute w-2 h-2 rounded-full"
+                                    style={{
+                                      backgroundColor: '#E07A3A',
+                                      left: '50%',
+                                      top: '50%',
+                                      transform: `rotate(${j * 60}deg) translateX(30px)`,
+                                      animation: `particleBurst 0.4s ease-out ${j * 0.05}s forwards`,
+                                    }}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </>
                       ) : (
                         <span className="text-[10px] font-semibold" style={{ color: '#F0EDE5', opacity: 0.5 }}>
                           stamp
