@@ -727,13 +727,24 @@ export default function NewV2Dashboard() {
                     className="w-28 h-28 rounded-full flex items-center justify-center overflow-hidden"
                     style={{ backgroundColor: '#F8F5EF', border: '1.5px solid #E8E2D8' }}
                   >
-                    <GiftIcon className="w-20 h-20 object-contain" style={{ transform: 'scale(1.5)' }} />
+                    {nextReward?.icon_url || nextReward?.image_url ? (
+                      <img
+                        src={nextReward?.icon_url || nextReward?.image_url}
+                        alt={nextReward.reward}
+                        className="w-20 h-20 object-contain"
+                      />
+                    ) : (
+                      <GiftIcon className="w-20 h-20 object-contain" style={{ transform: 'scale(1.5)' }} />
+                    )}
                   </div>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-center" style={{ color: '#F8F5EF' }}>
                     NEXT REWARD
                   </p>
                   <p className="text-[12px] font-medium text-center leading-snug" style={{ color: '#F8F5EF' }}>
-                    {nextMilestone} beans<br />= reward
+                    {nextReward?.reward || 'Loading...'}
+                  </p>
+                  <p className="text-[10px] text-center leading-snug" style={{ color: '#F8F5EF' }}>
+                    {nextMilestone} beans
                   </p>
                 </div>
               </div>
