@@ -37,50 +37,60 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
       // ─── Approach: stamper flies in from above ───────────────
       await Promise.all([
         stamperCtrl.start({
-          scale: 1.15, opacity: 1, filter: 'blur(0px)',
-          transition: { duration: 0.45, ease: 'easeOut' },
+          scale: [0.35, 1.25],
+          opacity: [0, 1],
+          filter: ['blur(14px)', 'blur(0px)'],
+          y: [-180, 0],
+          transition: { duration: 0.38, ease: 'easeOut' },
         }),
         shadowCtrl.start({
-          scale: 1.4, opacity: 0.35,
-          transition: { duration: 0.45, ease: 'easeOut' },
+          scale: [0.4, 1.6],
+          opacity: [0, 0.35],
+          transition: { duration: 0.38, ease: 'easeOut' },
         }),
       ])
 
-      // ─── Impact ──────────────────────────────────────────────────
-      if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(30)
-      await Promise.all([
-        stamperCtrl.start({ scale: 0.9, transition: { duration: 0.07 } }),
-        shadowCtrl.start({ scale: 0.8, opacity: 0, transition: { duration: 0.07 } }),
-      ])
+      // ─── Impact: all effects happen together ─────────────────────
+      if (typeof navigator !== 'undefined' && navigator.vibrate) {
+        navigator.vibrate(30)
+      }
 
-      // ─── Wobble ──────────────────────────────────────────────────
-      await stamperCtrl.start({
-        rotate: [0, -4, 4, -2, 2, 0],
-        transition: { duration: 0.2, ease: 'easeInOut' },
-      })
-
-      // ─── Splash ──────────────────────────────────────────────────
       splashCtrl.start({
-        scale: [0.3, 1.4], opacity: [1, 0],
-        transition: { duration: 0.3, ease: 'easeOut' },
+        scale: [0.2, 1.8],
+        opacity: [1, 0],
+        transition: { duration: 0.28, ease: 'easeOut' },
       })
 
-      // ─── New stamp appears ────────────────────────────────────────
-      await new Promise(r => setTimeout(r, 100))
-      await stampCtrl.start({
-        scale: 1, opacity: 1, rotate: rotation,
-        x: offsetX, y: offsetY,
-        transition: { duration: 0.25, ease: 'easeOut' },
+      stampCtrl.start({
+        scale: [1.6, 1],
+        opacity: [0, 1],
+        rotate: rotation,
+        x: offsetX,
+        y: offsetY,
+        transition: { duration: 0.22, ease: 'easeOut' },
       })
 
-      // ─── Exit: stamper lifts away ─────────────────────────────────
       await Promise.all([
         stamperCtrl.start({
-          y: -300, scale: 0.5, opacity: 0, filter: 'blur(10px)',
-          transition: { duration: 0.35, ease: 'easeIn' },
+          scale: [1.25, 0.92, 1.05],
+          rotate: [5, 2, 8, 5],
+          transition: { duration: 0.18, ease: 'easeInOut' },
         }),
-        stampCtrl.start({ opacity: 0, transition: { duration: 0.2 } }),
+        shadowCtrl.start({
+          scale: 0.8,
+          opacity: 0,
+          transition: { duration: 0.12 },
+        }),
       ])
+
+      // ─── Exit: stamper disappears ───────────────────────────────
+      await stamperCtrl.start({
+        scale: 1.45,
+        opacity: 0,
+        filter: 'blur(10px)',
+        y: -80,
+        transition: { duration: 0.32, ease: 'easeIn' },
+      })
 
       runningRef.current = false
       onComplete?.()
@@ -134,8 +144,8 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
             src="/image-assets/stamps/stamper.png"
             alt="Stamper"
             style={{
-              width: 'min(360px, 460px)',
-              height: 'min(360px, 460px)',
+              width: 'clamp(420px, 110vw, 620px)',
+              height: 'clamp(420px, 110vw, 620px)',
               objectFit: 'contain',
               transform: 'rotate(5deg)',
               display: 'block',
@@ -160,7 +170,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
           <img
             src="/image-assets/stamps/beansplatter.png"
             alt="Splash"
-            style={{ width: 220, height: 220, objectFit: 'contain', display: 'block' }}
+            style={{ width: 260, height: 260, objectFit: 'contain', display: 'block' }}
           />
         </motion.div>
       </div>
