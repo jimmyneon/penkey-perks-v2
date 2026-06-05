@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { CloudRain, Umbrella, Gift, CheckCircle2 } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { CloudRain, Umbrella, Gift, CheckCircle2, X } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import QRCodeLib from 'qrcode'
 
 interface RainyDayVoucherCardProps {
   userId: string
@@ -16,8 +15,9 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
   const [offerActive, setOfferActive] = useState(false)
   const [hasClaimed, setHasClaimed] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [claiming, setClaiming] = useState(false)
   const [weather, setWeather] = useState<any>(null)
+  const [showQR, setShowQR] = useState(false)
+  const [qrCode, setQrCode] = useState('')
 
   useEffect(() => {
     checkRainyDayOffer()
@@ -29,15 +29,7 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
 
       console.log('[RainyDayCard] Checking for rainy day offer, userId:', userId)
 
-      // First, log all active promotional offers for debugging
-      const { data: allOffers, error: allOffersError } = await supabase
-        .from('promotional_offers')
-        .select('id, title, active')
-        .eq('active', true)
-      
-      console.log('[RainyDayCard] All active offers:', { allOffers, allOffersError })
-
-      // Check if rainy day offer is active (using ilike for more flexible matching)
+      // Check if rainy day offer is active
       const { data: offer, error: offerError } = await supabase
         .from('promotional_offers')
         .select('*')
@@ -50,7 +42,7 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
       if (offer) {
         setOfferActive(true)
 
-        // Check if user already claimed today (using created_at instead of redeemed_at)
+        // Check if user already claimed today (using created_at)
         const last24Hours = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
         const { data: userOffer, error: userOfferError } = await supabase
           .from('user_promotional_offers')
@@ -80,35 +72,59 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
   }
 
   const claimVoucher = async () => {
-    if (claiming) return
-
-    setClaiming(true)
     try {
       const supabase = createClient()
 
       console.log('[RainyDayCard] Claiming voucher for userId:', userId)
 
-      const { data, error } = await supabase
-        .rpc('create_rainy_day_voucher', { p_user_id: userId })
+      // Get the offer
+      const { data: offer } = await supabase
+        .from('promotional_offers')
+        .select('*')
+        .ilike('title', '%Rainy Day Rescue%')
+        .eq('active', true)
+        .single()
 
-      console.log('[RainyDayCard] RPC response:', { data, error })
+      if (!offer) return
 
-      if (error) {
-        console.error('[RainyDayCard] Error claiming voucher:', error)
-        return
+      // Record that user claimed (for tracking, not individual voucher)
+      const { error: insertError } = await supabase
+        .from('user_promotional_offers')
+        .insert({
+          user_id: userId,
+          offer_id: offer.id,
+          viewed_at: new Date().toISOString(),
+          redeemed_at: new Date().toISOString()
+        })
+
+      if (insertError) {
+        console.error('[RainyDayCard] Error recording claim:', insertError)
       }
 
-      if (data && data[0]?.success) {
-        console.log('[RainyDayCard] Voucher claimed successfully')
-        setHasClaimed(true)
-        onVoucherClaimed?.()
-      } else {
-        console.log('[RainyDayCard] Voucher claim failed:', data)
-      }
+      // Increment redemption count on the offer
+      await supabase
+        .from('promotional_offers')
+        .update({ redemptions_count: (offer.redemptions_count || 0) + 1 })
+        .eq('id', offer.id)
+
+      // Generate global QR code (same for everyone)
+      const qrData = `RAINY-DAY-${offer.id}`
+      const url = await QRCodeLib.toDataURL(qrData, {
+        width: 200,
+        margin: 2,
+        color: {
+          dark: '#24364B',
+          light: '#FFFFFF'
+        }
+      })
+      setQrCode(url)
+      setShowQR(true)
+      setHasClaimed(true)
+
+      console.log('[RainyDayCard] Voucher claimed successfully')
+      onVoucherClaimed?.()
     } catch (error) {
       console.error('[RainyDayCard] Error claiming voucher:', error)
-    } finally {
-      setClaiming(false)
     }
   }
 
@@ -116,87 +132,111 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
     return null
   }
 
-  if (hasClaimed) {
-    return (
+  return (
+    <>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-4"
+        className="rounded-[18px] overflow-hidden"
+        style={{ backgroundColor: '#F8F5EF', boxShadow: '0 2px 14px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}
       >
-        <Card className="border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="bg-green-100 rounded-full p-2">
-                <CheckCircle2 className="w-5 h-5 text-green-600" />
-              </div>
-              <div className="flex-1">
-                <p className="font-medium text-green-900">Voucher Claimed!</p>
-                <p className="text-sm text-green-700">Your 20% off voucher is in My Rewards</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-    )
-  }
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="mb-4"
-    >
-      <Card className="border-2 border-blue-300 bg-gradient-to-br from-blue-100 via-blue-50 to-cyan-50 overflow-hidden relative">
-        {/* Rain animation background */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-1/4 w-1 h-8 bg-blue-400 animate-pulse" style={{ animationDelay: '0s' }} />
-          <div className="absolute top-0 left-2/4 w-1 h-8 bg-blue-400 animate-pulse" style={{ animationDelay: '0.2s' }} />
-          <div className="absolute top-0 left-3/4 w-1 h-8 bg-blue-400 animate-pulse" style={{ animationDelay: '0.4s' }} />
-        </div>
-
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-blue-900 text-lg">
-            <CloudRain className="w-5 h-5" />
-            Rainy Day Rescue
-          </CardTitle>
-          <CardDescription className="text-blue-700">
-            {weather?.description || 'It\'s raining!'} • {weather?.temperature}°C
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent className="space-y-3">
+        <div className="p-4">
           <div className="flex items-start gap-3">
-            <div className="bg-blue-200 rounded-full p-2 mt-1">
-              <Umbrella className="w-4 h-4 text-blue-700" />
+            {/* Icon */}
+            <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#FFF0E4' }}>
+              <CloudRain className="w-8 h-8" style={{ color: '#E07A3A' }} />
             </div>
-            <div className="flex-1">
-              <p className="font-semibold text-blue-900">20% Off Any Hot Drink</p>
-              <p className="text-sm text-blue-700">
-                Warm up with coffee, tea, or hot chocolate at 20% off today!
+
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                <p className="text-[15px] font-bold leading-tight" style={{ color: '#24364B' }}>
+                  Rainy Day Rescue
+                </p>
+                {weather && (
+                  <span className="text-[11px] font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: '#E8E2D8', color: '#5A6A7A' }}>
+                    {weather.temperature}°C
+                  </span>
+                )}
+              </div>
+              <p className="text-[13px] mb-3" style={{ color: '#5A6A7A' }}>
+                20% off any hot drink today
               </p>
+
+              {!hasClaimed ? (
+                <button
+                  onClick={claimVoucher}
+                  className="w-full py-2.5 px-4 rounded-[12px] text-[14px] font-semibold transition-all active:scale-[0.98]"
+                  style={{ backgroundColor: '#E07A3A', color: '#FFFFFF' }}
+                >
+                  Claim Your Voucher
+                </button>
+              ) : (
+                <button
+                  onClick={() => setShowQR(true)}
+                  className="w-full py-2.5 px-4 rounded-[12px] text-[14px] font-semibold transition-all active:scale-[0.98]"
+                  style={{ backgroundColor: '#24364B', color: '#FFFFFF' }}
+                >
+                  View QR Code
+                </button>
+              )}
             </div>
           </div>
 
-          <Button
-            onClick={claimVoucher}
-            disabled={claiming}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            {claiming ? (
-              'Claiming...'
-            ) : (
-              <>
-                <Gift className="w-4 h-4 mr-2" />
-                Claim Your Voucher
-              </>
-            )}
-          </Button>
-
-          <p className="text-xs text-blue-600 text-center">
-            Valid for 24 hours • One per rainy day
+          <p className="text-[11px] mt-3 text-center" style={{ color: '#8A96A0' }}>
+            Valid for 24 hours • Show QR code at counter
           </p>
-        </CardContent>
-      </Card>
-    </motion.div>
+        </div>
+      </motion.div>
+
+      {/* QR Code Modal */}
+      <AnimatePresence>
+        {showQR && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
+            style={{ backgroundColor: 'rgba(36,54,75,0.8)' }}
+            onClick={() => setShowQR(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="rounded-[18px] p-6 max-w-sm w-full"
+              style={{ backgroundColor: '#F9F7F2' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-[18px] font-bold" style={{ color: '#24364B' }}>
+                  Rainy Day Voucher
+                </h3>
+                <button
+                  onClick={() => setShowQR(false)}
+                  className="p-1 rounded-full transition-colors hover:bg-gray-200"
+                >
+                  <X className="w-5 h-5" style={{ color: '#5A6A7A' }} />
+                </button>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <div className="bg-white p-4 rounded-[12px] mb-4">
+                  {qrCode && (
+                    <img src={qrCode} alt="QR Code" className="w-48 h-48" />
+                  )}
+                </div>
+                <p className="text-[14px] font-semibold mb-1" style={{ color: '#24364B' }}>
+                  20% Off Any Hot Drink
+                </p>
+                <p className="text-[12px] text-center" style={{ color: '#5A6A7A' }}>
+                  Show this QR code at the counter to redeem
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   )
 }

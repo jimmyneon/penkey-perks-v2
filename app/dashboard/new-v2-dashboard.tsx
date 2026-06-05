@@ -335,18 +335,6 @@ export default function NewV2Dashboard() {
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
         <div className="px-5 pt-10 pb-28 space-y-5">
 
-          {/* ── RAINY DAY VOUCHER CARD ── */}
-          {user?.id && (
-            <RainyDayVoucherCard 
-              userId={user.id} 
-              onVoucherClaimed={async () => {
-                // Refresh vouchers when claimed
-                const freshVouchers = await getActiveVouchers(user.id)
-                setVouchers(freshVouchers)
-              }}
-            />
-          )}
-
           {/* ── HEADER ── */}
           <div className="flex items-start justify-between">
             {/* Left: greeting */}
@@ -452,6 +440,18 @@ export default function NewV2Dashboard() {
               </div>
             </div>
           </div>
+
+          {/* ── RAINY DAY VOUCHER CARD ── */}
+          {user?.id && (
+            <RainyDayVoucherCard 
+              userId={user.id} 
+              onVoucherClaimed={async () => {
+                // Refresh vouchers when claimed
+                const freshVouchers = await getActiveVouchers(user.id)
+                setVouchers(freshVouchers)
+              }}
+            />
+          )}
 
           {/* ── VOUCHERS — only shows when real vouchers exist ── */}
           {vouchers.length > 0 && (
