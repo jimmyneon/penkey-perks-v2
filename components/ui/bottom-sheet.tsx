@@ -29,7 +29,7 @@ export function BottomSheet({
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     const shouldClose =
-      info.offset.y > 20 || info.velocity.y > 150
+      info.offset.y > 15 || info.velocity.y > 100
 
     if (shouldClose) {
       onOpenChange(false)

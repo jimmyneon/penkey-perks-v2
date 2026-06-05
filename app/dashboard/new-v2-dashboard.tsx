@@ -161,6 +161,14 @@ export default function NewV2Dashboard() {
     }
   }, [showBeansPanel, beanBalance])
 
+  // Reset animation trigger when animation completes
+  useEffect(() => {
+    if (!showStampAnimation && animationTriggeredRef.current) {
+      console.log('[Animation Trigger] Animation completed, resetting trigger ref')
+      animationTriggeredRef.current = false
+    }
+  }, [showStampAnimation])
+
   // Update displayed bean count after animation completes
   useEffect(() => {
     if (!showStampAnimation && newlyStampedIndex !== null) {
