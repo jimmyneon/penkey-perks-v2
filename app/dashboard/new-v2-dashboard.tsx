@@ -17,6 +17,7 @@ import { BottomNav } from '@/components/bottom-nav'
 import { BrushUnderline } from '@/components/ui/brush-underline'
 import { GiftIcon } from '@/components/ui/gift-icon'
 import { StampAnimation } from '@/components/stamp-animation'
+import { RainyDayVoucherCard } from '@/components/dashboard/rainy-day-voucher-card'
 import { motion } from 'framer-motion'
 
 // Generate consistent random values for each stamp index
@@ -333,6 +334,18 @@ export default function NewV2Dashboard() {
     <div className="min-h-screen" style={{ backgroundColor: '#F9F7F2' }}>
       <div className="w-full max-w-[430px] mx-auto min-h-screen relative">
         <div className="px-5 pt-10 pb-28 space-y-5">
+
+          {/* ── RAINY DAY VOUCHER CARD ── */}
+          {user?.id && (
+            <RainyDayVoucherCard 
+              userId={user.id} 
+              onVoucherClaimed={async () => {
+                // Refresh vouchers when claimed
+                const freshVouchers = await getActiveVouchers(user.id)
+                setVouchers(freshVouchers)
+              }}
+            />
+          )}
 
           {/* ── HEADER ── */}
           <div className="flex items-start justify-between">
