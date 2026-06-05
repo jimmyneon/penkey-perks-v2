@@ -27,19 +27,23 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
     try {
       const supabase = createClient()
 
+      console.log('[RainyDayCard] Checking for rainy day offer, userId:', userId)
+
       // Check if rainy day offer is active
-      const { data: offer } = await supabase
+      const { data: offer, error: offerError } = await supabase
         .from('promotional_offers')
         .select('*')
         .eq('title', '🌧️ Rainy Day Rescue - 20% Off')
         .eq('active', true)
         .single()
 
+      console.log('[RainyDayCard] Offer query result:', { offer, offerError })
+
       if (offer) {
         setOfferActive(true)
 
         // Check if user already claimed today
-        const { data: userOffer } = await supabase
+        const { data: userOffer, error: userOfferError } = await supabase
           .from('user_promotional_offers')
           .select('*')
           .eq('user_id', userId)
@@ -47,6 +51,7 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
           .gte('redeemed_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
           .single()
 
+        console.log('[RainyDayCard] User offer result:', { userOffer, userOfferError })
         setHasClaimed(!!userOffer)
       }
 
@@ -57,7 +62,7 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
         setWeather(weatherData)
       }
     } catch (error) {
-      console.error('Error checking rainy day offer:', error)
+      console.error('[RainyDayCard] Error checking rainy day offer:', error)
     } finally {
       setLoading(false)
     }
