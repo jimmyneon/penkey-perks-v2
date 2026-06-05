@@ -46,14 +46,16 @@ BEGIN
     -- Enable RLS
     ALTER TABLE public.promotional_offers ENABLE ROW LEVEL SECURITY;
     
-    -- Create basic policies
+    -- Create basic policies (using auth.users which is the Supabase auth table)
     DROP POLICY IF EXISTS "Staff can manage promotional offers" ON public.promotional_offers;
     CREATE POLICY "Staff can manage promotional offers"
       ON public.promotional_offers
       FOR ALL
       USING (
         EXISTS (
-          SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'staff'
+          SELECT 1 FROM auth.users 
+          WHERE id = auth.uid() 
+          AND raw_user_meta_data->>'role' = 'staff'
         )
       );
     
@@ -129,8 +131,9 @@ BEGIN
       FOR ALL
       USING (
         EXISTS (
-          SELECT 1 FROM public.staff
-          WHERE staff.user_id = auth.uid()
+          SELECT 1 FROM auth.users 
+          WHERE id = auth.uid() 
+          AND raw_user_meta_data->>'role' = 'staff'
         )
       );
     
@@ -173,14 +176,16 @@ CREATE INDEX IF NOT EXISTS idx_weather_triggered_offers_active ON public.weather
 -- Enable RLS
 ALTER TABLE public.weather_triggered_offers ENABLE ROW LEVEL SECURITY;
 
--- Policies
+-- Policies (using auth.users which is the Supabase auth table)
 DROP POLICY IF EXISTS "Staff can manage weather triggered offers" ON public.weather_triggered_offers;
 CREATE POLICY "Staff can manage weather triggered offers"
   ON public.weather_triggered_offers
   FOR ALL
   USING (
     EXISTS (
-      SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'staff'
+      SELECT 1 FROM auth.users 
+      WHERE id = auth.uid() 
+      AND raw_user_meta_data->>'role' = 'staff'
     )
   );
 

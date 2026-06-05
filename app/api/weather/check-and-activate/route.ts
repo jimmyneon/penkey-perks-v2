@@ -18,60 +18,107 @@ export async function POST(request: Request) {
 
     const supabase = await createAdminClient()
 
-    // 1. Fetch current weather from OpenWeatherMap
+    // 1. Get location from app_settings (or use Lymington as default)
+    const { data: locationSettings } = await supabase
+      .from('app_settings')
+      .select('value')
+      .eq('key', 'weather_location')
+      .single()
+
+    let lat = 50.7594 // Default: Lymington
+    let lon = -1.5339
+    let locationName = 'Lymington'
+
+    if (locationSettings?.value) {
+      try {
+        const locationData = JSON.parse(locationSettings.value)
+        lat = locationData.lat || lat
+        lon = locationData.lon || lon
+        locationName = locationData.name || locationName
+      } catch (e) {
+        console.log('Using default location (Lymington)')
+      }
+    }
+
+    // 2. Fetch 5-day weather forecast from OpenWeatherMap
     const apiKey = process.env.OPENWEATHER_API_KEY
     if (!apiKey) {
       console.error('OPENWEATHER_API_KEY not set')
       return NextResponse.json({ error: 'Weather API key not configured' }, { status: 500 })
     }
 
-    const LYMINGTON_LAT = 50.7594
-    const LYMINGTON_LON = -1.5339
-
-    const weatherResponse = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${LYMINGTON_LAT}&lon=${LYMINGTON_LON}&appid=${apiKey}&units=metric`,
+    const forecastResponse = await fetch(
+      `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`,
       { cache: 'no-store' }
     )
 
-    if (!weatherResponse.ok) {
-      throw new Error('Weather API failed')
+    if (!forecastResponse.ok) {
+      throw new Error('Weather forecast API failed')
     }
 
-    const weatherData = await weatherResponse.json()
-    const weatherMain = weatherData.weather[0].main.toLowerCase()
-    const temp = Math.round(weatherData.main.temp)
+    const forecastData = await forecastResponse.json()
     
-    // Simplify weather conditions
-    let weatherCondition = 'clear'
-    if (weatherMain.includes('rain') || weatherMain.includes('drizzle')) {
-      weatherCondition = 'rainy'
-    } else if (weatherMain.includes('cloud')) {
-      weatherCondition = 'cloudy'
-    } else if (weatherMain.includes('snow')) {
-      weatherCondition = 'snowy'
-    } else if (weatherMain.includes('clear') || weatherMain.includes('sun')) {
-      weatherCondition = 'sunny'
+    // Check forecast for lunch period (12 PM - 2 PM today)
+    // Forecast returns 3-hour intervals: 00:00, 03:00, 06:00, 09:00, 12:00, 15:00, 18:00, 21:00
+    const today = new Date().toISOString().split('T')[0]
+    const lunchForecasts = forecastData.list.filter((item: any) => {
+      const forecastDate = item.dt_txt.split(' ')[0]
+      const forecastHour = parseInt(item.dt_txt.split(' ')[1].split(':')[0])
+      return forecastDate === today && (forecastHour >= 12 && forecastHour <= 15)
+    })
+    
+    // Determine if rain is expected during lunch
+    let willRainDuringLunch = false
+    let maxRainChance = 0
+    let expectedCondition = 'clear'
+    let expectedTemp = 20
+    
+    if (lunchForecasts.length > 0) {
+      for (const forecast of lunchForecasts) {
+        const weatherMain = forecast.weather[0].main.toLowerCase()
+        const rainChance = forecast.pop || 0 // Probability of precipitation
+        
+        if (rainChance > maxRainChance) {
+          maxRainChance = rainChance
+        }
+        
+        if (weatherMain.includes('rain') || weatherMain.includes('drizzle') || rainChance > 50) {
+          willRainDuringLunch = true
+          expectedCondition = 'rainy'
+        } else if (weatherMain.includes('cloud')) {
+          expectedCondition = 'cloudy'
+        } else if (weatherMain.includes('snow')) {
+          expectedCondition = 'snowy'
+        } else if (weatherMain.includes('clear') || weatherMain.includes('sun')) {
+          expectedCondition = 'sunny'
+        }
+        
+        expectedTemp = Math.round(forecast.main.temp)
+      }
     }
 
-    console.log('🌧️ Weather check:', {
-      condition: weatherCondition,
-      temperature: temp,
-      description: weatherData.weather[0].description
+    console.log('🌧️ Weather forecast check:', {
+      location: locationName,
+      date: today,
+      lunchForecasts: lunchForecasts.length,
+      willRainDuringLunch,
+      maxRainChance,
+      expectedCondition,
+      expectedTemp
     })
 
-    // 2. Update app settings with current weather
+    // 3. Update app settings with weather forecast
     await supabase
       .from('app_settings')
       .upsert({
         key: 'current_weather',
         value: JSON.stringify({
-          weather: weatherCondition,
-          temperature: temp,
-          description: weatherData.weather[0].description,
-          icon: weatherData.weather[0].icon,
-          humidity: weatherData.main.humidity,
-          windSpeed: weatherData.wind.speed,
-          location: 'Lymington',
+          weather: expectedCondition,
+          temperature: expectedTemp,
+          willRainDuringLunch,
+          maxRainChance,
+          description: willRainDuringLunch ? 'Rain expected during lunch' : 'No rain expected',
+          location: locationName,
           updated_at: new Date().toISOString()
         })
       }, { onConflict: 'key' })
@@ -142,9 +189,12 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       weather: {
-        condition: weatherCondition,
-        temperature: temp,
-        description: weatherData.weather[0].description
+        condition: expectedCondition,
+        temperature: expectedTemp,
+        willRainDuringLunch,
+        maxRainChance,
+        description: willRainDuringLunch ? 'Rain expected during lunch' : 'No rain expected',
+        location: locationName
       },
       activation: activationResult
     })

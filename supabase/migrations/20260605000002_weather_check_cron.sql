@@ -1,9 +1,19 @@
 -- =============================================
 -- WEATHER CHECK CRON JOB
--- Checks weather once daily (at 8 AM) and activates rainy day offers
+-- Checks weather forecast at 8 AM daily to predict lunch period weather
 -- =============================================
 
--- Add cron job to check weather once daily at 8 AM
+-- Enable pg_cron extension if not already enabled
+CREATE EXTENSION IF NOT EXISTS pg_cron;
+
+-- Enable pg_net extension for HTTP requests (required for cron to call API)
+CREATE EXTENSION IF NOT EXISTS pg_net;
+
+-- Grant permissions to postgres role
+GRANT USAGE ON SCHEMA cron TO postgres;
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA cron TO postgres;
+
+-- Add cron job to check weather forecast at 8 AM daily
 SELECT cron.schedule(
   'check-weather-and-activate-offers',
   '0 8 * * *', -- Daily at 8 AM
@@ -18,8 +28,5 @@ SELECT cron.schedule(
   );
   $$
 );
-
--- Comment
-COMMENT ON cron.job 'check-weather-and-activate-offers' IS 'Checks weather daily at 8 AM and activates rainy day promotional offers';
 
 SELECT 'Weather check cron job scheduled successfully!' as message;

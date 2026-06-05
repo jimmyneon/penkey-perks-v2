@@ -7,13 +7,14 @@
 
 ## 🎯 What This Does
 
-Automatically creates and distributes rainy day vouchers when it rains in Lymington:
+Automatically creates and distributes rainy day vouchers when rain is forecast for the lunch period:
 
-- **Weather Check:** Once daily at 8 AM via cron job
-- **Auto-Activation:** Activates "Rainy Day Rescue" offer when weather is rainy/drizzle
+- **Weather Check:** Once daily at 8 AM via cron job (checks 5-day forecast)
+- **Smart Activation:** Activates "Rainy Day Rescue" offer if rain expected during lunch (12-2 PM)
 - **Dashboard Display:** Shows voucher card on dashboard (no modal popup)
 - **Notifications:** Sends push, in-app, and email notifications to all customers
 - **Voucher Creation:** Users click to claim 20% off hot drink voucher (24h expiry)
+- **Location:** Configurable (defaults to Lymington)
 
 ---
 
@@ -166,15 +167,45 @@ SELECT * FROM notifications WHERE title LIKE '%Rainy%';
 Edit the cron schedule in `20260605000002_weather_check_cron.sql`:
 
 ```sql
--- Daily at 8 AM (current)
+-- Daily at 8 AM (current - checks forecast for lunch period)
 '0 8 * * *'
 
--- Twice daily (8 AM and 4 PM)
-'0 8,16 * * *'
+-- Twice daily (8 AM and 11 AM)
+'0 8,11 * * *'
 
 -- Every 6 hours
 '0 */6 * * *'
 ```
+
+### Adjust Lunch Period Check
+
+The system checks the forecast for 12 PM - 3 PM (lunch period). To change this, edit the forecast check in `app/api/weather/check-and-activate/route.ts`:
+
+```typescript
+// Current: 12 PM - 3 PM
+return forecastDate === today && (forecastHour >= 12 && forecastHour <= 15)
+
+// Example: 11 AM - 2 PM
+return forecastDate === today && (forecastHour >= 11 && forecastHour <= 14)
+```
+
+### Configure Location
+
+The system defaults to Lymington. To change the location, add a setting in `app_settings`:
+
+```sql
+INSERT INTO app_settings (key, value)
+VALUES (
+  'weather_location',
+  '{"lat": 51.5074, "lon": -0.1278, "name": "London"}'
+)
+ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value;
+```
+
+Common locations:
+- **London:** `{"lat": 51.5074, "lon": -0.1278, "name": "London"}`
+- **Lymington:** `{"lat": 50.7594, "lon": -1.5339, "name": "Lymington"}`
+- **Southampton:** `{"lat": 50.9097, "lon": -1.4044, "name": "Southampton"}`
 
 ### Adjust Offer Details
 
