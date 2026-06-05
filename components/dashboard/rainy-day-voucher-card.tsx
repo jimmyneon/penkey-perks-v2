@@ -148,11 +148,11 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
             </svg>
           </div>
         </div>
-        <div className="w-28 h-28 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFFFFF' }}>
+        <div className="w-36 h-36 flex items-center justify-center flex-shrink-0">
           <img
-            src="/image-assets/penkey-char/raining.png"
+            src="/raining.png"
             alt="Rainy Day"
-            className="w-[90%] h-[90%] object-contain"
+            className="w-full h-full object-contain"
           />
         </div>
       </motion.div>
