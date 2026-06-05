@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { CloudRain, Umbrella, Gift, CheckCircle2, X } from 'lucide-react'
+import { CloudRain, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import QRCodeLib from 'qrcode'
 
@@ -13,9 +13,7 @@ interface RainyDayVoucherCardProps {
 
 export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVoucherCardProps) {
   const [offerActive, setOfferActive] = useState(false)
-  const [hasClaimed, setHasClaimed] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [weather, setWeather] = useState<any>(null)
   const [showQR, setShowQR] = useState(false)
   const [qrCode, setQrCode] = useState('')
 
@@ -27,42 +25,16 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
     try {
       const supabase = createClient()
 
-      console.log('[RainyDayCard] Checking for rainy day offer, userId:', userId)
-
       // Check if rainy day offer is active
-      const { data: offer, error: offerError } = await supabase
+      const { data: offer } = await supabase
         .from('promotional_offers')
         .select('*')
         .ilike('title', '%Rainy Day Rescue%')
         .eq('active', true)
         .maybeSingle()
 
-      console.log('[RainyDayCard] Rainy day offer query result:', { offer, offerError })
-
       if (offer) {
         setOfferActive(true)
-
-        // Check if user already claimed today (using created_at)
-        const last24Hours = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
-        const { data: userOffer, error: userOfferError } = await supabase
-          .from('user_promotional_offers')
-          .select('*')
-          .eq('user_id', userId)
-          .eq('offer_id', offer.id)
-          .gte('created_at', last24Hours)
-          .maybeSingle()
-
-        console.log('[RainyDayCard] User offer result:', { userOffer, userOfferError })
-        setHasClaimed(!!userOffer)
-      } else {
-        console.log('[RainyDayCard] No rainy day offer found or not active')
-      }
-
-      // Get current weather
-      const weatherRes = await fetch('/api/weather')
-      if (weatherRes.ok) {
-        const weatherData = await weatherRes.json()
-        setWeather(weatherData)
       }
     } catch (error) {
       console.error('[RainyDayCard] Error checking rainy day offer:', error)
@@ -71,11 +43,9 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
     }
   }
 
-  const claimVoucher = async () => {
+  const handleCardClick = async () => {
     try {
       const supabase = createClient()
-
-      console.log('[RainyDayCard] Claiming voucher for userId:', userId)
 
       // Get the offer
       const { data: offer } = await supabase
@@ -87,7 +57,7 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
 
       if (!offer) return
 
-      // Record that user claimed (for tracking, not individual voucher)
+      // Record that user viewed/claimed (for tracking)
       const { error: insertError } = await supabase
         .from('user_promotional_offers')
         .insert({
@@ -98,7 +68,8 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
         })
 
       if (insertError) {
-        console.error('[RainyDayCard] Error recording claim:', insertError)
+        // Ignore duplicate errors (user already claimed today)
+        console.log('[RainyDayCard] User already claimed today')
       }
 
       // Increment redemption count on the offer
@@ -119,12 +90,10 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
       })
       setQrCode(url)
       setShowQR(true)
-      setHasClaimed(true)
 
-      console.log('[RainyDayCard] Voucher claimed successfully')
       onVoucherClaimed?.()
     } catch (error) {
-      console.error('[RainyDayCard] Error claiming voucher:', error)
+      console.error('[RainyDayCard] Error:', error)
     }
   }
 
@@ -137,56 +106,22 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-[18px] overflow-hidden"
-        style={{ backgroundColor: '#F8F5EF', boxShadow: '0 2px 14px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}
+        className="rounded-[18px] p-4 flex items-center gap-4 cursor-pointer active:scale-[0.985] transition-all duration-200"
+        style={{ backgroundColor: '#F4EFE7', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}
+        onClick={handleCardClick}
       >
-        <div className="p-4">
-          <div className="flex items-start gap-3">
-            {/* Icon */}
-            <div className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#FFF0E4' }}>
-              <CloudRain className="w-8 h-8" style={{ color: '#E07A3A' }} />
-            </div>
-
-            {/* Content */}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
-                <p className="text-[15px] font-bold leading-tight" style={{ color: '#24364B' }}>
-                  Rainy Day Rescue
-                </p>
-                {weather && (
-                  <span className="text-[11px] font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: '#E8E2D8', color: '#5A6A7A' }}>
-                    {weather.temperature}°C
-                  </span>
-                )}
-              </div>
-              <p className="text-[13px] mb-3" style={{ color: '#5A6A7A' }}>
-                20% off any hot drink today
-              </p>
-
-              {!hasClaimed ? (
-                <button
-                  onClick={claimVoucher}
-                  className="w-full py-2.5 px-4 rounded-[12px] text-[14px] font-semibold transition-all active:scale-[0.98]"
-                  style={{ backgroundColor: '#E07A3A', color: '#FFFFFF' }}
-                >
-                  Claim Your Voucher
-                </button>
-              ) : (
-                <button
-                  onClick={() => setShowQR(true)}
-                  className="w-full py-2.5 px-4 rounded-[12px] text-[14px] font-semibold transition-all active:scale-[0.98]"
-                  style={{ backgroundColor: '#24364B', color: '#FFFFFF' }}
-                >
-                  View QR Code
-                </button>
-              )}
-            </div>
-          </div>
-
-          <p className="text-[11px] mt-3 text-center" style={{ color: '#8A96A0' }}>
-            Valid for 24 hours • Show QR code at counter
-          </p>
+        <div className="w-28 h-28 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
+          <CloudRain className="w-[85%] h-[85%] scale-[150%]" style={{ color: '#E07A3A' }} />
         </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-[15px] font-bold leading-tight" style={{ color: '#24364B' }}>
+            Rainy Day Rescue
+          </p>
+          <p className="text-[12px] mt-0.5" style={{ color: '#5A6A7A' }}>20% off any hot drink today</p>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C4AFA8" strokeWidth="2.5">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
       </motion.div>
 
       {/* QR Code Modal */}
