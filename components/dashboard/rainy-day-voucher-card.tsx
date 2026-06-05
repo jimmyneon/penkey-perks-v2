@@ -141,7 +141,7 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative h-[200px] p-4 flex items-center gap-2 overflow-hidden cursor-pointer active:scale-[0.985] transition-all duration-200"
+        className="relative h-[200px] p-4 flex items-center gap-1 overflow-hidden cursor-pointer active:scale-[0.985] transition-all duration-200"
         style={{
           backgroundColor: '#FFF3E8',
           boxShadow: '0 2px 12px rgba(36,54,75,0.08)',
@@ -150,7 +150,15 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
         }}
         onClick={handleCardClick}
       >
-        <div className="relative z-10 w-[50%] min-w-0">
+        <div className="absolute left-[-18px] bottom-[-20px] w-[205px] h-[220px] flex items-center justify-center pointer-events-none">
+          <img
+            src="/raining.png"
+            alt="Rainy Day"
+            className="w-full h-full object-contain scale-[1.25]"
+          />
+        </div>
+
+        <div className="relative z-10 ml-[140px] w-[50%] min-w-0">
           <p className="text-[16px] font-bold leading-tight" style={{ color: '#24364B' }}>
             Rainy Day Rescue
           </p>
@@ -166,14 +174,6 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
           <p className="text-[12px] mt-6" style={{ color: '#8A96A0' }}>
             Ends in {timeRemaining}
           </p>
-        </div>
-
-        <div className="absolute right-[-18px] bottom-[-20px] w-[205px] h-[220px] flex items-center justify-center pointer-events-none">
-          <img
-            src="/raining.png"
-            alt="Rainy Day"
-            className="w-full h-full object-contain scale-[1.25]"
-          />
         </div>
       </motion.div>
 
