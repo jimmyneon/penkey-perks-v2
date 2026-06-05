@@ -29,30 +29,41 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
 
       console.log('[RainyDayCard] Checking for rainy day offer, userId:', userId)
 
-      // Check if rainy day offer is active
+      // First, log all active promotional offers for debugging
+      const { data: allOffers, error: allOffersError } = await supabase
+        .from('promotional_offers')
+        .select('id, title, active')
+        .eq('active', true)
+      
+      console.log('[RainyDayCard] All active offers:', { allOffers, allOffersError })
+
+      // Check if rainy day offer is active (using ilike for more flexible matching)
       const { data: offer, error: offerError } = await supabase
         .from('promotional_offers')
         .select('*')
-        .eq('title', '🌧️ Rainy Day Rescue - 20% Off')
+        .ilike('title', '%Rainy Day Rescue%')
         .eq('active', true)
-        .single()
+        .maybeSingle()
 
-      console.log('[RainyDayCard] Offer query result:', { offer, offerError })
+      console.log('[RainyDayCard] Rainy day offer query result:', { offer, offerError })
 
       if (offer) {
         setOfferActive(true)
 
-        // Check if user already claimed today
+        // Check if user already claimed today (using created_at instead of redeemed_at)
+        const last24Hours = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
         const { data: userOffer, error: userOfferError } = await supabase
           .from('user_promotional_offers')
           .select('*')
           .eq('user_id', userId)
           .eq('offer_id', offer.id)
-          .gte('redeemed_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
-          .single()
+          .gte('created_at', last24Hours)
+          .maybeSingle()
 
         console.log('[RainyDayCard] User offer result:', { userOffer, userOfferError })
         setHasClaimed(!!userOffer)
+      } else {
+        console.log('[RainyDayCard] No rainy day offer found or not active')
       }
 
       // Get current weather
@@ -75,20 +86,27 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
     try {
       const supabase = createClient()
 
+      console.log('[RainyDayCard] Claiming voucher for userId:', userId)
+
       const { data, error } = await supabase
         .rpc('create_rainy_day_voucher', { p_user_id: userId })
 
+      console.log('[RainyDayCard] RPC response:', { data, error })
+
       if (error) {
-        console.error('Error claiming voucher:', error)
+        console.error('[RainyDayCard] Error claiming voucher:', error)
         return
       }
 
       if (data && data[0]?.success) {
+        console.log('[RainyDayCard] Voucher claimed successfully')
         setHasClaimed(true)
         onVoucherClaimed?.()
+      } else {
+        console.log('[RainyDayCard] Voucher claim failed:', data)
       }
     } catch (error) {
-      console.error('Error claiming voucher:', error)
+      console.error('[RainyDayCard] Error claiming voucher:', error)
     } finally {
       setClaiming(false)
     }
