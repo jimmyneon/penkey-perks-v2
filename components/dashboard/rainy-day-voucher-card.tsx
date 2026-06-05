@@ -141,31 +141,49 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="min-h-[190px] p-5 flex items-center gap-4 cursor-pointer active:scale-[0.985] transition-all duration-200"
-        style={{ backgroundColor: '#FFF3E8', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #EAD8C8', borderRadius: '22px' }}
+        className="relative h-[200px] p-4 flex items-center gap-2 overflow-hidden cursor-pointer active:scale-[0.985] transition-all duration-200"
+        style={{
+          backgroundColor: '#FFF3E8',
+          boxShadow: '0 2px 12px rgba(36,54,75,0.08)',
+          border: '1px solid #EAD8C8',
+          borderRadius: '22px'
+        }}
         onClick={handleCardClick}
       >
-        <div className="flex-1 min-w-0">
-          <p className="text-[15px] font-bold leading-tight" style={{ color: '#24364B' }}>
+        <div className="relative z-10 w-[52%] min-w-0">
+          <p className="text-[16px] font-bold leading-tight" style={{ color: '#24364B' }}>
             Rainy Day Rescue
           </p>
-          <p className="text-[24px] font-extrabold leading-tight mt-1" style={{ color: '#E07A3A' }}>
+
+          <p className="text-[34px] font-extrabold leading-none mt-3" style={{ color: '#E07A3A' }}>
             20% OFF
           </p>
-          <p className="text-[14px] font-medium mt-0.5" style={{ color: '#5A6A7A' }}>
+
+          <p className="text-[15px] font-bold mt-1" style={{ color: '#24364B' }}>
             ANY HOT DRINK
           </p>
-          <p className="text-[12px] mt-1" style={{ color: '#8A96A0' }}>
+
+          <p className="text-[12px] mt-3" style={{ color: '#8A96A0' }}>
             Ends in {timeRemaining}
           </p>
-          <div className="flex items-center gap-1 mt-3" style={{ color: '#E07A3A' }}>
-            <span className="text-[13px] font-semibold">Click to claim</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+
+          <button
+            type="button"
+            className="mt-4 rounded-full px-5 py-2.5 text-[13px] font-semibold text-white flex items-center gap-2"
+            style={{ backgroundColor: '#E8751A' }}
+            onClick={(e) => {
+              e.stopPropagation()
+              handleCardClick()
+            }}
+          >
+            Claim Reward
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M9 18l6-6-6-6"/>
             </svg>
-          </div>
+          </button>
         </div>
-        <div className="w-[425px] h-[425px] flex items-center justify-center flex-shrink-0">
+
+        <div className="absolute right-[-10px] bottom-[-6px] w-[185px] h-[185px] flex items-center justify-center">
           <img
             src="/raining.png"
             alt="Rainy Day"
