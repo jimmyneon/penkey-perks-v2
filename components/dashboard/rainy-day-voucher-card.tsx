@@ -111,14 +111,18 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
         style={{ backgroundColor: '#FFF0E4', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}
         onClick={handleCardClick}
       >
-        <div className="w-28 h-28 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFFFFF' }}>
-          <CloudRain className="w-[85%] h-[85%]" style={{ color: '#E07A3A' }} />
-        </div>
         <div className="flex-1 min-w-0">
-          <p className="text-[15px] font-bold leading-tight" style={{ color: '#24364B' }}>
+          <p className="text-[18px] font-bold leading-tight" style={{ color: '#24364B' }}>
             Rainy Day Rescue
           </p>
-          <p className="text-[12px] mt-0.5" style={{ color: '#5A6A7A' }}>20% off any hot drink today</p>
+          <p className="text-[14px] mt-1" style={{ color: '#5A6A7A' }}>20% off any hot drink today</p>
+        </div>
+        <div className="w-24 h-24 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFFFFF' }}>
+          <img
+            src="/image-assets/penkey-char/raining.png"
+            alt="Rainy Day"
+            className="w-[90%] h-[90%] object-contain"
+          />
         </div>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C4AFA8" strokeWidth="2.5">
           <path d="M9 18l6-6-6-6"/>

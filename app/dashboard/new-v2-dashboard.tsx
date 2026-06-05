@@ -365,6 +365,18 @@ export default function NewV2Dashboard() {
             </div>
           </div>
 
+          {/* ── RAINY DAY VOUCHER CARD ── */}
+          {user?.id && (
+            <RainyDayVoucherCard
+              userId={user.id}
+              onVoucherClaimed={async () => {
+                // Refresh vouchers when claimed
+                const freshVouchers = await getActiveVouchers(user.id)
+                setVouchers(freshVouchers)
+              }}
+            />
+          )}
+
           {/* ── YOUR PROGRESS ── */}
           <div
             className="rounded-[18px] overflow-hidden active:scale-[0.985] transition-all duration-200"
@@ -440,18 +452,6 @@ export default function NewV2Dashboard() {
               </div>
             </div>
           </div>
-
-          {/* ── RAINY DAY VOUCHER CARD ── */}
-          {user?.id && (
-            <RainyDayVoucherCard 
-              userId={user.id} 
-              onVoucherClaimed={async () => {
-                // Refresh vouchers when claimed
-                const freshVouchers = await getActiveVouchers(user.id)
-                setVouchers(freshVouchers)
-              }}
-            />
-          )}
 
           {/* ── VOUCHERS — only shows when real vouchers exist ── */}
           {vouchers.length > 0 && (
