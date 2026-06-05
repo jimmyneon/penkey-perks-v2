@@ -145,7 +145,7 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
         style={{
           backgroundColor: '#FFF3E8',
           boxShadow: '0 2px 12px rgba(36,54,75,0.08)',
-          border: '3px solid red',
+          border: '1px solid #EAD8C8',
           borderRadius: '22px'
         }}
         onClick={handleCardClick}
@@ -155,7 +155,7 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
             Rainy Day Rescue
           </p>
 
-          <p className="text-[34px] font-extrabold leading-none mt-3" style={{ color: '#E07A3A' }}>
+          <p className="text-[34px] font-extrabold leading-none mt-1" style={{ color: '#E07A3A' }}>
             20% OFF
           </p>
 
@@ -163,27 +163,12 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
             ANY HOT DRINK
           </p>
 
-          <p className="text-[12px] mt-3" style={{ color: '#8A96A0' }}>
+          <p className="text-[12px] mt-6" style={{ color: '#8A96A0' }}>
             Ends in {timeRemaining}
           </p>
-
-          <button
-            type="button"
-            className="mt-4 rounded-full px-5 py-2.5 text-[13px] font-semibold text-white flex items-center gap-2"
-            style={{ backgroundColor: '#E8751A' }}
-            onClick={(e) => {
-              e.stopPropagation()
-              handleCardClick()
-            }}
-          >
-            Claim Reward
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M9 18l6-6-6-6"/>
-            </svg>
-          </button>
         </div>
 
-        <div className="absolute right-[-18px] bottom-[-12px] w-[205px] h-[205px] flex items-center justify-center pointer-events-none">
+        <div className="absolute right-[-18px] bottom-[-20px] w-[205px] h-[220px] flex items-center justify-center pointer-events-none">
           <img
             src="/raining.png"
             alt="Rainy Day"
