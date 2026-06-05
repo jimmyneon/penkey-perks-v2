@@ -20,7 +20,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
   const STAMP_RESULT_OFFSET_Y = -80
   const STAMPER_WIDTH = 'clamp(1000px, 250vw, 1500px)'
   const SPLASH_SIZE = 520
-  const RESULT_STAMP_SIZE = 400
+  const RESULT_STAMP_SIZE = 500
 
   const tx = targetPosition?.x ?? (typeof window !== 'undefined' ? window.innerWidth / 2 : 200)
   const ty = targetPosition?.y ?? (typeof window !== 'undefined' ? window.innerHeight / 2 : 400)
@@ -118,7 +118,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
           <img
             src="/image-assets/stamps/stamp.png"
             alt="Stamp"
-            style={{ width: RESULT_STAMP_SIZE, height: RESULT_STAMP_SIZE, objectFit: 'contain', display: 'block' }}
+            style={{ width: RESULT_STAMP_SIZE, height: RESULT_STAMP_SIZE, objectFit: 'contain', display: 'block', transform: 'scale(2)' }}
           />
         </motion.div>
       </div>
