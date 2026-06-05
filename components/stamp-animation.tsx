@@ -18,9 +18,9 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
   // Constants for size and position
   const STAMPER_OFFSET_Y = -180
   const STAMP_RESULT_OFFSET_Y = -80
-  const STAMPER_WIDTH = 'clamp(900px, 220vw, 1300px)'
+  const STAMPER_WIDTH = 'clamp(1000px, 250vw, 1500px)'
   const SPLASH_SIZE = 520
-  const RESULT_STAMP_SIZE = 300
+  const RESULT_STAMP_SIZE = 400
 
   const tx = targetPosition?.x ?? (typeof window !== 'undefined' ? window.innerWidth / 2 : 200)
   const ty = targetPosition?.y ?? (typeof window !== 'undefined' ? window.innerHeight / 2 : 400)
@@ -81,7 +81,7 @@ export function StampAnimation({ onComplete, show = false, targetPosition }: Sta
 
       // ─── Step 4: Reveal actual stamp ─────────────────────────────
       await stampCtrl.start({
-        scale: [1.4, 1],
+        scale: [2.5, 1],
         opacity: [0, 1],
         rotate: rotation,
         x: offsetX,
