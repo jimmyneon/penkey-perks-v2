@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { CloudRain, X } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { CloudRain } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { BottomSheet } from '@/components/ui/bottom-sheet'
 import QRCodeLib from 'qrcode'
 
 interface RainyDayVoucherCardProps {
@@ -107,11 +108,11 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="rounded-[18px] p-4 flex items-center gap-4 cursor-pointer active:scale-[0.985] transition-all duration-200"
-        style={{ backgroundColor: '#F4EFE7', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}
+        style={{ backgroundColor: '#FFF0E4', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}
         onClick={handleCardClick}
       >
-        <div className="w-28 h-28 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
-          <CloudRain className="w-[85%] h-[85%] scale-[150%]" style={{ color: '#E07A3A' }} />
+        <div className="w-28 h-28 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFFFFF' }}>
+          <CloudRain className="w-[85%] h-[85%]" style={{ color: '#E07A3A' }} />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-[15px] font-bold leading-tight" style={{ color: '#24364B' }}>
@@ -124,54 +125,29 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
         </svg>
       </motion.div>
 
-      {/* QR Code Modal */}
-      <AnimatePresence>
-        {showQR && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
-            style={{ backgroundColor: 'rgba(36,54,75,0.8)' }}
-            onClick={() => setShowQR(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="rounded-[18px] p-6 max-w-sm w-full"
-              style={{ backgroundColor: '#F9F7F2' }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-[18px] font-bold" style={{ color: '#24364B' }}>
-                  Rainy Day Voucher
-                </h3>
-                <button
-                  onClick={() => setShowQR(false)}
-                  className="p-1 rounded-full transition-colors hover:bg-gray-200"
-                >
-                  <X className="w-5 h-5" style={{ color: '#5A6A7A' }} />
-                </button>
-              </div>
+      {/* QR Code Bottom Sheet */}
+      <BottomSheet open={showQR} onOpenChange={setShowQR} showCloseButton={false}>
+        <div className="flex flex-col items-center p-5">
+          <div className="text-center mb-6">
+            <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
+              Rainy Day Voucher
+            </p>
+            <p className="text-[14px] mt-1" style={{ color: '#5A6A7A' }}>
+              20% Off Any Hot Drink
+            </p>
+          </div>
 
-              <div className="flex flex-col items-center">
-                <div className="bg-white p-4 rounded-[12px] mb-4">
-                  {qrCode && (
-                    <img src={qrCode} alt="QR Code" className="w-48 h-48" />
-                  )}
-                </div>
-                <p className="text-[14px] font-semibold mb-1" style={{ color: '#24364B' }}>
-                  20% Off Any Hot Drink
-                </p>
-                <p className="text-[12px] text-center" style={{ color: '#5A6A7A' }}>
-                  Show this QR code at the counter to redeem
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          <div className="bg-white p-4 rounded-[12px] mb-4">
+            {qrCode && (
+              <img src={qrCode} alt="QR Code" className="w-48 h-48" />
+            )}
+          </div>
+
+          <p className="text-[12px] text-center" style={{ color: '#5A6A7A' }}>
+            Show this QR code at the counter to redeem
+          </p>
+        </div>
+      </BottomSheet>
     </>
   )
 }
