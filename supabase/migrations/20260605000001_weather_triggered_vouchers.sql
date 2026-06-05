@@ -3,6 +3,147 @@
 -- Automatically creates rainy day vouchers when weather is bad
 -- =============================================
 
+-- Check if promotional_offers table exists, if not create it
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT FROM information_schema.tables 
+    WHERE table_schema = 'public' 
+    AND table_name = 'promotional_offers'
+  ) THEN
+    -- Create minimal promotional_offers table structure
+    CREATE TABLE public.promotional_offers (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      title TEXT NOT NULL,
+      description TEXT NOT NULL,
+      terms TEXT,
+      reward_type TEXT NOT NULL CHECK (reward_type IN ('free_item', 'discount', 'bonus_beans', 'custom')),
+      reward_value TEXT NOT NULL,
+      reward_description TEXT,
+      icon TEXT DEFAULT '🎁',
+      image_url TEXT,
+      button_text TEXT DEFAULT 'Redeem Now',
+      redemption_limit INTEGER,
+      total_redemption_limit INTEGER,
+      redemptions_count INTEGER DEFAULT 0,
+      voucher_expiry_hours INTEGER DEFAULT 48,
+      auto_create_voucher BOOLEAN DEFAULT true,
+      active BOOLEAN DEFAULT true,
+      start_date TIMESTAMP WITH TIME ZONE,
+      end_date TIMESTAMP WITH TIME ZONE,
+      target_audience TEXT DEFAULT 'all',
+      min_beans INTEGER,
+      max_beans INTEGER,
+      priority INTEGER DEFAULT 10,
+      show_as_modal BOOLEAN DEFAULT true,
+      show_as_notification BOOLEAN DEFAULT true,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      created_by UUID REFERENCES auth.users(id),
+      CONSTRAINT valid_date_range CHECK (end_date IS NULL OR start_date IS NULL OR end_date > start_date)
+    );
+    
+    -- Enable RLS
+    ALTER TABLE public.promotional_offers ENABLE ROW LEVEL SECURITY;
+    
+    -- Create basic policies
+    DROP POLICY IF EXISTS "Staff can manage promotional offers" ON public.promotional_offers;
+    CREATE POLICY "Staff can manage promotional offers"
+      ON public.promotional_offers
+      FOR ALL
+      USING (
+        EXISTS (
+          SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'staff'
+        )
+      );
+    
+    DROP POLICY IF EXISTS "Users can view active promotional offers" ON public.promotional_offers;
+    CREATE POLICY "Users can view active promotional offers"
+      ON public.promotional_offers
+      FOR SELECT
+      USING (active = true);
+    
+    RAISE NOTICE 'Created promotional_offers table';
+  END IF;
+END $$;
+
+-- Also check for user_promotional_offers table
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT FROM information_schema.tables 
+    WHERE table_schema = 'public' 
+    AND table_name = 'user_promotional_offers'
+  ) THEN
+    CREATE TABLE public.user_promotional_offers (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+      offer_id UUID NOT NULL REFERENCES public.promotional_offers(id) ON DELETE CASCADE,
+      viewed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      redeemed_at TIMESTAMP WITH TIME ZONE,
+      voucher_id UUID,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      UNIQUE(user_id, offer_id)
+    );
+    
+    ALTER TABLE public.user_promotional_offers ENABLE ROW LEVEL SECURITY;
+    
+    DROP POLICY IF EXISTS "Users manage own promotional offer interactions" ON public.user_promotional_offers;
+    CREATE POLICY "Users manage own promotional offer interactions"
+      ON public.user_promotional_offers
+      FOR ALL
+      USING (user_id = auth.uid());
+    
+    RAISE NOTICE 'Created user_promotional_offers table';
+  END IF;
+END $$;
+
+-- Also check for promotional_offer_rewards table
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT FROM information_schema.tables 
+    WHERE table_schema = 'public' 
+    AND table_name = 'promotional_offer_rewards'
+  ) THEN
+    CREATE TABLE public.promotional_offer_rewards (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      offer_id UUID NOT NULL REFERENCES public.promotional_offers(id) ON DELETE CASCADE,
+      reward_id UUID,
+      custom_name TEXT,
+      custom_description TEXT,
+      custom_type TEXT CHECK (custom_type IN ('free_item', 'discount', 'bonus_beans')),
+      custom_value TEXT,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      CONSTRAINT has_reward_or_custom CHECK (
+        reward_id IS NOT NULL OR 
+        (custom_name IS NOT NULL AND custom_type IS NOT NULL AND custom_value IS NOT NULL)
+      )
+    );
+    
+    ALTER TABLE public.promotional_offer_rewards ENABLE ROW LEVEL SECURITY;
+    
+    DROP POLICY IF EXISTS "Staff can manage promotional offer rewards" ON public.promotional_offer_rewards;
+    CREATE POLICY "Staff can manage promotional offer rewards"
+      ON public.promotional_offer_rewards
+      FOR ALL
+      USING (
+        EXISTS (
+          SELECT 1 FROM public.staff
+          WHERE staff.user_id = auth.uid()
+        )
+      );
+    
+    DROP POLICY IF EXISTS "Users can view promotional offer rewards" ON public.promotional_offer_rewards;
+    CREATE POLICY "Users can view promotional offer rewards"
+      ON public.promotional_offer_rewards
+      FOR SELECT
+      USING (true);
+    
+    RAISE NOTICE 'Created promotional_offer_rewards table';
+  END IF;
+END $$;
+
 -- 1. WEATHER TRIGGERED OFFERS TABLE
 -- Stores weather conditions and linked promotional offers
 CREATE TABLE IF NOT EXISTS public.weather_triggered_offers (

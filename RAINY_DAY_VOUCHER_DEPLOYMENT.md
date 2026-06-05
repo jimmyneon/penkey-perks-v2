@@ -9,7 +9,7 @@
 
 Automatically creates and distributes rainy day vouchers when it rains in Lymington:
 
-- **Weather Check:** Every 30 minutes via cron job
+- **Weather Check:** Once daily at 8 AM via cron job
 - **Auto-Activation:** Activates "Rainy Day Rescue" offer when weather is rainy/drizzle
 - **Dashboard Display:** Shows voucher card on dashboard (no modal popup)
 - **Notifications:** Sends push, in-app, and email notifications to all customers
@@ -166,14 +166,14 @@ SELECT * FROM notifications WHERE title LIKE '%Rainy%';
 Edit the cron schedule in `20260605000002_weather_check_cron.sql`:
 
 ```sql
--- Every 30 minutes (current)
-'*/30 * * * *'
+-- Daily at 8 AM (current)
+'0 8 * * *'
 
--- Every 15 minutes (more frequent)
-'*/15 * * * *'
+-- Twice daily (8 AM and 4 PM)
+'0 8,16 * * *'
 
--- Every hour (less frequent)
-'0 * * * *'
+-- Every 6 hours
+'0 */6 * * *'
 ```
 
 ### Adjust Offer Details
