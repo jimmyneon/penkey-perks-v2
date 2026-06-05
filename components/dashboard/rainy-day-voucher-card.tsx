@@ -17,6 +17,7 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
   const [showQR, setShowQR] = useState(false)
   const [qrCode, setQrCode] = useState('')
   const [timeRemaining, setTimeRemaining] = useState('')
+  const [offer, setOffer] = useState<any>(null)
 
   useEffect(() => {
     checkRainyDayOffer()
@@ -26,10 +27,21 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
   }, [userId])
 
   const updateTimer = () => {
+    if (!offer) return
+    
     const now = new Date()
-    const endOfDay = new Date()
-    endOfDay.setHours(23, 59, 59, 999)
-    const diff = endOfDay.getTime() - now.getTime()
+    const endTime = offer.expires_at ? new Date(offer.expires_at) : (() => {
+      const eod = new Date()
+      eod.setHours(23, 59, 59, 999)
+      return eod
+    })()
+    
+    const diff = endTime.getTime() - now.getTime()
+    if (diff <= 0) {
+      setTimeRemaining('Expired')
+      return
+    }
+    
     const hours = Math.floor(diff / (1000 * 60 * 60))
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
     setTimeRemaining(`${hours}h ${minutes}m`)
@@ -37,7 +49,7 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
 
   useEffect(() => {
     updateTimer()
-  }, [])
+  }, [offer])
 
   const checkRainyDayOffer = async () => {
     try {
@@ -52,6 +64,7 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
         .maybeSingle()
 
       if (offer) {
+        setOffer(offer)
         setOfferActive(true)
       }
     } catch (error) {
@@ -65,39 +78,43 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
     try {
       const supabase = createClient()
 
-      // Get the offer
-      const { data: offer } = await supabase
-        .from('promotional_offers')
-        .select('*')
-        .ilike('title', '%Rainy Day Rescue%')
-        .eq('active', true)
-        .single()
-
       if (!offer) return
 
-      // Record that user viewed/claimed (for tracking)
-      const { error: insertError } = await supabase
+      // Check if user already has a claim for this offer
+      const { data: existingClaim } = await supabase
         .from('user_promotional_offers')
-        .insert({
-          user_id: userId,
-          offer_id: offer.id,
-          viewed_at: new Date().toISOString(),
-          redeemed_at: new Date().toISOString()
-        })
+        .select('*')
+        .eq('user_id', userId)
+        .eq('offer_id', offer.id)
+        .maybeSingle()
 
-      if (insertError) {
-        // Ignore duplicate errors (user already claimed today)
-        console.log('[RainyDayCard] User already claimed today')
+      let claimId: string
+
+      if (existingClaim) {
+        claimId = existingClaim.id
+      } else {
+        // Create new claim record (viewed but not redeemed yet)
+        const { data: newClaim, error: insertError } = await supabase
+          .from('user_promotional_offers')
+          .insert({
+            user_id: userId,
+            offer_id: offer.id,
+            viewed_at: new Date().toISOString(),
+            redeemed_at: null
+          })
+          .select()
+          .single()
+
+        if (insertError) {
+          console.error('[RainyDayCard] Error creating claim:', insertError)
+          return
+        }
+
+        claimId = newClaim.id
       }
 
-      // Increment redemption count on the offer
-      await supabase
-        .from('promotional_offers')
-        .update({ redemptions_count: (offer.redemptions_count || 0) + 1 })
-        .eq('id', offer.id)
-
-      // Generate global QR code (same for everyone)
-      const qrData = `RAINY-DAY-${offer.id}`
+      // Generate unique QR code for this specific claim
+      const qrData = `RAINY-DAY-${claimId}`
       const url = await QRCodeLib.toDataURL(qrData, {
         width: 200,
         margin: 2,
@@ -124,8 +141,8 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="rounded-[18px] p-4 flex items-center gap-4 cursor-pointer active:scale-[0.985] transition-all duration-200"
-        style={{ backgroundColor: '#FFF0E4', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #E8E2D8' }}
+        className="min-h-[190px] p-5 flex items-center gap-4 cursor-pointer active:scale-[0.985] transition-all duration-200"
+        style={{ backgroundColor: '#FFF3E8', boxShadow: '0 2px 12px rgba(36,54,75,0.08)', border: '1px solid #EAD8C8', borderRadius: '22px' }}
         onClick={handleCardClick}
       >
         <div className="flex-1 min-w-0">
@@ -141,14 +158,17 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
           <p className="text-[12px] mt-1" style={{ color: '#8A96A0' }}>
             Ends in {timeRemaining}
           </p>
-          <div className="flex items-center gap-1 mt-2" style={{ color: '#E07A3A' }}>
-            <span className="text-[13px] font-semibold">Claim Reward</span>
+          <button
+            className="flex items-center gap-2 mt-3 px-5 py-3 rounded-full font-semibold text-white transition-all"
+            style={{ backgroundColor: '#E8751A' }}
+          >
+            Claim Reward
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M9 18l6-6-6-6"/>
             </svg>
-          </div>
+          </button>
         </div>
-        <div className="w-36 h-36 flex items-center justify-center flex-shrink-0">
+        <div className="w-[170px] h-[170px] flex items-center justify-center flex-shrink-0">
           <img
             src="/raining.png"
             alt="Rainy Day"
