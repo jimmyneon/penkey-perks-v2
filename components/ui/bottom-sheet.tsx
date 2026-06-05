@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from "react"
-import { motion, AnimatePresence, useAnimation, useDragControls, PanInfo } from "framer-motion"
+import { motion, AnimatePresence, useMotionValue, useDragControls, PanInfo } from "framer-motion"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -24,73 +24,37 @@ export function BottomSheet({
   className,
   fullScreen = false,
 }: BottomSheetProps) {
-  const controls = useAnimation()
+  const y = useMotionValue(0)
   const dragControls = useDragControls()
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     const shouldClose =
-      info.offset.y > 15 || info.velocity.y > 100
+      info.offset.y > 70 || info.velocity.y > 500
 
     if (shouldClose) {
       onOpenChange(false)
     } else {
-      controls.start({
-        y: 0,
-        transition: {
-          type: "tween",
-          duration: 0.22,
-          ease: [0.16, 1, 0.3, 1],
-        },
-      })
+      y.set(0)
     }
   }
 
-  // Animate open/close
-  React.useEffect(() => {
-    if (open) {
-      controls.start({
-        y: 0,
-        transition: {
-          type: "tween",
-          duration: 0.8,
-          ease: [0.16, 1, 0.3, 1],
-        },
-      })
-    } else {
-      controls.start({
-        y: "100%",
-        transition: {
-          type: "tween",
-          duration: 0.25,
-          ease: [0.16, 1, 0.3, 1],
-        },
-      })
-    }
-  }, [open, controls])
-
   // Lock body scroll when sheet is open
   React.useEffect(() => {
-    if (open) {
-      const scrollY = window.scrollY
-      document.body.style.overflow = 'hidden'
-      document.body.style.position = 'fixed'
-      document.body.style.top = `-${scrollY}px`
-      document.body.style.width = '100%'
-    } else {
-      const y = document.body.style.top
-      document.body.style.overflow = ''
-      document.body.style.position = ''
-      document.body.style.top = ''
-      document.body.style.width = ''
-      window.scrollTo(0, parseInt(y || '0') * -1)
-    }
+    if (!open) return
+
+    const scrollY = window.scrollY
+
+    document.body.style.overflow = 'hidden'
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.width = '100%'
+
     return () => {
-      const y = document.body.style.top
       document.body.style.overflow = ''
       document.body.style.position = ''
       document.body.style.top = ''
       document.body.style.width = ''
-      window.scrollTo(0, parseInt(y || '0') * -1)
+      window.scrollTo(0, scrollY)
     }
   }, [open])
 
@@ -111,14 +75,20 @@ export function BottomSheet({
           {/* Sheet - entire sheet draggable */}
           <motion.div
             initial={{ y: "100%" }}
-            animate={controls}
+            animate={{ y: 0 }}
             exit={{ y: "100%" }}
+            transition={{
+              type: "tween",
+              duration: 0.45,
+              ease: [0.16, 1, 0.3, 1],
+            }}
             drag="y"
             dragControls={dragControls}
             dragListener={false}
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={0.12}
             onDragEnd={handleDragEnd}
+            style={{ y }}
             className={cn(
               "fixed bottom-0 left-0 right-0 z-[10000] shadow-premium-xl",
               fullScreen ? "h-screen rounded-t-0" : "bg-cream-card rounded-t-3xl max-h-[85vh]",
