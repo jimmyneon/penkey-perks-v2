@@ -143,19 +143,22 @@ export default function NewV2Dashboard() {
     }
 
     console.log('[Animation Trigger] === SETTING showStampAnimation TO TRUE ===')
-    setShowStampAnimation(true)
-
-    // Set bean fill during impact phase (0.45s after animation starts, when stamper covers the bean)
+    // Delay animation trigger to let modal open first
     setTimeout(() => {
-      console.log('[Animation Trigger] Setting newlyStampedIndex during impact')
-      setNewlyStampedIndex(currentBeans - 1)
-    }, 450)
+      setShowStampAnimation(true)
 
-    setTimeout(() => {
-      console.log('[Animation Trigger] Card shake')
-      setCardShake(true)
-      setTimeout(() => setCardShake(false), 100)
-    }, 450)
+      // Set bean fill during impact phase (0.45s after animation starts, when stamper covers the bean)
+      setTimeout(() => {
+        console.log('[Animation Trigger] Setting newlyStampedIndex during impact')
+        setNewlyStampedIndex(currentBeans - 1)
+      }, 450)
+
+      setTimeout(() => {
+        console.log('[Animation Trigger] Card shake')
+        setCardShake(true)
+        setTimeout(() => setCardShake(false), 100)
+      }, 450)
+    }, 300)
     return () => {
       console.log('[Animation Trigger] Cleanup')
     }
