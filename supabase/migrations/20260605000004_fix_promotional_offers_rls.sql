@@ -27,6 +27,9 @@ CREATE POLICY "Staff can manage promotional offers"
 
 -- Also fix user_promotional_offers RLS if needed
 DROP POLICY IF EXISTS "Users manage own promotional offer interactions" ON public.user_promotional_offers;
+DROP POLICY IF EXISTS "Users can view own promotional offer interactions" ON public.user_promotional_offers;
+DROP POLICY IF EXISTS "Users can insert own promotional offer interactions" ON public.user_promotional_offers;
+DROP POLICY IF EXISTS "Users can update own promotional offer interactions" ON public.user_promotional_offers;
 
 CREATE POLICY "Users can view own promotional offer interactions"
   ON public.user_promotional_offers
