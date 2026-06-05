@@ -145,12 +145,12 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
         style={{
           backgroundColor: '#FFF3E8',
           boxShadow: '0 2px 12px rgba(36,54,75,0.08)',
-          border: '1px solid #EAD8C8',
+          border: '3px solid red',
           borderRadius: '22px'
         }}
         onClick={handleCardClick}
       >
-        <div className="relative z-10 w-[52%] min-w-0">
+        <div className="relative z-10 w-[50%] min-w-0">
           <p className="text-[16px] font-bold leading-tight" style={{ color: '#24364B' }}>
             Rainy Day Rescue
           </p>
@@ -183,11 +183,11 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
           </button>
         </div>
 
-        <div className="absolute right-[-10px] bottom-[-6px] w-[185px] h-[185px] flex items-center justify-center">
+        <div className="absolute right-[-18px] bottom-[-12px] w-[205px] h-[205px] flex items-center justify-center pointer-events-none">
           <img
             src="/raining.png"
             alt="Rainy Day"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain scale-[1.25]"
           />
         </div>
       </motion.div>
