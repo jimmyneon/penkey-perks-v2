@@ -158,17 +158,14 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
           <p className="text-[12px] mt-1" style={{ color: '#8A96A0' }}>
             Ends in {timeRemaining}
           </p>
-          <button
-            className="flex items-center gap-2 mt-3 px-5 py-3 rounded-full font-semibold text-white transition-all"
-            style={{ backgroundColor: '#E8751A' }}
-          >
-            Claim Reward
+          <div className="flex items-center gap-1 mt-3" style={{ color: '#E07A3A' }}>
+            <span className="text-[13px] font-semibold">Click to claim</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M9 18l6-6-6-6"/>
             </svg>
-          </button>
+          </div>
         </div>
-        <div className="w-[170px] h-[170px] flex items-center justify-center flex-shrink-0">
+        <div className="w-[425px] h-[425px] flex items-center justify-center flex-shrink-0">
           <img
             src="/raining.png"
             alt="Rainy Day"
