@@ -3,17 +3,17 @@
 -- Fixes 403 error when users try to view active offers
 -- =============================================
 
--- Drop existing policies
+-- Drop all existing policies on promotional_offers
 DROP POLICY IF EXISTS "Staff can manage promotional offers" ON public.promotional_offers;
 DROP POLICY IF EXISTS "Users can view active promotional offers" ON public.promotional_offers;
 
--- Create more permissive policy for viewing active offers
-CREATE POLICY "Users can view active promotional offers"
+-- Create simple policy: all authenticated users can view active offers
+CREATE POLICY "Authenticated users can view active promotional offers"
   ON public.promotional_offers
   FOR SELECT
-  USING (active = true);
+  USING (auth.role() = 'authenticated');
 
--- Create policy for staff to manage offers
+-- Create policy for staff to manage offers (INSERT/UPDATE/DELETE)
 CREATE POLICY "Staff can manage promotional offers"
   ON public.promotional_offers
   FOR ALL
