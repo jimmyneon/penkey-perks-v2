@@ -19,6 +19,7 @@ import { GiftIcon } from '@/components/ui/gift-icon'
 import { StampAnimation } from '@/components/stamp-animation'
 import { RainyDayVoucherCard } from '@/components/dashboard/rainy-day-voucher-card'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 // Generate consistent random values for each stamp index
 const getStampVariations = (index: number) => {
@@ -308,7 +309,14 @@ export default function NewV2Dashboard() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F4F1EA' }}>
-        <img src="/logo.webp" alt="Penkey Perks" className="w-32 h-32 object-contain opacity-80" />
+        <Image
+          src="/logo.webp"
+          alt="Penkey Perks"
+          width={128}
+          height={128}
+          className="w-32 h-32 object-contain opacity-80"
+          priority
+        />
       </div>
     )
   }
@@ -341,11 +349,14 @@ export default function NewV2Dashboard() {
             <div className="flex-1">
               <p className="text-[24px] font-bold leading-tight" style={{ color: '#E07A3A', fontFamily: 'cursive, Georgia, serif' }}>
                 {mounted ? getGreeting() : 'Hello'},{' '}
-                <img
+                <Image
                   src="/image-assets/stamps/heart.svg"
                   alt=""
+                  width={20}
+                  height={20}
                   className="inline-block w-5 h-5 object-contain align-middle"
                   style={{ marginBottom: '2px', animation: 'heartPulse 1.2s ease-in-out 3' }}
+                  priority
                 />
               </p>
               <h1 className="text-[72px] font-bold leading-none tracking-tight mt-0.5" style={{ color: '#24364B' }}>
@@ -357,10 +368,13 @@ export default function NewV2Dashboard() {
             </div>
             {/* Right: Cup Illy image */}
             <div className="flex-shrink-0">
-              <img
+              <Image
                 src="/cupilli.webp"
                 alt="Cup Illy"
+                width={160}
+                height={160}
                 className="w-40 h-40 object-contain"
+                priority
               />
             </div>
           </div>
@@ -389,7 +403,14 @@ export default function NewV2Dashboard() {
                 onClick={() => setShowBeansPanel(true)}
               >
                 {/* Bean pile background */}
-                <img src="/beanpile.webp" alt="" className="absolute inset-0 w-full h-full object-cover opacity-15" style={{ transform: 'scale(0.8)' }} />
+                <Image
+                  src="/beanpile.webp"
+                  alt=""
+                  fill
+                  className="object-cover opacity-15"
+                  style={{ transform: 'scale(0.8)' }}
+                  priority
+                />
                 
                 <div className="relative z-10">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.12em] mb-3" style={{ color: '#F0EDE5' }}>
@@ -400,7 +421,15 @@ export default function NewV2Dashboard() {
                       <FlipNumber value={currentBeans} className={`text-[56px] font-extrabold leading-none ${triggerAnimation ? 'animate-bean-glow' : ''}`} style={{ color: '#F0EDE5' }} />
                     </div>
                     <p className="text-[14px] font-semibold" style={{ color: '#F0EDE5' }}>{currentBeans === 1 ? 'bean' : 'beans'}</p>
-                    <img src="/stroke.webp" alt="" className="w-24 h-2 object-contain mt-1 opacity-60" style={{ marginLeft: '-12px' }} />
+                    <Image
+                      src="/stroke.webp"
+                      alt=""
+                      width={96}
+                      height={8}
+                      className="w-24 h-2 object-contain mt-1 opacity-60"
+                      style={{ marginLeft: '-12px' }}
+                      priority
+                    />
                   </div>
                 </div>
                 <Link href="/rewards" className="inline-flex items-center gap-1 text-[11px] font-semibold relative z-10" style={{ color: '#F28A2E' }} onClick={(e) => e.stopPropagation()}>
@@ -424,10 +453,13 @@ export default function NewV2Dashboard() {
                   </p>
                   <div className="flex items-center justify-center overflow-hidden">
                     {nextReward?.icon_url || nextReward?.image_url ? (
-                      <img
+                      <Image
                         src={nextReward?.icon_url || nextReward?.image_url}
                         alt={nextReward.reward}
+                        width={224}
+                        height={224}
                         className="w-56 h-56 object-contain scale-150"
+                        loading="lazy"
                       />
                     ) : null}
                   </div>
@@ -461,10 +493,13 @@ export default function NewV2Dashboard() {
               onClick={() => setShowVoucherSheet(true)}
             >
               <div className="w-28 h-28 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
-                <img
+                <Image
                   src="/vouchers/voucher.png"
                   alt="Vouchers"
+                  width={112}
+                  height={112}
                   className="w-[85%] h-[85%] object-contain scale-[150%]"
+                  loading="lazy"
                 />
               </div>
               <div className="flex-1 min-w-0">
@@ -492,7 +527,14 @@ export default function NewV2Dashboard() {
                 ].map((step) => (
                   <div key={step.img} className="text-center">
                     <div className="w-28 h-28 rounded-full mx-auto mb-2 flex items-center justify-center relative" style={{ backgroundColor: '#FFF0E4' }}>
-                      <img src={step.img} alt={step.label} className="w-24 h-24 object-contain" />
+                      <Image
+                        src={step.img}
+                        alt={step.label}
+                        width={96}
+                        height={96}
+                        className="w-24 h-24 object-contain"
+                        loading="lazy"
+                      />
                       <div className="absolute top-0 right-0 w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold text-white" style={{ backgroundColor: '#F28A2E' }}>
                         {step.num}
                       </div>
@@ -509,7 +551,14 @@ export default function NewV2Dashboard() {
                 className="inline-flex items-center gap-2 text-[12px] font-semibold"
                 style={{ color: '#E07A3A' }}
               >
-                <img src="/heart.webp" alt="" className="w-4 h-4 object-contain" />
+                <Image
+                  src="/heart.webp"
+                  alt=""
+                  width={16}
+                  height={16}
+                  className="w-4 h-4 object-contain"
+                  loading="lazy"
+                />
                 View all rewards
               </Link>
             </div>
@@ -520,7 +569,14 @@ export default function NewV2Dashboard() {
             <div className="flex items-center p-4">
               <div className="flex items-center gap-3 flex-1">
                 <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                  <img src="/heart.webp" alt="" className="w-5 h-5 object-contain" />
+                  <Image
+                    src="/heart.webp"
+                    alt=""
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 object-contain"
+                    loading="lazy"
+                  />
                 </div>
                 <div className="text-left">
                   <p className="text-base font-bold" style={{ color: '#24364B' }}>Thanks for supporting local</p>
@@ -528,7 +584,14 @@ export default function NewV2Dashboard() {
                 </div>
               </div>
               <div className="w-32 h-32 flex-shrink-0">
-                <img src="/local.webp" alt="" className="w-full h-full object-contain" />
+                <Image
+                  src="/local.webp"
+                  alt=""
+                  width={128}
+                  height={128}
+                  className="w-full h-full object-contain"
+                  loading="lazy"
+                />
               </div>
             </div>
           </div>
@@ -570,13 +633,23 @@ export default function NewV2Dashboard() {
               >
                 <div className="w-28 h-28 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden" style={{ backgroundColor: '#FFF0E4' }}>
                   {voucher.template?.icon_url || voucher.template?.image_url ? (
-                    <img
+                    <Image
                       src={voucher.template?.icon_url || voucher.template?.image_url}
                       alt={voucher.template.name}
+                      width={112}
+                      height={112}
                       className="w-full h-full object-contain p-2 scale-[150%]"
+                      loading="lazy"
                     />
                   ) : (
-                    <img src="/coffeecup.webp" alt="" className="w-14 h-14 object-contain scale-[150%]" />
+                    <Image
+                      src="/coffeecup.webp"
+                      alt=""
+                      width={56}
+                      height={56}
+                      className="w-14 h-14 object-contain scale-[150%]"
+                      loading="lazy"
+                    />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -658,7 +731,14 @@ export default function NewV2Dashboard() {
           )}
 
           <div className="flex items-center gap-2">
-            <img src="/heart.webp" alt="" className="w-4 h-4 object-contain" />
+            <Image
+              src="/heart.webp"
+              alt=""
+              width={16}
+              height={16}
+              className="w-4 h-4 object-contain"
+              loading="lazy"
+            />
             <p className="text-[12px]" style={{ color: '#8A96A0' }}>Swipe down to close</p>
           </div>
         </div>
@@ -710,13 +790,16 @@ export default function NewV2Dashboard() {
                       }}
                     >
                       {filled ? (
-                        <img
+                        <Image
                           src="/image-assets/stamps/stamp.png"
                           alt="Stamp"
+                          width={56}
+                          height={56}
                           className="w-[140%] h-[140%] object-cover -m-3"
                           style={{
                             transform: `rotate(${variations.rotation}deg) translate(${variations.offsetX}px, ${variations.offsetY}px) scale(${variations.scale})`,
                           }}
+                          loading="lazy"
                         />
                       ) : (
                         <span className="text-[10px] font-semibold" style={{ color: '#F0EDE5', opacity: 0.5 }}>
@@ -751,10 +834,13 @@ export default function NewV2Dashboard() {
                     style={{ backgroundColor: '#F8F5EF', border: '1.5px solid #E8E2D8' }}
                   >
                     {nextReward?.icon_url || nextReward?.image_url ? (
-                      <img
+                      <Image
                         src={nextReward?.icon_url || nextReward?.image_url}
                         alt={nextReward.reward}
+                        width={80}
+                        height={80}
                         className="w-20 h-20 object-contain"
+                        loading="lazy"
                       />
                     ) : (
                       <GiftIcon className="w-20 h-20 object-contain" style={{ transform: 'scale(1.5)' }} />
@@ -907,10 +993,13 @@ export default function NewV2Dashboard() {
                             }}
                           >
                             {reward.image_url ? (
-                              <img
+                              <Image
                                 src={reward.image_url}
                                 alt={reward.name}
+                                width={112}
+                                height={80}
                                 className="w-full h-full object-cover"
+                                loading="lazy"
                               />
                             ) : (
                               <>

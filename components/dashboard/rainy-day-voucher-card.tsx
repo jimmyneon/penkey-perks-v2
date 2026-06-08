@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { motion } from 'framer-motion'
 import { BottomSheet } from '@/components/ui/bottom-sheet'
 import QRCodeLib from 'qrcode'
+import Image from 'next/image'
 
 interface RainyDayVoucherCardProps {
   userId: string
@@ -151,10 +152,13 @@ export function RainyDayVoucherCard({ userId, onVoucherClaimed }: RainyDayVouche
         onClick={handleCardClick}
       >
         <div className="absolute left-[-18px] bottom-[-20px] w-[205px] h-[220px] flex items-center justify-center pointer-events-none">
-          <img
+          <Image
             src="/raining.png"
             alt="Rainy Day"
+            width={205}
+            height={220}
             className="w-full h-full object-contain scale-[1.25]"
+            loading="lazy"
           />
         </div>
 

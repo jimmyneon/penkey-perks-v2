@@ -13,6 +13,7 @@ const nextConfig = {
         hostname: '**.supabase.co',
       },
     ],
+    unoptimized: false,
   },
   compiler: {
     // Remove console logs in production (keep error and warn)
