@@ -1,6 +1,6 @@
 /**
  * Unified Notification Sender
- * Sends notifications via push, email, and in-app channels
+ * Sends notifications via push and in-app channels
  * Uses database templates and handles all messaging logic
  */
 
@@ -22,7 +22,7 @@ export interface NotificationOptions {
 
 /**
  * Send notification using database template
- * Automatically sends via push, email, and/or in-app based on template settings
+ * Sends push and in-app notifications based on template settings
  */
 export async function sendNotification(options: NotificationOptions) {
   const {
@@ -83,65 +83,7 @@ export async function sendNotification(options: NotificationOptions) {
       }
     }
 
-    // 4. Queue Email
-    if (channels.email) {
-      try {
-        // Find matching email template
-        const { data: emailTemplate } = await supabase
-          .from('email_templates')
-          .select('id, subject, html_body')
-          .eq('name', templateName)
-          .eq('active', true)
-          .single()
-
-        if (emailTemplate) {
-          // Get user email
-          const { data: user } = await supabase
-            .from('users')
-            .select('email')
-            .eq('id', userId)
-            .single()
-
-          if (user?.email) {
-            // Substitute variables in email
-            let subject = emailTemplate.subject
-            let htmlBody = emailTemplate.html_body
-
-            for (const [key, value] of Object.entries(variables)) {
-              const regex = new RegExp(`{{${key}}}`, 'g')
-              subject = subject.replace(regex, String(value))
-              htmlBody = htmlBody.replace(regex, String(value))
-            }
-
-            // Queue email
-            const { data: queuedEmail, error: queueError } = await supabase
-              .from('email_queue')
-              .insert({
-                template_id: emailTemplate.id,
-                recipient_email: user.email,
-                recipient_user_id: userId,
-                subject,
-                html_body: htmlBody,
-                text_body: htmlBody.replace(/<[^>]*>/g, ''),
-                variables,
-                status: 'pending'
-              })
-              .select('id')
-              .single()
-
-            if (!queueError && queuedEmail) {
-              results.email.sent = true
-              results.email.id = queuedEmail.id
-              console.log(`✅ Email queued for ${templateName}:`, queuedEmail.id)
-            }
-          }
-        }
-      } catch (error) {
-        console.error(`❌ Email failed for ${templateName}:`, error)
-      }
-    }
-
-    // 5. Create In-App Notification
+    // 4. Create In-App Notification
     if (channels.inApp) {
       try {
         const endDate = new Date()
@@ -272,54 +214,7 @@ export async function sendStaffMessage(options: {
       }
     }
 
-    // 3. Queue Emails for All Customers
-    if (channels.email) {
-      const { data: customers } = await supabase
-        .from('users')
-        .select('id, email')
-        .eq('role', 'customer')
-
-      if (customers && customers.length > 0) {
-        // Get staff announcement email template
-        const { data: emailTemplate } = await supabase
-          .from('email_templates')
-          .select('id')
-          .eq('name', 'staff_announcement')
-          .single()
-
-        if (emailTemplate) {
-          const emailInserts = customers.map(customer => ({
-            template_id: emailTemplate.id,
-            recipient_email: customer.email,
-            recipient_user_id: customer.id,
-            subject: title,
-            html_body: `
-              <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2 style="color: #8B6F47;">${title}</h2>
-                <p style="color: #333; line-height: 1.6;">${message}</p>
-                <p style="color: #666; font-size: 14px; margin-top: 20px;">
-                  - The Penkey Team
-                </p>
-              </div>
-            `,
-            text_body: `${title}\n\n${message}\n\n- The Penkey Team`,
-            variables: { title, message },
-            status: 'pending'
-          }))
-
-          const { error: queueError } = await supabase
-            .from('email_queue')
-            .insert(emailInserts)
-
-          if (!queueError) {
-            results.email.queued = emailInserts.length
-            console.log(`✅ Staff emails queued: ${emailInserts.length}`)
-          }
-        }
-      }
-    }
-
-    // 4. Log staff activity
+    // 3. Log staff activity
     await supabase
       .from('staff_activity_log')
       .insert({
